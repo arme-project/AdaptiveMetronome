@@ -9,7 +9,7 @@ class Player
 {
 public:
     //==============================================================================
-    Player (const juce::MidiMessageSequence *seq);
+    Player (const juce::MidiMessageSequence *seq, int midiChannel);
     ~Player();
     
     //==============================================================================

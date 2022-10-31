@@ -33,10 +33,11 @@ void EnsembleModel::loadMidiFile (const juce::File &file)
     clearPlayers(); // delete old players
     createPlayers (midiFile); // create new players
     initialiseAlphas(); // allocate alpha matrix
-    
-    
-    //==========================================================================
-    debugLog();
+}
+
+//==============================================================================
+void EnsembleModel::processMidiBlock (juce::MidiBuffer& midi)
+{
 }
 
 //==============================================================================
@@ -49,6 +50,7 @@ void EnsembleModel::clearPlayers()
 
 void EnsembleModel::createPlayers (const juce::MidiFile &file)
 {
+    // Create a Player for each track in the file which has note on events.
     int nTracks = file.getNumTracks();
     
     for (int i = 0; i < nTracks; ++i)
@@ -57,7 +59,11 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
         
         if (checkMidiSequenceHasNotes (track))
         {
-            players.push_back (std::make_unique <Player> (track));
+            // Assing channels to players in a cyclical manner.
+            int channelToUse = (i % 16) + 1;
+            
+            players.push_back (std::make_unique <Player> (track,
+                                                          channelToUse));
         }
     }
 }

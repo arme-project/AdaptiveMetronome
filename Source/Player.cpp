@@ -1,7 +1,8 @@
 #include "Player.h"
 
 //==============================================================================
-Player::Player (const juce::MidiMessageSequence *seq)
+Player::Player (const juce::MidiMessageSequence *seq, int midiChannel)
+  : channel (midiChannel)
 {
     initialiseScore (seq);
 }

@@ -25,7 +25,20 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samp
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    // Check host's playhead is currently moving.
+    bool playing = false;
+    auto playHeadPosition = getPlayHead()->getPosition();
     
+    if (playHeadPosition.hasValue())
+    {
+        playing = playHeadPosition->getIsPlaying();
+    }
+    
+    // If it is start processing MIDI
+    if (playing)
+    {
+        ensemble.processMidiBlock (midiMessages);
+    }
 }
 
 void AdaptiveMetronomeAudioProcessor::releaseResources()
