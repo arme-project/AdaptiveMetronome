@@ -1,0 +1,55 @@
+Plugin
+  * If first playback or bpm has changed update bpm of tappers (probably don't need this).
+  * If the playhead is moving start processing input midi with tapManager.nextBlock()
+  * When playback stops reset the tappers to start of score I guess.
+
+tapManager.nextBlock()
+  * globalCounter() keeps track of current sample being processed.
+  * updateInputTapper, passing in midi block and beat info.
+    - Loop over input midi and check for note on/offs.
+    - Pass to inputTapper turnNoteOn/Off accordingly.
+    - Overwrite midi buffer with
+  * Loop over all samples of input
+    - iterate synth tappers
+      ~ updateTappersPitch(): work out which note to play based on number of notes played!
+      ~ iterate() each tapper: add next notes to the buffer based on nextOnsetTime,
+                               and indicate a note has been triggered
+    - if every synth tapper has had a note triggered allNotesHaveBeenTriggered()
+      ~ If user input has come in too:
+        * apply LPC transform
+        * log tap stuff
+        * increment beat counter
+        * update tap acceptance window: the time difference between the mean synth tapper times
+                                        for the two most recent notes played
+        * reset flags which indicate synths have all played this beat
+    - If no user input
+      ~ once we get to the end of the acceptance window (mean of most recent synth note times
+        + half the window length) assume a tap has been made
+    - increment global counter
+
+
+transformLPC
+  * if there is user input
+    - add the onset time of the input tapper to an array.
+    - get the previous motor noise of the input tapper
+    - get the standard deviations of motor and timekeeper noise (sigmaM and sigmaT)
+  * if no user input
+    - assume next onset came at one interval after the previous one
+    - assume all noise and standard deviations are zero
+  * get the onsets, noises and standard deviations for the synth tappers
+  * For each tapper's onset time/noise/standard deviation
+    - generate new random motor and timekeeper noise based on standard deviations
+    - generate Hnoise as TKNoise + MNoise - MNoisePrev
+    - Generate some logging stuff with the noise values 
+    - Internal loop over onset times/noises/standard deviations
+      ~ calculate asynchs:
+        * asynchs are the onset time differences between each pair of tappers
+        * if no user input set asynch for input tapper to 0
+      ~ asynchAlpha for each par of tappers is the alpha for that pair multiplied by the asynch
+      ~ sum up asynchAlphas for the current tapper in sumAsync
+    - Update tapper noises and onsets
+      ~ set input tapper previous motor noise
+      ~ set input tapper interval to time difference between two most recent onsets
+      ~ each synth tapper's interval changed to BPM interval - sumAsync + Hnoise for that tapper
+      ~ next onset time for each tapper set to most recent onset time + that interval
+      ~ set previous motor noise for each synth tapper
