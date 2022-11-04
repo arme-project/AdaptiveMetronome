@@ -21,23 +21,33 @@ bool AdaptiveMetronomeAudioProcessor::isBusesLayoutSupported (const BusesLayout&
 //==============================================================================
 void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    ensemble.setSampleRate (sampleRate);
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    // Check host's playhead is currently moving.
+    //==========================================================================
+    // Check if playhead is currently moving and find the current BPM.
     bool playing = false;
+    juce::Optional <double> bpm;
     auto playHeadPosition = getPlayHead()->getPosition();
     
     if (playHeadPosition.hasValue())
     {
         playing = playHeadPosition->getIsPlaying();
+        bpm = playHeadPosition->getBpm();
     }
     
-    // If it is start processing MIDI
+    if (bpm.hasValue())
+    {
+        ensemble.setTempo (*bpm);
+    }
+    
+    //==========================================================================
+    // If the playhead is moving start processing MIDI
     if (playing)
     {
-        ensemble.processMidiBlock (midiMessages);
+        ensemble.processMidiBlock (midiMessages, buffer.getNumSamples());
     }
 }
 

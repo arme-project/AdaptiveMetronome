@@ -1,8 +1,13 @@
 #include "Player.h"
 
 //==============================================================================
-Player::Player (const juce::MidiMessageSequence *seq, int midiChannel)
-  : channel (midiChannel)
+Player::Player (const juce::MidiMessageSequence *seq, int midiChannel, 
+                double sampleRate, int initialInterval)
+  : channel (midiChannel),
+    sampleRate (sampleRate),
+    onsetInterval (initialInterval),
+    samplesSinceLastOnset (0),
+    samplesToNextOffset (-1)
 {
     initialiseScore (seq);
 }
@@ -16,6 +21,53 @@ void Player::reset()
 {
     // rewind to start of score
     currentNoteIndex = 0;
+}
+
+//==============================================================================
+void Player::setSampleRate (double newSampleRate)
+{
+    sampleRate = newSampleRate;
+}
+
+void Player::setOnsetInterval (int interval)
+{
+    onsetInterval = interval;
+}
+
+//==============================================================================
+void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
+{
+    if (currentNoteIndex >= notes.size())
+    {
+        return;
+    }
+    
+    if (samplesSinceLastOnset == onsetInterval)
+    {
+        auto &note = notes [++currentNoteIndex];
+        
+        midi.addEvent (juce::MidiMessage::noteOn (channel, note.noteNumber, note.velocity),
+                       sampleIndex);
+                       
+        samplesSinceLastOnset = 0;
+        
+        samplesToNextOffset = note.duration * sampleRate;
+    }
+    
+    if (samplesToNextOffset == 0)
+    {
+        auto &note = notes [currentNoteIndex - 1];
+        
+        midi.addEvent (juce::MidiMessage::noteOff (channel, note.noteNumber, note.velocity),
+                       sampleIndex);
+    }
+    
+    ++samplesSinceLastOnset;
+    
+    if (samplesToNextOffset >= 0)
+    {
+        --samplesToNextOffset;
+    }
 }
 
 //==============================================================================

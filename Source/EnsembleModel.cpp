@@ -2,6 +2,8 @@
 
 //==============================================================================
 EnsembleModel::EnsembleModel()
+  : sampleRate (44100),
+    samplesPerBeat (sampleRate / 4)
 {
 }
 
@@ -36,8 +38,45 @@ void EnsembleModel::loadMidiFile (const juce::File &file)
 }
 
 //==============================================================================
-void EnsembleModel::processMidiBlock (juce::MidiBuffer& midi)
+void EnsembleModel::setSampleRate (double newSampleRate)
 {
+    sampleRate = newSampleRate;
+    
+    for (auto &player : players)
+    {
+        player->setSampleRate (sampleRate);
+    }
+}
+
+void EnsembleModel::setTempo (double bpm)
+{
+    int newSamplesPerBeat = 60.0 * sampleRate / bpm;
+    
+    // Check tempo has actually changed.
+    if (newSamplesPerBeat == samplesPerBeat)
+    {
+        return;
+    }
+    
+    // Update tempo of playback.
+    samplesPerBeat = newSamplesPerBeat;
+    
+    for (auto &player : players)
+    {
+        player->setOnsetInterval (samplesPerBeat);
+    }
+}
+
+//==============================================================================
+void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples)
+{
+    for (int i = 0; i < numSamples; ++i)
+    {
+        for (auto &player : players)
+        {
+            player->processSample (midi, i);
+        }
+    }
 }
 
 //==============================================================================
@@ -63,7 +102,9 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
             int channelToUse = (i % 16) + 1;
             
             players.push_back (std::make_unique <Player> (track,
-                                                          channelToUse));
+                                                          channelToUse,
+                                                          sampleRate,
+                                                          samplesPerBeat));
         }
     }
 }

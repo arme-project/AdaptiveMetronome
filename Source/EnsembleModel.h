@@ -14,7 +14,11 @@ public:
     void loadMidiFile (const juce::File &file);
     
     //==============================================================================
-    void processMidiBlock (juce::MidiBuffer& midi);
+    void setSampleRate (double newSampleRate);
+    void setTempo (double bpm);
+    
+    //==============================================================================
+    void processMidiBlock (juce::MidiBuffer &midi, int numSamples);
 
 private:
     //==============================================================================
@@ -23,6 +27,8 @@ private:
     
     //==============================================================================
     // Timing parameters
+    double sampleRate;
+    int samplesPerBeat;
     std::vector <std::vector <double> > alphas;
     
     //==============================================================================

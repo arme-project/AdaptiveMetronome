@@ -9,11 +9,19 @@ class Player
 {
 public:
     //==============================================================================
-    Player (const juce::MidiMessageSequence *seq, int midiChannel);
+    Player (const juce::MidiMessageSequence *seq, int midiChannel, 
+            double sampleRate, int initialInterval);
     ~Player();
     
     //==============================================================================
     void reset();
+    
+    //==============================================================================
+    void setSampleRate (double newSampleRate);
+    void setOnsetInterval (int interval);
+    
+    //==============================================================================
+    void processSample (juce::MidiBuffer &midi, int sampleIndex);
     
     //==============================================================================
     std::size_t getNumNotes();
@@ -27,9 +35,9 @@ private:
     // Score information
     struct Note
     {
-        int noteNumber;
-        juce::uint8 velocity;
-        double duration;
+        int noteNumber; // MIDI note number
+        juce::uint8 velocity; // MIDI velocity
+        double duration; // Note duration in seconds
     };
     
     std::vector <Note> notes;
@@ -39,6 +47,8 @@ private:
     
     //==============================================================================
     // Timing information
-    int onsetInterval;
-    std::size_t nextOnsetTime;
+    double sampleRate;
+    int onsetInterval; // time between previous and next onset in samples
+    int samplesSinceLastOnset;
+    int samplesToNextOffset;
 };
