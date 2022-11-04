@@ -37,11 +37,30 @@ void Player::setOnsetInterval (int interval)
 //==============================================================================
 void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
 {
+    //==========================================================================
+    // Turn off previous note
+    if (samplesToNextOffset == 0)
+    {
+        auto &note = notes [currentNoteIndex - 1];
+        
+        midi.addEvent (juce::MidiMessage::noteOff (channel, note.noteNumber, note.velocity),
+                       sampleIndex);
+    }
+        
+    if (samplesToNextOffset >= 0)
+    {
+        --samplesToNextOffset;
+    }
+    
+    //==========================================================================
+    // Check if we're at the end of the score.
     if (currentNoteIndex >= notes.size())
     {
         return;
     }
     
+    //==========================================================================
+    // Do we need to play another note?
     if (samplesSinceLastOnset == onsetInterval)
     {
         auto &note = notes [++currentNoteIndex];
@@ -54,20 +73,7 @@ void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
         samplesToNextOffset = note.duration * sampleRate;
     }
     
-    if (samplesToNextOffset == 0)
-    {
-        auto &note = notes [currentNoteIndex - 1];
-        
-        midi.addEvent (juce::MidiMessage::noteOff (channel, note.noteNumber, note.velocity),
-                       sampleIndex);
-    }
-    
     ++samplesSinceLastOnset;
-    
-    if (samplesToNextOffset >= 0)
-    {
-        --samplesToNextOffset;
-    }
 }
 
 //==============================================================================
