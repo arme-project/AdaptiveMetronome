@@ -2,12 +2,13 @@
 
 //==============================================================================
 Player::Player (const juce::MidiMessageSequence *seq, int midiChannel, 
-                double sampleRate, int initialInterval)
+                const double &sampleRate, const int &scoreCounter, int initialInterval)
   : channel (midiChannel),
     sampleRate (sampleRate),
+    scoreCounter (scoreCounter),
     onsetInterval (initialInterval),
-    samplesSinceLastOnset (0),
-    samplesToNextOffset (-1)
+    mNoiseDistribution (0.0, 10e-4),
+    tkNoiseDistribution (0.0, 10e-3)
 {
     initialiseScore (seq);
 }
@@ -24,14 +25,48 @@ void Player::reset()
 }
 
 //==============================================================================
-void Player::setSampleRate (double newSampleRate)
-{
-    sampleRate = newSampleRate;
-}
-
 void Player::setOnsetInterval (int interval)
 {
     onsetInterval = interval;
+}
+
+//==============================================================================
+double Player::generateMotorNoise()
+{
+    previousMotorNoise = currentMotorNoise;
+    
+    currentMotorNoise = mNoiseDistribution (randomEngine);
+    
+    return currentMotorNoise;
+}
+
+double Player::generateTimeKeeperNoise()
+{
+    return tkNoiseDistribution (randomEngine);
+}
+
+double Player::generateHNoise()
+{
+    double mNoise = generateMotorNoise();
+    double tkNoise = generateTimeKeeperNoise();
+    
+    return tkNoise + mNoise - previousMotorNoise;
+}
+
+//==============================================================================
+bool Player::hasNotePlayed()
+{
+    return notePlayed;
+}
+
+void Player::resetNotePlayed()
+{
+    notePlayed = false;
+}
+
+int Player::getLatestOnsetTime()
+{
+    return currentOnsetTime;
 }
 
 //==============================================================================
@@ -41,10 +76,7 @@ void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
     // Turn off previous note
     if (samplesToNextOffset == 0)
     {
-        auto &note = notes [currentNoteIndex - 1];
-        
-        midi.addEvent (juce::MidiMessage::noteOff (channel, note.noteNumber, note.velocity),
-                       sampleIndex);
+        stopPreviousNote (midi, sampleIndex);
     }
         
     if (samplesToNextOffset >= 0)
@@ -61,16 +93,10 @@ void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
     
     //==========================================================================
     // Do we need to play another note?
-    if (samplesSinceLastOnset == onsetInterval)
+    if (samplesSinceLastOnset >= onsetInterval)
     {
-        auto &note = notes [++currentNoteIndex];
-        
-        midi.addEvent (juce::MidiMessage::noteOn (channel, note.noteNumber, note.velocity),
-                       sampleIndex);
-                       
-        samplesSinceLastOnset = 0;
-        
-        samplesToNextOffset = note.duration * sampleRate;
+        stopPreviousNote (midi, sampleIndex);
+        playNextNote (midi, sampleIndex);
     }
     
     ++samplesSinceLastOnset;
@@ -109,3 +135,44 @@ void Player::initialiseScore (const juce::MidiMessageSequence *seq)
     // Reset to start of score.
     reset();
 }
+
+void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex)
+{
+    // Add note to buffer.
+    auto &note = notes [currentNoteIndex];
+        
+    midi.addEvent (juce::MidiMessage::noteOn (channel, note.noteNumber, note.velocity),
+                   sampleIndex);
+            
+    // Initialise counters for note timings.
+    samplesSinceLastOnset = 0;
+    samplesToNextOffset = note.duration * sampleRate;
+             
+    // Store onset time.
+    notePlayed = true;
+    previousOnsetTime = currentOnsetTime;
+    currentOnsetTime = scoreCounter;
+    
+    // Move to next note in score.
+    ++currentNoteIndex;
+}
+
+void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
+{
+    // Check if notes have been played yet.
+    if (currentNoteIndex == 0)
+    {
+        return;
+    }
+    
+    // Send note off for previous note.
+    auto &note = notes [currentNoteIndex - 1];
+        
+    midi.addEvent (juce::MidiMessage::noteOff (channel, note.noteNumber, note.velocity),
+                   sampleIndex);
+}
+
+//==============================================================================
+// Randomness
+std::random_device Player::randomSeed;
+std::default_random_engine Player::randomEngine (randomSeed());

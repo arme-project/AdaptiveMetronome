@@ -27,15 +27,21 @@ private:
     
     //==============================================================================
     // Timing parameters
-    double sampleRate;
-    int samplesPerBeat;
+    double sampleRate = 44100.0;
+    int samplesPerBeat = sampleRate / 4;
+    int scoreCounter = 0;
     std::vector <std::vector <double> > alphas;
+    
+    //==============================================================================
+    bool newOnsetsAvailable();
+    void calculateNewIntervals();
+    void clearOnsetsAvailable();
     
     //==============================================================================
     void clearPlayers();
     void createPlayers (const juce::MidiFile &file);
     void initialiseAlphas();
-    
+
     //==============================================================================
     static bool checkMidiSequenceHasNotes (const juce::MidiMessageSequence *seq);
     
@@ -43,18 +49,13 @@ private:
     
     
     //==============================================================================
-    void debugLog()
+    void debugLog (double test)
     {
         juce::File log ("/Users/Sean.Enderby/Desktop/test.log");
         juce::FileOutputStream out (log);
-        out.setPosition (0);
-        out.truncate();
+        //out.setPosition (0);
+        //out.truncate();
         
-        out.writeString ("Num Players: " + juce::String(players.size()) + "\n");
-        
-        for (auto &p : players)
-        {
-            out.writeString ("Num Notes: " + juce::String(p->getNumNotes()) + "\n");
-        }
+        out.writeString (juce::String(test) + "\n");
     }
 };

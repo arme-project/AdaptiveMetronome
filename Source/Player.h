@@ -1,6 +1,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include <vector>
+#include <random>
 
 /**
  * A class for playing back a sequence of MIDI note on/off events at given intervals.
@@ -10,15 +11,25 @@ class Player
 public:
     //==============================================================================
     Player (const juce::MidiMessageSequence *seq, int midiChannel, 
-            double sampleRate, int initialInterval);
+            const double &sampleRate, const int &scoreCounter, int initialInterval);
     ~Player();
     
     //==============================================================================
     void reset();
     
     //==============================================================================
-    void setSampleRate (double newSampleRate);
     void setOnsetInterval (int interval);
+    
+    //==============================================================================
+    double generateMotorNoise();
+    double generateTimeKeeperNoise();
+    double generateHNoise();
+    
+    //==============================================================================
+    bool hasNotePlayed();
+    void resetNotePlayed();
+    
+    int getLatestOnsetTime();
     
     //==============================================================================
     void processSample (juce::MidiBuffer &midi, int sampleIndex);
@@ -26,7 +37,7 @@ public:
     //==============================================================================
     std::size_t getNumNotes();
     
-private:
+private:    
     //==============================================================================
     // MIDI config
     int channel;
@@ -44,11 +55,25 @@ private:
     std::size_t currentNoteIndex;
     
     void initialiseScore (const juce::MidiMessageSequence *seq);
+    void playNextNote (juce::MidiBuffer &midi, int sampleIndex);
+    void stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex);
     
     //==============================================================================
     // Timing information
-    double sampleRate;
+    const double &sampleRate;
+    const int &scoreCounter;
     int onsetInterval; // time between previous and next onset in samples
-    int samplesSinceLastOnset;
-    int samplesToNextOffset;
+    
+    int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
+    
+    int currentOnsetTime = 0, previousOnsetTime = 0;
+    bool notePlayed = false;
+    
+    //==============================================================================
+    // Randomness
+    static std::random_device randomSeed;
+    static std::default_random_engine randomEngine;
+    std::normal_distribution <double> mNoiseDistribution, tkNoiseDistribution;
+    
+    double currentMotorNoise, previousMotorNoise;
 };

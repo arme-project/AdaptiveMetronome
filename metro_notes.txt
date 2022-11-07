@@ -45,7 +45,7 @@ transformLPC
       ~ calculate asynchs:
         * asynchs are the onset time differences between each pair of tappers
         * if no user input set asynch for input tapper to 0
-      ~ asynchAlpha for each par of tappers is the alpha for that pair multiplied by the asynch
+      ~ asynchAlpha for each pair of tappers is the alpha for that pair multiplied by the asynch
       ~ sum up asynchAlphas for the current tapper in sumAsync
     - Update tapper noises and onsets
       ~ set input tapper previous motor noise

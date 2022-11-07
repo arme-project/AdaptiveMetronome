@@ -2,8 +2,6 @@
 
 //==============================================================================
 EnsembleModel::EnsembleModel()
-  : sampleRate (44100),
-    samplesPerBeat (sampleRate / 4)
 {
 }
 
@@ -35,17 +33,15 @@ void EnsembleModel::loadMidiFile (const juce::File &file)
     clearPlayers(); // delete old players
     createPlayers (midiFile); // create new players
     initialiseAlphas(); // allocate alpha matrix
+    
+    // Initialise score counter;
+    scoreCounter = 0;
 }
 
 //==============================================================================
 void EnsembleModel::setSampleRate (double newSampleRate)
 {
     sampleRate = newSampleRate;
-    
-    for (auto &player : players)
-    {
-        player->setSampleRate (sampleRate);
-    }
 }
 
 void EnsembleModel::setTempo (double bpm)
@@ -76,7 +72,54 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples)
         {
             player->processSample (midi, i);
         }
+        
+        if (newOnsetsAvailable())
+        {
+            calculateNewIntervals();
+            clearOnsetsAvailable();
+        }
+        
+        ++scoreCounter;
     }
+}
+
+//==============================================================================
+bool EnsembleModel::newOnsetsAvailable()
+{
+    bool available = true;
+    
+    for (auto &player : players)
+    {
+        available = available && player->hasNotePlayed();
+    }
+    
+    return available;
+}
+
+void EnsembleModel::calculateNewIntervals()
+{
+    for (int i = 0; i < players.size(); ++i)
+    {
+        double asyncSum = 0;
+        
+        for (int j = 0; j < players.size(); ++j)
+        {
+            double async = players [i]->getLatestOnsetTime() - players [j]->getLatestOnsetTime();
+            asyncSum += alphas[i][j] * async;
+        }
+        
+        int hNoise = players [i]->generateHNoise() * sampleRate;
+
+        players [i]->setOnsetInterval (samplesPerBeat - asyncSum + hNoise);
+    }
+}
+
+void EnsembleModel::clearOnsetsAvailable()
+{
+   for (auto &player : players)
+    {
+        player->resetNotePlayed();
+    } 
 }
 
 //==============================================================================
@@ -104,6 +147,7 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
             players.push_back (std::make_unique <Player> (track,
                                                           channelToUse,
                                                           sampleRate,
+                                                          scoreCounter,
                                                           samplesPerBeat));
         }
     }
@@ -115,7 +159,7 @@ void EnsembleModel::initialiseAlphas()
     
     for (auto &a : alphas)
     {
-        a.resize (players.size(), 0.0);
+        a.resize (players.size(), 0.1);
     }
 }
 
