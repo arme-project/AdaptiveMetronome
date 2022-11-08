@@ -38,16 +38,13 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
         bpm = playHeadPosition->getBpm();
     }
     
-    if (bpm.hasValue())
-    {
-        ensemble.setTempo (*bpm);
-    }
+    double tempo = bpm.hasValue() ? *bpm : 60;
     
     //==========================================================================
     // If the playhead is moving start processing MIDI
     if (playing)
     {
-        ensemble.processMidiBlock (midiMessages, buffer.getNumSamples());
+        ensemble.processMidiBlock (midiMessages, buffer.getNumSamples(), tempo);
     }
 }
 

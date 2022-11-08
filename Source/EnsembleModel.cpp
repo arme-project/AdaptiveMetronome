@@ -3,6 +3,7 @@
 //==============================================================================
 EnsembleModel::EnsembleModel()
 {
+    playersInUse.clear();
 }
 
 EnsembleModel::~EnsembleModel()
@@ -10,21 +11,28 @@ EnsembleModel::~EnsembleModel()
 }
 
 //==============================================================================
-void EnsembleModel::loadMidiFile (const juce::File &file)
+bool EnsembleModel::loadMidiFile (const juce::File &file)
 {
+    FlagLock lock (playersInUse);
+    
+    if (!lock.locked)
+    {
+        return false;
+    }
+    
     //==========================================================================
     // Read in content of MIDI file.
     juce::FileInputStream inStream (file);
     
     if (!inStream.openedOk())
-        return; // put some error handling here
+        return false; // put some error handling here
         
     int fileType = 0;
     
     juce::MidiFile midiFile;
     
     if (!midiFile.readFrom (inStream, true, &fileType))
-        return; // more error handling
+        return false; // more error handling
         
     midiFile.convertTimestampTicksToSeconds();
     
@@ -36,6 +44,8 @@ void EnsembleModel::loadMidiFile (const juce::File &file)
     
     // Initialise score counter;
     scoreCounter = 0;
+    
+    return true;
 }
 
 //==============================================================================
@@ -44,28 +54,18 @@ void EnsembleModel::setSampleRate (double newSampleRate)
     sampleRate = newSampleRate;
 }
 
-void EnsembleModel::setTempo (double bpm)
+//==============================================================================
+void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, double tempo)
 {
-    int newSamplesPerBeat = 60.0 * sampleRate / bpm;
+    FlagLock lock (playersInUse);
     
-    // Check tempo has actually changed.
-    if (newSamplesPerBeat == samplesPerBeat)
+    if (!lock.locked)
     {
         return;
     }
     
-    // Update tempo of playback.
-    samplesPerBeat = newSamplesPerBeat;
+    setTempo (tempo);
     
-    for (auto &player : players)
-    {
-        player->setOnsetInterval (samplesPerBeat);
-    }
-}
-
-//==============================================================================
-void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples)
-{
     for (int i = 0; i < numSamples; ++i)
     {
         for (auto &player : players)
@@ -84,6 +84,35 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples)
 }
 
 //==============================================================================
+void EnsembleModel::setTempo (double bpm)
+{
+    int newSamplesPerBeat = 60.0 * sampleRate / bpm;
+    
+    // Check tempo has actually changed.
+    if (newSamplesPerBeat == samplesPerBeat)
+    {
+        return;
+    }
+    
+    // Update tempo of playback.
+    samplesPerBeat = newSamplesPerBeat;
+    
+    setInitialPlayerTempo();
+}
+
+void EnsembleModel::setInitialPlayerTempo()
+{
+    if (!initialTempoSet)
+    {
+        for (auto &player : players)
+        {
+            player->setOnsetInterval (samplesPerBeat);
+        }
+        
+        initialTempoSet = true;
+    }
+}
+
 bool EnsembleModel::newOnsetsAvailable()
 {
     bool available = true;
@@ -108,9 +137,9 @@ void EnsembleModel::calculateNewIntervals()
             asyncSum += alphas[i][j] * async;
         }
         
-        int hNoise = players [i]->generateHNoise() * sampleRate;
+        double hNoise = players [i]->generateHNoise() * sampleRate;
 
-        players [i]->setOnsetInterval (samplesPerBeat - asyncSum + hNoise);
+        players [i]->setOnsetInterval (samplesPerBeat - (asyncSum + hNoise));
     }
 }
 
@@ -123,11 +152,24 @@ void EnsembleModel::clearOnsetsAvailable()
 }
 
 //==============================================================================
+EnsembleModel::FlagLock::FlagLock (std::atomic_flag &f)
+  : flag (f),
+    locked (!flag.test_and_set())
+{
+}
+
+EnsembleModel::FlagLock::~FlagLock()
+{
+    flag.clear();
+}
+
+//==============================================================================
 void EnsembleModel::clearPlayers()
 {
     // Remove anything to do with old players.
     players.clear();
     alphas.clear();
+    initialTempoSet = false;
 }
 
 void EnsembleModel::createPlayers (const juce::MidiFile &file)

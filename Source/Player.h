@@ -52,7 +52,7 @@ private:
     };
     
     std::vector <Note> notes;
-    std::size_t currentNoteIndex;
+    std::size_t currentNoteIndex = 0;
     
     void initialiseScore (const juce::MidiMessageSequence *seq);
     void playNextNote (juce::MidiBuffer &midi, int sampleIndex);
@@ -75,5 +75,17 @@ private:
     static std::default_random_engine randomEngine;
     std::normal_distribution <double> mNoiseDistribution, tkNoiseDistribution;
     
-    double currentMotorNoise, previousMotorNoise;
+    double currentMotorNoise = 0.0, previousMotorNoise = 0.0;
+    
+    
+    
+    
+    //==============================================================================
+    void debugLog (int note, int time)
+    {
+        juce::File log ("/Users/Sean.Enderby/Desktop/test.log");
+        juce::FileOutputStream out (log);
+        
+        out.writeString ("Channel: " + juce::String(channel) + ", Note: " + juce::String (note) + ", Time: " + juce::String (time) + "\n");
+    }
 };

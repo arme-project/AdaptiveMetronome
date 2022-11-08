@@ -7,8 +7,8 @@ Player::Player (const juce::MidiMessageSequence *seq, int midiChannel,
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
     onsetInterval (initialInterval),
-    mNoiseDistribution (0.0, 10e-4),
-    tkNoiseDistribution (0.0, 10e-3)
+    mNoiseDistribution (0.0, 0.0),
+    tkNoiseDistribution (0.0, 0.0)
 {
     initialiseScore (seq);
 }
