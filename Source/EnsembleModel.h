@@ -2,6 +2,7 @@
 #include <JuceHeader.h>
 #include <vector>
 #include <atomic>
+#include <thread>
 #include "Player.h"
 
 class EnsembleModel
@@ -44,7 +45,7 @@ private:
     //==============================================================================
     class FlagLock
     {
-    public: 
+    public:
         FlagLock (std::atomic_flag &f);
         ~FlagLock();
         
@@ -56,21 +57,24 @@ private:
     void clearPlayers();
     void createPlayers (const juce::MidiFile &file);
     void initialiseAlphas();
+    
+    //==============================================================================
+    // A bunch of stuff for safely logging onset times and sending them out to the
+    // server.
+    std::unique_ptr <juce::AbstractFifo> onsetFifo;
+    std::vector <int> onsetBuffer;
+    
+    void initialiseOnsetBuffer (int bufferSize);
+    
+    std::thread loggerThread;
+    std::atomic <bool> continueLogging;
+        
+    void startLoggerLoop();
+    void stopLoggerLoop();
+    
+    void loggerLoop();
+    void logOnsets (juce::FileOutputStream &logStream);
 
     //==============================================================================
     static bool checkMidiSequenceHasNotes (const juce::MidiMessageSequence *seq);
-    
-    
-    
-    
-    //==============================================================================
-    void debugLog (double test)
-    {
-        juce::File log ("/Users/Sean.Enderby/Desktop/test.log");
-        juce::FileOutputStream out (log);
-        //out.setPosition (0);
-        //out.truncate();
-        
-        out.writeString (juce::String(test) + "\n");
-    }
 };

@@ -76,16 +76,4 @@ private:
     std::normal_distribution <double> mNoiseDistribution, tkNoiseDistribution;
     
     double currentMotorNoise = 0.0, previousMotorNoise = 0.0;
-    
-    
-    
-    
-    //==============================================================================
-    void debugLog (int note, int time)
-    {
-        juce::File log ("/Users/Sean.Enderby/Desktop/test.log");
-        juce::FileOutputStream out (log);
-        
-        out.writeString ("Channel: " + juce::String(channel) + ", Note: " + juce::String (note) + ", Time: " + juce::String (time) + "\n");
-    }
 };
