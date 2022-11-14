@@ -40,7 +40,7 @@ public:
     void changeProgramName (int index, const juce::String& newName) override;
     
     //==============================================================================
-    void loadMidiFile (const juce::File &file);
+    EnsembleModel& loadMidiFile (const juce::File &file);
 
 private:
     //==============================================================================

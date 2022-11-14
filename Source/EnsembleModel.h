@@ -20,12 +20,14 @@ public:
     
     //==============================================================================
     void processMidiBlock (juce::MidiBuffer &midi, int numSamples, double tempo);
+    
+    //==============================================================================
+    int getNumPlayers();
+    juce::AudioParameterFloat& getPlayerMotorNoiseParameter (int playerIndex);
+    juce::AudioParameterFloat& getPlayerTimeKeeperNoiseParameter (int playerIndex);
+    juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
 
 private:
-    //==============================================================================
-    // Players
-    std::vector <std::unique_ptr <Player> > players;
-    
     //==============================================================================
     // Timing parameters
     double sampleRate = 44100.0;
@@ -47,6 +49,7 @@ private:
     void storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex);
     
     //==============================================================================
+    // Ensemble players and associated parameters.
     class FlagLock
     {
     public:
@@ -59,8 +62,9 @@ private:
     
     // The following functions should only be called when the playersInUse
     // flag has been locked using the above FlagLock class.
+    std::vector <std::unique_ptr <Player> > players;
     std::atomic_flag playersInUse;
-    void clearPlayers();
+
     void createPlayers (const juce::MidiFile &file);
     void initialise2DBuffers();
     

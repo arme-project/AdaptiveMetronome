@@ -41,9 +41,7 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     
     //==========================================================================
     // Create player for each track in the file.
-    clearPlayers(); // delete old players
     createPlayers (midiFile); // create new players
-    initialise2DBuffers(); // allocate 2D arrays for alphas and logging
     
     // Initialise score counter
     scoreCounter = 0;
@@ -92,6 +90,27 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, do
         
         ++scoreCounter;
     }
+}
+
+//==============================================================================
+int EnsembleModel::getNumPlayers()
+{
+    return static_cast <int> (players.size());
+}
+
+juce::AudioParameterFloat& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
+{
+    return players [playerIndex]->mNoiseStdParam;
+}
+
+juce::AudioParameterFloat& EnsembleModel::getPlayerTimeKeeperNoiseParameter (int playerIndex)
+{
+    return players [playerIndex]->tkNoiseStdParam;
+}
+
+juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIndex)
+{
+    return players [playerIndex]->volumeParam;
 }
 
 //==============================================================================
@@ -216,18 +235,16 @@ EnsembleModel::FlagLock::~FlagLock()
 }
 
 //==============================================================================
-void EnsembleModel::clearPlayers()
-{
-    // Remove anything to do with old players.
-    players.clear();
-    alphas.clear();
-    initialTempoSet = false;
-}
-
 void EnsembleModel::createPlayers (const juce::MidiFile &file)
 {
+    //==========================================================================
+    // Delete Old Players
+    players.clear();
+    
+    //==========================================================================
     // Create a Player for each track in the file which has note on events.
     int nTracks = file.getNumTracks();
+    int playerIndex = 0;
     
     for (int i = 0; i < nTracks; ++i)
     {
@@ -238,13 +255,19 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
             // Assing channels to players in a cyclical manner.
             int channelToUse = (i % 16) + 1;
             
-            players.push_back (std::make_unique <Player> (track,
+            players.push_back (std::make_unique <Player> (playerIndex++,
+                                                          track,
                                                           channelToUse,
                                                           sampleRate,
                                                           scoreCounter,
                                                           samplesPerBeat));
         }
     }
+        
+    initialTempoSet = false;
+    
+    //==========================================================================
+    initialise2DBuffers(); // allocate 2D arrays for alphas and logging
 }
 
 void EnsembleModel::initialise2DBuffers()
@@ -261,6 +284,7 @@ void EnsembleModel::initialise2DBuffers()
     asyncBuffer.resize (players.size());
     alphaBuffer.resize (players.size());
 }
+
 
 //==============================================================================
 void EnsembleModel::initialiseLoggingBuffers (int bufferSize)

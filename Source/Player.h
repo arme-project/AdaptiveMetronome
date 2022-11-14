@@ -10,7 +10,7 @@ class Player
 {
 public:
     //==============================================================================
-    Player (const juce::MidiMessageSequence *seq, int midiChannel, 
+    Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
             const double &sampleRate, const int &scoreCounter, int initialInterval);
     ~Player();
     
@@ -41,6 +41,10 @@ public:
     
     //==============================================================================
     void processSample (juce::MidiBuffer &midi, int sampleIndex);
+    
+    //==============================================================================
+    // Parameters
+    juce::AudioParameterFloat mNoiseStdParam, tkNoiseStdParam, volumeParam;
     
     //==============================================================================
     std::size_t getNumNotes();

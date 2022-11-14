@@ -1,14 +1,23 @@
 #include "Player.h"
 
 //==============================================================================
-Player::Player (const juce::MidiMessageSequence *seq, int midiChannel, 
+Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
                 const double &sampleRate, const int &scoreCounter, int initialInterval)
-  : channel (midiChannel),
+  : mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
+                    "Player " + juce::String (index) + " Motor Noise Std",
+                    0.0, 50.0, 1e-4),
+    tkNoiseStdParam ("player" + juce::String (index) + "-tknoise-std",
+                     "Player " + juce::String (index) + " Time Keeper Noise Std",
+                     0.0, 200.0, 1e-3),
+    volumeParam ("player" + juce::String (index) + "-volume",
+                 "Player " + juce::String (index) + " Volume",
+                 0.0, 1.0, 1.0),
+    channel (midiChannel),
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
     onsetInterval (initialInterval),
-    mNoiseDistribution (0.0, 1e-4),
-    tkNoiseDistribution (0.0, 1e-3)
+    mNoiseDistribution (0.0, mNoiseStdParam.get()),
+    tkNoiseDistribution (0.0, tkNoiseStdParam.get())
 {
     initialiseScore (seq);
 }
