@@ -19,11 +19,15 @@ public:
     
     //==============================================================================
     void setOnsetInterval (int interval);
+    int getOnsetInterval();
     
     //==============================================================================
     double generateMotorNoise();
     double generateTimeKeeperNoise();
     double generateHNoise();
+    
+    double getMotorNoise();
+    double getTimeKeeperNoise();
     
     //==============================================================================
     bool hasNotePlayed();
@@ -75,5 +79,5 @@ private:
     static std::default_random_engine randomEngine;
     std::normal_distribution <double> mNoiseDistribution, tkNoiseDistribution;
     
-    double currentMotorNoise = 0.0, previousMotorNoise = 0.0;
+    double currentMotorNoise = 0.0, previousMotorNoise = 0.0, currentTimeKeeperNoise = 0.0;
 };

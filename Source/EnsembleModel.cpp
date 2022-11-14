@@ -133,25 +133,6 @@ bool EnsembleModel::newOnsetsAvailable()
 
 void EnsembleModel::calculateNewIntervals()
 {
-            
-    // Put most recent onset times in buffer to be logged.
-    if (onsetFifo)
-    {
-        auto writer = onsetFifo->write (players.size());
-
-        int p = 0;
-        
-        for (int i = 0; i < writer.blockSize1; ++i)
-        {
-            onsetBuffer [writer.startIndex1 + i] = players [p++]->getLatestOnsetTime();
-        }
-        
-        for (int i = 0; i < writer.blockSize2; ++i)
-        {
-            onsetBuffer [writer.startIndex2 + i] = players [p++]->getLatestOnsetTime();
-        }
-    }
-    
     // Calculate new onset times for players.
     for (int i = 0; i < players.size(); ++i)
     {
@@ -167,6 +148,25 @@ void EnsembleModel::calculateNewIntervals()
 
         players [i]->setOnsetInterval (samplesPerBeat - (asyncSum + hNoise));
     }
+    
+                
+    // Add details of most recent onsets to buffers to be logged.
+    if (loggingFifo)
+    {
+        auto writer = loggingFifo->write (players.size());
+
+        int p = 0;
+        
+        for (int i = 0; i < writer.blockSize1; ++i)
+        {
+            storeOnsetDetailsForPlayer (writer.startIndex1 + i, p++);
+        }
+        
+        for (int i = 0; i < writer.blockSize2; ++i)
+        {
+            storeOnsetDetailsForPlayer (writer.startIndex2 + i, p++);
+        }
+    } 
 }
 
 void EnsembleModel::clearOnsetsAvailable()
@@ -175,6 +175,14 @@ void EnsembleModel::clearOnsetsAvailable()
     {
         player->resetNotePlayed();
     } 
+}
+
+void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex)
+{
+    onsetBuffer [bufferIndex] = players [playerIndex]->getLatestOnsetTime();
+    onsetIntervalBuffer [bufferIndex] = players [playerIndex]->getOnsetInterval();
+    motorNoiseBuffer [bufferIndex] = players [playerIndex]->getMotorNoise();
+    timeKeeperNoiseBuffer [bufferIndex] = players [playerIndex]->getTimeKeeperNoise();
 }
 
 //==============================================================================
@@ -232,16 +240,19 @@ void EnsembleModel::initialiseAlphas()
 }
 
 //==============================================================================
-void EnsembleModel::initialiseOnsetBuffer (int bufferSize)
+void EnsembleModel::initialiseLoggingBuffers (int bufferSize)
 {
-    onsetFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
+    loggingFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
     onsetBuffer.resize (bufferSize, 0);
+    onsetIntervalBuffer.resize (bufferSize, 0);
+    motorNoiseBuffer.resize (bufferSize, 0.0);
+    timeKeeperNoiseBuffer.resize (bufferSize, 0.0);
 }
 
 void EnsembleModel::startLoggerLoop()
 {
     stopLoggerLoop();
-    initialiseOnsetBuffer (4 * players.size());
+    initialiseLoggingBuffers (4 * players.size());
         
     continueLogging = true;
     loggerThread = std::thread ([this] () {this->loggerLoop();});
@@ -259,49 +270,79 @@ void EnsembleModel::stopLoggerLoop()
 
 void EnsembleModel::loggerLoop()
 {
-    juce::File logFile ("/Users/Sean.Enderby/Desktop/test.log");
+    juce::File logFile ("/Users/Sean.Enderby/Desktop/test.csv");
     juce::FileOutputStream logStream (logFile);
     logStream.setPosition (0);
     logStream.truncate();
     
+    logLineCounter = 0;
+    
     while (continueLogging)
     {
-        logOnsets (logStream);
-        std::this_thread::sleep_for (100ms);
+        logOnsetDetails (logStream);
+        std::this_thread::sleep_for (50ms);
     }
 }
 
-void EnsembleModel::logOnsets (juce::FileOutputStream &logStream)
+void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
 {
-    while (onsetFifo->getNumReady() > 0)
+    while (loggingFifo->getNumReady() > 0)
     {
         std::vector <int> latestOnsets (players.size());
-        juce::String logLine ("Onsets: ");
+        juce::String logLine (logLineCounter++);
+        juce::String onsetLog, intervalLog, mNoiseLog, tkNoiseLog;
         int p = 0;
 
-        auto reader = onsetFifo->read (players.size());
+        auto reader = loggingFifo->read (players.size());
         
         for (int i = 0; i < reader.blockSize1; ++i)
         {
             int onsetTime = onsetBuffer [reader.startIndex1 + i];
             latestOnsets [p++] = onsetTime;
-            logLine += juce::String (onsetTime) + ", ";
+            
+            logOnsetDetailsForPlayer (reader.startIndex1 + i,
+                                      onsetLog,
+                                      intervalLog,
+                                      mNoiseLog,
+                                      tkNoiseLog);                 
         }
         
         for (int i = 0; i < reader.blockSize2; ++i)
         {
             int onsetTime = onsetBuffer [reader.startIndex2 + i];
             latestOnsets [p++] = onsetTime;
-            logLine += juce::String (onsetTime) + ", ";
+     
+            logOnsetDetailsForPlayer (reader.startIndex2 + i,
+                                      onsetLog,
+                                      intervalLog,
+                                      mNoiseLog,
+                                      tkNoiseLog);
         }
         
-        logStream.writeText (logLine + "\n", false, false, nullptr);
+        logLine += onsetLog + ", " + 
+                   intervalLog + ", " + 
+                   mNoiseLog + ", " +
+                   tkNoiseLog + "\n";
+                   
+        logStream.writeText (logLine, false, false, nullptr);
         
         //==========================================================================
         // At this point latestOnsets contains the onset time in samples for
         // each of the players' most recently played notes. Do what you will
         // with them here.
     }
+}
+
+void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
+                                              juce::String &onsetLog,
+                                              juce::String &intervalLog,
+                                              juce::String &mNoiseLog,
+                                              juce::String &tkNoiseLog)
+{
+    onsetLog += ", " + juce::String (onsetBuffer [bufferIndex] / sampleRate);
+    intervalLog += ", " + juce::String (onsetIntervalBuffer [bufferIndex] / sampleRate);
+    mNoiseLog += ", " + juce::String (motorNoiseBuffer [bufferIndex]);
+    tkNoiseLog += ", " + juce::String (timeKeeperNoiseBuffer [bufferIndex]);
 }
 
 //==============================================================================

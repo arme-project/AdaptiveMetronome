@@ -30,6 +30,11 @@ void Player::setOnsetInterval (int interval)
     onsetInterval = interval;
 }
 
+int Player::getOnsetInterval()
+{
+    return onsetInterval;
+}
+
 //==============================================================================
 double Player::generateMotorNoise()
 {
@@ -42,7 +47,8 @@ double Player::generateMotorNoise()
 
 double Player::generateTimeKeeperNoise()
 {
-    return tkNoiseDistribution (randomEngine);
+    currentTimeKeeperNoise = tkNoiseDistribution (randomEngine);
+    return currentTimeKeeperNoise;
 }
 
 double Player::generateHNoise()
@@ -51,6 +57,16 @@ double Player::generateHNoise()
     double tkNoise = generateTimeKeeperNoise();
     
     return tkNoise + mNoise - previousMotorNoise;
+}
+
+double Player::getMotorNoise()
+{
+    return currentMotorNoise;
+}
+
+double Player::getTimeKeeperNoise()
+{
+    return currentTimeKeeperNoise;
 }
 
 //==============================================================================

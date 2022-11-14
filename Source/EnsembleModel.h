@@ -41,6 +41,8 @@ private:
     bool newOnsetsAvailable();
     void calculateNewIntervals();
     void clearOnsetsAvailable();
+        
+    void storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex);
     
     //==============================================================================
     class FlagLock
@@ -61,10 +63,11 @@ private:
     //==============================================================================
     // A bunch of stuff for safely logging onset times and sending them out to the
     // server.
-    std::unique_ptr <juce::AbstractFifo> onsetFifo;
-    std::vector <int> onsetBuffer;
+    std::unique_ptr <juce::AbstractFifo> loggingFifo;
+    std::vector <int> onsetBuffer, onsetIntervalBuffer;
+    std::vector <double> motorNoiseBuffer, timeKeeperNoiseBuffer;
     
-    void initialiseOnsetBuffer (int bufferSize);
+    void initialiseLoggingBuffers (int bufferSize);
     
     std::thread loggerThread;
     std::atomic <bool> continueLogging;
@@ -72,9 +75,17 @@ private:
     void startLoggerLoop();
     void stopLoggerLoop();
     
+    int logLineCounter = 0;
+    
     void loggerLoop();
-    void logOnsets (juce::FileOutputStream &logStream);
-
+    void logOnsetDetails (juce::FileOutputStream &logStream);
+    
+    void logOnsetDetailsForPlayer (int bufferIndex,
+                                   juce::String &onsetLog,
+                                   juce::String &intervalLog,
+                                   juce::String &mNoiseLog,
+                                   juce::String &tkNoiseLog);
+ 
     //==============================================================================
     static bool checkMidiSequenceHasNotes (const juce::MidiMessageSequence *seq);
 };
