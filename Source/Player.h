@@ -29,11 +29,15 @@ public:
     double getMotorNoise();
     double getTimeKeeperNoise();
     
+    double getMotorNoiseStd();
+    double getTimeKeeperNoiseStd();
+    
     //==============================================================================
     bool hasNotePlayed();
     void resetNotePlayed();
     
     int getLatestOnsetTime();
+    juce::uint8 getLatestVelocity();
     
     //==============================================================================
     void processSample (juce::MidiBuffer &midi, int sampleIndex);

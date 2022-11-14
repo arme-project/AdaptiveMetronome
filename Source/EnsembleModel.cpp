@@ -43,7 +43,7 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     // Create player for each track in the file.
     clearPlayers(); // delete old players
     createPlayers (midiFile); // create new players
-    initialiseAlphas(); // allocate alpha matrix
+    initialise2DBuffers(); // allocate 2D arrays for alphas and logging
     
     // Initialise score counter
     scoreCounter = 0;
@@ -70,8 +70,12 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, do
         return;
     }
     
+    //==============================================================================
+    // Update tempo from DAW playhead.
     setTempo (tempo);
     
+    //==============================================================================
+    // Process each sample of the buffer for each player.
     for (int i = 0; i < numSamples; ++i)
     {
         for (auto &player : players)
@@ -79,6 +83,7 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, do
             player->processSample (midi, i);
         }
         
+        // If all players have played a note, update timings.
         if (newOnsetsAvailable())
         {
             calculateNewIntervals();
@@ -133,6 +138,7 @@ bool EnsembleModel::newOnsetsAvailable()
 
 void EnsembleModel::calculateNewIntervals()
 {
+    //==========================================================================
     // Calculate new onset times for players.
     for (int i = 0; i < players.size(); ++i)
     {
@@ -147,13 +153,13 @@ void EnsembleModel::calculateNewIntervals()
         double hNoise = players [i]->generateHNoise() * sampleRate;
 
         players [i]->setOnsetInterval (samplesPerBeat - (asyncSum + hNoise));
-    }
-    
-                
+    }   
+          
+    //==========================================================================
     // Add details of most recent onsets to buffers to be logged.
     if (loggingFifo)
     {
-        auto writer = loggingFifo->write (players.size());
+        auto writer = loggingFifo->write (static_cast <int> (players.size()));
 
         int p = 0;
         
@@ -179,10 +185,22 @@ void EnsembleModel::clearOnsetsAvailable()
 
 void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex)
 {
+    // Store the log information about the latest onset from the given player
+    // in the logging buffers.
     onsetBuffer [bufferIndex] = players [playerIndex]->getLatestOnsetTime();
     onsetIntervalBuffer [bufferIndex] = players [playerIndex]->getOnsetInterval();
     motorNoiseBuffer [bufferIndex] = players [playerIndex]->getMotorNoise();
     timeKeeperNoiseBuffer [bufferIndex] = players [playerIndex]->getTimeKeeperNoise();
+    
+    for (int i = 0; i < players.size(); ++i)
+    {
+        asyncBuffer [i][bufferIndex] = players [playerIndex]->getLatestOnsetTime() - players [i]->getLatestOnsetTime();
+        alphaBuffer [i][bufferIndex] = alphas [playerIndex][i];
+    }
+    
+    mNoiseStdBuffer [bufferIndex] = players [playerIndex]->getMotorNoiseStd();
+    tkNoiseStdBuffer [bufferIndex] = players [playerIndex]->getTimeKeeperNoiseStd();
+    velocityBuffer [bufferIndex] = players [playerIndex]->getLatestVelocity();
 }
 
 //==============================================================================
@@ -229,14 +247,19 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
     }
 }
 
-void EnsembleModel::initialiseAlphas()
+void EnsembleModel::initialise2DBuffers()
 {
+    // Alpha matrix for players
     alphas.resize (players.size());
     
     for (auto &a : alphas)
     {
         a.resize (players.size(), 0.1);
     }
+    
+    // First dimension of 2D logging buffers
+    asyncBuffer.resize (players.size());
+    alphaBuffer.resize (players.size());
 }
 
 //==============================================================================
@@ -247,12 +270,22 @@ void EnsembleModel::initialiseLoggingBuffers (int bufferSize)
     onsetIntervalBuffer.resize (bufferSize, 0);
     motorNoiseBuffer.resize (bufferSize, 0.0);
     timeKeeperNoiseBuffer.resize (bufferSize, 0.0);
+    
+    for (int i = 0; i < asyncBuffer.size(); ++i)
+    {
+        asyncBuffer [i].resize (bufferSize, 0.0);
+        alphaBuffer [i].resize (bufferSize, 0.0);
+    }
+    
+    tkNoiseStdBuffer.resize (bufferSize, 0.0);
+    mNoiseStdBuffer.resize (bufferSize, 0.0);
+    velocityBuffer.resize (bufferSize, 0.0);
 }
 
 void EnsembleModel::startLoggerLoop()
 {
     stopLoggerLoop();
-    initialiseLoggingBuffers (4 * players.size());
+    initialiseLoggingBuffers (4 * static_cast <int> (players.size()));
         
     continueLogging = true;
     loggerThread = std::thread ([this] () {this->loggerLoop();});
@@ -270,10 +303,16 @@ void EnsembleModel::stopLoggerLoop()
 
 void EnsembleModel::loggerLoop()
 {
+    //==========================================================================
+    // Expose this option to UI at some point.
     juce::File logFile ("/Users/Sean.Enderby/Desktop/test.csv");
     juce::FileOutputStream logStream (logFile);
     logStream.setPosition (0);
     logStream.truncate();
+    
+    //==========================================================================
+    // Write log file
+    writeLogHeader (logStream);
     
     logLineCounter = 0;
     
@@ -284,16 +323,61 @@ void EnsembleModel::loggerLoop()
     }
 }
 
+void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
+{
+    juce::String logLine ("N");
+    juce::String onsetLog, intervalLog, mNoiseLog, tkNoiseLog,
+                 asyncLog, alphaLog, tkNoiseStdLog, mNoiseStdLog,
+                 velocityLog;
+                 
+    for (int i = 0; i < players.size(); ++i)
+    {
+        int playerId = i + 1;
+        
+        onsetLog += ", P" + juce::String (playerId);
+        intervalLog += ", P" + juce::String (playerId) + " Int";
+        mNoiseLog += ", P" + juce::String (playerId) + " MVar";
+        tkNoiseLog += ", P" + juce::String (playerId) + " TKVar";
+        
+        for (int j = 0; j < players.size(); ++j)
+        {
+            int otherPlayerId = j + 1;
+            
+            asyncLog += ", Async " + juce::String (playerId) + juce::String (otherPlayerId);
+            alphaLog += ", Alpha " + juce::String (playerId) + juce::String (otherPlayerId);
+        }
+        
+        tkNoiseStdLog += ", P" + juce::String (playerId) + " TKStd";
+        mNoiseStdLog += ", P" + juce::String (playerId) + " MStd";
+        velocityLog += ", P" + juce::String (playerId) + " Vol";
+    }
+    
+    logLine += onsetLog + ", " + 
+               intervalLog + ", " + 
+               mNoiseLog + ", " +
+               tkNoiseLog + ", " +
+               asyncLog + ", " +
+               alphaLog + ", " +
+               tkNoiseStdLog + ", " +
+               mNoiseStdLog + ", " +
+               velocityLog + "\n";
+                   
+    logStream.writeText (logLine, false, false, nullptr);
+}
+
+
 void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
 {
     while (loggingFifo->getNumReady() > 0)
     {
         std::vector <int> latestOnsets (players.size());
         juce::String logLine (logLineCounter++);
-        juce::String onsetLog, intervalLog, mNoiseLog, tkNoiseLog;
+        juce::String onsetLog, intervalLog, mNoiseLog, tkNoiseLog,
+                     asyncLog, alphaLog, tkNoiseStdLog, mNoiseStdLog,
+                     velocityLog;
         int p = 0;
 
-        auto reader = loggingFifo->read (players.size());
+        auto reader = loggingFifo->read (static_cast <int> (players.size()));
         
         for (int i = 0; i < reader.blockSize1; ++i)
         {
@@ -304,7 +388,12 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                                       onsetLog,
                                       intervalLog,
                                       mNoiseLog,
-                                      tkNoiseLog);                 
+                                      tkNoiseLog,
+                                      asyncLog,
+                                      alphaLog,
+                                      mNoiseStdLog,
+                                      tkNoiseStdLog,
+                                      velocityLog);                 
         }
         
         for (int i = 0; i < reader.blockSize2; ++i)
@@ -316,13 +405,23 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                                       onsetLog,
                                       intervalLog,
                                       mNoiseLog,
-                                      tkNoiseLog);
+                                      tkNoiseLog,
+                                      asyncLog,
+                                      alphaLog,
+                                      mNoiseStdLog,
+                                      tkNoiseStdLog,
+                                      velocityLog);
         }
         
         logLine += onsetLog + ", " + 
                    intervalLog + ", " + 
                    mNoiseLog + ", " +
-                   tkNoiseLog + "\n";
+                   tkNoiseLog + ", " +
+                   asyncLog + ", " +
+                   alphaLog + ", " +
+                   tkNoiseStdLog + ", " +
+                   mNoiseStdLog + ", " +
+                   velocityLog + "\n";
                    
         logStream.writeText (logLine, false, false, nullptr);
         
@@ -337,12 +436,27 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
                                               juce::String &onsetLog,
                                               juce::String &intervalLog,
                                               juce::String &mNoiseLog,
-                                              juce::String &tkNoiseLog)
+                                              juce::String &tkNoiseLog,
+                                              juce::String &asyncLog,
+                                              juce::String &alphaLog,
+                                              juce::String &tkNoiseStdLog,
+                                              juce::String &mNoiseStdLog,
+                                              juce::String &velocityLog)
 {
     onsetLog += ", " + juce::String (onsetBuffer [bufferIndex] / sampleRate);
     intervalLog += ", " + juce::String (onsetIntervalBuffer [bufferIndex] / sampleRate);
     mNoiseLog += ", " + juce::String (motorNoiseBuffer [bufferIndex]);
     tkNoiseLog += ", " + juce::String (timeKeeperNoiseBuffer [bufferIndex]);
+    
+    for (int i = 0; i < asyncBuffer.size(); ++i)
+    {
+        asyncLog += "," + juce::String (asyncBuffer [i][bufferIndex] / sampleRate);
+        alphaLog += "," + juce::String (alphaBuffer [i][bufferIndex]);
+    }
+    
+    tkNoiseStdLog += ", " + juce::String (tkNoiseStdBuffer [bufferIndex]);
+    mNoiseStdLog += ", " + juce::String (mNoiseStdBuffer [bufferIndex]);
+    velocityLog += ", " + juce::String (velocityBuffer [bufferIndex] / 127.0);
 }
 
 //==============================================================================

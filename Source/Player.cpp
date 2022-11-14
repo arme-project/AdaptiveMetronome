@@ -69,6 +69,16 @@ double Player::getTimeKeeperNoise()
     return currentTimeKeeperNoise;
 }
 
+double Player::getMotorNoiseStd()
+{
+    return mNoiseDistribution.stddev();
+}
+
+double Player::getTimeKeeperNoiseStd()
+{
+    return tkNoiseDistribution.stddev();
+}
+
 //==============================================================================
 bool Player::hasNotePlayed()
 {
@@ -83,6 +93,22 @@ void Player::resetNotePlayed()
 int Player::getLatestOnsetTime()
 {
     return currentOnsetTime;
+}
+
+juce::uint8 Player::getLatestVelocity()
+{
+    if (currentNoteIndex == 0)
+    {
+        return notes [0].velocity;
+    }
+    else if (currentNoteIndex <= notes.size())
+    {
+        return notes [currentNoteIndex - 1].velocity;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 //==============================================================================
