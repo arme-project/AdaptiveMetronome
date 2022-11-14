@@ -242,6 +242,8 @@ void EnsembleModel::startLoggerLoop()
 {
     stopLoggerLoop();
     initialiseOnsetBuffer (4 * players.size());
+        
+    continueLogging = true;
     loggerThread = std::thread ([this] () {this->loggerLoop();});
 }
 
@@ -262,12 +264,10 @@ void EnsembleModel::loggerLoop()
     logStream.setPosition (0);
     logStream.truncate();
     
-    continueLogging = true;
-    
     while (continueLogging)
     {
         logOnsets (logStream);
-        std::this_thread::sleep_for (500ms);
+        std::this_thread::sleep_for (100ms);
     }
 }
 
