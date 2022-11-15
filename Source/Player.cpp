@@ -3,7 +3,10 @@
 //==============================================================================
 Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
                 const double &sampleRate, const int &scoreCounter, int initialInterval)
-  : mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
+  : channelParam ("player" + juce::String (index) + "-channel",
+                  "Player " + juce::String (index) + " MIDI Channel",
+                  1, 16, midiChannel),
+    mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
                     "Player " + juce::String (index) + " Motor Noise Std",
                     0.0, 50.0, 0.1),
     tkNoiseStdParam ("player" + juce::String (index) + "-tknoise-std",
@@ -12,7 +15,6 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
     volumeParam ("player" + juce::String (index) + "-volume",
                  "Player " + juce::String (index) + " Volume",
                  0.0, 1.0, 1.0),
-    channel (midiChannel),
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
     onsetInterval (initialInterval),
@@ -57,7 +59,9 @@ double Player::generateMotorNoise()
 
 double Player::generateTimeKeeperNoise()
 {
+    tkNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, tkNoiseStdParam.get() / 1000.0));
     currentTimeKeeperNoise = tkNoiseDistribution (randomEngine);
+    
     return currentTimeKeeperNoise;
 }
 
@@ -105,20 +109,9 @@ int Player::getLatestOnsetTime()
     return currentOnsetTime;
 }
 
-juce::uint8 Player::getLatestVelocity()
+double Player::getLatestVolume()
 {
-    if (currentNoteIndex == 0)
-    {
-        return notes [0].velocity;
-    }
-    else if (currentNoteIndex <= notes.size())
-    {
-        return notes [currentNoteIndex - 1].velocity;
-    }
-    else
-    {
-        return 0;
-    }
+    return latestVolume;
 }
 
 //==============================================================================
@@ -192,9 +185,12 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex)
 {
     // Add note to buffer.
     auto &note = notes [currentNoteIndex];
+    juce::uint8 velocity = note.velocity * volumeParam;
         
-    midi.addEvent (juce::MidiMessage::noteOn (channel, note.noteNumber, note.velocity),
+    midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, velocity),
                    sampleIndex);
+                   
+    latestVolume = velocity / 127.0;
             
     // Initialise counters for note timings.
     samplesSinceLastOnset = 0;
@@ -220,7 +216,7 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
     // Send note off for previous note.
     auto &note = notes [currentNoteIndex - 1];
         
-    midi.addEvent (juce::MidiMessage::noteOff (channel, note.noteNumber, note.velocity),
+    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
                    sampleIndex);
 }
 

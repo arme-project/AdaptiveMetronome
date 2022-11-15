@@ -23,9 +23,11 @@ public:
     
     //==============================================================================
     int getNumPlayers();
+    juce::AudioParameterInt& getPlayerChannelParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerMotorNoiseParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerTimeKeeperNoiseParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
+    juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
 
 private:
     //==============================================================================
@@ -33,7 +35,7 @@ private:
     double sampleRate = 44100.0;
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
-    std::vector <std::vector <double> > alphas;
+    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
     
     //==============================================================================
     // Funtions for ammendinding timings for each player in this ensemble. These
@@ -77,7 +79,7 @@ private:
     std::vector <std::vector <int> > asyncBuffer;
     std::vector <std::vector <double> > alphaBuffer;
     std::vector <double> tkNoiseStdBuffer, mNoiseStdBuffer;
-    std::vector <double> velocityBuffer;
+    std::vector <double> volumeBuffer;
     
     void initialiseLoggingBuffers (int bufferSize);
     

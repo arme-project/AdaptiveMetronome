@@ -37,23 +37,20 @@ public:
     void resetNotePlayed();
     
     int getLatestOnsetTime();
-    juce::uint8 getLatestVelocity();
+    double getLatestVolume();
     
     //==============================================================================
     void processSample (juce::MidiBuffer &midi, int sampleIndex);
     
     //==============================================================================
     // Parameters
+    juce::AudioParameterInt channelParam;
     juce::AudioParameterFloat mNoiseStdParam, tkNoiseStdParam, volumeParam;
     
     //==============================================================================
     std::size_t getNumNotes();
     
 private:    
-    //==============================================================================
-    // MIDI config
-    int channel;
-
     //==============================================================================
     // Score information
     struct Note
@@ -65,6 +62,7 @@ private:
     
     std::vector <Note> notes;
     std::size_t currentNoteIndex = 0;
+    double latestVolume = 0.0;
     
     void initialiseScore (const juce::MidiMessageSequence *seq);
     void playNextNote (juce::MidiBuffer &midi, int sampleIndex);

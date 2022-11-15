@@ -67,25 +67,75 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()
 
 void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
 {
+    ensembleParametersViewport.setViewedComponent (nullptr);
+    
     auto &ensemble = processor.loadMidiFile (file);
-    initialiseEnsembleWidgets (ensemble);
+    ensembleParametersViewport.setViewedComponent (new EnsembleParametersComponent (ensemble));
 }
 
 //==============================================================================
 AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsembleParametersComponent (EnsembleModel &ensemble)
 {
-    for (int i = 0; i < ensemble.getNumPlayers(); ++i)
+    int nPlayers = ensemble.getNumPlayers();
+    
+    for (int i = 0; i < nPlayers; ++i)
     {
+        //==============================================================================
+        // MIDI channel selectors
+        channelSelectors.push_back (std::make_unique <juce::ComboBox> ());
+        
+        for (int c = 1; c <= 16; ++c)
+        {
+            channelSelectors [i]->addItem (juce::String (c), c);
+        }
+        
+        addAndMakeVisible (*channelSelectors [i]);
+        
+        //==============================================================================
+        // Parameter Sliders
         mNoiseStdSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                      juce::Slider::TextBoxBelow));
+        tkNoiseStdSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
+                                                                      juce::Slider::TextBoxBelow));
+        volumeSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
+                                                                  juce::Slider::TextBoxBelow));
                                                                      
+                                                                     
+        addAndMakeVisible (*mNoiseStdSliders [i]);
+        addAndMakeVisible (*tkNoiseStdSliders [i]);
+        addAndMakeVisible (*volumeSliders [i]);
+                                                                     
+        //==============================================================================
+        // Component attachments
+        channelAttachments.push_back (std::make_unique <juce::ComboBoxParameterAttachment> (ensemble.getPlayerChannelParameter (i),
+                                                                                            *channelSelectors [i]));
         mNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerMotorNoiseParameter (i),
                                                                                             *mNoiseStdSliders [i]));
+        tkNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerTimeKeeperNoiseParameter (i),
+                                                                                             *tkNoiseStdSliders [i]));
+        mNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerVolumeParameter (i),
+                                                                                            *volumeSliders [i]));
                                                                                             
-        addAndMakeVisible (*mNoiseStdSliders [i]);
+        //==============================================================================
+        // Alpha controls       
+        std::vector <std::unique_ptr <juce::Slider> > alphaRow;
+        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > alphaAttachmentRow;
+
+        for (int j = 0; j < nPlayers; ++j)
+        {
+            alphaRow.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
+                                                                 juce::Slider::TextBoxBelow));
+            alphaAttachmentRow.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getAlphaParameter (i, j),
+                                                                                              *alphaRow [j]));
+                                                                 
+            addAndMakeVisible (*alphaRow [j]);
+        }
+        
+        alphaSliders.push_back (std::move (alphaRow));
+        alphaAttachments.push_back (std::move (alphaAttachmentRow));
     }
     
-    setSize(1000, 700);
+    setSize((4 + nPlayers) * sliderWidth, rowHeight * nPlayers);
 }
 
 AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::~EnsembleParametersComponent()
@@ -94,10 +144,20 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::~EnsemblePar
 
 void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized()
 {
-    mNoiseStdSliders [0]->setBounds (0, 0, 100, 100);
-}
-
-void AdaptiveMetronomeAudioProcessorEditor::initialiseEnsembleWidgets (EnsembleModel &ensemble)
-{
-    ensembleParametersViewport.setViewedComponent (new EnsembleParametersComponent (ensemble));
+    auto bounds = getLocalBounds();
+    
+    for (int i = 0; i < channelAttachments.size(); ++i)
+    {
+        auto rowBounds = bounds.removeFromTop (rowHeight);
+        
+        channelSelectors [i]->setBounds (rowBounds.removeFromLeft (sliderWidth));
+        mNoiseStdSliders [i]->setBounds (rowBounds.removeFromLeft (sliderWidth));
+        tkNoiseStdSliders [i]->setBounds (rowBounds.removeFromLeft (sliderWidth));
+        volumeSliders [i]->setBounds (rowBounds.removeFromLeft (sliderWidth));
+        
+        for (int j = 0; j < alphaSliders [i].size(); ++j)
+        {
+            alphaSliders [i][j]->setBounds (rowBounds.removeFromLeft (sliderWidth));
+        }
+    }
 }

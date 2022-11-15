@@ -98,6 +98,11 @@ int EnsembleModel::getNumPlayers()
     return static_cast <int> (players.size());
 }
 
+juce::AudioParameterInt& EnsembleModel::getPlayerChannelParameter (int playerIndex)
+{
+    return players [playerIndex]->channelParam;
+}
+
 juce::AudioParameterFloat& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
 {
     return players [playerIndex]->mNoiseStdParam;
@@ -111,6 +116,11 @@ juce::AudioParameterFloat& EnsembleModel::getPlayerTimeKeeperNoiseParameter (int
 juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIndex)
 {
     return players [playerIndex]->volumeParam;
+}
+
+juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
+{
+    return *alphaParams [player1Index][player2Index];
 }
 
 //==============================================================================
@@ -166,7 +176,7 @@ void EnsembleModel::calculateNewIntervals()
         for (int j = 0; j < players.size(); ++j)
         {
             double async = players [i]->getLatestOnsetTime() - players [j]->getLatestOnsetTime();
-            asyncSum += alphas[i][j] * async;
+            asyncSum += *alphaParams[i][j] * async;
         }
         
         double hNoise = players [i]->generateHNoise() * sampleRate;
@@ -214,12 +224,12 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     for (int i = 0; i < players.size(); ++i)
     {
         asyncBuffer [i][bufferIndex] = players [playerIndex]->getLatestOnsetTime() - players [i]->getLatestOnsetTime();
-        alphaBuffer [i][bufferIndex] = alphas [playerIndex][i];
+        alphaBuffer [i][bufferIndex] = *alphaParams [playerIndex][i];
     }
     
     tkNoiseStdBuffer [bufferIndex] = players [playerIndex]->getTimeKeeperNoiseStd();
     mNoiseStdBuffer [bufferIndex] = players [playerIndex]->getMotorNoiseStd();
-    velocityBuffer [bufferIndex] = players [playerIndex]->getLatestVelocity();
+    volumeBuffer [bufferIndex] = players [playerIndex]->getLatestVolume();
 }
 
 //==============================================================================
@@ -253,7 +263,7 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
         if (checkMidiSequenceHasNotes (track))
         {
             // Assing channels to players in a cyclical manner.
-            int channelToUse = (i % 16) + 1;
+            int channelToUse = (playerIndex % 16) + 1;
             
             players.push_back (std::make_unique <Player> (playerIndex++,
                                                           track,
@@ -272,12 +282,21 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
 
 void EnsembleModel::initialise2DBuffers()
 {
-    // Alpha matrix for players
-    alphas.resize (players.size());
+    // Fix this nonsense!!!!!!!!
+    alphaParams.clear();
     
-    for (auto &a : alphas)
+    for (int i = 0; i < players.size(); ++i)
     {
-        a.resize (players.size(), 0.1);
+        std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
+        
+        for (int j = 0; j < players.size(); ++j)
+        {
+            row.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
+                                                                         "Alpha " + juce::String (i) + "-" + juce::String (j),
+                                                                         0.0, 1.0, 0.1));
+        }
+        
+        alphaParams.push_back (std::move (row));
     }
     
     // First dimension of 2D logging buffers
@@ -303,7 +322,7 @@ void EnsembleModel::initialiseLoggingBuffers (int bufferSize)
     
     tkNoiseStdBuffer.resize (bufferSize, 0.0);
     mNoiseStdBuffer.resize (bufferSize, 0.0);
-    velocityBuffer.resize (bufferSize, 0.0);
+    volumeBuffer.resize (bufferSize, 0.0);
 }
 
 void EnsembleModel::startLoggerLoop()
@@ -480,7 +499,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     
     tkNoiseStdLog += ", " + juce::String (tkNoiseStdBuffer [bufferIndex]);
     mNoiseStdLog += ", " + juce::String (mNoiseStdBuffer [bufferIndex]);
-    velocityLog += ", " + juce::String (velocityBuffer [bufferIndex] / 127.0);
+    velocityLog += ", " + juce::String (volumeBuffer [bufferIndex]);
 }
 
 //==============================================================================

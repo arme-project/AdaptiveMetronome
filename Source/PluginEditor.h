@@ -39,13 +39,26 @@ private:
     
     private:
         //==========================================================================
+        // Parameter sliders and attachments
+        std::vector <std::unique_ptr <juce::ComboBox> > channelSelectors;
         std::vector <std::unique_ptr <juce::Slider> > mNoiseStdSliders;
+        std::vector <std::unique_ptr <juce::Slider> > tkNoiseStdSliders;
+        std::vector <std::unique_ptr <juce::Slider> > volumeSliders;
+        std::vector <std::vector <std::unique_ptr <juce::Slider> > > alphaSliders;
     
+        std::vector <std::unique_ptr <juce::ComboBoxParameterAttachment> > channelAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > mNoiseStdAttachments;
+        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > tkNoiseStdAttachments;
+        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > volumeAttachments;
+        std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > alphaAttachments;
+        
+        //==========================================================================
+        // Layout constants
+        static const int rowHeight = 100;
+        static const int sliderWidth = 100;
     };
     
     juce::Viewport ensembleParametersViewport;
-    void initialiseEnsembleWidgets (EnsembleModel &ensemble);
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AdaptiveMetronomeAudioProcessorEditor)
