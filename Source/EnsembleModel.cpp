@@ -217,8 +217,8 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
         alphaBuffer [i][bufferIndex] = alphas [playerIndex][i];
     }
     
-    mNoiseStdBuffer [bufferIndex] = players [playerIndex]->getMotorNoiseStd();
     tkNoiseStdBuffer [bufferIndex] = players [playerIndex]->getTimeKeeperNoiseStd();
+    mNoiseStdBuffer [bufferIndex] = players [playerIndex]->getMotorNoiseStd();
     velocityBuffer [bufferIndex] = players [playerIndex]->getLatestVelocity();
 }
 
@@ -415,8 +415,8 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                                       tkNoiseLog,
                                       asyncLog,
                                       alphaLog,
-                                      mNoiseStdLog,
                                       tkNoiseStdLog,
+                                      mNoiseStdLog,
                                       velocityLog);                 
         }
         
@@ -432,8 +432,8 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                                       tkNoiseLog,
                                       asyncLog,
                                       alphaLog,
-                                      mNoiseStdLog,
                                       tkNoiseStdLog,
+                                      mNoiseStdLog,
                                       velocityLog);
         }
         

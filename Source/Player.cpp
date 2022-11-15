@@ -5,10 +5,10 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
                 const double &sampleRate, const int &scoreCounter, int initialInterval)
   : mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
                     "Player " + juce::String (index) + " Motor Noise Std",
-                    0.0, 50.0, 1e-4),
+                    0.0, 50.0, 0.1),
     tkNoiseStdParam ("player" + juce::String (index) + "-tknoise-std",
                      "Player " + juce::String (index) + " Time Keeper Noise Std",
-                     0.0, 200.0, 1e-3),
+                     0.0, 200.0, 1.0),
     volumeParam ("player" + juce::String (index) + "-volume",
                  "Player " + juce::String (index) + " Volume",
                  0.0, 1.0, 1.0),
@@ -16,8 +16,8 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
     onsetInterval (initialInterval),
-    mNoiseDistribution (0.0, mNoiseStdParam.get()),
-    tkNoiseDistribution (0.0, tkNoiseStdParam.get())
+    mNoiseDistribution (0.0, mNoiseStdParam.get() / 1000.0),
+    tkNoiseDistribution (0.0, tkNoiseStdParam.get() / 1000.0)
 {
     initialiseScore (seq);
 }
@@ -49,6 +49,7 @@ double Player::generateMotorNoise()
 {
     previousMotorNoise = currentMotorNoise;
     
+    mNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, mNoiseStdParam.get() / 1000.0));
     currentMotorNoise = mNoiseDistribution (randomEngine);
     
     return currentMotorNoise;
