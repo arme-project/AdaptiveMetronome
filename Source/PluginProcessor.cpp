@@ -22,6 +22,7 @@ bool AdaptiveMetronomeAudioProcessor::isBusesLayoutSupported (const BusesLayout&
 void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     ensemble.setSampleRate (sampleRate);
+    midiOutputBuffer.ensureSize (4096);
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -42,10 +43,14 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     
     //==========================================================================
     // If the playhead is moving start processing MIDI
+    midiOutputBuffer.clear();
+    
     if (playing)
     {
-        ensemble.processMidiBlock (midiMessages, buffer.getNumSamples(), tempo);
+        ensemble.processMidiBlock (midiOutputBuffer, buffer.getNumSamples(), tempo);
     }
+    
+    midiMessages.swapWith (midiOutputBuffer);
 }
 
 void AdaptiveMetronomeAudioProcessor::releaseResources()
