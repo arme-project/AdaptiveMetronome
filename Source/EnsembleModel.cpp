@@ -11,6 +11,7 @@ EnsembleModel::EnsembleModel()
 EnsembleModel::~EnsembleModel()
 {
     stopLoggerLoop();
+    stopPollingLoop();
 }
 
 //==============================================================================
@@ -48,6 +49,9 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     
     // Start loop for logging onset times or each player
     startLoggerLoop();
+    
+    // Start loop which polls for new alpha values
+    startPollingLoop();
     
     return true;
 }
@@ -168,6 +172,10 @@ bool EnsembleModel::newOnsetsAvailable()
 void EnsembleModel::calculateNewIntervals()
 {
     //==========================================================================
+    // Get most recent alphas
+    getLatestAlphas();
+    
+    //==========================================================================
     // Calculate new onset times for players.
     for (int i = 0; i < players.size(); ++i)
     {
@@ -209,6 +217,34 @@ void EnsembleModel::clearOnsetsAvailable()
    for (auto &player : players)
     {
         player->resetNotePlayed();
+    } 
+}
+
+void EnsembleModel::getLatestAlphas()
+{
+    if (pollingFifo)
+    {
+        // Consume everything in the buffer, only using the most recent set of alphas.
+        auto reader = pollingFifo->read (pollingFifo->getNumReady()); 
+        
+        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
+        {
+            int player2 = 0;
+            
+            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
+
+            for (int i = block1Start; i < reader.blockSize1; ++i)
+            {
+                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
+            }
+            
+            int block2Start = std::max (block1Start - reader.blockSize1, 0);
+        
+            for (int i = block2Start; i < reader.blockSize2; ++i)
+            {
+                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
+            }
+        }
     } 
 }
 
@@ -277,12 +313,11 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
     initialTempoSet = false;
     
     //==========================================================================
-    initialise2DBuffers(); // allocate 2D arrays for alphas and logging
+    createAlphaParameters(); // create matrix of parameters for alphas
 }
 
-void EnsembleModel::initialise2DBuffers()
+void EnsembleModel::createAlphaParameters()
 {
-    // Fix this nonsense!!!!!!!!
     alphaParams.clear();
     
     for (int i = 0; i < players.size(); ++i)
@@ -298,21 +333,22 @@ void EnsembleModel::initialise2DBuffers()
         
         alphaParams.push_back (std::move (row));
     }
-    
-    // First dimension of 2D logging buffers
-    asyncBuffer.resize (players.size());
-    alphaBuffer.resize (players.size());
 }
 
 
 //==============================================================================
-void EnsembleModel::initialiseLoggingBuffers (int bufferSize)
+void EnsembleModel::initialiseLoggingBuffers()
 {
+    int bufferSize = static_cast <int> (4 * players.size());
+    
     loggingFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
     onsetBuffer.resize (bufferSize, 0);
     onsetIntervalBuffer.resize (bufferSize, 0);
     motorNoiseBuffer.resize (bufferSize, 0.0);
     timeKeeperNoiseBuffer.resize (bufferSize, 0.0);
+    
+    asyncBuffer.resize (players.size());
+    alphaBuffer.resize (players.size());
     
     for (int i = 0; i < asyncBuffer.size(); ++i)
     {
@@ -328,7 +364,7 @@ void EnsembleModel::initialiseLoggingBuffers (int bufferSize)
 void EnsembleModel::startLoggerLoop()
 {
     stopLoggerLoop();
-    initialiseLoggingBuffers (4 * static_cast <int> (players.size()));
+    initialiseLoggingBuffers();
         
     continueLogging = true;
     loggerThread = std::thread ([this] () {this->loggerLoop();});
@@ -472,6 +508,10 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
         // At this point latestOnsets contains the onset time in samples for
         // each of the players' most recently played notes. Do what you will
         // with them here.
+        
+        // Once you've sent those to the server indicate to the polling thread that
+        // it should start to poll for new alphas.
+        alphasUpToDate.clear();
     }
 }
 
@@ -500,6 +540,92 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     tkNoiseStdLog += ", " + juce::String (tkNoiseStdBuffer [bufferIndex]);
     mNoiseStdLog += ", " + juce::String (mNoiseStdBuffer [bufferIndex]);
     velocityLog += ", " + juce::String (volumeBuffer [bufferIndex]);
+}
+
+//==============================================================================
+void EnsembleModel::initialisePollingBuffers()
+{
+    int bufferSize = static_cast <int> (10 * players.size());
+    
+    pollingFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
+
+    pollingBuffer.resize (players.size());
+    
+    for (int i = 0; i < pollingBuffer.size(); ++i)
+    {
+        pollingBuffer [i].resize (bufferSize, 0.0);
+    }
+}
+
+void EnsembleModel::startPollingLoop()
+{
+    stopPollingLoop();
+    initialisePollingBuffers();
+        
+    continuePolling = true;
+    alphasUpToDate.test_and_set();
+    pollingThread = std::thread ([this] () {this->pollingLoop();});
+}
+
+void EnsembleModel::stopPollingLoop()
+{
+    continuePolling = false;
+    
+    if (pollingThread.joinable())
+    {
+        pollingThread.join();
+    }
+}
+
+void EnsembleModel::pollingLoop()
+{
+    while (continuePolling)
+    {
+        if (!alphasUpToDate.test_and_set())
+        {
+            getNewAlphas();
+        }
+        
+        std::this_thread::sleep_for (50ms);
+    }
+}
+
+void EnsembleModel::getNewAlphas()
+{
+    //==========================================================================
+    // In here you should make a request to your server to ask for new alpha
+    // values. If you get some updated values set the following value to true.
+    // If not, set the value to false and the plug-in will poll again after
+    // short time.
+    bool newAlphas = true;
+    
+    if (newAlphas)
+    {
+        auto writer = pollingFifo->write (static_cast <int> (players.size()));
+        
+        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
+        {        
+            int player2 = 0;
+            
+            for (int i = 0; i < writer.blockSize1; ++i)
+            {
+                // Replace the 0.2 with the alpha parameter for player1_player2
+                pollingBuffer [player1][writer.startIndex1 + i] = 0.2;
+                ++player2;
+            }
+        
+            for (int i = 0; i < writer.blockSize2; ++i)
+            {
+                // Replace the 0.2 with the alpha parameter for player1_player2
+                pollingBuffer [player1][writer.startIndex2 + i] = 0.2;
+                ++player2;
+            }
+        }
+    }
+    else
+    {
+        alphasUpToDate.clear();
+    }
 }
 
 //==============================================================================

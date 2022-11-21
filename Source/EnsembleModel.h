@@ -48,6 +48,7 @@ private:
     void calculateNewIntervals();
     void clearOnsetsAvailable();
         
+    void getLatestAlphas();
     void storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex);
     
     //==============================================================================
@@ -68,7 +69,7 @@ private:
     std::atomic_flag playersInUse;
 
     void createPlayers (const juce::MidiFile &file);
-    void initialise2DBuffers();
+    void createAlphaParameters();
     
     //==============================================================================
     // A bunch of stuff for safely logging onset times and sending them out to the
@@ -77,11 +78,11 @@ private:
     std::vector <int> onsetBuffer, onsetIntervalBuffer;
     std::vector <double> motorNoiseBuffer, timeKeeperNoiseBuffer;
     std::vector <std::vector <int> > asyncBuffer;
-    std::vector <std::vector <double> > alphaBuffer;
+    std::vector <std::vector <float> > alphaBuffer;
     std::vector <double> tkNoiseStdBuffer, mNoiseStdBuffer;
     std::vector <double> volumeBuffer;
     
-    void initialiseLoggingBuffers (int bufferSize);
+    void initialiseLoggingBuffers();
     
     std::thread loggerThread;
     std::atomic <bool> continueLogging;
@@ -105,7 +106,24 @@ private:
                                    juce::String &tkNoiseStdLog,
                                    juce::String &mNoiseStdLog,
                                    juce::String &velocityLog);
- 
+                                   
+    //==============================================================================
+    // Functionality for polling for new alpha values from the server.
+    std::unique_ptr <juce::AbstractFifo> pollingFifo;
+    std::vector <std::vector <float> > pollingBuffer;
+
+    void initialisePollingBuffers();
+    
+    std::thread pollingThread;
+    std::atomic <bool> continuePolling;
+    std::atomic_flag alphasUpToDate;
+    
+    void startPollingLoop();
+    void stopPollingLoop();
+    
+    void pollingLoop();
+    void getNewAlphas();
+    
     //==============================================================================
     static bool checkMidiSequenceHasNotes (const juce::MidiMessageSequence *seq);
 };
