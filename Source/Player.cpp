@@ -138,7 +138,7 @@ void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
     
     //==========================================================================
     // Do we need to play another note?
-    if (samplesSinceLastOnset >= onsetInterval)
+    if (samplesSinceLastOnset >= onsetInterval || samplesSinceLastOnset < 0)
     {
         stopPreviousNote (midi, sampleIndex);
         playNextNote (midi, sampleIndex);

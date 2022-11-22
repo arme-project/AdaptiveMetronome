@@ -41,12 +41,17 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     midiFile.convertTimestampTicksToSeconds();
     
     //==========================================================================
+    // Initialise intro countdown
+    introCounter = -sampleRate / 2;
+    introTonesPlayed = 0;
+    
+    //==========================================================================
     // Create player for each track in the file.
     createPlayers (midiFile); // create new players
-    
+     
     // Initialise score counter
     scoreCounter = 0;
-    
+            
     // Start loop for logging onset times or each player
     startLoggerLoop();
     
@@ -57,9 +62,13 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
 }
 
 //==============================================================================
-void EnsembleModel::setSampleRate (double newSampleRate)
+void EnsembleModel::prepareToPlay (double newSampleRate)
 {
     sampleRate = newSampleRate;
+}
+
+void EnsembleModel::releaseResources()
+{
 }
 
 //==============================================================================
@@ -80,19 +89,13 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, do
     // Process each sample of the buffer for each player.
     for (int i = 0; i < numSamples; ++i)
     {
-        for (auto &player : players)
+        if (introTonesPlayed < numIntroTones)
         {
-            player->processSample (midi, i);
+            playIntroTones (midi, i);
+            continue;
         }
         
-        // If all players have played a note, update timings.
-        if (newOnsetsAvailable())
-        {
-            calculateNewIntervals();
-            clearOnsetsAvailable();
-        }
-        
-        ++scoreCounter;
+        playScore (midi, i);
     }
 }
 
@@ -125,6 +128,36 @@ juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIn
 juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
 {
     return *alphaParams [player1Index][player2Index];
+}
+
+//==============================================================================
+void EnsembleModel::playIntroTones (juce::MidiBuffer &midi, int sampleIndex)
+{
+    if (introCounter == 0)
+    {
+        introToneOn (midi, sampleIndex);
+    }
+    else if (introCounter == samplesPerBeat / 4)
+    {
+        introToneOff (midi, sampleIndex);
+    }
+    else if (introCounter >= samplesPerBeat - 1)
+    {
+        ++introTonesPlayed;
+        introCounter = -1;
+    }
+    
+    ++introCounter;
+}
+
+void EnsembleModel::introToneOn (juce::MidiBuffer &midi, int sampleIndex)
+{
+    midi.addEvent (juce::MidiMessage::noteOn (1, introToneNote, introToneVel), sampleIndex);
+}
+
+void EnsembleModel::introToneOff (juce::MidiBuffer &midi, int sampleIndex)
+{
+    midi.addEvent (juce::MidiMessage::noteOff (1, introToneNote, introToneVel), sampleIndex);
 }
 
 //==============================================================================
@@ -335,6 +368,22 @@ void EnsembleModel::createAlphaParameters()
     }
 }
 
+void EnsembleModel::playScore (juce::MidiBuffer &midi, int sampleIndex)
+{          
+    for (auto &player : players)
+    {
+        player->processSample (midi, sampleIndex);
+    }
+        
+    // If all players have played a note, update timings.
+    if (newOnsetsAvailable())
+    {
+        calculateNewIntervals();
+        clearOnsetsAvailable();
+    }
+        
+    ++scoreCounter;
+}
 
 //==============================================================================
 void EnsembleModel::initialiseLoggingBuffers()

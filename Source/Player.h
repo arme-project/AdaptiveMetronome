@@ -74,7 +74,7 @@ private:
     const int &scoreCounter;
     int onsetInterval; // time between previous and next onset in samples
     
-    int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
+    int samplesSinceLastOnset = -1, samplesToNextOffset = -1;
     
     int currentOnsetTime = 0, previousOnsetTime = 0;
     bool notePlayed = false;

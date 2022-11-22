@@ -16,7 +16,8 @@ public:
     bool loadMidiFile (const juce::File &file);
     
     //==============================================================================
-    void setSampleRate (double newSampleRate);
+    void prepareToPlay (double newSampleRate);
+    void releaseResources();
     
     //==============================================================================
     void processMidiBlock (juce::MidiBuffer &midi, int numSamples, double tempo);
@@ -36,6 +37,18 @@ private:
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
     std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
+    
+    //==============================================================================
+    // Intro countdown
+    static const int numIntroTones = 4;
+    static const int introToneNote = 69;
+    static const juce::uint8 introToneVel = 100;
+    int introCounter = 0;
+    int introTonesPlayed = 0;
+    
+    void playIntroTones (juce::MidiBuffer &midi, int sampleIndex);
+    void introToneOn (juce::MidiBuffer &midi, int sampleIndex);
+    void introToneOff (juce::MidiBuffer &midi, int sampleIndex);
     
     //==============================================================================
     // Funtions for ammendinding timings for each player in this ensemble. These
@@ -70,6 +83,8 @@ private:
 
     void createPlayers (const juce::MidiFile &file);
     void createAlphaParameters();
+    
+    void playScore (juce::MidiBuffer &midi, int sampleIndex);
     
     //==============================================================================
     // A bunch of stuff for safely logging onset times and sending them out to the

@@ -21,7 +21,7 @@ bool AdaptiveMetronomeAudioProcessor::isBusesLayoutSupported (const BusesLayout&
 //==============================================================================
 void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    ensemble.setSampleRate (sampleRate);
+    ensemble.prepareToPlay (sampleRate);
     midiOutputBuffer.ensureSize (4096);
 }
 
