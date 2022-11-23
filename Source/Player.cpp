@@ -33,6 +33,17 @@ void Player::reset()
 {
     // rewind to start of score
     currentNoteIndex = 0;
+    
+    // reset note on/off counters
+    samplesSinceLastOnset = -1;
+    samplesToNextOffset = -1;
+    
+    // reset onset times
+    currentOnsetTime = 0;
+    previousOnsetTime = 0;
+    
+    // clear note played flag
+    notePlayed = false;
 }
 
 //==============================================================================

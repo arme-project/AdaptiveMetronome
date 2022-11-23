@@ -21,6 +21,7 @@ private:
     AdaptiveMetronomeAudioProcessor &processor;
     
     //==============================================================================
+    juce::Label instructionLabel;
     juce::TextButton loadMidiButton;
     std::unique_ptr <juce::FileChooser> fileChooser;
     
@@ -36,8 +37,18 @@ private:
         ~EnsembleParametersComponent();
         
         void resized() override;
-    
-    private:
+        
+        static void calculateWidthAndHeight (int nPlayers, int &width, int &height);
+
+    private:      
+        //==========================================================================
+        // Labels
+        std::vector <std::unique_ptr <juce::Label> > headingLabels;
+        std::vector <std::unique_ptr <juce::Label> > playerLabels;
+        std::vector <std::unique_ptr <juce::Label> > alphaLabels;
+        
+        static const juce::StringArray headings;
+        
         //==========================================================================
         // Parameter sliders and attachments
         std::vector <std::unique_ptr <juce::ComboBox> > channelSelectors;
@@ -51,14 +62,22 @@ private:
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > tkNoiseStdAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > volumeAttachments;
         std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > alphaAttachments;
+
         
         //==========================================================================
         // Layout constants
+        static const int headingHeight = 50;
         static const int rowHeight = 100;
-        static const int sliderWidth = 100;
+        static const int columnWidth = 100;
+        static const int padding = 5;
+        static const int comboBoxHeight = 30;
     };
     
     juce::Viewport ensembleParametersViewport;
+
+    static const int instructionStripHeight = 50;
+    static const int optionsStripHeight = 50;
+    static const int padding = 5;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AdaptiveMetronomeAudioProcessorEditor)
