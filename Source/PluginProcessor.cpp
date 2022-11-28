@@ -47,7 +47,7 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     
     if (playing)
     {
-        ensemble.processMidiBlock (midiOutputBuffer, buffer.getNumSamples(), tempo);
+        ensemble.processMidiBlock (midiMessages, midiOutputBuffer, buffer.getNumSamples(), tempo);
     }
     
     midiMessages.swapWith (midiOutputBuffer);

@@ -3,6 +3,7 @@
 #include <vector>
 #include <random>
 
+
 /**
  * A class for playing back a sequence of MIDI note on/off events at given intervals.
  */
@@ -12,7 +13,7 @@ public:
     //==============================================================================
     Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
             const double &sampleRate, const int &scoreCounter, int initialInterval);
-    ~Player();
+    virtual ~Player();
     
     //==============================================================================
     void reset();
@@ -20,6 +21,11 @@ public:
     //==============================================================================
     void setOnsetInterval (int interval);
     int getOnsetInterval();
+    int getPlayedOnsetInterval();
+      
+    virtual void recalculateOnsetInterval (int samplesPerBeat,
+                                           const std::vector <std::unique_ptr <Player> > &players,
+                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas);
     
     //==============================================================================
     double generateMotorNoise();
@@ -40,8 +46,8 @@ public:
     double getLatestVolume();
     
     //==============================================================================
-    void processSample (juce::MidiBuffer &midi, int sampleIndex);
-    
+    void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
+
     //==============================================================================
     // Parameters
     juce::AudioParameterInt channelParam;
@@ -50,7 +56,10 @@ public:
     //==============================================================================
     std::size_t getNumNotes();
     
-private:    
+protected:
+    //==============================================================================
+    int playerIndex = 0;
+    
     //==============================================================================
     // Score information
     struct Note
@@ -68,17 +77,20 @@ private:
     void playNextNote (juce::MidiBuffer &midi, int sampleIndex);
     void stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex);
     
+    virtual void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
+    
     //==============================================================================
     // Timing information
     const double &sampleRate;
     const int &scoreCounter;
-    int onsetInterval; // time between previous and next onset in samples
+    int onsetInterval = 0; // time between previous and next onset in samples
     
     int samplesSinceLastOnset = -1, samplesToNextOffset = -1;
     
     int currentOnsetTime = 0, previousOnsetTime = 0;
     bool notePlayed = false;
     
+private:
     //==============================================================================
     // Randomness
     static std::random_device randomSeed;

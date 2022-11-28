@@ -15,6 +15,7 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
     volumeParam ("player" + juce::String (index) + "-volume",
                  "Player " + juce::String (index) + " Volume",
                  0.0, 1.0, 1.0),
+    playerIndex (index),
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
     onsetInterval (initialInterval),
@@ -55,6 +56,28 @@ void Player::setOnsetInterval (int interval)
 int Player::getOnsetInterval()
 {
     return onsetInterval;
+}
+
+int Player::getPlayedOnsetInterval()
+{
+    return currentOnsetTime - previousOnsetTime;
+}
+
+void Player::recalculateOnsetInterval (int samplesPerBeat,
+                                       const std::vector <std::unique_ptr <Player> > &players,
+                                       const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas)
+{   
+    double asyncSum = 0;
+        
+    for (int i = 0; i < players.size(); ++i)
+    {
+        double async = currentOnsetTime - players [i]->getLatestOnsetTime();
+        asyncSum += *alphas[i] * async;
+    }
+        
+    double hNoise = generateHNoise() * sampleRate;
+
+    onsetInterval = samplesPerBeat - (asyncSum + hNoise);
 }
 
 //==============================================================================
@@ -126,13 +149,13 @@ double Player::getLatestVolume()
 }
 
 //==============================================================================
-void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
+void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
     //==========================================================================
     // Turn off previous note
     if (samplesToNextOffset == 0)
     {
-        stopPreviousNote (midi, sampleIndex);
+        stopPreviousNote (outMidi, sampleIndex);
     }
         
     if (samplesToNextOffset >= 0)
@@ -149,11 +172,7 @@ void Player::processSample (juce::MidiBuffer &midi, int sampleIndex)
     
     //==========================================================================
     // Do we need to play another note?
-    if (samplesSinceLastOnset >= onsetInterval || samplesSinceLastOnset < 0)
-    {
-        stopPreviousNote (midi, sampleIndex);
-        playNextNote (midi, sampleIndex);
-    }
+    processNoteOn (inMidi, outMidi, sampleIndex);
     
     ++samplesSinceLastOnset;
 }
@@ -194,6 +213,8 @@ void Player::initialiseScore (const juce::MidiMessageSequence *seq)
 
 void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex)
 {
+    stopPreviousNote (midi, sampleIndex);
+
     // Add note to buffer.
     auto &note = notes [currentNoteIndex];
     juce::uint8 velocity = note.velocity * volumeParam;
@@ -229,6 +250,14 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
         
     midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
                    sampleIndex);
+}
+
+void Player::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
+{
+    if (samplesSinceLastOnset >= onsetInterval || samplesSinceLastOnset < 0)
+    {
+        playNextNote (outMidi, sampleIndex);
+    }
 }
 
 //==============================================================================

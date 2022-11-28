@@ -20,7 +20,7 @@ public:
     void releaseResources();
     
     //==============================================================================
-    void processMidiBlock (juce::MidiBuffer &midi, int numSamples, double tempo);
+    void processMidiBlock (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int numSamples, double tempo);
     
     //==============================================================================
     int getNumPlayers();
@@ -84,7 +84,7 @@ private:
     void createPlayers (const juce::MidiFile &file);
     void createAlphaParameters();
     
-    void playScore (juce::MidiBuffer &midi, int sampleIndex);
+    void playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
     
     //==============================================================================
     // A bunch of stuff for safely logging onset times and sending them out to the

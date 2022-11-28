@@ -1,4 +1,5 @@
 #include "EnsembleModel.h"
+#include "UserPlayer.h"
 
 using namespace std::chrono_literals;
 
@@ -72,7 +73,7 @@ void EnsembleModel::releaseResources()
 }
 
 //==============================================================================
-void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, double tempo)
+void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int numSamples, double tempo)
 {
     FlagLock lock (playersInUse);
     
@@ -91,11 +92,11 @@ void EnsembleModel::processMidiBlock (juce::MidiBuffer &midi, int numSamples, do
     {
         if (introTonesPlayed < numIntroTones)
         {
-            playIntroTones (midi, i);
+            playIntroTones (outMidi, i);
             continue;
         }
         
-        playScore (midi, i);
+        playScore (inMidi, outMidi, i);
     }
 }
 
@@ -212,17 +213,7 @@ void EnsembleModel::calculateNewIntervals()
     // Calculate new onset times for players.
     for (int i = 0; i < players.size(); ++i)
     {
-        double asyncSum = 0;
-        
-        for (int j = 0; j < players.size(); ++j)
-        {
-            double async = players [i]->getLatestOnsetTime() - players [j]->getLatestOnsetTime();
-            asyncSum += *alphaParams[i][j] * async;
-        }
-        
-        double hNoise = players [i]->generateHNoise() * sampleRate;
-
-        players [i]->setOnsetInterval (samplesPerBeat - (asyncSum + hNoise));
+        players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
     }   
           
     //==========================================================================
@@ -286,7 +277,7 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     // Store the log information about the latest onset from the given player
     // in the logging buffers.
     onsetBuffer [bufferIndex] = players [playerIndex]->getLatestOnsetTime();
-    onsetIntervalBuffer [bufferIndex] = players [playerIndex]->getOnsetInterval();
+    onsetIntervalBuffer [bufferIndex] = players [playerIndex]->getPlayedOnsetInterval();
     motorNoiseBuffer [bufferIndex] = players [playerIndex]->getMotorNoise();
     timeKeeperNoiseBuffer [bufferIndex] = players [playerIndex]->getTimeKeeperNoise();
     
@@ -334,12 +325,24 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
             // Assing channels to players in a cyclical manner.
             int channelToUse = (playerIndex % 16) + 1;
             
-            players.push_back (std::make_unique <Player> (playerIndex++,
-                                                          track,
-                                                          channelToUse,
-                                                          sampleRate,
-                                                          scoreCounter,
-                                                          samplesPerBeat));
+            if (playerIndex == 0)
+            {
+                players.push_back (std::make_unique <UserPlayer> (playerIndex++,
+                                                                  track,
+                                                                  channelToUse,
+                                                                  sampleRate,
+                                                                  scoreCounter,
+                                                                  samplesPerBeat));
+            }
+            else
+            {
+                players.push_back (std::make_unique <Player> (playerIndex++,
+                                                              track,
+                                                              channelToUse,
+                                                              sampleRate,
+                                                              scoreCounter,
+                                                              samplesPerBeat));
+            }
         }
     }
         
@@ -356,23 +359,26 @@ void EnsembleModel::createAlphaParameters()
     for (int i = 0; i < players.size(); ++i)
     {
         std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
+        double alpha = 0.25;
         
         for (int j = 0; j < players.size(); ++j)
         {
             row.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
                                                                          "Alpha " + juce::String (i) + "-" + juce::String (j),
-                                                                         0.0, 1.0, 0.1));
+                                                                         0.0, 1.0, alpha));
+                                                                         
+            alpha = 0.0;
         }
         
         alphaParams.push_back (std::move (row));
     }
 }
 
-void EnsembleModel::playScore (juce::MidiBuffer &midi, int sampleIndex)
+void EnsembleModel::playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {          
     for (auto &player : players)
     {
-        player->processSample (midi, sampleIndex);
+        player->processSample (inMidi, outMidi, sampleIndex);
     }
         
     // If all players have played a note, update timings.
@@ -646,7 +652,7 @@ void EnsembleModel::getNewAlphas()
     // values. If you get some updated values set the following value to true.
     // If not, set the value to false and the plug-in will poll again after
     // short time.
-    bool newAlphas = true;
+    bool newAlphas = false;
     
     if (newAlphas)
     {

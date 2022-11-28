@@ -8,6 +8,8 @@
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
+      <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
       <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"
             file="Source/EnsembleModel.cpp"/>
       <FILE id="S9PNfy" name="EnsembleModel.h" compile="0" resource="0" file="Source/EnsembleModel.h"/>
