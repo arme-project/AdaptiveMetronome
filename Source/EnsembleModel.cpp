@@ -439,7 +439,10 @@ void EnsembleModel::loggerLoop()
 {
     //==========================================================================
     // Expose this option to UI at some point.
-    juce::File logFile ("/Users/Sean.Enderby/Desktop/test.csv");
+    auto time = juce::Time::getCurrentTime();
+    auto logFileName = time.formatted ("Log_%H-%M-%S_%d%b%Y.csv");
+    
+    auto logFile = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory).getChildFile (logFileName);
     juce::FileOutputStream logStream (logFile);
     logStream.setPosition (0);
     logStream.truncate();
