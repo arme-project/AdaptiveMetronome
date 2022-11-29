@@ -115,6 +115,11 @@ int EnsembleModel::getNumPlayers()
     return static_cast <int> (players.size());
 }
 
+bool EnsembleModel::isPlayerUserOperated (int playerIndex)
+{
+    return players [playerIndex]->isUserOperated();
+}
+
 juce::AudioParameterInt& EnsembleModel::getPlayerChannelParameter (int playerIndex)
 {
     return players [playerIndex]->channelParam;
@@ -231,10 +236,22 @@ void EnsembleModel::calculateNewIntervals()
     
     //==========================================================================
     // Calculate new onset times for players.
+    // Make sure all non-user players update before the user players.
     for (int i = 0; i < players.size(); ++i)
     {
-        players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
-    }   
+        if (!players [i]->isUserOperated())
+        {
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+        }
+    }  
+    
+    for (int i = 0; i < players.size(); ++i)
+    {
+        if (players [i]->isUserOperated())
+        {
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+        }
+    } 
           
     //==========================================================================
     // Add details of most recent onsets to buffers to be logged.

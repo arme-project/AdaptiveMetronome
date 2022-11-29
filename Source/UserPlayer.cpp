@@ -12,6 +12,12 @@ UserPlayer::~UserPlayer()
 }
 
 //==============================================================================
+bool UserPlayer::isUserOperated()
+{
+    return true;
+}
+
+//==============================================================================
 void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas)
@@ -24,7 +30,7 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
     
     for (int i = 0; i < players.size(); ++i)
     {
-        if (i != playerIndex)
+        if (!players [i]->isUserOperated())
         {
             meanOnset += players [i]->getLatestOnsetTime();
             meanInterval += players [i]->getOnsetInterval();

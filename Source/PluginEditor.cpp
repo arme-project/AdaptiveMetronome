@@ -161,7 +161,6 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
                                                                      juce::Slider::TextBoxBelow));
         mNoiseStdSliders [i]->setTextValueSuffix (" ms");
         mNoiseStdSliders [i]->setColour (juce::Slider::thumbColourId, juce::Colours::seagreen);
-
                                                                      
         tkNoiseStdSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                       juce::Slider::TextBoxBelow));
@@ -175,6 +174,9 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
         addAndMakeVisible (*mNoiseStdSliders [i]);
         addAndMakeVisible (*tkNoiseStdSliders [i]);
         addAndMakeVisible (*volumeSliders [i]);
+        
+        mNoiseStdSliders [i]->setVisible (!ensemble.isPlayerUserOperated (i));
+        tkNoiseStdSliders [i]->setVisible (!ensemble.isPlayerUserOperated (i));
                                                                      
         //=======================================================================
         // Component attachments
@@ -202,6 +204,7 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
                                                                                               *alphaRow [j]));
                                                                  
             addAndMakeVisible (*alphaRow [j]);
+            alphaRow [j]->setVisible (!ensemble.isPlayerUserOperated (i));
         }
         
         alphaSliders.push_back (std::move (alphaRow));

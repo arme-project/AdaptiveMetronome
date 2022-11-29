@@ -9,6 +9,10 @@ public:
                 const double &sampleRate, const int &scoreCounter, int initialInterval);
     ~UserPlayer();
     
+    //==============================================================================
+    bool isUserOperated() override;
+    
+    //==============================================================================
     void recalculateOnsetInterval (int samplesPerBeat,
                                    const std::vector <std::unique_ptr <Player> > &players,
                                    const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas) override;

@@ -25,6 +25,7 @@ public:
     
     //==============================================================================
     int getNumPlayers();
+    bool isPlayerUserOperated (int playerIndex);
     juce::AudioParameterInt& getPlayerChannelParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerMotorNoiseParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerTimeKeeperNoiseParameter (int playerIndex);
