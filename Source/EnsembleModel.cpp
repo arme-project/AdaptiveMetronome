@@ -7,6 +7,7 @@ using namespace std::chrono_literals;
 EnsembleModel::EnsembleModel()
 {
     playersInUse.clear();
+    resetFlag.clear();
 }
 
 EnsembleModel::~EnsembleModel()
@@ -88,6 +89,13 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
     setTempo (tempo);
     
     //==============================================================================
+    // Clear output if ensemble has been reset
+    if (!resetFlag.test_and_set())
+    {
+        soundOffAllChannels (outMidi);
+    }
+    
+    //==============================================================================
     // Process each sample of the buffer for each player.
     for (int i = 0; i < numSamples; ++i)
     {
@@ -130,6 +138,17 @@ juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIn
 juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
 {
     return *alphaParams [player1Index][player2Index];
+}
+
+//==============================================================================
+void EnsembleModel::soundOffAllChannels (juce::MidiBuffer &midi)
+{
+    for (int channel = 1; channel <= 16; ++channel)
+    {
+        midi.addEvent (juce::MidiMessage::allNotesOff (channel), 0);
+        midi.addEvent (juce::MidiMessage::allSoundOff (channel), 0);
+        midi.addEvent (juce::MidiMessage::allControllersOff (channel), 0);
+    }
 }
 
 //==============================================================================
@@ -346,8 +365,6 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
             }
         }
     }
-        
-    initialTempoSet = false;
     
     //==========================================================================
     createAlphaParameters(); // create matrix of parameters for alphas
@@ -401,6 +418,9 @@ void EnsembleModel::resetPlayers()
      
     // Initialise score counter
     scoreCounter = 0;
+    
+    // make sure to update player tempo when playback starts      
+    initialTempoSet = false;
             
     // Start loop for logging onset times or each player
     startLoggerLoop();
@@ -409,10 +429,13 @@ void EnsembleModel::resetPlayers()
     startPollingLoop();
     
     //==========================================================================
+    // reset all players
     for (auto &player : players)
     {
         player->reset();
     }
+    
+    resetFlag.clear();
 }
 
 //==============================================================================

@@ -30,6 +30,9 @@ public:
     juce::AudioParameterFloat& getPlayerTimeKeeperNoiseParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
     juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
+    
+    //==============================================================================
+    static void soundOffAllChannels (juce::MidiBuffer &midi);
 
 private:
     //==============================================================================
@@ -87,6 +90,7 @@ private:
     
     void playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
     
+    std::atomic_flag resetFlag;
     void resetPlayers();
     
     //==============================================================================

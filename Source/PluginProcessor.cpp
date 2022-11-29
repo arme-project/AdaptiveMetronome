@@ -23,6 +23,8 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samp
 {
     ensemble.prepareToPlay (sampleRate);
     midiOutputBuffer.ensureSize (4096);
+    
+    wasPlaying = false;
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -42,14 +44,29 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     double tempo = bpm.hasValue() ? *bpm : 60;
     
     //==========================================================================
-    // If the playhead is moving start processing MIDI
+    // Prepare output MIDI buffer
     midiOutputBuffer.clear();
     
+    //==========================================================================
+    // If playback has just stopped, stop all sound
+    bool playbackStopped = !playing && wasPlaying;
+    
+    if (playbackStopped)
+    {
+        EnsembleModel::soundOffAllChannels (midiOutputBuffer);
+    }
+    
+    wasPlaying = playing;
+    
+    //==========================================================================
+    // If the playhead is moving start processing MIDI
     if (playing)
     {
         ensemble.processMidiBlock (midiMessages, midiOutputBuffer, buffer.getNumSamples(), tempo);
     }
     
+    //==========================================================================
+    // Replace output MIDI buffer
     midiMessages.swapWith (midiOutputBuffer);
 }
 
