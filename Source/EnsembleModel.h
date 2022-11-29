@@ -14,6 +14,7 @@ public:
     
     //==============================================================================
     bool loadMidiFile (const juce::File &file);
+    bool reset();
     
     //==============================================================================
     void prepareToPlay (double newSampleRate);
@@ -86,6 +87,8 @@ private:
     
     void playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
     
+    void resetPlayers();
+    
     //==============================================================================
     // A bunch of stuff for safely logging onset times and sending them out to the
     // server. Functions defined in here are only safe to call from the logging thread.
@@ -121,6 +124,8 @@ private:
                                    juce::String &tkNoiseStdLog,
                                    juce::String &mNoiseStdLog,
                                    juce::String &velocityLog);
+                                   
+    void postLatestOnsets (const std::vector <int> &onsets);
                                    
     //==============================================================================
     // Functionality for polling for new alpha values from the server.

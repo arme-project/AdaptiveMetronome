@@ -42,22 +42,23 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     midiFile.convertTimestampTicksToSeconds();
     
     //==========================================================================
-    // Initialise intro countdown
-    introCounter = -sampleRate / 2;
-    introTonesPlayed = 0;
-    
-    //==========================================================================
     // Create player for each track in the file.
     createPlayers (midiFile); // create new players
-     
-    // Initialise score counter
-    scoreCounter = 0;
-            
-    // Start loop for logging onset times or each player
-    startLoggerLoop();
+    resetPlayers();
     
-    // Start loop which polls for new alpha values
-    startPollingLoop();
+    return true;
+}
+
+bool EnsembleModel::reset()
+{
+    FlagLock lock (playersInUse);
+    
+    if (!lock.locked)
+    {
+        return false;
+    }
+    
+    resetPlayers();
     
     return true;
 }
@@ -391,6 +392,29 @@ void EnsembleModel::playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer 
     ++scoreCounter;
 }
 
+void EnsembleModel::resetPlayers()
+{
+    //==========================================================================
+    // Initialise intro countdown
+    introCounter = -sampleRate / 2;
+    introTonesPlayed = 0;
+     
+    // Initialise score counter
+    scoreCounter = 0;
+            
+    // Start loop for logging onset times or each player
+    startLoggerLoop();
+    
+    // Start loop which polls for new alpha values
+    startPollingLoop();
+    
+    //==========================================================================
+    for (auto &player : players)
+    {
+        player->reset();
+    }
+}
+
 //==============================================================================
 void EnsembleModel::initialiseLoggingBuffers()
 {
@@ -561,15 +585,9 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                    velocityLog + "\n";
                    
         logStream.writeText (logLine, false, false, nullptr);
-        
-        //==========================================================================
-        // At this point latestOnsets contains the onset time in samples for
-        // each of the players' most recently played notes. Do what you will
-        // with them here.
-        
-        // Once you've sent those to the server indicate to the polling thread that
-        // it should start to poll for new alphas.
-        alphasUpToDate.clear();
+
+        // Send onset detail to wherever they need to go.
+        postLatestOnsets (latestOnsets);
     }
 }
 
@@ -598,6 +616,17 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     tkNoiseStdLog += ", " + juce::String (tkNoiseStdBuffer [bufferIndex]);
     mNoiseStdLog += ", " + juce::String (mNoiseStdBuffer [bufferIndex]);
     velocityLog += ", " + juce::String (volumeBuffer [bufferIndex]);
+}
+
+void EnsembleModel::postLatestOnsets (const std::vector <int> &onsets)
+{        
+    //==========================================================================
+    // onsets contains the onset time in samples for each of the players' most 
+    // recently played notes. Do what you will with them here.
+        
+    // Once you've sent those to the server indicate to the polling thread that
+    // it should start to poll for new alphas.
+    alphasUpToDate.clear();
 }
 
 //==============================================================================

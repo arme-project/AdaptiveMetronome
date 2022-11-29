@@ -22,10 +22,11 @@ private:
     
     //==============================================================================
     juce::Label instructionLabel;
-    juce::TextButton loadMidiButton;
+    juce::TextButton resetButton, loadMidiButton;
     std::unique_ptr <juce::FileChooser> fileChooser;
     
     //==============================================================================
+    void resetButtonCallback();
     void loadMidiButtonCallback();
     void loadMidiFile (juce::File file);
     

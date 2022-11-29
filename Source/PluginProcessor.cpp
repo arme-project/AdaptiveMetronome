@@ -136,6 +136,11 @@ EnsembleModel& AdaptiveMetronomeAudioProcessor::loadMidiFile (const juce::File &
     return ensemble;
 }
 
+void AdaptiveMetronomeAudioProcessor::resetEnsemble()
+{
+    ensemble.reset();
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

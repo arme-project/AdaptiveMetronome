@@ -6,6 +6,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
+      resetButton ("Reset"),
       loadMidiButton ("Load MIDI")
 {
     //==========================================================================
@@ -14,6 +15,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     instructionLabel.setFont (instructionStripHeight - padding * 3);
     
     //==========================================================================
+    addAndMakeVisible (resetButton);
+    resetButton.addListener (this);
+    
     addAndMakeVisible (loadMidiButton);    
     loadMidiButton.addListener (this);
     
@@ -51,6 +55,9 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     auto loadButtonBounds = optionsStripBounds.removeFromRight (loadMidiButton.getBestWidthForHeight (optionsStripHeight));
     loadMidiButton.setBounds (loadButtonBounds.reduced (padding));
     
+    auto resetButtonBounds = optionsStripBounds.removeFromRight (resetButton.getBestWidthForHeight (optionsStripHeight));
+    resetButton.setBounds (resetButtonBounds.reduced (padding));
+    
     //==========================================================================
     // Ensemble Parameters Area
     ensembleParametersViewport.setBounds (bounds);
@@ -59,10 +66,22 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
 {
-    loadMidiButtonCallback();
+    if (button == &resetButton)
+    {
+        resetButtonCallback();
+    }
+    else
+    {
+        loadMidiButtonCallback();
+    }
 }
 
 //==============================================================================
+void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
+{
+    processor.resetEnsemble();
+}
+
 void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()
 {
     fileChooser = std::make_unique <juce::FileChooser> ("Load MIDI",
