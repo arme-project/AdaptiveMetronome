@@ -2,7 +2,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor& p)
+AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor& p,
+                                                                              EnsembleModel &ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
@@ -22,6 +23,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     loadMidiButton.addListener (this);
     
     addAndMakeVisible (ensembleParametersViewport);
+    
+    //==========================================================================
+    initialiseEnsembleParameters (ensemble);
     
     //==========================================================================
     int paramWidth = 0, paramHeight = 0;
@@ -102,7 +106,7 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
     ensembleParametersViewport.setViewedComponent (nullptr);
     
     auto &ensemble = processor.loadMidiFile (file);
-    ensembleParametersViewport.setViewedComponent (new EnsembleParametersComponent (ensemble));
+    initialiseEnsembleParameters (ensemble);
 }
 
 //==============================================================================
@@ -215,10 +219,16 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::~EnsemblePar
 
 void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized()
 {
-    auto bounds = getLocalBounds();
-    
+    //==========================================================================
+    // Don't place anything if there are no players
+    if (alphaLabels.size() == 0)
+    {
+        return;
+    }
+
     //==========================================================================
     // Place Headings
+    auto bounds = getLocalBounds();
     auto headingBounds = bounds.removeFromTop (headingHeight);
     auto alphaHeadingIdx = headingLabels.size() - 1;
     
@@ -257,5 +267,10 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::calcula
 {
     width = (5 + nPlayers) * columnWidth;
     height = rowHeight * nPlayers + headingHeight;
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::initialiseEnsembleParameters (EnsembleModel &ensemble)
+{
+    ensembleParametersViewport.setViewedComponent (new EnsembleParametersComponent (ensemble));
 }
 

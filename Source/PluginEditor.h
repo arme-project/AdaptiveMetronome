@@ -6,7 +6,8 @@ class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
                                               public juce::Button::Listener
 {
 public:
-    AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&);
+    AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&,
+                                           EnsembleModel &ensemble);
     ~AdaptiveMetronomeAudioProcessorEditor() override;
 
     //==============================================================================
@@ -79,6 +80,8 @@ private:
     static const int instructionStripHeight = 50;
     static const int optionsStripHeight = 50;
     static const int padding = 5;
+    
+    void initialiseEnsembleParameters (EnsembleModel &ensemble);
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AdaptiveMetronomeAudioProcessorEditor)

@@ -82,7 +82,7 @@ bool AdaptiveMetronomeAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* AdaptiveMetronomeAudioProcessor::createEditor()
 {
-    return new AdaptiveMetronomeAudioProcessorEditor (*this);
+    return new AdaptiveMetronomeAudioProcessorEditor (*this, ensemble);
 }
 
 //==============================================================================
