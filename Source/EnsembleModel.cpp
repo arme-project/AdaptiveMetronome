@@ -362,7 +362,7 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
             // Assing channels to players in a cyclical manner.
             int channelToUse = (playerIndex % 16) + 1;
             
-            if (playerIndex == 0)
+            if (playerIndex < numUserPlayers)
             {
                 players.push_back (std::make_unique <UserPlayer> (playerIndex++,
                                                                   track,
@@ -535,7 +535,7 @@ void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
     {
         int playerId = i + 1;
         
-        onsetLog += ", P" + juce::String (playerId);
+        onsetLog += ", P" + juce::String (playerId) + (players [i]->isUserOperated() ? " (input)" : "");
         intervalLog += ", P" + juce::String (playerId) + " Int";
         mNoiseLog += ", P" + juce::String (playerId) + " MVar";
         tkNoiseLog += ", P" + juce::String (playerId) + " TKVar";

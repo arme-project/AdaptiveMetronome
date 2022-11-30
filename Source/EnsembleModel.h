@@ -37,6 +37,9 @@ public:
 
 private:
     //==============================================================================
+    static const int numUserPlayers = 1;
+    
+    //==============================================================================
     // Timing parameters
     double sampleRate = 44100.0;
     int samplesPerBeat = sampleRate / 4;
