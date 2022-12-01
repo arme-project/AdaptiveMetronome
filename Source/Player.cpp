@@ -6,6 +6,9 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
   : channelParam ("player" + juce::String (index) + "-channel",
                   "Player " + juce::String (index) + " MIDI Channel",
                   1, 16, midiChannel),
+    delayParam ("player" + juce::String (index) + "-delay",
+                "Player " + juce::String (index) + " Delay",
+                0.0, 50.0, 0.0),
     mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
                     "Player " + juce::String (index) + " Motor Noise Std",
                     0.0, 10.0, 0.1),
@@ -83,7 +86,7 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
         
     double hNoise = generateHNoise() * sampleRate;
 
-    onsetInterval = samplesPerBeat - (asyncSum + hNoise);
+    onsetInterval = samplesPerBeat - asyncSum + hNoise;
 }
 
 //==============================================================================

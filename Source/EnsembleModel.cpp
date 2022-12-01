@@ -125,6 +125,11 @@ juce::AudioParameterInt& EnsembleModel::getPlayerChannelParameter (int playerInd
     return players [playerIndex]->channelParam;
 }
 
+juce::AudioParameterFloat& EnsembleModel::getPlayerDelayParameter (int playerIndex)
+{
+    return players [playerIndex]->delayParam;
+}
+
 juce::AudioParameterFloat& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
 {
     return players [playerIndex]->mNoiseStdParam;

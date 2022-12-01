@@ -112,9 +112,10 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
 //==============================================================================
 const juce::StringArray AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::headings {"Player",
                                                                                                       "MIDI Channel",
+                                                                                                      "Volume",
+                                                                                                      "Delay",
                                                                                                       "Motor Noise STD",
                                                                                                       "Time Keeper Noise STD",
-                                                                                                      "Volume",
                                                                                                       "Alphas"};
 
 AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsembleParametersComponent (EnsembleModel &ensemble)
@@ -157,24 +158,36 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
         
         //=======================================================================
         // Parameter Sliders
+        // Volume
+        volumeSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
+                                                                  juce::Slider::TextBoxBelow));
+          
+        // Delay
+        delaySliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
+                                                                 juce::Slider::TextBoxBelow));
+        delaySliders [i]->setTextValueSuffix (" ms");
+        delaySliders [i]->setColour (juce::Slider::thumbColourId, juce::Colours::seagreen);                                                        
+        
+        // Motor Noise                                                         
         mNoiseStdSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                      juce::Slider::TextBoxBelow));
         mNoiseStdSliders [i]->setTextValueSuffix (" ms");
         mNoiseStdSliders [i]->setColour (juce::Slider::thumbColourId, juce::Colours::seagreen);
-                                                                     
+        
+        // Timekeeper Noise                                                             
         tkNoiseStdSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                       juce::Slider::TextBoxBelow));
         tkNoiseStdSliders [i]->setTextValueSuffix (" ms");
         tkNoiseStdSliders [i]->setColour (juce::Slider::thumbColourId, juce::Colours::seagreen);
-
-        volumeSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
-                                                                  juce::Slider::TextBoxBelow));
-                                                                     
-                                                                     
+              
+        // Add all to the UI
+        addAndMakeVisible (*delaySliders [i]);
+        addAndMakeVisible (*volumeSliders [i]);
         addAndMakeVisible (*mNoiseStdSliders [i]);
         addAndMakeVisible (*tkNoiseStdSliders [i]);
-        addAndMakeVisible (*volumeSliders [i]);
         
+        // Hide user player parameters
+        delaySliders [i]->setVisible (!ensemble.isPlayerUserOperated (i));
         mNoiseStdSliders [i]->setVisible (!ensemble.isPlayerUserOperated (i));
         tkNoiseStdSliders [i]->setVisible (!ensemble.isPlayerUserOperated (i));
                                                                      
@@ -182,12 +195,14 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
         // Component attachments
         channelAttachments.push_back (std::make_unique <juce::ComboBoxParameterAttachment> (ensemble.getPlayerChannelParameter (i),
                                                                                             *channelSelectors [i]));
+        volumeAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerVolumeParameter (i),
+                                                                                         *volumeSliders [i]));
+        delayAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerDelayParameter (i),
+                                                                                        *delaySliders [i]));
         mNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerMotorNoiseParameter (i),
                                                                                             *mNoiseStdSliders [i]));
         tkNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerTimeKeeperNoiseParameter (i),
                                                                                              *tkNoiseStdSliders [i]));
-        mNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerVolumeParameter (i),
-                                                                                            *volumeSliders [i]));
                                                                                             
         //=======================================================================
         // Alpha controls       
@@ -254,10 +269,11 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized
         auto rowBounds = bounds.removeFromTop (rowHeight);
         
         playerLabels [i]->setBounds (rowBounds.removeFromLeft (columnWidth));
-        channelSelectors [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding, (rowHeight - comboBoxHeight) / 2));
+        channelSelectors [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding, (rowHeight - comboBoxHeight) / 2)); 
+        volumeSliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
+        delaySliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
         mNoiseStdSliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
         tkNoiseStdSliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
-        volumeSliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
         
         for (int j = 0; j < alphaSliders [i].size(); ++j)
         {
@@ -268,7 +284,7 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized
 
 void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::calculateWidthAndHeight (int nPlayers, int &width, int &height)
 {
-    width = (5 + nPlayers) * columnWidth;
+    width = (6 + nPlayers) * columnWidth;
     height = rowHeight * nPlayers + headingHeight;
 }
 

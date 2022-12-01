@@ -54,7 +54,7 @@ public:
     //==============================================================================
     // Parameters
     juce::AudioParameterInt channelParam;
-    juce::AudioParameterFloat mNoiseStdParam, tkNoiseStdParam, volumeParam;
+    juce::AudioParameterFloat delayParam, mNoiseStdParam, tkNoiseStdParam, volumeParam;
     
     //==============================================================================
     std::size_t getNumNotes();
