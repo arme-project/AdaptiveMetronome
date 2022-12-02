@@ -46,6 +46,7 @@ public:
     void resetNotePlayed();
     
     int getLatestOnsetTime();
+    int getLatestOnsetDelay();
     double getLatestVolume();
     virtual bool wasLatestOnsetUserInput();
     
@@ -78,7 +79,7 @@ protected:
     double latestVolume = 0.0;
     
     void initialiseScore (const juce::MidiMessageSequence *seq);
-    void playNextNote (juce::MidiBuffer &midi, int sampleIndex);
+    void playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesDelay = 0);
     void stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex);
     
     virtual void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
@@ -89,9 +90,10 @@ protected:
     const int &scoreCounter;
     int onsetInterval = 0; // time between previous and next onset in samples
     
-    int samplesSinceLastOnset = -1, samplesToNextOffset = -1;
+    int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
     
     int currentOnsetTime = 0, previousOnsetTime = 0;
+    int latestDelay = 0;
     bool notePlayed = false;
     
 private:

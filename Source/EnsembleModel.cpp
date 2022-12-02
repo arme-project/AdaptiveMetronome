@@ -324,6 +324,7 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     data.onsetTime = players [playerIndex]->getLatestOnsetTime();
     data.onsetInterval = players [playerIndex]->getPlayedOnsetInterval();
     data.userInput = players [playerIndex]->wasLatestOnsetUserInput();
+    data.delay = players [playerIndex]->getLatestOnsetDelay();
     data.motorNoise = players [playerIndex]->getMotorNoise();
     data.timeKeeperNoise = players [playerIndex]->getTimeKeeperNoise();
     
@@ -527,9 +528,9 @@ void EnsembleModel::loggerLoop()
 void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
 {
     juce::String logLine ("N");
-    juce::String onsetLog, intervalLog, userInputLog, mNoiseLog, tkNoiseLog,
-                 asyncLog, alphaLog, tkNoiseStdLog, mNoiseStdLog,
-                 velocityLog;
+    juce::String onsetLog, intervalLog, userInputLog, delayLog,
+                 mNoiseLog, tkNoiseLog, asyncLog, alphaLog, 
+                 tkNoiseStdLog, mNoiseStdLog, velocityLog;
                  
     for (int i = 0; i < players.size(); ++i)
     {
@@ -538,6 +539,7 @@ void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
         onsetLog += ", P" + juce::String (playerId) + (players [i]->isUserOperated() ? " (input)" : "");
         intervalLog += ", P" + juce::String (playerId) + " Int";
         userInputLog += ", P" + juce::String (playerId) + " User Input";
+        delayLog += ", P" + juce::String (playerId) + " Delay";
         mNoiseLog += ", P" + juce::String (playerId) + " MVar";
         tkNoiseLog += ", P" + juce::String (playerId) + " TKVar";
         
@@ -557,6 +559,7 @@ void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
     logLine += onsetLog + ", " + 
                intervalLog + ", " + 
                userInputLog + ", " + 
+               delayLog + ", " +
                mNoiseLog + ", " +
                tkNoiseLog + ", " +
                asyncLog + ", " +
@@ -573,24 +576,32 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
 {
     while (loggingFifo->getNumReady() > 0)
     {
-        std::vector <int> latestOnsets (players.size());
+        std::vector <int> latestOnsets (players.size()), latestDelays (players.size());
         juce::String logLine (logLineCounter++);
-        juce::String userInputLog, onsetLog, intervalLog, mNoiseLog, tkNoiseLog,
-                     asyncLog, alphaLog, tkNoiseStdLog, mNoiseStdLog,
-                     velocityLog;
+        juce::String onsetLog, intervalLog, userInputLog, delayLog,
+                     mNoiseLog, tkNoiseLog, asyncLog, alphaLog, 
+                     tkNoiseStdLog, mNoiseStdLog, velocityLog;
+                 
         int p = 0;
 
         auto reader = loggingFifo->read (static_cast <int> (players.size()));
         
         for (int i = 0; i < reader.blockSize1; ++i)
         {
-            int onsetTime = loggingBuffer [reader.startIndex1 + i].onsetTime;
-            latestOnsets [p++] = onsetTime;
+            // Append to array to send to server.
+            int bufferIndex = reader.startIndex1 + i;
             
-            logOnsetDetailsForPlayer (reader.startIndex1 + i,
+            auto &data = loggingBuffer [bufferIndex];
+            latestOnsets [p] = data.onsetTime;
+            latestDelays [p] = data.delay;
+            ++p;
+            
+            // Log to log file
+            logOnsetDetailsForPlayer (bufferIndex,
                                       onsetLog,
                                       intervalLog,
                                       userInputLog,
+                                      delayLog,
                                       mNoiseLog,
                                       tkNoiseLog,
                                       asyncLog,
@@ -602,13 +613,20 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
         
         for (int i = 0; i < reader.blockSize2; ++i)
         {
-            int onsetTime = loggingBuffer [reader.startIndex2 + i].onsetTime;
-            latestOnsets [p++] = onsetTime;
+             // Append to array to send to server.
+            int bufferIndex = reader.startIndex2 + i;
+            
+            auto &data = loggingBuffer [bufferIndex];
+            latestOnsets [p] = data.onsetTime;
+            latestDelays [p] = data.delay;
+            ++p;
      
-            logOnsetDetailsForPlayer (reader.startIndex2 + i,
+            // Log to log file
+            logOnsetDetailsForPlayer (bufferIndex,
                                       onsetLog,
                                       intervalLog,
                                       userInputLog,
+                                      delayLog,
                                       mNoiseLog,
                                       tkNoiseLog,
                                       asyncLog,
@@ -619,8 +637,9 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
         }
         
         logLine += onsetLog + ", " + 
-                   intervalLog + ", " +
-                   userInputLog + ", " +
+                   intervalLog + ", " + 
+                   userInputLog + ", " + 
+                   delayLog + ", " +
                    mNoiseLog + ", " +
                    tkNoiseLog + ", " +
                    asyncLog + ", " +
@@ -632,7 +651,7 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
         logStream.writeText (logLine, false, false, nullptr);
 
         // Send onset detail to wherever they need to go.
-        postLatestOnsets (latestOnsets);
+        postLatestOnsets (latestOnsets, latestDelays);
     }
 }
 
@@ -640,6 +659,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
                                               juce::String &onsetLog,
                                               juce::String &intervalLog,
                                               juce::String &userInputLog,
+                                              juce::String &delayLog,
                                               juce::String &mNoiseLog,
                                               juce::String &tkNoiseLog,
                                               juce::String &asyncLog,
@@ -653,6 +673,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     onsetLog += ", " + juce::String (data.onsetTime / sampleRate);
     intervalLog += ", " + juce::String (data.onsetInterval / sampleRate);
     userInputLog += ", " + juce::String (data.userInput ? "true" : "false");
+    delayLog += ", " + juce::String (data.delay / sampleRate);
     mNoiseLog += ", " + juce::String (data.motorNoise);
     tkNoiseLog += ", " + juce::String (data.timeKeeperNoise);
     
@@ -667,11 +688,16 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     velocityLog += ", " + juce::String (data.volume);
 }
 
-void EnsembleModel::postLatestOnsets (const std::vector <int> &onsets)
+void EnsembleModel::postLatestOnsets (const std::vector <int> &onsets, const std::vector <int> &delays)
 {        
     //==========================================================================
     // onsets contains the onset time in samples for each of the players' most 
-    // recently played notes. Do what you will with them here.
+    // recently played notes.
+    //
+    // delays contains the delays for each player in samples
+    //
+    // Send these to the server however you want here. The current sampling
+    // frequency is available in the sampleRate variable.
         
     // Once you've sent those to the server indicate to the polling thread that
     // it should start to poll for new alphas.

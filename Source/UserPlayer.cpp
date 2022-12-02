@@ -76,7 +76,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
     }
     
     // If no user input trigger a note automatically
-    if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || samplesSinceLastOnset < 0))
+    if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || scoreCounter == 0))
     {
         playNextNote (outMidi, sampleIndex);
         noteTriggeredByUser = false;

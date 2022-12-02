@@ -107,6 +107,7 @@ private:
     {
         int onsetTime, onsetInterval;
         bool userInput;
+        double delay;
         double motorNoise, timeKeeperNoise;
         std::vector <int> asyncs;
         std::vector <float> alphas;
@@ -134,6 +135,7 @@ private:
                                    juce::String &onsetLog,
                                    juce::String &intervalLog,
                                    juce::String &userInputLog,
+                                   juce::String &delayLog,
                                    juce::String &mNoiseLog,
                                    juce::String &tkNoiseLog,
                                    juce::String &asyncLog,
@@ -142,7 +144,7 @@ private:
                                    juce::String &mNoiseStdLog,
                                    juce::String &velocityLog);
                                    
-    void postLatestOnsets (const std::vector <int> &onsets);
+    void postLatestOnsets (const std::vector <int> &onsets, const std::vector <int> &delays);
                                    
     //==============================================================================
     // Functionality for polling for new alpha values from the server.

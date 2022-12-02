@@ -8,7 +8,7 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
                   1, 16, midiChannel),
     delayParam ("player" + juce::String (index) + "-delay",
                 "Player " + juce::String (index) + " Delay",
-                0.0, 50.0, 0.0),
+                0.0, 200.0, 0.0),
     mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
                     "Player " + juce::String (index) + " Motor Noise Std",
                     0.0, 10.0, 0.1),
@@ -45,7 +45,7 @@ void Player::reset()
     currentNoteIndex = 0;
     
     // reset note on/off counters
-    samplesSinceLastOnset = -1;
+    samplesSinceLastOnset = 0;
     samplesToNextOffset = -1;
     
     // reset onset times
@@ -152,6 +152,11 @@ int Player::getLatestOnsetTime()
     return currentOnsetTime;
 }
 
+int Player::getLatestOnsetDelay()
+{
+    return latestDelay;
+}
+
 double Player::getLatestVolume()
 {
     return latestVolume;
@@ -225,7 +230,7 @@ void Player::initialiseScore (const juce::MidiMessageSequence *seq)
     reset();
 }
 
-void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex)
+void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesDelay)
 {
     stopPreviousNote (midi, sampleIndex);
 
@@ -238,14 +243,14 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex)
                    
     latestVolume = velocity / 127.0;
             
-    // Initialise counters for note timings.
-    samplesSinceLastOnset = 0;
+    // Ignoring delay this onset should have happened samplesDelay samples ago.
+    samplesSinceLastOnset = samplesDelay;                    
     samplesToNextOffset = note.duration * sampleRate;
              
-    // Store onset time.
+    // Store onset time, ignoring per-player delay.
     notePlayed = true;
     previousOnsetTime = currentOnsetTime;
-    currentOnsetTime = scoreCounter;
+    currentOnsetTime = scoreCounter - samplesDelay;
     
     // Move to next note in score.
     ++currentNoteIndex;
@@ -268,10 +273,14 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
 
 void Player::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
-    if (samplesSinceLastOnset >= onsetInterval || samplesSinceLastOnset < 0)
+    int samplesDelay = sampleRate * delayParam / 1000.0;
+    
+    if (samplesSinceLastOnset >= onsetInterval + samplesDelay || scoreCounter == samplesDelay)
     {
-        playNextNote (outMidi, sampleIndex);
+        playNextNote (outMidi, sampleIndex, samplesDelay);
     }
+    
+    latestDelay = samplesDelay;
 }
 
 //==============================================================================
