@@ -7,13 +7,29 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
+      userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI")
 {
+        
     //==========================================================================
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
     instructionLabel.setFont (instructionStripHeight - padding * 3);
+    
+    //==========================================================================
+    addAndMakeVisible (userPlayersLabel);
+    userPlayersLabel.setJustificationType (juce::Justification::right);
+    userPlayersLabel.setFont (optionsStripHeight - padding * 5);
+    
+    addAndMakeVisible (userPlayersSelector);
+    
+    for (int s = 0; s <= 4; ++s)
+    {
+        userPlayersSelector.addItem (juce::String (s), s + 1);
+    }
+    
+    userPlayersSelector.setSelectedId (2);
     
     //==========================================================================
     addAndMakeVisible (resetButton);
@@ -62,6 +78,11 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     auto resetButtonBounds = optionsStripBounds.removeFromRight (resetButton.getBestWidthForHeight (optionsStripHeight));
     resetButton.setBounds (resetButtonBounds.reduced (padding));
     
+    auto userPlayersBounds = optionsStripBounds.removeFromRight (100);
+    userPlayersSelector.setBounds (userPlayersBounds.reduced (padding));
+    
+    userPlayersLabel.setBounds (optionsStripBounds);
+    
     //==========================================================================
     // Ensemble Parameters Area
     ensembleParametersViewport.setBounds (bounds);
@@ -105,7 +126,7 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
 {
     ensembleParametersViewport.setViewedComponent (nullptr);
     
-    auto &ensemble = processor.loadMidiFile (file);
+    auto &ensemble = processor.loadMidiFile (file, userPlayersSelector.getSelectedId() - 1);
     initialiseEnsembleParameters (ensemble);
 }
 

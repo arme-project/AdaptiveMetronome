@@ -17,7 +17,7 @@ EnsembleModel::~EnsembleModel()
 }
 
 //==============================================================================
-bool EnsembleModel::loadMidiFile (const juce::File &file)
+bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
 {
     FlagLock lock (playersInUse);
     
@@ -25,7 +25,7 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     {
         return false;
     }
-    
+
     //==========================================================================
     // Read in content of MIDI file.
     juce::FileInputStream inStream (file);
@@ -43,7 +43,8 @@ bool EnsembleModel::loadMidiFile (const juce::File &file)
     midiFile.convertTimestampTicksToSeconds();
     
     //==========================================================================
-    // Create player for each track in the file.
+    // Create player for each track in the file.      
+    numUserPlayers = userPlayers;
     createPlayers (midiFile); // create new players
     resetPlayers();
     

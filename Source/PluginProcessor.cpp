@@ -146,9 +146,9 @@ void AdaptiveMetronomeAudioProcessor::changeProgramName (int index, const juce::
 }
 
 //==============================================================================
-EnsembleModel& AdaptiveMetronomeAudioProcessor::loadMidiFile (const juce::File &file)
+EnsembleModel& AdaptiveMetronomeAudioProcessor::loadMidiFile (const juce::File &file, int userPlayers)
 {
-    ensemble.loadMidiFile (file);
+    ensemble.loadMidiFile (file, userPlayers);
     
     return ensemble;
 }

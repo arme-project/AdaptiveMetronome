@@ -13,7 +13,7 @@ public:
     ~EnsembleModel();
     
     //==============================================================================
-    bool loadMidiFile (const juce::File &file);
+    bool loadMidiFile (const juce::File &file, int userPlayers);
     bool reset();
     
     //==============================================================================
@@ -38,7 +38,7 @@ public:
 
 private:
     //==============================================================================
-    static const int numUserPlayers = 1;
+    int numUserPlayers = 1;
     
     //==============================================================================
     // Timing parameters
