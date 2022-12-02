@@ -48,6 +48,12 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
 }
 
 //==============================================================================
+bool UserPlayer::wasLatestOnsetUserInput()
+{
+    return noteTriggeredByUser;
+}
+
+//==============================================================================
 void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
     // Loop over all MIDI events at this sample position
@@ -65,6 +71,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2))
         {
             playNextNote (outMidi, sampleIndex);
+            noteTriggeredByUser = true;
         }
     }
     
@@ -72,5 +79,6 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
     if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || samplesSinceLastOnset < 0))
     {
         playNextNote (outMidi, sampleIndex);
+        noteTriggeredByUser = false;
     }
 }

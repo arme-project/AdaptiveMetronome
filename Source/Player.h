@@ -47,6 +47,7 @@ public:
     
     int getLatestOnsetTime();
     double getLatestVolume();
+    virtual bool wasLatestOnsetUserInput();
     
     //==============================================================================
     void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);

@@ -102,14 +102,21 @@ private:
     // A bunch of stuff for safely logging onset times and sending them out to the
     // server. Functions defined in here are only safe to call from the logging thread.
     std::unique_ptr <juce::AbstractFifo> loggingFifo;
-    std::vector <int> onsetBuffer, onsetIntervalBuffer;
-    std::vector <double> motorNoiseBuffer, timeKeeperNoiseBuffer;
-    std::vector <std::vector <int> > asyncBuffer;
-    std::vector <std::vector <float> > alphaBuffer;
-    std::vector <double> tkNoiseStdBuffer, mNoiseStdBuffer;
-    std::vector <double> volumeBuffer;
     
-    void initialiseLoggingBuffers();
+    struct LogData
+    {
+        int onsetTime, onsetInterval;
+        bool userInput;
+        double motorNoise, timeKeeperNoise;
+        std::vector <int> asyncs;
+        std::vector <float> alphas;
+        double tkNoiseStd, mNoiseStd;
+        double volume;
+    };
+    
+    std::vector <LogData> loggingBuffer;
+
+    void initialiseLoggingBuffer();
     
     std::thread loggerThread;
     std::atomic <bool> continueLogging;
@@ -126,6 +133,7 @@ private:
     void logOnsetDetailsForPlayer (int bufferIndex,
                                    juce::String &onsetLog,
                                    juce::String &intervalLog,
+                                   juce::String &userInputLog,
                                    juce::String &mNoiseLog,
                                    juce::String &tkNoiseLog,
                                    juce::String &asyncLog,

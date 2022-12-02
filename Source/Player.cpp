@@ -157,6 +157,11 @@ double Player::getLatestVolume()
     return latestVolume;
 }
 
+bool Player::wasLatestOnsetUserInput()
+{
+    return false;
+}
+
 //==============================================================================
 void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
