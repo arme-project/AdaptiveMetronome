@@ -57,6 +57,7 @@ AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::paint (juce::Graphics& g)
 {
+    g.fillAll (juce::Colours::black);
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::resized()
@@ -254,6 +255,11 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
 
 AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::~EnsembleParametersComponent()
 {
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::paint (juce::Graphics &g)
+{
+    g.fillAll (juce::Colours::black);
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized()

@@ -39,6 +39,7 @@ private:
         EnsembleParametersComponent (EnsembleModel &ensemble);
         ~EnsembleParametersComponent();
         
+        void paint (juce::Graphics &g) override;
         void resized() override;
         
         static void calculateWidthAndHeight (int nPlayers, int &width, int &height);
