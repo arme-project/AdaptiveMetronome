@@ -43,8 +43,16 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
     
     //==========================================================================
     // Calculate next onset interval so that a note will be played automatically
-    // between the next two non-user player onset times.
-    onsetInterval = meanOnset - currentOnsetTime + 1.5 * meanInterval;
+    // between the next two non-user player onset times. If there are only human
+    // players, just use the most recently played interval.
+    if (nOtherPlayers == 0)
+    {
+        // potentially do something clever here
+    }
+    else
+    {
+        onsetInterval = meanOnset - currentOnsetTime + 1.5 * meanInterval;
+    }
 }
 
 //==============================================================================
