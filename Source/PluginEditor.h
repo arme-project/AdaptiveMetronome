@@ -3,7 +3,9 @@
 #include "PluginProcessor.h"
 
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
-                                              public juce::Button::Listener
+                                              public juce::Button::Listener,
+                                              private juce::OSCReceiver,
+                                              private juce::OSCReceiver::ListenerWithOSCAddress<juce::OSCReceiver::MessageLoopCallback>
 {
 public:
     AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&,
@@ -22,14 +24,20 @@ private:
     AdaptiveMetronomeAudioProcessor &processor;
     
     //==============================================================================
+    juce::OSCSender sender;
+    //juce::OSCReceiver receiver;
+    //juce::OSCReceiver::ListenerWithOSCAddress< juce::OSCReceiver::MessageLoopCallback receiverCallback;
+
+    //==============================================================================
     juce::Label instructionLabel, userPlayersLabel;
     juce::ComboBox userPlayersSelector;
-    juce::TextButton resetButton, loadMidiButton;
+    juce::TextButton resetButton, loadMidiButton, playButton;
     std::unique_ptr <juce::FileChooser> fileChooser;
     
     //==============================================================================
     void resetButtonCallback();
     void loadMidiButtonCallback();
+    void playButtonCallback();
     void loadMidiFile (juce::File file);
     
     //==============================================================================
@@ -79,6 +87,8 @@ private:
     };
     
     juce::Viewport ensembleParametersViewport;
+
+    void oscMessageReceived(const juce::OSCMessage& message) override;
 
     static const int instructionStripHeight = 50;
     static const int optionsStripHeight = 50;

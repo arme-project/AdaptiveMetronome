@@ -238,7 +238,17 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
     auto &note = notes [currentNoteIndex];
     juce::uint8 velocity = note.velocity * volumeParam;
         
-    midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, velocity),
+    float floatVelocity;
+
+    // Convert note velocity to float (not sure why this is now needed)
+    if (note.velocity > 1) {
+        floatVelocity = note.velocity / 127.0;
+    }
+    else {
+        floatVelocity = note.velocity;
+    }
+
+    midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, floatVelocity),
                    sampleIndex);
                    
     latestVolume = velocity / 127.0;
@@ -266,8 +276,17 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
     
     // Send note off for previous note.
     auto &note = notes [currentNoteIndex - 1];
-        
-    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
+
+    float floatVelocity;
+
+    if (note.velocity > 1) {
+        floatVelocity = note.velocity / 127;
+    }
+    else {
+        floatVelocity = note.velocity;
+    }
+
+    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, floatVelocity * volumeParam),
                    sampleIndex);
 }
 

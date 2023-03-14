@@ -11,9 +11,11 @@ public:
 
     //==============================================================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
+    bool manualPlaying;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void setManualPlaying(bool shouldPlay);
     void releaseResources() override;
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 

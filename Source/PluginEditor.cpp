@@ -8,10 +8,28 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
       userPlayersLabel (juce::String(), "No. User Players:"),
+      playButton ("Play"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI")
-{
+    {
+    //==========================================================================
         
+    // specify here where to send OSC messages to: host URL and UDP port number
+    if (!sender.connect("127.0.0.1", 8000))   // [4]
+        DBG("Error: could not connect to UDP port 8000.");
+    // specify here on which UDP port number to receive incoming OSC messages
+    if (! connect (8080))                       // [3]
+        DBG("Error: could not connect to UDP port 8080.");
+    else
+    {
+        DBG("Connection to 8080 succeeded");
+    }
+
+    //if (!receiver.connect(8080))                       // [3]
+    //    DBG("Error: could not connect to UDP port 8080.");
+    // tell the component to listen for OSC messages matching this address:
+    addListener(this, "/input_1");     // [4]
+
     //==========================================================================
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
@@ -37,6 +55,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     
     addAndMakeVisible (loadMidiButton);    
     loadMidiButton.addListener (this);
+
+    addAndMakeVisible (playButton);
+    playButton.addListener (this);
     
     addAndMakeVisible (ensembleParametersViewport);
     
@@ -52,6 +73,16 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
+}
+
+
+//==============================================================================
+void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMessage& message)
+{
+    DBG("MESSAGE RECEIVED");
+
+    if (message.size() == 1 && message[0].isInt32())                              // [5]
+        DBG(message[0].getInt32());  // [6]
 }
 
 //==============================================================================
@@ -78,6 +109,9 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     
     auto resetButtonBounds = optionsStripBounds.removeFromRight (resetButton.getBestWidthForHeight (optionsStripHeight));
     resetButton.setBounds (resetButtonBounds.reduced (padding));
+
+    auto playButtonBounds = optionsStripBounds.removeFromRight(playButton.getBestWidthForHeight(optionsStripHeight));
+    playButton.setBounds(playButtonBounds.reduced(padding));
     
     auto userPlayersBounds = optionsStripBounds.removeFromRight (100);
     userPlayersSelector.setBounds (userPlayersBounds.reduced (padding));
@@ -96,13 +130,26 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
     {
         resetButtonCallback();
     }
-    else
+    else if (button == &loadMidiButton)
     {
         loadMidiButtonCallback();
+    }
+    else {
+        playButtonCallback();
     }
 }
 
 //==============================================================================
+void AdaptiveMetronomeAudioProcessorEditor::playButtonCallback()
+{
+    //Debug.Write("Button PRESSED!");
+    DBG("BUTTON PRESSED!");
+    //processor.setManualPlaying(true);
+    // create and send an OSC message with an address and a float value:
+    if (!sender.send("/input_9", (float)10.0))
+        DBG("Error: could not send OSC message.");
+
+}
 void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
 {
     processor.resetEnsemble();
@@ -314,6 +361,8 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::calcula
     width = (6 + nPlayers) * columnWidth;
     height = rowHeight * nPlayers + headingHeight;
 }
+
+
 
 void AdaptiveMetronomeAudioProcessorEditor::initialiseEnsembleParameters (EnsembleModel &ensemble)
 {

@@ -72,6 +72,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         {
             playNextNote (outMidi, sampleIndex);
             noteTriggeredByUser = true;
+            DBG("NOTE PLAYED BY USER");
         }
     }
     

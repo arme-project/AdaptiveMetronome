@@ -25,6 +25,13 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samp
     midiOutputBuffer.ensureSize (4096);
     
     wasPlaying = false;
+    manualPlaying = false;
+}
+
+void AdaptiveMetronomeAudioProcessor::setManualPlaying(bool shouldPlay)
+{
+    manualPlaying = shouldPlay;
+    DBG("SETTING MANUAL PLAY");
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -38,7 +45,7 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     if (playHeadPosition.hasValue())
     {
         playing = playHeadPosition->getIsPlaying();
-        bpm = playHeadPosition->getBpm();
+        bpm = 200.0; //playHeadPosition->getBpm();
     }
     
     double tempo = bpm.hasValue() ? *bpm : 60;
@@ -49,7 +56,7 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     
     //==========================================================================
     // If playback has just stopped, stop all sound
-    bool playbackStopped = !playing && wasPlaying;
+    bool playbackStopped = !manualPlaying && wasPlaying;
     
     if (playbackStopped)
     {
@@ -57,10 +64,12 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     }
     
     wasPlaying = playing;
+    wasPlaying = manualPlaying;
+
     
     //==========================================================================
     // If the playhead is moving start processing MIDI
-    if (playing)
+    if (manualPlaying)
     {
         ensemble.processMidiBlock (midiMessages, midiOutputBuffer, buffer.getNumSamples(), tempo);
     }
