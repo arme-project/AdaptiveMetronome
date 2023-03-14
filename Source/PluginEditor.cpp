@@ -12,25 +12,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI")
     {
-    //==========================================================================
-        
-    // specify here where to send OSC messages to: host URL and UDP port number
-    if (!sender.connect("127.0.0.1", 8000))   // [4]
-        DBG("Error: could not connect to UDP port 8000.");
-    // specify here on which UDP port number to receive incoming OSC messages
-    if (! connect (8080))                       // [3]
-        DBG("Error: could not connect to UDP port 8080.");
-    else
-    {
-        DBG("Connection to 8080 succeeded");
-    }
-
-    //if (!receiver.connect(8080))                       // [3]
-    //    DBG("Error: could not connect to UDP port 8080.");
-    // tell the component to listen for OSC messages matching this address:
-    addListener(this, "/input_1");     // [4]
-
-    //==========================================================================
+    
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
     instructionLabel.setFont (instructionStripHeight - padding * 3);
@@ -73,16 +55,6 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
-}
-
-
-//==============================================================================
-void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMessage& message)
-{
-    DBG("MESSAGE RECEIVED");
-
-    if (message.size() == 1 && message[0].isInt32())                              // [5]
-        DBG(message[0].getInt32());  // [6]
 }
 
 //==============================================================================
@@ -142,14 +114,11 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::playButtonCallback()
 {
-    //Debug.Write("Button PRESSED!");
     DBG("BUTTON PRESSED!");
-    //processor.setManualPlaying(true);
-    // create and send an OSC message with an address and a float value:
-    if (!sender.send("/input_9", (float)10.0))
-        DBG("Error: could not send OSC message.");
+    processor.setManualPlaying(true);
 
 }
+
 void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
 {
     processor.resetEnsemble();

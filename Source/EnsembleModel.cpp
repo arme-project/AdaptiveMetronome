@@ -8,12 +8,34 @@ EnsembleModel::EnsembleModel()
 {
     playersInUse.clear();
     resetFlag.clear();
+    // specify here where to send OSC messages to: host URL and UDP port number
+    if (!sender.connect("127.0.0.1", 8000))   // [4]
+        DBG("Error: could not connect to UDP port 8000.");
+    // specify here on which UDP port number to receive incoming OSC messages
+    if (!connect(8080))                       // [3]
+        DBG("Error: could not connect to UDP port 8080.");
+    else
+    {
+        DBG("Connection to 8080 succeeded");
+    }
+
+    addListener(this, "/input_1");     // [4]
 }
 
 EnsembleModel::~EnsembleModel()
 {
     stopLoggerLoop();
     stopPollingLoop();
+}
+
+
+//==============================================================================
+void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
+{
+    DBG("MESSAGE RECEIVED");
+
+    if (message.size() == 1 && message[0].isInt32())                              // [5]
+        DBG(message[0].getInt32());  // [6]
 }
 
 //==============================================================================

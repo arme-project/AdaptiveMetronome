@@ -5,13 +5,18 @@
 #include <thread>
 #include "Player.h"
 
-class EnsembleModel
+class EnsembleModel : private juce::OSCReceiver,
+                      private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
 {
 public:
     //==============================================================================
     EnsembleModel();
     ~EnsembleModel();
     
+    //==============================================================================
+    juce::OSCSender sender;
+    void oscMessageReceived(const juce::OSCMessage& message) override;
+
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
     bool reset();
