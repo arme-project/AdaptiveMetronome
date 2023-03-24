@@ -4,7 +4,7 @@
 #include <atomic>
 #include <thread>
 #include "Player.h"
-
+#include "MetronomeClock.h"
 class EnsembleModel : private juce::OSCReceiver,
                       private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
 {
@@ -14,12 +14,17 @@ public:
     ~EnsembleModel();
     
     //==============================================================================
+    
     juce::OSCSender sender;
     void oscMessageReceived(const juce::OSCMessage& message) override;
 
+    void oscMessageSend();
+
+    MetronomeClock* clock = nullptr;
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
     bool reset();
+    bool reset(bool skipIntroNotes);
     
     //==============================================================================
     void prepareToPlay (double newSampleRate);
@@ -27,8 +32,10 @@ public:
     
     //==============================================================================
     void processMidiBlock (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int numSamples, double tempo);
-    
+    void setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber, int msMax);
     //==============================================================================
+    bool waitingForFirstNote = true;
+    void triggerFirstNote();
     int getNumPlayers();
     bool isPlayerUserOperated (int playerIndex);
     juce::AudioParameterInt& getPlayerChannelParameter (int playerIndex);
@@ -40,6 +47,8 @@ public:
     
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
+
+    void setMetronomeClock(MetronomeClock* clockPtr);
 
 private:
     //==============================================================================
@@ -59,7 +68,11 @@ private:
     static const juce::uint8 introToneVel = 100;
     int introCounter = 0;
     int introTonesPlayed = 0;
-    
+    bool playbackStarted = false;
+    bool introFinishedPlaying = false;
+
+    bool firstSampleProcessed = false;
+
     void playIntroTones (juce::MidiBuffer &midi, int sampleIndex);
     void introToneOn (juce::MidiBuffer &midi, int sampleIndex);
     void introToneOff (juce::MidiBuffer &midi, int sampleIndex);

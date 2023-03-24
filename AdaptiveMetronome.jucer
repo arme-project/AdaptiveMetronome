@@ -6,9 +6,13 @@
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://somagroup.co.uk" pluginManufacturer="ARME"
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
-              pluginFormats="buildStandalone">
+              pluginFormats="buildStandalone" cppLanguageStandard="17">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <FILE id="WYwJgv" name="MetronomeClock.h" compile="0" resource="0"
+            file="Source/MetronomeClock.h"/>
+      <FILE id="ItjeP9" name="MetronomeClock.cpp" compile="1" resource="0"
+            file="Source/MetronomeClock.cpp"/>
       <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
       <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
       <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"
@@ -65,4 +69,7 @@
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

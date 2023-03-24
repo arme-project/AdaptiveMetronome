@@ -56,6 +56,24 @@ void Player::reset()
     notePlayed = false;
 }
 
+
+void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote)
+{
+    if (currentNoteIndex == 0) {
+        DBG("First note received in player");
+        oscOnsetTime = 0.0; // Onset in seconds
+        oscOnsetTimeInSamples = 0;
+        latestOscOnsetNoteNumber = 0;
+        newOSCOnsetAvailable = true;
+    }
+    else {
+        oscOnsetTime = onsetFromOsc; // Onset in seconds
+        oscOnsetTimeInSamples = samplesSinceFirstNote;
+        latestOscOnsetNoteNumber = onsetNoteNumber;
+        newOSCOnsetAvailable = true;
+    }
+}
+
 //==============================================================================
 void Player::setOnsetInterval (int interval)
 {
@@ -76,17 +94,27 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
                                        const std::vector <std::unique_ptr <Player> > &players,
                                        const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas)
 {   
+    int previousOnsetInterval = onsetInterval;
     double asyncSum = 0;
         
     for (int i = 0; i < players.size(); ++i)
     {
         double async = currentOnsetTime - players [i]->getLatestOnsetTime();
+        //if (i == 0) {
+        //    DBG(currentOnsetTime);
+        //}
         asyncSum += *alphas[i] * async;
     }
         
     double hNoise = generateHNoise() * sampleRate;
 
     onsetInterval = samplesPerBeat - asyncSum + hNoise;
+
+    float onsetChange = std::abs(onsetInterval - previousOnsetInterval) / previousOnsetInterval;
+    //if (onsetChange > 0.05) {
+    //    
+    //    DBG("BIG CHANGE YO");
+    //}
 }
 
 //==============================================================================
@@ -145,6 +173,7 @@ bool Player::hasNotePlayed()
 void Player::resetNotePlayed()
 {
     notePlayed = false;
+    userPlayedNote = false;
 }
 
 int Player::getLatestOnsetTime()
@@ -165,6 +194,11 @@ double Player::getLatestVolume()
 bool Player::wasLatestOnsetUserInput()
 {
     return false;
+}
+
+int Player::getCurrentNoteIndex()
+{
+    return (int)(currentNoteIndex);
 }
 
 //==============================================================================
@@ -192,7 +226,13 @@ void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &ou
     //==========================================================================
     // Do we need to play another note?
     processNoteOn (inMidi, outMidi, sampleIndex);
-    
+
+    //std::unique_ptr<UserPlayer> userPlayer = std::unique_ptr<UserPlayer>(static_cast<UserPlayer*>(players[0].release()));
+
+    //DBG(userPlayer->getNoteTriggeredByUser());
+
+    //players[0] = std::unique_ptr<Player>(static_cast<Player*>(userPlayer.release()));
+
     ++samplesSinceLastOnset;
 }
 
@@ -248,9 +288,12 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
         floatVelocity = note.velocity;
     }
 
-    midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, floatVelocity),
-                   sampleIndex);
-                   
+    if (!isUserOperated()) {
+    //if (true) {
+        midi.addEvent(juce::MidiMessage::noteOn(channelParam, note.noteNumber, floatVelocity),
+            sampleIndex);
+    }
+
     latestVolume = velocity / 127.0;
             
     // Ignoring delay this onset should have happened samplesDelay samples ago.
@@ -260,7 +303,13 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
     // Store onset time, ignoring per-player delay.
     notePlayed = true;
     previousOnsetTime = currentOnsetTime;
-    currentOnsetTime = scoreCounter - samplesDelay;
+    if (isUserOperated()) {
+        DBG("NOTE INDEX: " << currentNoteIndex << " : " << latestOscOnsetNoteNumber);
+        DBG("SAMPLES: " << scoreCounter << " : " << oscOnsetTimeInSamples);
+        currentOnsetTime = oscOnsetTimeInSamples;
+    } else {
+        currentOnsetTime = scoreCounter - samplesDelay;
+    }
     
     // Move to next note in score.
     ++currentNoteIndex;

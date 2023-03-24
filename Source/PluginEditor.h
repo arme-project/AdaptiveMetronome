@@ -1,9 +1,14 @@
 #pragma once
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "MetronomeClock.h"
+using namespace std::chrono;
 
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
-                                              public juce::Button::Listener
+                                              public juce::Button::Listener,
+                                              private juce::OSCReceiver,
+                                              private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
+
 {
 public:
     AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&,
@@ -13,15 +18,19 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    
+    EnsembleModel* thisEnsemble;
     //==============================================================================
     void buttonClicked (juce::Button *button) override;
+    bool midiNoteReceived;
+    void oscMessageReceived(const juce::OSCMessage& message) override;
+    milliseconds millisecond_at_tick;
+    MetronomeClock clock;
 
 private:
     //==============================================================================
     AdaptiveMetronomeAudioProcessor &processor;
     //==============================================================================
-    juce::Label instructionLabel, userPlayersLabel;
+    juce::Label instructionLabel, userPlayersLabel, midiNoteReceivedLabel;
     juce::ComboBox userPlayersSelector;
     juce::TextButton resetButton, loadMidiButton, playButton;
     std::unique_ptr <juce::FileChooser> fileChooser;
@@ -31,7 +40,8 @@ private:
     void loadMidiButtonCallback();
     void playButtonCallback();
     void loadMidiFile (juce::File file);
-    
+    void setMidiNoteReceived(bool setMidiNoteLabel);
+
     //==============================================================================
     class EnsembleParametersComponent : public juce::Component
     {

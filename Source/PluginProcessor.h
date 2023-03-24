@@ -12,9 +12,11 @@ public:
     //==============================================================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
     bool manualPlaying;
+    bool reaperPlaying;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    //void setManualPlaying();
     void setManualPlaying(bool shouldPlay);
     void releaseResources() override;
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
@@ -44,10 +46,10 @@ public:
     //==============================================================================
     EnsembleModel& loadMidiFile (const juce::File &file, int userPlayers);
     void resetEnsemble();
+    EnsembleModel ensemble;
 
 private:
     //==============================================================================
-    EnsembleModel ensemble;
     
     //==============================================================================
     juce::MidiBuffer midiOutputBuffer;

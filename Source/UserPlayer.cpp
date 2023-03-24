@@ -5,6 +5,7 @@ UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int mid
                         const double &sampleRate, const int &scoreCounter, int initialInterval)
   : Player (index, seq, midiChannel, sampleRate, scoreCounter, initialInterval)
 {
+    useOSCinput = true;
 }
 
 UserPlayer::~UserPlayer()
@@ -24,6 +25,9 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
 {
     //==========================================================================
     // Find mean onset and interval for all other players
+    //if (isUserOperated()) {
+    //    DBG(scoreCounter - oscOnsetTimeInSamples);
+    //}
     float meanOnset = 0.0f;
     float meanInterval = 0.0f;
     int nOtherPlayers = 0;
@@ -53,33 +57,56 @@ bool UserPlayer::wasLatestOnsetUserInput()
     return noteTriggeredByUser;
 }
 
+juce::String UserPlayer::getNoteTriggeredByUser()
+{
+    if (noteTriggeredByUser) {
+        return "yes";
+    }
+    else {
+        return "no";
+    }
+}
+
 //==============================================================================
 void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
-    // Loop over all MIDI events at this sample position
-    for (auto it = inMidi.findNextSamplePosition (sampleIndex); it != inMidi.end(); ++it)
-    {
-        // Stop early if there are MIDI events after this time.
-        if ((*it).samplePosition != sampleIndex)
-        {
-            break;
-        }
-        
-        auto event = (*it).getMessage();
-        
-        // Play the next note at the first note on in this beat period
-        if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2))
-        {
-            playNextNote (outMidi, sampleIndex);
+    if (useOSCinput) {
+        if (newOSCOnsetAvailable) {
             noteTriggeredByUser = true;
-            DBG("NOTE PLAYED BY USER");
+            userPlayedNote = true;
+            newOSCOnsetAvailable = false;
+            playNextNote(outMidi, sampleIndex);
+        }
+    }
+    else {
+        // Loop over all MIDI events at this sample position
+        for (auto it = inMidi.findNextSamplePosition (sampleIndex); it != inMidi.end(); ++it)
+        {
+            // Stop early if there are MIDI events after this time.
+            if ((*it).samplePosition != sampleIndex)
+            {
+                break;
+            }
+        
+            auto event = (*it).getMessage();
+        
+            //if (event.isNoteOn()) {
+            //    DBG("NOTE IS SO ON");
+            //}
+            // 
+            // Play the next note at the first note on in this beat period
+            if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2)) {
+                playNextNote (outMidi, sampleIndex);
+                noteTriggeredByUser = true;
+                userPlayedNote = true;
+            }
         }
     }
     
-    // If no user input trigger a note automatically
-    if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || scoreCounter == 0))
-    {
-        playNextNote (outMidi, sampleIndex);
-        noteTriggeredByUser = false;
-    }
+    //// If no user input trigger a note automatically
+    //if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || scoreCounter == 0))
+    //{
+    //    playNextNote (outMidi, sampleIndex);
+    //    noteTriggeredByUser = false;
+    //}
 }

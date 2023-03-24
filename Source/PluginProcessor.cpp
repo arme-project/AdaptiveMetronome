@@ -26,12 +26,19 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samp
     
     wasPlaying = false;
     manualPlaying = false;
+    reaperPlaying = false;
+}
+
+inline const char* const BoolToString(bool b)
+{
+    return b ? "true" : "false";
 }
 
 void AdaptiveMetronomeAudioProcessor::setManualPlaying(bool shouldPlay)
 {
     manualPlaying = shouldPlay;
-    DBG("SETTING MANUAL PLAY");
+    ensemble.waitingForFirstNote = true;
+    DBG("SETTING PLAYBACK TO " << BoolToString(manualPlaying) << ", " << BoolToString(ensemble.waitingForFirstNote));
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -45,7 +52,7 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     if (playHeadPosition.hasValue())
     {
         playing = playHeadPosition->getIsPlaying();
-        bpm = 200.0; //playHeadPosition->getBpm();
+        bpm = 120.0; //playHeadPosition->getBpm();
     }
     
     double tempo = bpm.hasValue() ? *bpm : 60;

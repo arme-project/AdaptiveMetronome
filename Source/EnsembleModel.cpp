@@ -9,17 +9,25 @@ EnsembleModel::EnsembleModel()
     playersInUse.clear();
     resetFlag.clear();
     // specify here where to send OSC messages to: host URL and UDP port number
-    if (!sender.connect("127.0.0.1", 8000))   // [4]
-        DBG("Error: could not connect to UDP port 8000.");
-    // specify here on which UDP port number to receive incoming OSC messages
-    if (!connect(8080))                       // [3]
-        DBG("Error: could not connect to UDP port 8080.");
-    else
-    {
-        DBG("Connection to 8080 succeeded");
-    }
+    //if (!sender.connect("192.168.1.139", 8020))
+    //    DBG("Error: could not connect to UDP port 8020.");
+    //else {
+    //    DBG("OSC SENDER CONNECTED");
+    //}
+    //// specify here on which UDP port number to receive incoming OSC messages
+    //if (!connect(8080))                       // [3]
+    //    DBG("Error: could not connect to UDP port 8080.");
+    //else
+    //{
+    //    DBG("Connection to 8080 succeeded");
+    //}
 
-    addListener(this, "/input_1");     // [4]
+    //addListener(this, "/plugin");     // [4]
+    //addListener(this, "/oscstart");     // [4]
+
+    //waitForOscStart = true;
+
+
 }
 
 EnsembleModel::~EnsembleModel()
@@ -32,12 +40,30 @@ EnsembleModel::~EnsembleModel()
 //==============================================================================
 void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
 {
-    DBG("MESSAGE RECEIVED");
-
-    if (message.size() == 1 && message[0].isInt32())                              // [5]
-        DBG(message[0].getInt32());  // [6]
+    //DBG("MESSAGE RECEIVED");
+    juce::OSCAddressPattern oscPattern = message.getAddressPattern();
+    juce::String oscAddress = oscPattern.toString();
+    DBG(oscAddress);
+    if (oscAddress == "/plugin") {
+        if (message[1].isInt32())                              // [5]
+            DBG(message[1].getInt32());  // [6]
+        if (message[0].isFloat32())
+            DBG(message[0].getFloat32());
+    }
+    else if (oscAddress == "/oscstart") {
+        
+    }
 }
 
+void EnsembleModel::oscMessageSend()
+{
+    if (!sender.send("/playReaper", (float)1))
+        DBG("Error: could not send OSC message.");
+    else {
+        DBG("OSC MESSAGE SENT");
+        playbackStarted = true;
+    }
+}
 //==============================================================================
 bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
 {
@@ -73,6 +99,10 @@ bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
     return true;
 }
 
+void EnsembleModel::triggerFirstNote() {
+    waitingForFirstNote = false;
+}
+
 bool EnsembleModel::reset()
 {
     FlagLock lock (playersInUse);
@@ -83,7 +113,17 @@ bool EnsembleModel::reset()
     }
     
     resetPlayers();
+    playbackStarted = false;
     
+    waitingForFirstNote = true;
+    return true;
+}
+
+bool EnsembleModel::reset(bool skipIntroNotes)
+{
+    reset();
+    introTonesPlayed = numIntroTones;
+
     return true;
 }
 
@@ -100,13 +140,20 @@ void EnsembleModel::releaseResources()
 //==============================================================================
 void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int numSamples, double tempo)
 {
+    //DBG(numSamples);
     FlagLock lock (playersInUse);
     
-    if (!lock.locked)
+    if (!lock.locked || waitingForFirstNote)
     {
         return;
     }
     
+    //if (!firstSampleProcessed) {
+    //    DBG(clock->tickToString(clock->tick()));
+    //    clock->setStartOfFirstSample(clock->tick());
+    //    firstSampleProcessed = true;
+    //}
+
     //==============================================================================
     // Update tempo from DAW playhead.
     setTempo (tempo);
@@ -127,9 +174,63 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
             playIntroTones (outMidi, i);
             continue;
         }
-        
-        playScore (inMidi, outMidi, i);
+        else {
+            if (!playbackStarted) {
+                //oscMessageSend();
+            }
+        }
+
+        playScore(inMidi, outMidi, i);
     }
+    
+}
+
+void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber, int msMax)
+{
+    for (auto& player : players)
+    {
+        if (player->isUserOperated()) {
+            auto tickOfOnset = clock->convertMsMaxToTick(msMax);
+            int msOnsetSinceFirstSample = clock->getDurationSincePlayback(tickOfOnset);
+            int onsetInSamples = (int)(msOnsetSinceFirstSample * (sampleRate / 1000));
+            player->setOscOnsetTime(oscOnsetTime, onsetNoteNumber, onsetInSamples);
+        }
+    }
+}
+
+void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
+{
+    if (!firstSampleProcessed) {
+        DBG("Since start = " << clock->getDurationSincePlayback(clock->tick()));
+        clock->setStartOfFirstSample(clock->tick());
+        firstSampleProcessed = true;
+    }
+    //if (scoreCounter % (int)sampleRate == 0) {
+        //DBG("Since start = " << clock->getDurationSincePlayback(clock->tick()));
+        //DBG(clock->tickToString(clock->tick()));
+    //}
+    for (auto& player : players)
+    {
+        player->processSample(inMidi, outMidi, sampleIndex);
+        if (player->isUserOperated()) {
+            if (player->userPlayedNote) {
+                //DBG("Player played note at " << player->getLatestOnsetTime() / sampleRate);
+                player->userPlayedNote = false;
+            }
+        }
+    }
+    //if (players[1]->hasNotePlayed()) {
+    //    DBG("Next note for user is " << players[1]->getCurrentNoteIndex() + 1 << " at time " << (players[1]->getLatestOnsetTime() + players[1]->getOnsetInterval())/sampleRate);
+    //}
+
+    // If all players have played a note, update timings.
+    if (newOnsetsAvailable())
+    {
+        calculateNewIntervals();
+        clearOnsetsAvailable();
+    }
+
+    ++scoreCounter;
 }
 
 //==============================================================================
@@ -182,6 +283,11 @@ void EnsembleModel::soundOffAllChannels (juce::MidiBuffer &midi)
         midi.addEvent (juce::MidiMessage::allSoundOff (channel), 0);
         midi.addEvent (juce::MidiMessage::allControllersOff (channel), 0);
     }
+}
+
+void EnsembleModel::setMetronomeClock(MetronomeClock* clockPtr)
+{
+    clock = clockPtr;
 }
 
 //==============================================================================
@@ -271,12 +377,19 @@ void EnsembleModel::calculateNewIntervals()
         {
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
         }
+        if (i == 1) {
+            //DBG("Next note for user is " << players[i]->getCurrentNoteIndex() + 1 << " at time " << (players[i]->getLatestOnsetTime() + players[i]->getOnsetInterval()) / sampleRate);
+        }
+
     }  
     
     for (int i = 0; i < players.size(); ++i)
     {
         if (players [i]->isUserOperated())
         {
+            //if (i == 0) {
+            //    DBG(players[i]->getLatestOnsetTime()/sampleRate);
+            //}
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
         }
     } 
@@ -441,23 +554,6 @@ void EnsembleModel::createAlphaParameters()
     }
 }
 
-void EnsembleModel::playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
-{          
-    for (auto &player : players)
-    {
-        player->processSample (inMidi, outMidi, sampleIndex);
-    }
-        
-    // If all players have played a note, update timings.
-    if (newOnsetsAvailable())
-    {
-        calculateNewIntervals();
-        clearOnsetsAvailable();
-    }
-        
-    ++scoreCounter;
-}
-
 void EnsembleModel::resetPlayers()
 {
     //==========================================================================
@@ -467,6 +563,7 @@ void EnsembleModel::resetPlayers()
      
     // Initialise score counter
     scoreCounter = 0;
+    firstSampleProcessed = false;
     
     // make sure to update player tempo when playback starts      
     initialTempoSet = false;
@@ -490,16 +587,18 @@ void EnsembleModel::resetPlayers()
 //==============================================================================
 void EnsembleModel::initialiseLoggingBuffer()
 {
-    int bufferSize = static_cast <int> (4 * players.size());
-    
-    loggingFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
-    
-    loggingBuffer.resize (bufferSize);
-    
-    for (int i = 0; i < loggingBuffer.size(); ++i)
-    {
-        loggingBuffer [i].asyncs.resize (players.size(), 0.0);
-        loggingBuffer [i].alphas.resize (players.size(), 0.0);
+    if (players.size() > 0) {
+        int bufferSize = static_cast <int> (4 * players.size());
+
+        loggingFifo = std::make_unique <juce::AbstractFifo>(bufferSize);
+
+        loggingBuffer.resize(bufferSize);
+
+        for (int i = 0; i < loggingBuffer.size(); ++i)
+        {
+            loggingBuffer[i].asyncs.resize(players.size(), 0.0);
+            loggingBuffer[i].alphas.resize(players.size(), 0.0);
+        }
     }
 }
 

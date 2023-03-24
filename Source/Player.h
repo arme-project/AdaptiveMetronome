@@ -30,6 +30,17 @@ public:
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas);
     
+
+    //==============================================================================
+    // OSC RELATED
+    float oscOnsetTime;
+    int oscOnsetTimeInSamples;
+    int latestOscOnsetNoteNumber;
+    void setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote);
+    //void setOscOnsetTimeInSamples(float oscOnsetTime);
+
+    bool newOSCOnsetAvailable = false;
+
     //==============================================================================
     double generateMotorNoise();
     double generateTimeKeeperNoise();
@@ -49,6 +60,7 @@ public:
     int getLatestOnsetDelay();
     double getLatestVolume();
     virtual bool wasLatestOnsetUserInput();
+    int getCurrentNoteIndex();
     
     //==============================================================================
     void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
@@ -60,7 +72,9 @@ public:
     
     //==============================================================================
     std::size_t getNumNotes();
-    
+
+    bool userPlayedNote = false;
+
 protected:
     //==============================================================================
     int playerIndex = 0;

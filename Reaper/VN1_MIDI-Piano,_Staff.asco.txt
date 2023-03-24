@@ -1,0 +1,38 @@
+﻿; Antescofo score generated using native importer
+; Copyright (c) IRCAM 2015
+; Designed by Robert Piéchaud
+
+; Original file: VN1_MIDI-Piano,_Staff.xml
+; exported from MuseScore 4.0.2
+; MusicXML version 4.0
+; Converted to Antescofo on Wed Mar 22 23:04:19 2023
+
+; start
+
+; ----------- measure 1 --- beat 0
+
+NOTE 0 4 measure1
+
+; ----------- measure 2 --- beat 4
+
+NOTE 0 4 measure2
+
+; ----------- measure 3 --- beat 8
+
+NOTE 0 4 measure3
+
+; ----------- measure 4 --- beat 12
+
+NOTE 0 4 measure4
+
+; ----------- measure 5 --- beat 16
+
+NOTE 0 4 measure5
+
+; ----------- measure 6 --- beat 20
+
+NOTE 0 4 measure6
+
+; ----------- measure 7 --- beat 24
+
+NOTE 0 4 measure7

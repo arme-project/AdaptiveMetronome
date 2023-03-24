@@ -19,10 +19,15 @@ public:
                                    
     //==============================================================================
     bool wasLatestOnsetUserInput() override;
-                                           
+    bool noteTriggeredByUser = false;
+    juce::String getNoteTriggeredByUser();
+
+
+
+    bool useOSCinput = false;
+
 protected:
     //==============================================================================
-    bool noteTriggeredByUser = false;
     
     //==============================================================================
     void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex) override;
