@@ -26,11 +26,16 @@ public:
     int getOnsetInterval();
     int getPlayedOnsetInterval();
       
+    std::queue<double> onsetIntervals;
+
     virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas);
     
 
+    void addIntervalToQueue(double interval);
+    void emptyIntervalQueue();
+    int numOfIntervalsInQueue = 0;
     //==============================================================================
     // OSC RELATED
     float oscOnsetTime;

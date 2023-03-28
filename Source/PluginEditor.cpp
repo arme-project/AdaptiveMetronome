@@ -19,7 +19,8 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
     instructionLabel.setFont (instructionStripHeight - padding * 3);
-    
+    //matlabEngine = matlab::engine::startMATLAB({ u"-desktop" });
+
     //==========================================================================
     addAndMakeVisible (userPlayersLabel);
     userPlayersLabel.setJustificationType (juce::Justification::right);
@@ -78,10 +79,10 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addListener(this, "/tick");
     addListener(this, "/synch");
     addListener(this, "/playbackstart");
-
+    addListener(this, "/alphas");
     //waitForOscStart = true;
 
-
+    startTimer(500);
 }
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
@@ -96,23 +97,32 @@ void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMe
     juce::String oscAddress = oscPattern.toString();
     //DBG(oscAddress);
 
-
-
     if (oscAddress == "/plugin") {
-        if (message[0].isFloat32() && message[1].isInt32() && message[2].isInt32()) {
+        if (message[0].isFloat32() && message[1].isInt32() 
+            && message[2].isInt32() && message[3].isFloat32()) {
             if (processor.manualPlaying) {
+                thisEnsemble->setTempo((double)message[3].getFloat32());
+                
                 if (thisEnsemble->waitingForFirstNote && message[1].getInt32() == 0) {
                     thisEnsemble->triggerFirstNote();
                     thisEnsemble->setUserOnsetFromOsc(message[0].getFloat32(), message[1].getInt32(), message[2].getInt32());
                 }
-                else {
-                    //DBG("JUCE CLOCK AT ONSET: " << clock.tickToString(clock.tick()));
+                else if (message[1].getInt32() > 0) {
                     thisEnsemble->setUserOnsetFromOsc(message[0].getFloat32(), message[1].getInt32(), message[2].getInt32());
-
                 }
             }
         }
-    } 
+    }
+    else if (oscAddress == "/alphas") {
+        //DBG("ALPHAS RECEIVED SIZE " << message.size());
+        if (message.size() == 16) {
+            for (int i = 0; i < 16; i++) {
+                if (message[i].isFloat32()) {
+                    DBG(i << " = " << message[i].getFloat32());
+                }
+            }
+        }
+    }
     else if (oscAddress == "/playbackstart") {
         if (message[0].isInt32()) {                             // [5]
             if (thisEnsemble->waitingForFirstNote && processor.manualPlaying) {
@@ -189,6 +199,17 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     ensembleParametersViewport.setBounds (bounds);
 }
 
+void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
+{
+    if (thisEnsemble != nullptr) {
+        //DBG("CHECKING NOTE INDEX");
+        auto currentEnsembleNote = thisEnsemble->currentNoteIndex.get();
+        midiNoteReceivedLabel.setText(juce::String(currentEnsembleNote), juce::NotificationType::dontSendNotification);
+        //thisEnsemble->oscMessageSend(true);
+        thisEnsemble->getAlphasFromMATLAB();
+    }
+}
+
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
 {
@@ -209,10 +230,7 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::playButtonCallback()
 {
-    //DBG("BUTTON PRESSED!");
-    //processor.ensemble.oscMessageSend();
     processor.setManualPlaying(!processor.manualPlaying);
-
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
@@ -354,7 +372,7 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
             alphaRow.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                  juce::Slider::TextBoxBelow));                                         
             alphaRow [j]->setColour (juce::Slider::thumbColourId, juce::Colours::indianred);
-            
+            alphaRow [j]->setRange(-1.0, 1.0, 0);
             alphaAttachmentRow.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getAlphaParameter (i, j),
                                                                                               *alphaRow [j]));
                                                                  

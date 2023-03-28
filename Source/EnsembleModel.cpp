@@ -1,33 +1,27 @@
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
 
+using namespace matlab::engine;
+using namespace matlab::data ;
 using namespace std::chrono_literals;
 
 //==============================================================================
 EnsembleModel::EnsembleModel()
-{
+{   
+    randomizer = juce::Random(0);
     playersInUse.clear();
     resetFlag.clear();
+    currentNoteIndex.set(99);
     // specify here where to send OSC messages to: host URL and UDP port number
-    //if (!sender.connect("192.168.1.139", 8020))
-    //    DBG("Error: could not connect to UDP port 8020.");
-    //else {
-    //    DBG("OSC SENDER CONNECTED");
-    //}
-    //// specify here on which UDP port number to receive incoming OSC messages
-    //if (!connect(8080))                       // [3]
-    //    DBG("Error: could not connect to UDP port 8080.");
-    //else
-    //{
-    //    DBG("Connection to 8080 succeeded");
-    //}
-
-    //addListener(this, "/plugin");     // [4]
-    //addListener(this, "/oscstart");     // [4]
-
-    //waitForOscStart = true;
-
-
+    if (!sender.connect("127.0.0.1", 8060))
+        DBG("Error: could not connect to UDP port 8060.");
+    else {
+        DBG("OSC SENDER CONNECTED");
+    }
+    matlabEngine = connectMATLAB(u"MATLAB_17720");
+    matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
 }
 
 EnsembleModel::~EnsembleModel()
@@ -55,13 +49,70 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
     }
 }
 
-void EnsembleModel::oscMessageSend()
-{
-    if (!sender.send("/playReaper", (float)1))
-        DBG("Error: could not send OSC message.");
+bool EnsembleModel::getAlphasFromMATLAB() {
+
+    // Vector to store Matlab arrays of function inputs
+    auto vOfArrays = std::vector<Array>(4);
+
+    // Loop over players
+    for (int playerNumber = 0; playerNumber < 4; playerNumber++) {
+        // Generate random intervals for testing
+        std::deque<double> onsetIntervals;
+        for (int i = 0; i < 10; i++) {
+            auto randInterval = randomizer.nextFloat() / 20 + 0.5;
+            onsetIntervals.push_back(randInterval);
+        }
+
+        // Convert to Matlab array
+        TypedArray<double> data = factory.createArray<std::deque<double>::iterator>({ onsetIntervals.size(), 1 },
+            onsetIntervals.begin(), onsetIntervals.end());
+        
+        // Add to vector
+        vOfArrays[playerNumber] = data;
+    }
+
+    // If connected to matlab instance ...
+    if (matlabEngine != nullptr) {
+        TypedArray<double> alphasFromMatlab = matlabEngine->feval(u"getAlphasCpp", vOfArrays);
+        int playerCount = 0;
+        int valueCount = 0;
+        int totalCount = 0;
+        for (auto dim : alphasFromMatlab) {
+            valueCount = (int)(totalCount / 4);
+            playerCount = (int)(totalCount % 4);
+            //DBG(playerCount << ":" << valueCount << " = " << dim);
+            if (getNumPlayers() > 0) {
+                *alphaParams[playerCount][valueCount] = (float)dim;
+            }
+            totalCount++;
+        }
+        return true;
+    }
     else {
-        DBG("OSC MESSAGE SENT");
-        playbackStarted = true;
+        DBG("NO MATLAB INSTANCE CONNECTED");
+        return false;
+    }
+}
+
+void EnsembleModel::oscMessageSend(bool test)
+{
+    if (test) {
+        auto oscMessage = juce::OSCMessage("/test");
+        if (!sender.send(oscMessage)) {
+            DBG("Error: could not send OSC message.");
+        }
+    }
+    else {
+
+        auto oscMessage = juce::OSCMessage("/onsets");
+        for (int i = 0; i < 4; i++) {
+            auto randomFloat = randomizer.nextFloat()/(float)20.0 + (float)0.5;
+            oscMessage.addArgument(randomFloat);
+        }
+
+        if (!sender.send(oscMessage)) {
+            DBG("Error: could not send OSC message.");
+        }
     }
 }
 //==============================================================================
@@ -156,7 +207,7 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
 
     //==============================================================================
     // Update tempo from DAW playhead.
-    setTempo (tempo);
+    //setTempo (tempo);
     
     //==============================================================================
     // Clear output if ensemble has been reset
@@ -333,6 +384,7 @@ void EnsembleModel::setTempo (double bpm)
     
     // Update tempo of playback.
     samplesPerBeat = newSamplesPerBeat;
+    DBG("Setting new tempo to: " << bpm << ":" << samplesPerBeat);
     
     setInitialPlayerTempo();
 }
@@ -378,9 +430,9 @@ void EnsembleModel::calculateNewIntervals()
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
         }
         if (i == 1) {
-            //DBG("Next note for user is " << players[i]->getCurrentNoteIndex() + 1 << " at time " << (players[i]->getLatestOnsetTime() + players[i]->getOnsetInterval()) / sampleRate);
+            //DBG("SETTING NEW NOTE INDEX");
+            currentNoteIndex.set(players[i]->getCurrentNoteIndex());
         }
-
     }  
     
     for (int i = 0; i < players.size(); ++i)
@@ -391,6 +443,7 @@ void EnsembleModel::calculateNewIntervals()
             //    DBG(players[i]->getLatestOnsetTime()/sampleRate);
             //}
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+
         }
     } 
           
@@ -424,6 +477,7 @@ void EnsembleModel::clearOnsetsAvailable()
 
 void EnsembleModel::getLatestAlphas()
 {
+    // UNUSED
     if (pollingFifo)
     {
         // Consume everything in the buffer, only using the most recent set of alphas.
@@ -539,13 +593,14 @@ void EnsembleModel::createAlphaParameters()
     for (int i = 0; i < players.size(); ++i)
     {
         std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
+        // CHANGE DEFAULT ALPHA
         double alpha = 0.25;
         
         for (int j = 0; j < players.size(); ++j)
         {
             row.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
                                                                          "Alpha " + juce::String (i) + "-" + juce::String (j),
-                                                                         0.0, 1.0, alpha));
+                                                                         -1.0, 1.0, alpha));
                                                                          
             alpha = 0.0;
         }
@@ -875,6 +930,7 @@ void EnsembleModel::pollingLoop()
 
 void EnsembleModel::getNewAlphas()
 {
+    // UNUSED
     //==========================================================================
     // In here you should make a request to your server to ask for new alpha
     // values. If you get some updated values set the following value to true.

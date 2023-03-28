@@ -2,9 +2,13 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "MetronomeClock.h"
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
+
 using namespace std::chrono;
 
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                              public juce::Timer,
                                               public juce::Button::Listener,
                                               private juce::OSCReceiver,
                                               private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
@@ -18,6 +22,9 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    void timerCallback() override;
+
+    //matlab::engine::FutureResult<std::unique_ptr<matlab::engine::MATLABEngine>> matlabEngine;
     EnsembleModel* thisEnsemble;
     //==============================================================================
     void buttonClicked (juce::Button *button) override;

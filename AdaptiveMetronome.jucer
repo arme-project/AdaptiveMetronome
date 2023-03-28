@@ -6,7 +6,7 @@
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://somagroup.co.uk" pluginManufacturer="ARME"
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
-              pluginFormats="buildStandalone" cppLanguageStandard="17">
+              pluginFormats="buildStandalone" cppLanguageStandard="17" headerPath="&quot;C:\Program Files\MATLAB\R2022b\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2022b\extern\bin\win64&quot;">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
       <FILE id="WYwJgv" name="MetronomeClock.h" compile="0" resource="0"
@@ -31,7 +31,7 @@
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
-    <VS2019 targetFolder="Builds/VisualStudio2019">
+    <VS2019 targetFolder="Builds/VisualStudio2019" externalLibraries="&quot;C:\Program Files\MATLAB\R2022b\extern\lib\win64\microsoft\libMatlabEngine.lib&quot;;&#10;&quot;C:\Program Files\MATLAB\R2022b\extern\lib\win64\microsoft\libMatlabDataArray.lib&quot;;">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>

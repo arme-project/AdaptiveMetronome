@@ -61,9 +61,9 @@ void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int sample
 {
     if (currentNoteIndex == 0) {
         DBG("First note received in player");
-        oscOnsetTime = 0.0; // Onset in seconds
-        oscOnsetTimeInSamples = 0;
-        latestOscOnsetNoteNumber = 0;
+        oscOnsetTime = onsetFromOsc; // Onset in seconds
+        oscOnsetTimeInSamples = samplesSinceFirstNote;
+        latestOscOnsetNoteNumber = onsetNoteNumber;
         newOSCOnsetAvailable = true;
     }
     else {
@@ -107,14 +107,30 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
     }
         
     double hNoise = generateHNoise() * sampleRate;
-
+    
     onsetInterval = samplesPerBeat - asyncSum + hNoise;
+    DBG("NEW ONSET INTERVAL: " << onsetInterval);
+    //onsetInterval = previousOnsetInterval - asyncSum + hNoise;
 
     float onsetChange = std::abs(onsetInterval - previousOnsetInterval) / previousOnsetInterval;
     //if (onsetChange > 0.05) {
     //    
     //    DBG("BIG CHANGE YO");
     //}
+}
+
+void Player::addIntervalToQueue(double interval)
+{
+    int maxNumberOfIntervalsInQueue = 19;
+    while (numOfIntervalsInQueue = onsetIntervals.size() > maxNumberOfIntervalsInQueue) {
+        onsetIntervals.pop();
+    }
+    onsetIntervals.push(interval);
+}
+
+void Player::emptyIntervalQueue()
+{
+    onsetIntervals.empty();
 }
 
 //==============================================================================
@@ -276,25 +292,25 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
 
     // Add note to buffer.
     auto &note = notes [currentNoteIndex];
-    juce::uint8 velocity = note.velocity * volumeParam;
+    if (true) {
+    //if (!isUserOperated()) {
+        juce::uint8 velocity = note.velocity * volumeParam;
         
-    float floatVelocity;
+        float floatVelocity;
 
-    // Convert note velocity to float (not sure why this is now needed)
-    if (note.velocity > 1) {
-        floatVelocity = note.velocity / 127.0;
-    }
-    else {
-        floatVelocity = note.velocity;
-    }
+        // Convert note velocity to float (not sure why this is now needed)
+        if (note.velocity > 1) {
+            floatVelocity = note.velocity / 127.0;
+        }
+        else {
+            floatVelocity = note.velocity;
+        }
 
-    if (!isUserOperated()) {
-    //if (true) {
         midi.addEvent(juce::MidiMessage::noteOn(channelParam, note.noteNumber, floatVelocity),
             sampleIndex);
-    }
 
-    latestVolume = velocity / 127.0;
+        latestVolume = velocity / 127.0;
+    }
             
     // Ignoring delay this onset should have happened samplesDelay samples ago.
     samplesSinceLastOnset = samplesDelay;                    
@@ -304,8 +320,8 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
     notePlayed = true;
     previousOnsetTime = currentOnsetTime;
     if (isUserOperated()) {
-        DBG("NOTE INDEX: " << currentNoteIndex << " : " << latestOscOnsetNoteNumber);
-        DBG("SAMPLES: " << scoreCounter << " : " << oscOnsetTimeInSamples);
+        //DBG("NOTE INDEX: " << currentNoteIndex << " : " << latestOscOnsetNoteNumber);
+        //DBG("SAMPLES: " << scoreCounter << " : " << oscOnsetTimeInSamples);
         currentOnsetTime = oscOnsetTimeInSamples;
     } else {
         currentOnsetTime = scoreCounter - samplesDelay;

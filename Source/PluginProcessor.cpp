@@ -70,7 +70,7 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
         EnsembleModel::soundOffAllChannels (midiOutputBuffer);
     }
     
-    wasPlaying = playing;
+    //wasPlaying = playing;
     wasPlaying = manualPlaying;
 
     

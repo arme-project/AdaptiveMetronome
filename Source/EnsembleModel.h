@@ -5,8 +5,13 @@
 #include <thread>
 #include "Player.h"
 #include "MetronomeClock.h"
-class EnsembleModel : private juce::OSCReceiver,
-                      private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
+
+using namespace matlab::engine;
+
+class EnsembleModel :   private juce::OSCReceiver,
+                        private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
 {
 public:
     //==============================================================================
@@ -14,17 +19,25 @@ public:
     ~EnsembleModel();
     
     //==============================================================================
-    
+    // Communication
+    std::unique_ptr<MATLABEngine> matlabEngine;
     juce::OSCSender sender;
     void oscMessageReceived(const juce::OSCMessage& message) override;
+    void oscMessageSend(bool test);
+    matlab::data::ArrayFactory factory;
+    bool getAlphasFromMATLAB();
 
-    void oscMessageSend();
-
+    //==============================================================================
+    // Metronome for accurate time measurements
+    juce::Random randomizer;
     MetronomeClock* clock = nullptr;
+    void setMetronomeClock(MetronomeClock* clockPtr);
+
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
     bool reset();
     bool reset(bool skipIntroNotes);
+    void setTempo (double bpm);
     
     //==============================================================================
     void prepareToPlay (double newSampleRate);
@@ -45,10 +58,11 @@ public:
     juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
     juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
     
+    juce::Atomic<int> currentNoteIndex;
+    
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
 
-    void setMetronomeClock(MetronomeClock* clockPtr);
 
 private:
     //==============================================================================
@@ -60,13 +74,14 @@ private:
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
     std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
-    
+
     //==============================================================================
     // Intro countdown
     static const int numIntroTones = 4;
     static const int introToneNote = 69;
     static const juce::uint8 introToneVel = 100;
     int introCounter = 0;
+
     int introTonesPlayed = 0;
     bool playbackStarted = false;
     bool introFinishedPlaying = false;
@@ -81,13 +96,13 @@ private:
     // Funtions for ammendinding timings for each player in this ensemble. These
     // should only be called from within processMidiBlock().
     bool initialTempoSet = false;
-    void setTempo (double bpm);
     void setInitialPlayerTempo();
     
     bool newOnsetsAvailable();
     void calculateNewIntervals();
     void clearOnsetsAvailable();
         
+
     void getLatestAlphas();
     void storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex);
     
