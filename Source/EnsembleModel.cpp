@@ -5,7 +5,7 @@
 
 using namespace matlab::engine;
 using namespace matlab::data ;
-using namespace std::chrono_literals;
+using namespace std::chrono;
 
 //==============================================================================
 EnsembleModel::EnsembleModel()
@@ -20,67 +20,104 @@ EnsembleModel::EnsembleModel()
     else {
         DBG("OSC SENDER CONNECTED");
     }
-    matlabEngine = connectMATLAB(u"MATLAB_17720");
-    matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
+    auto sharedMATLABs = matlab::engine::findMATLAB();
+    if (sharedMATLABs.size() > 0) {
+        //matlabEngine = connectMATLAB(u"MATLAB_4016");
+        matlabEngine = connectMATLAB(sharedMATLABs[0]);
+        matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
+    }
 }
 
 EnsembleModel::~EnsembleModel()
 {
     stopLoggerLoop();
-    stopPollingLoop();
+    //stopPollingLoop();
 }
 
-
-//==============================================================================
-void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
-{
-    //DBG("MESSAGE RECEIVED");
-    juce::OSCAddressPattern oscPattern = message.getAddressPattern();
-    juce::String oscAddress = oscPattern.toString();
-    DBG(oscAddress);
-    if (oscAddress == "/plugin") {
-        if (message[1].isInt32())                              // [5]
-            DBG(message[1].getInt32());  // [6]
-        if (message[0].isFloat32())
-            DBG(message[0].getFloat32());
-    }
-    else if (oscAddress == "/oscstart") {
-        
-    }
+void EnsembleModel::writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message) {
+    auto timeStampString = juce::String(clock->tickToString(timeStamp));
+    juce::String formattedString;
+    formattedString << timeStampString
+        << " - "
+        << source << "::" << method
+        << " --- "
+        << message;
+    juce::Logger::writeToLog(formattedString);
 }
 
-bool EnsembleModel::getAlphasFromMATLAB() {
-
-    // Vector to store Matlab arrays of function inputs
-    auto vOfArrays = std::vector<Array>(4);
-
-    // Loop over players
-    for (int playerNumber = 0; playerNumber < 4; playerNumber++) {
-        // Generate random intervals for testing
-        std::deque<double> onsetIntervals;
-        for (int i = 0; i < 10; i++) {
-            auto randInterval = randomizer.nextFloat() / 20 + 0.5;
-            onsetIntervals.push_back(randInterval);
-        }
-
-        // Convert to Matlab array
-        TypedArray<double> data = factory.createArray<std::deque<double>::iterator>({ onsetIntervals.size(), 1 },
-            onsetIntervals.begin(), onsetIntervals.end());
-        
-        // Add to vector
-        vOfArrays[playerNumber] = data;
-    }
-
+bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
+    // This is the main method to call to update alphas
+    // This packs the most recent onsets, sends to Matlab,
+    // and assigns returned values to alphaParams
+    
     // If connected to matlab instance ...
     if (matlabEngine != nullptr) {
-        TypedArray<double> alphasFromMatlab = matlabEngine->feval(u"getAlphasCpp", vOfArrays);
+        auto matlabOnsetArray = buildMatlabOnsetArray(test);
+        
+        if (logToLogger) {
+            juce::String message;
+            message << "Array sizes before sending to MATLAB: ";
+            for (auto array : matlabOnsetArray) {
+                message << array.getNumberOfElements() << ", ";
+            }
+            writeToLogger(clock->tick(), "EnsembleModel",
+                "getAlphasFromMATLAB", message);
+        }
+
+        TypedArray<double> alphasFromMatlab = factory.createEmptyArray();
+        bool useFEVAL = false;
+        if (useFEVAL) {
+            alphasFromMatlab = 
+                matlabEngine->feval(u"getAlphasCpp", matlabOnsetArray);
+        }
+        else {
+            for (int nPlayer = 0; nPlayer < 4; nPlayer++) {
+                TypedArray<double> matlabArray = matlabOnsetArray[nPlayer];
+                juce::String varName;
+                varName << "P" << nPlayer;
+
+                matlabEngine->setVariable(varName.toStdString(), matlabArray);
+            }
+            matlabEngine->eval(u"alphas=getAlphasCpp(P0, P1, P2, P3)");
+            alphasFromMatlab = matlabEngine->getVariable(u"alphas");
+        }
+
+        if (logToLogger) {
+            juce::String message;
+            message << "Returned alphas from MATLAB: ";
+            for (auto size : alphasFromMatlab.getDimensions()) {
+                message << size << ", ";
+            }
+            writeToLogger(clock->tick(), "EnsembleModel",
+                "getAlphasFromMATLAB", message);
+        }
+
+        //if (setAlphasFromMATLABArray(alphasFromMatlab)) {
+        //    return true;
+        //}
+        //else {
+        //    return false;
+        //}
+
+    }
+    else {
+        DBG("NO MATLAB INSTANCE CONNECTED");
+        return false;
+    }
+}
+
+bool EnsembleModel::setAlphasFromMATLABArray(TypedArray<double> alphasFromMATLAB)
+{
+    if (alphasFromMATLAB.getNumberOfElements() == 16) {
         int playerCount = 0;
         int valueCount = 0;
         int totalCount = 0;
-        for (auto dim : alphasFromMatlab) {
+        for (auto dim : alphasFromMATLAB) {
             valueCount = (int)(totalCount / 4);
             playerCount = (int)(totalCount % 4);
-            //DBG(playerCount << ":" << valueCount << " = " << dim);
+
+
+
             if (getNumPlayers() > 0) {
                 *alphaParams[playerCount][valueCount] = (float)dim;
             }
@@ -89,9 +126,52 @@ bool EnsembleModel::getAlphasFromMATLAB() {
         return true;
     }
     else {
-        DBG("NO MATLAB INSTANCE CONNECTED");
+        DBG("WRONG NUMBER OF ELEMENTS IN MATLAB RETURN ARRAY");
         return false;
     }
+}
+
+std::vector<matlab::data::Array> EnsembleModel::buildMatlabOnsetArray(bool test = false) {
+    // This packs the recent onsets as a Matlab array to be sent to Matlab
+    // if test == true, 20 onsets are randomly generated
+    
+    // Vector to store Matlab arrays of function inputs
+    if (getNumPlayers() != 4) {
+        DBG("NUMBER OF PLAYERS MUST BE 4 FOR ALPHA CALC");
+        DBG("Using test numbers for calc");
+        test = true;
+    }
+    auto vectorOfOnsetArrays = std::vector<Array>(4);
+
+    if (!test) {
+        for (int nPlayer = 0; nPlayer < getNumPlayers(); nPlayer++) {
+            auto intervals = &players[nPlayer]->onsetIntervals;
+            TypedArray<double> data = factory.createArray<std::deque<double>::iterator>(
+                { intervals->size(), 1 },
+                intervals->begin(), intervals->end());
+            vectorOfOnsetArrays[nPlayer] = data;
+        }
+    }
+    else {
+
+        for (int nPlayer = 0; nPlayer < 4; nPlayer++) {
+            // Generate random intervals for testing
+            std::deque<double> onsetIntervals;
+            auto testInterval = double(0.5);
+            for (int i = 0; i < 20; i++) {
+                auto randInterval = 0.5 + (randomizer.nextFloat() / 20);
+                onsetIntervals.push_back(randInterval);
+            }
+
+            // Convert to Matlab array
+            TypedArray<double> data = factory.createArray<std::deque<double>::iterator>({ onsetIntervals.size(), 1 },
+                onsetIntervals.begin(), onsetIntervals.end());
+
+            // Add to vector
+            vectorOfOnsetArrays[nPlayer] = data;
+        }
+    }
+    return vectorOfOnsetArrays;
 }
 
 void EnsembleModel::oscMessageSend(bool test)
@@ -207,7 +287,7 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
 
     //==============================================================================
     // Update tempo from DAW playhead.
-    //setTempo (tempo);
+    setTempo (tempo);
     
     //==============================================================================
     // Clear output if ensemble has been reset
@@ -265,13 +345,13 @@ void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& 
         player->processSample(inMidi, outMidi, sampleIndex);
         if (player->isUserOperated()) {
             if (player->userPlayedNote) {
-                //DBG("Player played note at " << player->getLatestOnsetTime() / sampleRate);
+                //DBG("Player played note at " << player->getLatestOnsetTimeInSamples() / sampleRate);
                 player->userPlayedNote = false;
             }
         }
     }
     //if (players[1]->hasNotePlayed()) {
-    //    DBG("Next note for user is " << players[1]->getCurrentNoteIndex() + 1 << " at time " << (players[1]->getLatestOnsetTime() + players[1]->getOnsetInterval())/sampleRate);
+    //    DBG("Next note for user is " << players[1]->getCurrentNoteIndex() + 1 << " at time " << (players[1]->getLatestOnsetTimeInSamples() + players[1]->getOnsetIntervalForNextNote())/sampleRate);
     //}
 
     // If all players have played a note, update timings.
@@ -384,7 +464,7 @@ void EnsembleModel::setTempo (double bpm)
     
     // Update tempo of playback.
     samplesPerBeat = newSamplesPerBeat;
-    DBG("Setting new tempo to: " << bpm << ":" << samplesPerBeat);
+    //DBG("Setting new tempo to: " << bpm << ":" << samplesPerBeat);
     
     setInitialPlayerTempo();
 }
@@ -395,7 +475,7 @@ void EnsembleModel::setInitialPlayerTempo()
     {
         for (auto &player : players)
         {
-            player->setOnsetInterval (samplesPerBeat);
+            player->setOnsetIntervalForNextNote (samplesPerBeat);
         }
         
         initialTempoSet = true;
@@ -418,8 +498,21 @@ void EnsembleModel::calculateNewIntervals()
 {
     //==========================================================================
     // Get most recent alphas
-    getLatestAlphas();
-    
+    //getLatestAlphas();
+    bool enoughOnsetsToRecalculateAlpha = true;
+    for (int i = 0; i < getNumPlayers(); ++i) {
+        if (players[i]->onsetIntervals.size() < 4) {
+            enoughOnsetsToRecalculateAlpha = false;
+        }
+    }
+    if (enoughOnsetsToRecalculateAlpha) {
+        if (!getAlphasFromMATLAB()) {
+            DBG("ALPHAS CANT BE UPDATED");
+        }
+    }
+    else {
+        //DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
+    }
     //==========================================================================
     // Calculate new onset times for players.
     // Make sure all non-user players update before the user players.
@@ -429,8 +522,7 @@ void EnsembleModel::calculateNewIntervals()
         {
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
         }
-        if (i == 1) {
-            //DBG("SETTING NEW NOTE INDEX");
+        if (i == 3) {
             currentNoteIndex.set(players[i]->getCurrentNoteIndex());
         }
     }  
@@ -439,9 +531,6 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (players [i]->isUserOperated())
         {
-            //if (i == 0) {
-            //    DBG(players[i]->getLatestOnsetTime()/sampleRate);
-            //}
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
 
         }
@@ -475,43 +564,14 @@ void EnsembleModel::clearOnsetsAvailable()
     } 
 }
 
-void EnsembleModel::getLatestAlphas()
-{
-    // UNUSED
-    if (pollingFifo)
-    {
-        // Consume everything in the buffer, only using the most recent set of alphas.
-        auto reader = pollingFifo->read (pollingFifo->getNumReady()); 
-        
-        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-        {
-            int player2 = 0;
-            
-            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
-
-            for (int i = block1Start; i < reader.blockSize1; ++i)
-            {
-                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
-            }
-            
-            int block2Start = std::max (block1Start - reader.blockSize1, 0);
-        
-            for (int i = block2Start; i < reader.blockSize2; ++i)
-            {
-                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
-            }
-        }
-    } 
-}
-
 void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex)
 {
     // Store the log information about the latest onset from the given player
     // in the logging buffers.
     auto &data = loggingBuffer [bufferIndex];
     
-    data.onsetTime = players [playerIndex]->getLatestOnsetTime();
-    data.onsetInterval = players [playerIndex]->getPlayedOnsetInterval();
+    data.onsetTime = players [playerIndex]->getLatestOnsetTimeInSamples();
+    data.onsetIntervalForNextNote = players [playerIndex]->getPlayedOnsetIntervalInSamples();
     data.userInput = players [playerIndex]->wasLatestOnsetUserInput();
     data.delay = players [playerIndex]->getLatestOnsetDelay();
     data.motorNoise = players [playerIndex]->getMotorNoise();
@@ -519,7 +579,7 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     
     for (int i = 0; i < players.size(); ++i)
     {
-        data.asyncs [i] = players [playerIndex]->getLatestOnsetTime() - players [i]->getLatestOnsetTime();
+        data.asyncs [i] = players [playerIndex]->getLatestOnsetTimeInSamples() - players [i]->getLatestOnsetTimeInSamples();
         data.alphas [i] = *alphaParams [playerIndex][i];
     }
     
@@ -627,7 +687,7 @@ void EnsembleModel::resetPlayers()
     startLoggerLoop();
     
     // Start loop which polls for new alpha values
-    startPollingLoop();
+    //startPollingLoop();
     
     //==========================================================================
     // reset all players
@@ -847,7 +907,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     auto &data = loggingBuffer [bufferIndex];
     
     onsetLog += ", " + juce::String (data.onsetTime / sampleRate);
-    intervalLog += ", " + juce::String (data.onsetInterval / sampleRate);
+    intervalLog += ", " + juce::String (data.onsetIntervalForNextNote / sampleRate);
     userInputLog += ", " + juce::String (data.userInput ? "true" : "false");
     delayLog += ", " + juce::String (data.delay / sampleRate);
     mNoiseLog += ", " + juce::String (data.motorNoise);
@@ -878,93 +938,6 @@ void EnsembleModel::postLatestOnsets (const std::vector <int> &onsets, const std
     // Once you've sent those to the server indicate to the polling thread that
     // it should start to poll for new alphas.
     alphasUpToDate.clear();
-}
-
-//==============================================================================
-void EnsembleModel::initialisePollingBuffers()
-{
-    int bufferSize = static_cast <int> (10 * players.size());
-    
-    pollingFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
-
-    pollingBuffer.resize (players.size());
-    
-    for (int i = 0; i < pollingBuffer.size(); ++i)
-    {
-        pollingBuffer [i].resize (bufferSize, 0.0);
-    }
-}
-
-void EnsembleModel::startPollingLoop()
-{
-    stopPollingLoop();
-    initialisePollingBuffers();
-        
-    continuePolling = true;
-    alphasUpToDate.test_and_set();
-    pollingThread = std::thread ([this] () {this->pollingLoop();});
-}
-
-void EnsembleModel::stopPollingLoop()
-{
-    continuePolling = false;
-    
-    if (pollingThread.joinable())
-    {
-        pollingThread.join();
-    }
-}
-
-void EnsembleModel::pollingLoop()
-{
-    while (continuePolling)
-    {
-        if (!alphasUpToDate.test_and_set())
-        {
-            getNewAlphas();
-        }
-        
-        std::this_thread::sleep_for (50ms);
-    }
-}
-
-void EnsembleModel::getNewAlphas()
-{
-    // UNUSED
-    //==========================================================================
-    // In here you should make a request to your server to ask for new alpha
-    // values. If you get some updated values set the following value to true.
-    // If not, set the value to false and the plug-in will poll again after
-    // short time.
-    bool newAlphas = false;
-    
-    if (newAlphas)
-    {
-        auto writer = pollingFifo->write (static_cast <int> (players.size()));
-        
-        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-        {        
-            int player2 = 0;
-            
-            for (int i = 0; i < writer.blockSize1; ++i)
-            {
-                // Replace the 0.2 with the alpha parameter for player1_player2
-                pollingBuffer [player1][writer.startIndex1 + i] = 0.2;
-                ++player2;
-            }
-        
-            for (int i = 0; i < writer.blockSize2; ++i)
-            {
-                // Replace the 0.2 with the alpha parameter for player1_player2
-                pollingBuffer [player1][writer.startIndex2 + i] = 0.2;
-                ++player2;
-            }
-        }
-    }
-    else
-    {
-        alphasUpToDate.clear();
-    }
 }
 
 //==============================================================================

@@ -1,5 +1,8 @@
 #include "Player.h"
+#include "PluginEditor.h"
 
+using namespace std::chrono;
+using Editor = AdaptiveMetronomeAudioProcessorEditor;
 //==============================================================================
 Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
                 const double &sampleRate, const int &scoreCounter, int initialInterval)
@@ -21,7 +24,7 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
     playerIndex (index),
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
-    onsetInterval (initialInterval),
+    onsetIntervalForNextNote (initialInterval),
     mNoiseDistribution (0.0, mNoiseStdParam.get() / 1000.0),
     tkNoiseDistribution (0.0, tkNoiseStdParam.get() / 1000.0)
 {
@@ -41,6 +44,11 @@ bool Player::isUserOperated()
 //==============================================================================
 void Player::reset()
 {
+    if (logToLogger) {
+        juce::String message;
+        message << "Player: " << playerIndex;
+        Editor::writeToLogger(system_clock::now(), "Player", "Reset", message);
+    }
     // rewind to start of score
     currentNoteIndex = 0;
     
@@ -49,13 +57,14 @@ void Player::reset()
     samplesToNextOffset = -1;
     
     // reset onset times
-    currentOnsetTime = 0;
-    previousOnsetTime = 0;
+    currentOnsetTimeInSamples = 0;
+    previousOnsetTimeInSamples = 0;
     
     // clear note played flag
     notePlayed = false;
-}
+    onsetIntervals.clear();
 
+}
 
 void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote)
 {
@@ -72,60 +81,74 @@ void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int sample
         latestOscOnsetNoteNumber = onsetNoteNumber;
         newOSCOnsetAvailable = true;
     }
+
+    if (logToLogger) {
+        juce::String message;
+        message << "Note number: " << latestOscOnsetNoteNumber << ", "
+            << "oscOnsetTime: " << oscOnsetTime << ", "
+            << "oscOnsetTimeInSamples: " << oscOnsetTimeInSamples/sampleRate;
+        Editor::writeToLogger(system_clock::now(), "Player", "setOscOnsetTime", message);
+    }
 }
 
 //==============================================================================
-void Player::setOnsetInterval (int interval)
+void Player::setOnsetIntervalForNextNote (int interval)
 {
-    onsetInterval = interval;
+    if (logToLogger) {
+        juce::String message;
+        message << "Player: " << playerIndex << " : " << interval;
+        Editor::writeToLogger(system_clock::now(), "Player", "setOnsetIntervalForNextNote", message);
+    }
+    onsetIntervalForNextNote = interval;
 }
 
-int Player::getOnsetInterval()
+int Player::getOnsetIntervalForNextNote()
 {
-    return onsetInterval;
+    return onsetIntervalForNextNote;
 }
 
-int Player::getPlayedOnsetInterval()
+int Player::getPlayedOnsetIntervalInSamples()
 {
-    return currentOnsetTime - previousOnsetTime;
+    return currentOnsetTimeInSamples - previousOnsetTimeInSamples;
 }
 
 void Player::recalculateOnsetInterval (int samplesPerBeat,
                                        const std::vector <std::unique_ptr <Player> > &players,
                                        const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas)
 {   
-    int previousOnsetInterval = onsetInterval;
+    int previousOnsetInterval = onsetIntervalForNextNote;
     double asyncSum = 0;
         
     for (int i = 0; i < players.size(); ++i)
     {
-        double async = currentOnsetTime - players [i]->getLatestOnsetTime();
-        //if (i == 0) {
-        //    DBG(currentOnsetTime);
-        //}
+        double async = currentOnsetTimeInSamples - players [i]->getLatestOnsetTimeInSamples();
         asyncSum += *alphas[i] * async;
     }
         
     double hNoise = generateHNoise() * sampleRate;
     
-    onsetInterval = samplesPerBeat - asyncSum + hNoise;
-    DBG("NEW ONSET INTERVAL: " << onsetInterval);
-    //onsetInterval = previousOnsetInterval - asyncSum + hNoise;
+    onsetIntervalForNextNote = samplesPerBeat - asyncSum + hNoise;
 
-    float onsetChange = std::abs(onsetInterval - previousOnsetInterval) / previousOnsetInterval;
-    //if (onsetChange > 0.05) {
-    //    
-    //    DBG("BIG CHANGE YO");
-    //}
+    if (logToLogger) {
+        juce::String message;
+        message << "Player: " << playerIndex << " : " << onsetIntervalForNextNote/sampleRate;
+        Editor::writeToLogger(system_clock::now(), "Player", "recalculateOnsetInterval", message);
+    }
 }
 
 void Player::addIntervalToQueue(double interval)
 {
     int maxNumberOfIntervalsInQueue = 19;
     while (numOfIntervalsInQueue = onsetIntervals.size() > maxNumberOfIntervalsInQueue) {
-        onsetIntervals.pop();
+        onsetIntervals.pop_front();
     }
-    onsetIntervals.push(interval);
+    onsetIntervals.push_back(interval);
+    if (logToLogger) {
+        juce::String message;
+        message << "Player: " << playerIndex << " : " << interval 
+            << ", at position: " << onsetIntervals.size();
+        Editor::writeToLogger(system_clock::now(), "Player", "addIntervalToQueue", message);
+    }
 }
 
 void Player::emptyIntervalQueue()
@@ -192,9 +215,9 @@ void Player::resetNotePlayed()
     userPlayedNote = false;
 }
 
-int Player::getLatestOnsetTime()
+int Player::getLatestOnsetTimeInSamples()
 {
-    return currentOnsetTime;
+    return currentOnsetTimeInSamples;
 }
 
 int Player::getLatestOnsetDelay()
@@ -243,12 +266,6 @@ void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &ou
     // Do we need to play another note?
     processNoteOn (inMidi, outMidi, sampleIndex);
 
-    //std::unique_ptr<UserPlayer> userPlayer = std::unique_ptr<UserPlayer>(static_cast<UserPlayer*>(players[0].release()));
-
-    //DBG(userPlayer->getNoteTriggeredByUser());
-
-    //players[0] = std::unique_ptr<Player>(static_cast<Player*>(userPlayer.release()));
-
     ++samplesSinceLastOnset;
 }
 
@@ -288,6 +305,7 @@ void Player::initialiseScore (const juce::MidiMessageSequence *seq)
 
 void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesDelay)
 {
+
     stopPreviousNote (midi, sampleIndex);
 
     // Add note to buffer.
@@ -318,17 +336,33 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
              
     // Store onset time, ignoring per-player delay.
     notePlayed = true;
-    previousOnsetTime = currentOnsetTime;
+    previousOnsetTimeInSamples = currentOnsetTimeInSamples;
     if (isUserOperated()) {
         //DBG("NOTE INDEX: " << currentNoteIndex << " : " << latestOscOnsetNoteNumber);
-        //DBG("SAMPLES: " << scoreCounter << " : " << oscOnsetTimeInSamples);
-        currentOnsetTime = oscOnsetTimeInSamples;
+        DBG("SAMPLES: " << scoreCounter << " : " << oscOnsetTimeInSamples);
+        currentOnsetTimeInSamples = oscOnsetTimeInSamples;
     } else {
-        currentOnsetTime = scoreCounter - samplesDelay;
+        currentOnsetTimeInSamples = scoreCounter - samplesDelay;
     }
     
+    if (logToLogger) {
+        juce::String message;
+        message << "Player: " << playerIndex << ", Notes played: " << currentNoteIndex << ", "
+            << "scoreCounter: " << scoreCounter << ", "
+            << "currentOnsetTimeInSamples: " << currentOnsetTimeInSamples;
+        Editor::writeToLogger(system_clock::now(), "Player", "playNextNote", message);
+    }
     // Move to next note in score.
     ++currentNoteIndex;
+
+    if (currentNoteIndex > 1) {
+        double onsetIntervalInSamples = getPlayedOnsetIntervalInSamples();
+        double onsetIntervalInSeconds = onsetIntervalInSamples / sampleRate;
+        addIntervalToQueue(onsetIntervalInSeconds);
+        if (onsetIntervals.size() > 4) {
+            auto onsetIntervalsCopy = onsetIntervals;
+        }
+    }
 }
 
 void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
@@ -359,7 +393,7 @@ void Player::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &ou
 {
     int samplesDelay = sampleRate * delayParam / 1000.0;
     
-    if (samplesSinceLastOnset >= onsetInterval + samplesDelay || scoreCounter == samplesDelay)
+    if (samplesSinceLastOnset >= onsetIntervalForNextNote + samplesDelay || scoreCounter == samplesDelay)
     {
         playNextNote (outMidi, sampleIndex, samplesDelay);
     }

@@ -12,8 +12,7 @@ MetronomeClock::MetronomeClock()
 
 time_point<system_clock> MetronomeClock::tick()
 {
-    tickLatest = system_clock::now();
-    return tickLatest;
+    return system_clock::now();
 }
 
 void MetronomeClock::synchWithMax( int expectedHours, int expectedMinutes, 
@@ -99,7 +98,7 @@ tm MetronomeClock::msMaxToLocalTime(int msMax)
 
 juce::String MetronomeClock::tickToString(time_point<system_clock> tick)
 {
-    tm local = tickToLocalTime(tick);
+    tm local = MetronomeClock::tickToLocalTime(tick);
     int msRemainder = getMsComponentFromTick(tick);
     char time[13];
     int cx;

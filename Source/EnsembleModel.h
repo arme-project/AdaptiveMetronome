@@ -10,8 +10,7 @@
 
 using namespace matlab::engine;
 
-class EnsembleModel :   private juce::OSCReceiver,
-                        private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
+class EnsembleModel
 {
 public:
     //==============================================================================
@@ -22,16 +21,21 @@ public:
     // Communication
     std::unique_ptr<MATLABEngine> matlabEngine;
     juce::OSCSender sender;
-    void oscMessageReceived(const juce::OSCMessage& message) override;
+    void writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message);
     void oscMessageSend(bool test);
     matlab::data::ArrayFactory factory;
-    bool getAlphasFromMATLAB();
+
+    // MATLAB integration
+    bool getAlphasFromMATLAB(bool test);
+    std::vector<matlab::data::Array> buildMatlabOnsetArray(bool test);
+    bool setAlphasFromMATLABArray(matlab::data::TypedArray<double> alphasFromMATLAB);
 
     //==============================================================================
     // Metronome for accurate time measurements
     juce::Random randomizer;
     MetronomeClock* clock = nullptr;
     void setMetronomeClock(MetronomeClock* clockPtr);
+    bool logToLogger = true;
 
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
@@ -58,10 +62,12 @@ public:
     juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
     juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
     
+    // TODO: Change to a JUCE parameter
     juce::Atomic<int> currentNoteIndex;
     
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
+    std::vector <std::unique_ptr <Player> > players;
 
 
 private:
@@ -103,7 +109,7 @@ private:
     void clearOnsetsAvailable();
         
 
-    void getLatestAlphas();
+    //void getLatestAlphas();
     void storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex);
     
     //==============================================================================
@@ -120,7 +126,6 @@ private:
     
     // The following functions should only be called when the playersInUse
     // flag has been locked using the above FlagLock class.
-    std::vector <std::unique_ptr <Player> > players;
     std::atomic_flag playersInUse;
 
     void createPlayers (const juce::MidiFile &file);
@@ -138,7 +143,7 @@ private:
     
     struct LogData
     {
-        int onsetTime, onsetInterval;
+        int onsetTime, onsetIntervalForNextNote;
         bool userInput;
         double delay;
         double motorNoise, timeKeeperNoise;
@@ -181,20 +186,8 @@ private:
                                    
     //==============================================================================
     // Functionality for polling for new alpha values from the server.
-    std::unique_ptr <juce::AbstractFifo> pollingFifo;
-    std::vector <std::vector <float> > pollingBuffer;
 
-    void initialisePollingBuffers();
-    
-    std::thread pollingThread;
-    std::atomic <bool> continuePolling;
     std::atomic_flag alphasUpToDate;
-    
-    void startPollingLoop();
-    void stopPollingLoop();
-    
-    void pollingLoop();
-    void getNewAlphas();
     
     //==============================================================================
     static bool checkMidiSequenceHasNotes (const juce::MidiMessageSequence *seq);

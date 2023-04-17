@@ -22,17 +22,23 @@ public:
     void reset();
     
     //==============================================================================
-    void setOnsetInterval (int interval);
-    int getOnsetInterval();
-    int getPlayedOnsetInterval();
+    void setOnsetIntervalForNextNote (int interval);
+    int getOnsetIntervalForNextNote();
+    int getPlayedOnsetIntervalInSamples();
       
-    std::queue<double> onsetIntervals;
+    std::deque<double> onsetIntervals;
 
     virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas);
     
+    //EnsembleModel* parentEnsemble;
+    //void setParentEnsemble(EnsembleModel* ensemble);
 
+
+    /**
+     * Add an onset interval to the queue. Make sure this is an IOI in seconds.
+     */
     void addIntervalToQueue(double interval);
     void emptyIntervalQueue();
     int numOfIntervalsInQueue = 0;
@@ -61,7 +67,7 @@ public:
     bool hasNotePlayed();
     void resetNotePlayed();
     
-    int getLatestOnsetTime();
+    int getLatestOnsetTimeInSamples();
     int getLatestOnsetDelay();
     double getLatestVolume();
     virtual bool wasLatestOnsetUserInput();
@@ -83,7 +89,7 @@ public:
 protected:
     //==============================================================================
     int playerIndex = 0;
-    
+    bool logToLogger = true;
     //==============================================================================
     // Score information
     struct Note
@@ -107,11 +113,11 @@ protected:
     // Timing information
     const double &sampleRate;
     const int &scoreCounter;
-    int onsetInterval = 0; // time between previous and next onset in samples
+    int onsetIntervalForNextNote = 0; // time between previous and next onset in samples
     
     int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
     
-    int currentOnsetTime = 0, previousOnsetTime = 0;
+    int currentOnsetTimeInSamples = 0, previousOnsetTimeInSamples = 0;
     int latestDelay = 0;
     bool notePlayed = false;
     

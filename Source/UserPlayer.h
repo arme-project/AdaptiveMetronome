@@ -23,7 +23,6 @@ public:
     juce::String getNoteTriggeredByUser();
 
 
-
     bool useOSCinput = false;
 
 protected:

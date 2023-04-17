@@ -1,4 +1,7 @@
 #include "UserPlayer.h"
+#include "PluginEditor.h"
+
+using Editor = AdaptiveMetronomeAudioProcessorEditor;
 
 //==============================================================================
 UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
@@ -25,9 +28,13 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
 {
     //==========================================================================
     // Find mean onset and interval for all other players
-    //if (isUserOperated()) {
-    //    DBG(scoreCounter - oscOnsetTimeInSamples);
-    //}
+
+    // Calculate latest onsetInterval in seconds
+
+    //double onsetIntervalInSamples = getPlayedOnsetIntervalInSamples();
+    //double onsetIntervalInSeconds = onsetIntervalInSamples/sampleRate;
+    //addIntervalToQueue(onsetIntervalInSeconds);
+
     float meanOnset = 0.0f;
     float meanInterval = 0.0f;
     int nOtherPlayers = 0;
@@ -36,8 +43,8 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
     {
         if (!players [i]->isUserOperated())
         {
-            meanOnset += players [i]->getLatestOnsetTime();
-            meanInterval += players [i]->getOnsetInterval();
+            meanOnset += players [i]->getLatestOnsetTimeInSamples();
+            meanInterval += players [i]->getOnsetIntervalForNextNote();
             ++nOtherPlayers;
         }
     }
@@ -48,7 +55,13 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
     //==========================================================================
     // Calculate next onset interval so that a note will be played automatically
     // between the next two non-user player onset times.
-    onsetInterval = meanOnset - currentOnsetTime + 1.5 * meanInterval;
+    //onsetIntervalForNextNote = meanOnset - currentOnsetTimeInSamples + 1.5 * meanInterval;
+    onsetIntervalForNextNote = meanOnset - currentOnsetTimeInSamples + meanInterval;
+    if (logToLogger) {
+        juce::String message;
+        message << "Player: " << playerIndex << " : " << onsetIntervalForNextNote;
+        Editor::writeToLogger(system_clock::now(), "Player", "recalculateOnsetInterval", message);
+    }
 }
 
 //==============================================================================
@@ -95,7 +108,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
             //}
             // 
             // Play the next note at the first note on in this beat period
-            if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2)) {
+            if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetIntervalForNextNote / 2)) {
                 playNextNote (outMidi, sampleIndex);
                 noteTriggeredByUser = true;
                 userPlayedNote = true;

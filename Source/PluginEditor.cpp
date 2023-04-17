@@ -2,9 +2,11 @@
 #include "PluginEditor.h"
 #include "MetronomeClock.h"
 
+using namespace juce;
+
 //==============================================================================
 AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor& p,
-                                                                              EnsembleModel &ensemble)
+                                                                              EnsembleModel& ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
@@ -13,9 +15,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       playButton ("Play"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI"),
-      clock (MetronomeClock())
+      clock (MetronomeClock()),
+      thisEnsemble(&ensemble)
     {
-    thisEnsemble = &ensemble;
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
     instructionLabel.setFont (instructionStripHeight - padding * 3);
@@ -60,13 +62,6 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
 
 
     //==========================================================================
-    // specify here where to send OSC messages to: host URL and UDP port number
-    //if (!sender.connect("192.168.1.139", 8020))
-    //    DBG("Error: could not connect to UDP port 8020.");
-    //else {
-    //    DBG("OSC SENDER CONNECTED");
-    //}
-    // specify here on which UDP port number to receive incoming OSC messages
     if (!connect(8080))                       // [3]
         DBG("Error: could not connect to UDP port 8080.");
     else
@@ -83,27 +78,53 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     //waitForOscStart = true;
 
     startTimer(500);
+
+    if (logFile.exists()) {
+        logFile.deleteFile();
+        logFile.create();
+    }
+    else {
+        logFile.create();
+    }
+    juce::Logger::setCurrentLogger(&logger);
+    juce::Logger::writeToLog("LOGGER TEST");
 }
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
 }
 
+void AdaptiveMetronomeAudioProcessorEditor::writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message) {
+    auto space = juce::String(" ").getLastCharacter();
+    auto timeStampString = juce::String(MetronomeClock::tickToString(timeStamp));
+        //.getDurationSincePlayback(timeStamp);
+    juce::String formattedString;
+    juce::String sourceCombined;
+    sourceCombined << source << "::" << method;
+    auto sourceCombinedPadded = sourceCombined.paddedRight(space, 48);
+    formattedString << timeStampString 
+        << " - "
+        << sourceCombinedPadded
+        << " --- "
+        << message;
+    Logger::writeToLog(formattedString);
+}
+
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMessage& message)
 {
-    //DBG("MESSAGE RECEIVED");
     juce::OSCAddressPattern oscPattern = message.getAddressPattern();
     juce::String oscAddress = oscPattern.toString();
-    //DBG(oscAddress);
+    writeToLogger(MetronomeClock::tick(), "PluginEditor", "oscMessageReceived", oscAddress);
 
     if (oscAddress == "/plugin") {
         if (message[0].isFloat32() && message[1].isInt32() 
             && message[2].isInt32() && message[3].isFloat32()) {
             if (processor.manualPlaying) {
-                thisEnsemble->setTempo((double)message[3].getFloat32());
+                // Uncomment to update tempo from Antescofo
+                //thisEnsemble->setTempo((double)message[3].getFloat32());
                 
-                if (thisEnsemble->waitingForFirstNote && message[1].getInt32() == 0) {
+                if (thisEnsemble->waitingForFirstNote && message[1].getInt32() == 1) {
                     thisEnsemble->triggerFirstNote();
                     thisEnsemble->setUserOnsetFromOsc(message[0].getFloat32(), message[1].getInt32(), message[2].getInt32());
                 }
@@ -203,10 +224,20 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
 {
     if (thisEnsemble != nullptr) {
         //DBG("CHECKING NOTE INDEX");
+        juce::String noteIndexString= juce::String("Player notes: ");
+        for (int i = 0; i < 4; i++) {
+            if (i < thisEnsemble->players.size()) {
+                noteIndexString += juce::String(i);
+                noteIndexString += juce::String(":");
+                noteIndexString += juce::String(thisEnsemble->players[i]->getCurrentNoteIndex());
+                noteIndexString += juce::String(", ");
+            }
+        }
         auto currentEnsembleNote = thisEnsemble->currentNoteIndex.get();
-        midiNoteReceivedLabel.setText(juce::String(currentEnsembleNote), juce::NotificationType::dontSendNotification);
-        //thisEnsemble->oscMessageSend(true);
-        thisEnsemble->getAlphasFromMATLAB();
+        midiNoteReceivedLabel.setText(noteIndexString, juce::NotificationType::dontSendNotification);
+        
+        // UNCOMMENT TO TEST ALPHA CALC
+        // thisEnsemble->getAlphasFromMATLAB(true);
     }
 }
 
@@ -260,11 +291,6 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
     
     auto &ensemble = processor.loadMidiFile (file, userPlayersSelector.getSelectedId() - 1);
     initialiseEnsembleParameters (ensemble);
-}
-
-void AdaptiveMetronomeAudioProcessorEditor::setMidiNoteReceived(bool setMidiNoteReceivedBool)
-{
-    midiNoteReceived = setMidiNoteReceivedBool;
 }
 
 //==============================================================================
