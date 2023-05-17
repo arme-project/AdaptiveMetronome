@@ -56,7 +56,9 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
     // Calculate next onset interval so that a note will be played automatically
     // between the next two non-user player onset times.
     //onsetIntervalForNextNote = meanOnset - currentOnsetTimeInSamples + 1.5 * meanInterval;
-    onsetIntervalForNextNote = meanOnset - currentOnsetTimeInSamples + meanInterval;
+    //onsetIntervalForNextNote = meanOnset - currentOnsetTimeInSamples + meanInterval;
+    
+    
     if (logToLogger) {
         juce::String message;
         message << "Player: " << playerIndex << " : " << onsetIntervalForNextNote;
@@ -83,15 +85,15 @@ juce::String UserPlayer::getNoteTriggeredByUser()
 //==============================================================================
 void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
-    if (useOSCinput) {
-        if (newOSCOnsetAvailable) {
-            noteTriggeredByUser = true;
-            userPlayedNote = true;
-            newOSCOnsetAvailable = false;
-            playNextNote(outMidi, sampleIndex);
-        }
+    if (useOSCinput && newOSCOnsetAvailable) {
+        noteTriggeredByUser = true;
+        userPlayedNote = true;
+        newOSCOnsetAvailable = false;
+
+        playNextNote(outMidi, sampleIndex);
+        
     }
-    else {
+    //else {
         // Loop over all MIDI events at this sample position
         for (auto it = inMidi.findNextSamplePosition (sampleIndex); it != inMidi.end(); ++it)
         {
@@ -103,18 +105,15 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         
             auto event = (*it).getMessage();
         
-            //if (event.isNoteOn()) {
-            //    DBG("NOTE IS SO ON");
-            //}
-            // 
             // Play the next note at the first note on in this beat period
             if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetIntervalForNextNote / 2)) {
-                playNextNote (outMidi, sampleIndex);
-                noteTriggeredByUser = true;
-                userPlayedNote = true;
+                DBG("USER MIDI NOTE!");
+                //playNextNote (outMidi, sampleIndex);
+                //noteTriggeredByUser = true;
+                //userPlayedNote = true;
             }
         }
-    }
+    //}
     
     //// If no user input trigger a note automatically
     //if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || scoreCounter == 0))

@@ -124,7 +124,7 @@ void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMe
                 // Uncomment to update tempo from Antescofo
                 //thisEnsemble->setTempo((double)message[3].getFloat32());
                 
-                if (thisEnsemble->waitingForFirstNote && message[1].getInt32() == 1) {
+                if (thisEnsemble->waitingForFirstNote && message[1].getInt32() == 0) {
                     thisEnsemble->triggerFirstNote();
                     thisEnsemble->setUserOnsetFromOsc(message[0].getFloat32(), message[1].getInt32(), message[2].getInt32());
                 }
@@ -149,6 +149,7 @@ void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMe
             if (thisEnsemble->waitingForFirstNote && processor.manualPlaying) {
                 clock.setStartOfPlayback(message[0].getInt32());
                 DBG("Start playback - " << clock.tickToString(clock.tick()));
+
             }
         }
     }

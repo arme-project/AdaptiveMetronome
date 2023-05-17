@@ -24,7 +24,7 @@ EnsembleModel::EnsembleModel()
     if (sharedMATLABs.size() > 0) {
         //matlabEngine = connectMATLAB(u"MATLAB_4016");
         matlabEngine = connectMATLAB(sharedMATLABs[0]);
-        matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
+        //matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
     }
 }
 
@@ -51,57 +51,55 @@ bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
     // and assigns returned values to alphaParams
     
     // If connected to matlab instance ...
-    if (matlabEngine != nullptr) {
-        auto matlabOnsetArray = buildMatlabOnsetArray(test);
+    if (matlabEngine == nullptr) {
+        DBG("NO MATLAB INSTANCE CONNECTED");
+        return false;
+    }
+
+    auto matlabOnsetArray = buildMatlabOnsetArray(test);
         
-        if (logToLogger) {
-            juce::String message;
-            message << "Array sizes before sending to MATLAB: ";
-            for (auto array : matlabOnsetArray) {
-                message << array.getNumberOfElements() << ", ";
-            }
-            writeToLogger(clock->tick(), "EnsembleModel",
-                "getAlphasFromMATLAB", message);
+    if (logToLogger) {
+        juce::String message;
+        message << "Array sizes before sending to MATLAB: ";
+        for (auto array : matlabOnsetArray) {
+            message << array.getNumberOfElements() << ", ";
         }
+        writeToLogger(clock->tick(), "EnsembleModel",
+            "getAlphasFromMATLAB", message);
+    }
 
-        TypedArray<double> alphasFromMatlab = factory.createEmptyArray();
-        bool useFEVAL = false;
-        if (useFEVAL) {
-            alphasFromMatlab = 
-                matlabEngine->feval(u"getAlphasCpp", matlabOnsetArray);
-        }
-        else {
-            for (int nPlayer = 0; nPlayer < 4; nPlayer++) {
-                TypedArray<double> matlabArray = matlabOnsetArray[nPlayer];
-                juce::String varName;
-                varName << "P" << nPlayer;
-
-                matlabEngine->setVariable(varName.toStdString(), matlabArray);
-            }
-            matlabEngine->eval(u"alphas=getAlphasCpp(P0, P1, P2, P3)");
-            alphasFromMatlab = matlabEngine->getVariable(u"alphas");
-        }
-
-        if (logToLogger) {
-            juce::String message;
-            message << "Returned alphas from MATLAB: ";
-            for (auto size : alphasFromMatlab.getDimensions()) {
-                message << size << ", ";
-            }
-            writeToLogger(clock->tick(), "EnsembleModel",
-                "getAlphasFromMATLAB", message);
-        }
-
-        //if (setAlphasFromMATLABArray(alphasFromMatlab)) {
-        //    return true;
-        //}
-        //else {
-        //    return false;
-        //}
-
+    TypedArray<double> alphasFromMatlab = factory.createEmptyArray();
+    bool useFEVAL = false;
+    if (useFEVAL) {
+        alphasFromMatlab = 
+            matlabEngine->feval(u"getAlphas", matlabOnsetArray);
     }
     else {
-        DBG("NO MATLAB INSTANCE CONNECTED");
+        for (int nPlayer = 0; nPlayer < 4; nPlayer++) {
+            TypedArray<double> matlabArray = matlabOnsetArray[nPlayer];
+            juce::String varName;
+            varName << "P" << nPlayer;
+
+            matlabEngine->setVariable(varName.toStdString(), matlabArray);
+        }
+        matlabEngine->eval(u"alphas=getAlphas(P0, P1, P2, P3, false)");
+        alphasFromMatlab = matlabEngine->getVariable(u"alphas");
+    }
+
+    if (logToLogger) {
+        juce::String message;
+        message << "Returned alphas from MATLAB: ";
+        for (auto size : alphasFromMatlab.getDimensions()) {
+            message << size << ", ";
+        }
+        writeToLogger(clock->tick(), "EnsembleModel",
+            "getAlphasFromMATLAB", message);
+    }
+
+    if (setAlphasFromMATLABArray(alphasFromMatlab)) {
+        return true;
+    }
+    else {
         return false;
     }
 }
@@ -145,7 +143,9 @@ std::vector<matlab::data::Array> EnsembleModel::buildMatlabOnsetArray(bool test 
 
     if (!test) {
         for (int nPlayer = 0; nPlayer < getNumPlayers(); nPlayer++) {
-            auto intervals = &players[nPlayer]->onsetIntervals;
+            //auto intervals = &players[nPlayer]->onsetIntervals;
+            auto intervals = &players[nPlayer]->onsetTimes;
+
             TypedArray<double> data = factory.createArray<std::deque<double>::iterator>(
                 { intervals->size(), 1 },
                 intervals->begin(), intervals->end());
@@ -360,7 +360,7 @@ void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& 
         calculateNewIntervals();
         clearOnsetsAvailable();
     }
-
+    
     ++scoreCounter;
 }
 
@@ -499,20 +499,21 @@ void EnsembleModel::calculateNewIntervals()
     //==========================================================================
     // Get most recent alphas
     //getLatestAlphas();
+    auto minimumNumberOfOnsets = 5;
     bool enoughOnsetsToRecalculateAlpha = true;
     for (int i = 0; i < getNumPlayers(); ++i) {
-        if (players[i]->onsetIntervals.size() < 4) {
+        if (players[i]->onsetIntervals.size() < minimumNumberOfOnsets) {
             enoughOnsetsToRecalculateAlpha = false;
         }
     }
-    if (enoughOnsetsToRecalculateAlpha) {
-        if (!getAlphasFromMATLAB()) {
-            DBG("ALPHAS CANT BE UPDATED");
-        }
-    }
-    else {
-        //DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
-    }
+    //if (enoughOnsetsToRecalculateAlpha) {
+    //    if (!getAlphasFromMATLAB()) {
+    //        DBG("ALPHAS CANT BE UPDATED");
+    //    }
+    //}
+    //else {
+    //    //DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
+    //}
     //==========================================================================
     // Calculate new onset times for players.
     // Make sure all non-user players update before the user players.

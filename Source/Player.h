@@ -27,6 +27,7 @@ public:
     int getPlayedOnsetIntervalInSamples();
       
     std::deque<double> onsetIntervals;
+    std::deque<double> onsetTimes;
 
     virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
@@ -39,7 +40,7 @@ public:
     /**
      * Add an onset interval to the queue. Make sure this is an IOI in seconds.
      */
-    void addIntervalToQueue(double interval);
+    void addIntervalToQueue(double interval, double onsetTime);
     void emptyIntervalQueue();
     int numOfIntervalsInQueue = 0;
     //==============================================================================
