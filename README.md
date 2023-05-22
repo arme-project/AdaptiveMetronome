@@ -13,6 +13,7 @@ The EPSRC-funded ARME project is proud to release a plug-in designed to simulate
 9) In the midi section of the new track select MIDI FX->Audio Units->ARME->Adaptive metronome
 10) Press Load MIDI in the new window the midi file
 
+Video instructions:
 [![Installation Video](https://img.youtube.com/vi/2CeIm4auh44/0.jpg)](https://www.youtube.com/watch?v=2CeIm4auh44)
 
 
@@ -22,6 +23,7 @@ The EPSRC-funded ARME project is proud to release a plug-in designed to simulate
 2) Hit the “play” triangle in the main window to start the simulated performance
 3) After the initial 4 metronome beats, press J to play each note (if this doesn’t work go to Window>Show keyboard and check that by pressing J you can hear the notes playing)
 
+Video instructions:
 [![Operation Video](https://img.youtube.com/vi/HKUYVPlAp8E/0.jpg)](https://www.youtube.com/watch?v=HKUYVPlAp8E)
 
 
