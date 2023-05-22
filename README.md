@@ -2,12 +2,12 @@ The EPSRC-funded ARME project is proud to release a plug-in designed to simulate
 
 **Instruction for installation on Logic Pro for Mac:**
 
-1) Download the latest release (on the right side of the page): https://github.com/arme-project/AdaptiveMetronome
-2) Extract the AU plugin contained in the zip file and move it to the following plugin folder: Finder\Macintosh HD\Library\Audio\Plugins\Components
-3) Download the midi file: https://github.com/maxdiluca/haydn_midi/archive/refs/tags/download.zip
-4) Extract the midi contained in the zip file and move it to your documents folder
+1) Download the latest release (on the right side of this page)
+2) Extract the AU plugin contained in the zip file and move it to the following folder: Finder\Macintosh HD\Library\Audio\Plugins\Components
+3) Download the midi file of the Haydn piece from this repo: https://github.com/maxdiluca/haydn_midi/archive/refs/tags/download.zip
+4) Extract the midi contained in the zip file
 5) Open Logic Pro
-6) 1) If an error occurs with the plugin, go to Settings>privacy and security and uder the “allow applications downloaded from” Select App Store and identified developers, “AdaptiveMetronome.component" was blocked from use because it is not from an identified developer”, click “Allow anyways”. Enter the password of an account with admin privileges. Close and re-open Logic Pro
+6) If an error occurs with the plugin, go to Settings>'privacy and security', uder the “allow applications downloaded from” Select "App Store and identified developers", and under “AdaptiveMetronome.component was blocked from use because it is not from an identified developer”, click “Allow anyways”. Enter the password of an account with admin privileges. Close and re-open Logic Pro
 7) Create a new empty project. Choose Software Instrument or once the project is open select Track>New software instrument track.
 8) In the Library, select Orchestral, Strings, String ensemble (or another instrument of your choice)
 9) In the midi section of the new track select MIDI FX->Audio Units->ARME->Adaptive metronome
