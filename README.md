@@ -39,7 +39,7 @@ Video instructions:
 
 **Instruction for installation on Reaper for Windows:**
 
-1) Download the latest release (on the right side of the page): https://github.com/arme-project/AdaptiveMetronome
+1) Download the latest release (on the right side of this page)
 2) Extract the VST3 plugin contained in the zip file and move it to the following plugin folder:  C:\Program Files\Common Files\VST3
 3) Download the MIDI file: https://github.com/maxdiluca/haydn_midi/archive/refs/tags/download.zip
 4) Extract the MIDI contained in the zip file and move it to your documents folder
