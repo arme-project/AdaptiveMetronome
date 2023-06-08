@@ -6,9 +6,81 @@
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://somagroup.co.uk" pluginManufacturer="ARME"
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
-              pluginFormats="buildStandalone" cppLanguageStandard="17" headerPath="&quot;C:\Program Files\MATLAB\R2023a\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\bin\win64&quot;">
+              pluginFormats="buildStandalone" cppLanguageStandard="17" headerPath="&quot;C:\Program Files\MATLAB\R2023a\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\bin\win64&quot;;&#10;&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\getAlphas&quot;">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
+    <GROUP id="{2C8D5889-24C6-6E2C-FF6B-14B68781A631}" name="codegen">
+      <GROUP id="{7A40AE10-2720-5DD9-4EDE-6A62AD3CA05A}" name="lib">
+        <GROUP id="{04B99DAD-0413-6D16-98E6-9CBB67D6D5E5}" name="getAlphas">
+          <FILE id="Ht3wHb" name="_clang-format" compile="0" resource="1" file="Source/codegen/lib/getAlphas/_clang-format"/>
+          <FILE id="zD0SMC" name="bgls_from_onsets_and_window.cpp" compile="1"
+                resource="0" file="Source/codegen/lib/getAlphas/bgls_from_onsets_and_window.cpp"/>
+          <FILE id="d4a70Y" name="bgls_from_onsets_and_window.h" compile="0"
+                resource="0" file="Source/codegen/lib/getAlphas/bgls_from_onsets_and_window.h"/>
+          <FILE id="s1HrIv" name="bGLS_phase_model_single_and_multiperson.cpp"
+                compile="1" resource="0" file="Source/codegen/lib/getAlphas/bGLS_phase_model_single_and_multiperson.cpp"/>
+          <FILE id="HBc5pP" name="bGLS_phase_model_single_and_multiperson.h"
+                compile="0" resource="0" file="Source/codegen/lib/getAlphas/bGLS_phase_model_single_and_multiperson.h"/>
+          <FILE id="t1pur7" name="buildInfo.mat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/buildInfo.mat"/>
+          <FILE id="RGe7vL" name="coder_bounded_array.h" compile="0" resource="0"
+                file="Source/codegen/lib/getAlphas/coder_bounded_array.h"/>
+          <FILE id="Kbvmd9" name="cov.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/cov.cpp"/>
+          <FILE id="z9hMRu" name="cov.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/cov.h"/>
+          <FILE id="Ta5t5r" name="diff.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/diff.cpp"/>
+          <FILE id="Q3eEVo" name="diff.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/diff.h"/>
+          <FILE id="b3d0eq" name="eml_rand_mt19937ar.cpp" compile="1" resource="0"
+                file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar.cpp"/>
+          <FILE id="AHVR2G" name="eml_rand_mt19937ar.h" compile="0" resource="0"
+                file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar.h"/>
+          <FILE id="diuvEW" name="eml_rand_mt19937ar_stateful.cpp" compile="1"
+                resource="0" file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar_stateful.cpp"/>
+          <FILE id="aMXH7P" name="eml_rand_mt19937ar_stateful.h" compile="0"
+                resource="0" file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar_stateful.h"/>
+          <FILE id="OS9MZd" name="eml_setop.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/eml_setop.cpp"/>
+          <FILE id="IwVJtP" name="eml_setop.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/eml_setop.h"/>
+          <FILE id="b9nn1C" name="getAlphas.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/getAlphas.cpp"/>
+          <FILE id="EfYpUm" name="getAlphas.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/getAlphas.h"/>
+          <FILE id="DzN00h" name="getAlphas_data.cpp" compile="1" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_data.cpp"/>
+          <FILE id="PM2PjQ" name="getAlphas_data.h" compile="0" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_data.h"/>
+          <FILE id="ttvBPJ" name="getAlphas_initialize.cpp" compile="1" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_initialize.cpp"/>
+          <FILE id="KzTkvt" name="getAlphas_initialize.h" compile="0" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_initialize.h"/>
+          <FILE id="DivLdq" name="getAlphas_terminate.cpp" compile="1" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_terminate.cpp"/>
+          <FILE id="RqRKVv" name="getAlphas_terminate.h" compile="0" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_terminate.h"/>
+          <FILE id="y6Kjhf" name="getAlphas_types.h" compile="0" resource="0"
+                file="Source/codegen/lib/getAlphas/getAlphas_types.h"/>
+          <FILE id="LIn639" name="inv.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/inv.cpp"/>
+          <FILE id="hWFktW" name="inv.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/inv.h"/>
+          <FILE id="Iokjk3" name="randn.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/randn.cpp"/>
+          <FILE id="jObVtX" name="randn.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/randn.h"/>
+          <FILE id="uVD5QC" name="rt_nonfinite.cpp" compile="1" resource="0"
+                file="Source/codegen/lib/getAlphas/rt_nonfinite.cpp"/>
+          <FILE id="QzVSVm" name="rt_nonfinite.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rt_nonfinite.h"/>
+          <FILE id="pn4n7d" name="rtGetInf.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/rtGetInf.cpp"/>
+          <FILE id="yMLZbr" name="rtGetInf.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtGetInf.h"/>
+          <FILE id="tk0WUT" name="rtGetNaN.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/rtGetNaN.cpp"/>
+          <FILE id="DsyKi7" name="rtGetNaN.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtGetNaN.h"/>
+          <FILE id="zxWmti" name="rtw_proj.tmw" compile="0" resource="1" file="Source/codegen/lib/getAlphas/rtw_proj.tmw"/>
+          <FILE id="FpQZFn" name="rtwtypes.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtwtypes.h"/>
+        </GROUP>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{261A485E-52EE-5BAE-3101-8296367C0509}" name="R2023a">
+      <GROUP id="{FED11F79-5E39-D12B-2E80-0870110A146D}" name="extern">
+        <GROUP id="{2791D349-E7E1-1CE6-1B61-5EA97E2050FD}" name="include">
+          <FILE id="gs9SvZ" name="tmwtypes.h" compile="0" resource="0" file="Source/R2023a/extern/include/tmwtypes.h"/>
+        </GROUP>
+      </GROUP>
+    </GROUP>
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <FILE id="mliO5T" name="recalculateAlphas.cpp" compile="1" resource="0"
+            file="Source/recalculateAlphas.cpp"/>
+      <FILE id="fXK2Hz" name="recalculateAlphas.h" compile="0" resource="0"
+            file="Source/recalculateAlphas.h"/>
       <FILE id="WYwJgv" name="MetronomeClock.h" compile="0" resource="0"
             file="Source/MetronomeClock.h"/>
       <FILE id="ItjeP9" name="MetronomeClock.cpp" compile="1" resource="0"
@@ -53,9 +125,9 @@
       </MODULEPATHS>
     </VS2019>
     <VS2022 targetFolder="Builds/VisualStudio2022" externalLibraries="&quot;C:\Program Files\MATLAB\R2023a\extern\lib\win64\microsoft\libMatlabEngine.lib&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\lib\win64\microsoft\libMatlabDataArray.lib&quot;;"
-            extraCompilerFlags="/FS" toolset="v142">
+            extraCompilerFlags="/FS">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\codegen\lib\getAlphas&quot;&#10;&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\R2023a\extern\include&quot;"/>
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>

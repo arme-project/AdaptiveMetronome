@@ -136,7 +136,7 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
         
     double hNoise = generateHNoise() * sampleRate;
     
-    onsetIntervalForNextNote = samplesPerBeat - asyncSum + hNoise;
+    setOnsetIntervalForNextNote(samplesPerBeat - asyncSum + hNoise);
 
     if (logToLogger) {
         juce::String message;

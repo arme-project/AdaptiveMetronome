@@ -2,6 +2,8 @@
 #include "UserPlayer.h"
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
+#include "recalculateAlphas.h"
+#include "getAlphas_terminate.h"
 
 using namespace matlab::engine;
 using namespace matlab::data ;
@@ -26,12 +28,17 @@ EnsembleModel::EnsembleModel()
         matlabEngine = connectMATLAB(sharedMATLABs[0]);
         //matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
     }
+
+    auto alpha1 = getAlphasCppTest();
+    DBG(alpha1);
+    getAlphas_terminate();
+
 }
 
 EnsembleModel::~EnsembleModel()
 {
     stopLoggerLoop();
-    //stopPollingLoop();
+    stopPollingLoop();
 }
 
 void EnsembleModel::writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message) {
@@ -82,7 +89,7 @@ bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
 
             matlabEngine->setVariable(varName.toStdString(), matlabArray);
         }
-        matlabEngine->eval(u"alphas=getAlphas(P0, P1, P2, P3, false)");
+        matlabEngine->eval(u"alphas=getAlphas(P0, P1, P2, P3, true)");
         alphasFromMatlab = matlabEngine->getVariable(u"alphas");
     }
 
@@ -103,6 +110,38 @@ bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
         return false;
     }
 }
+
+
+bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
+    // This is the main method to call to update alphas
+    // This packs the most recent onsets, sends to Matlab,
+    // and assigns returned values to alphaParams
+
+    // If connected to matlab instance ...
+
+    auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
+
+
+
+    if (setAlphasFromCodegen(alphasFromCodegen)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool EnsembleModel::setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen) {
+
+    for (int n = 0; n < 4; n++) {
+        for (int m = 0; m < 4; m++) {
+            *alphaParams[n][m] = alphasFromCodegen[n][m];
+        }
+    }
+
+    return true;
+}
+
 
 bool EnsembleModel::setAlphasFromMATLABArray(TypedArray<double> alphasFromMATLAB)
 {
@@ -355,11 +394,11 @@ void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& 
     //}
 
     // If all players have played a note, update timings.
-    if (newOnsetsAvailable())
-    {
-        calculateNewIntervals();
-        clearOnsetsAvailable();
-    }
+    //if (newOnsetsAvailable())
+    //{
+    //    calculateNewIntervals();
+    //    clearOnsetsAvailable();
+    //}
     
     ++scoreCounter;
 }
@@ -498,7 +537,6 @@ void EnsembleModel::calculateNewIntervals()
 {
     //==========================================================================
     // Get most recent alphas
-    //getLatestAlphas();
     auto minimumNumberOfOnsets = 5;
     bool enoughOnsetsToRecalculateAlpha = true;
     for (int i = 0; i < getNumPlayers(); ++i) {
@@ -506,14 +544,14 @@ void EnsembleModel::calculateNewIntervals()
             enoughOnsetsToRecalculateAlpha = false;
         }
     }
-    //if (enoughOnsetsToRecalculateAlpha) {
-    //    if (!getAlphasFromMATLAB()) {
-    //        DBG("ALPHAS CANT BE UPDATED");
-    //    }
-    //}
-    //else {
-    //    //DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
-    //}
+    if (enoughOnsetsToRecalculateAlpha) {
+        if (!getAlphasFromMATLAB()) {
+            DBG("ALPHAS CANT BE UPDATED");
+        }
+    }
+    else {
+        DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
+    }
     //==========================================================================
     // Calculate new onset times for players.
     // Make sure all non-user players update before the user players.
@@ -521,7 +559,7 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (!players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParamsFixed [i]);
         }
         if (i == 3) {
             currentNoteIndex.set(players[i]->getCurrentNoteIndex());
@@ -532,7 +570,7 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParamsFixed [i]);
 
         }
     } 
@@ -650,23 +688,30 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
 void EnsembleModel::createAlphaParameters()
 {
     alphaParams.clear();
-    
+    alphaParamsFixed.clear();
     for (int i = 0; i < players.size(); ++i)
     {
         std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
+        std::vector <std::unique_ptr <juce::AudioParameterFloat> > rowFixed;
+
         // CHANGE DEFAULT ALPHA
         double alpha = 0.25;
-        
+
         for (int j = 0; j < players.size(); ++j)
         {
-            row.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
-                                                                         "Alpha " + juce::String (i) + "-" + juce::String (j),
-                                                                         -1.0, 1.0, alpha));
-                                                                         
+            row.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+                "Alpha " + juce::String(i) + "-" + juce::String(j),
+                -1.0, 1.0, alpha));
+
+            rowFixed.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+                "Alpha " + juce::String(i) + "-" + juce::String(j),
+                -1.0, 1.0, alpha));
+
             alpha = 0.0;
         }
-        
-        alphaParams.push_back (std::move (row));
+
+        alphaParams.push_back(std::move(row));
+        alphaParamsFixed.push_back(std::move(rowFixed));
     }
 }
 
@@ -688,7 +733,7 @@ void EnsembleModel::resetPlayers()
     startLoggerLoop();
     
     // Start loop which polls for new alpha values
-    //startPollingLoop();
+    startPollingLoop();
     
     //==========================================================================
     // reset all players
@@ -727,6 +772,14 @@ void EnsembleModel::startLoggerLoop()
     loggerThread = std::thread ([this] () {this->loggerLoop();});
 }
 
+void EnsembleModel::startPollingLoop()
+{
+    stopPollingLoop();
+
+    continuePolling = true;
+    pollingThread = std::thread([this]() {this->pollingLoop(); });
+}
+
 void EnsembleModel::stopLoggerLoop()
 {
     continueLogging = false;
@@ -734,6 +787,16 @@ void EnsembleModel::stopLoggerLoop()
     if (loggerThread.joinable())
     {
         loggerThread.join();
+    }
+}
+
+void EnsembleModel::stopPollingLoop()
+{
+    continuePolling = false;
+
+    if (pollingThread.joinable())
+    {
+        pollingThread.join();
     }
 }
 
@@ -759,6 +822,18 @@ void EnsembleModel::loggerLoop()
     {
         logOnsetDetails (logStream);
         std::this_thread::sleep_for (50ms);
+    }
+}
+
+void EnsembleModel::pollingLoop()
+{
+    while (continuePolling) {
+        if (newOnsetsAvailable())
+            {
+                calculateNewIntervals();
+                clearOnsetsAvailable();
+            }
+        std::this_thread::sleep_for(10ms);
     }
 }
 

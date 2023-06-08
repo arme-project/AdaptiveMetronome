@@ -7,6 +7,10 @@
 #include "MetronomeClock.h"
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
+#include "rtwtypes.h"
+#include <cstddef>
+#include <cstdlib>
+#include "recalculateAlphas.h"
 
 using namespace matlab::engine;
 
@@ -23,19 +27,22 @@ public:
     juce::OSCSender sender;
     void writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message);
     void oscMessageSend(bool test);
-    matlab::data::ArrayFactory factory;
 
     // MATLAB integration
+    matlab::data::ArrayFactory factory;
     bool getAlphasFromMATLAB(bool test);
-    std::vector<matlab::data::Array> buildMatlabOnsetArray(bool test);
+    bool getAlphasFromCodegen(bool test);
+
     bool setAlphasFromMATLABArray(matlab::data::TypedArray<double> alphasFromMATLAB);
+    bool setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen);
+    std::vector<matlab::data::Array> buildMatlabOnsetArray(bool test);
 
     //==============================================================================
     // Metronome for accurate time measurements
     juce::Random randomizer;
     MetronomeClock* clock = nullptr;
     void setMetronomeClock(MetronomeClock* clockPtr);
-    bool logToLogger = true;
+    bool logToLogger = false;
 
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
@@ -80,6 +87,7 @@ private:
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
     std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
+    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParamsFixed;
 
     //==============================================================================
     // Intro countdown
@@ -158,14 +166,21 @@ private:
     void initialiseLoggingBuffer();
     
     std::thread loggerThread;
+    std::thread pollingThread;
+
     std::atomic <bool> continueLogging;
-        
+    std::atomic <bool> continuePolling;
+
     void startLoggerLoop();
     void stopLoggerLoop();
-    
+
+    void startPollingLoop();
+    void stopPollingLoop();
+
     int logLineCounter = 0;
     
     void loggerLoop();
+    void pollingLoop();
     void writeLogHeader (juce::FileOutputStream &logStream);
     void logOnsetDetails (juce::FileOutputStream &logStream);
     
