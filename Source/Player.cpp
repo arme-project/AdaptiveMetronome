@@ -54,6 +54,9 @@ void Player::reset()
     
     // clear note played flag
     notePlayed = false;
+
+    onsetIntervals.clear();
+    onsetTimes.clear();
 }
 
 //==============================================================================
@@ -70,6 +73,23 @@ int Player::getOnsetInterval()
 int Player::getPlayedOnsetInterval()
 {
     return currentOnsetTime - previousOnsetTime;
+}
+
+void Player::addIntervalToQueue(double interval, double onsetTime)
+{
+    int maxNumberOfIntervalsInQueue = 19;
+    while (numOfIntervalsInQueue = onsetIntervals.size() > maxNumberOfIntervalsInQueue) {
+        onsetIntervals.pop_front();
+        onsetTimes.pop_front();
+    }
+    onsetIntervals.push_back(interval);
+    onsetTimes.push_back(onsetTime);
+}
+
+void Player::emptyIntervalQueue()
+{
+    onsetIntervals.empty();
+    onsetTimes.empty();
 }
 
 void Player::recalculateOnsetInterval (int samplesPerBeat,
@@ -254,6 +274,13 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
     
     // Move to next note in score.
     ++currentNoteIndex;
+
+    if (currentNoteIndex > 1) {
+        double onsetIntervalInSeconds = getOnsetInterval() / sampleRate;
+        double onsetTimeInMS = (currentOnsetTime / sampleRate) * 1000.0;
+        addIntervalToQueue(onsetIntervalInSeconds, onsetTimeInMS);
+    }
+
 }
 
 void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)

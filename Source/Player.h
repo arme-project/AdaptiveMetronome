@@ -25,7 +25,20 @@ public:
     void setOnsetInterval (int interval);
     int getOnsetInterval();
     int getPlayedOnsetInterval();
-      
+    
+
+    //=== MATLAB code
+    std::deque<double> onsetIntervals;
+    std::deque<double> onsetTimes;
+    /**
+     * Add an onset interval to the queue. Make sure this is an onset in milliseconds.
+     */
+    void addIntervalToQueue(double interval, double onsetTime);
+    void emptyIntervalQueue();
+    int numOfIntervalsInQueue = 0;
+
+
+
     virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas);

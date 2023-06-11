@@ -1,5 +1,7 @@
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
+#include "recalculateAlphas.h"
+#include "getAlphas_terminate.h"
 
 using namespace std::chrono_literals;
 
@@ -8,6 +10,10 @@ EnsembleModel::EnsembleModel()
 {
     playersInUse.clear();
     resetFlag.clear();
+    auto alpha1 = getAlphasCppTest();
+    DBG(alpha1);
+    getAlphas_terminate();
+
 }
 
 EnsembleModel::~EnsembleModel()
@@ -50,6 +56,39 @@ bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
     
     return true;
 }
+
+
+bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
+    // This is the main method to call to update alphas
+    // This packs the most recent onsets, sends to Matlab,
+    // and assigns returned values to alphaParams
+    std::vector<std::vector<double>> alphasFromCodegen;
+
+    if (!players[0]->onsetTimes.empty()) {
+        auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
+    };
+
+
+
+    if (setAlphasFromCodegen(alphasFromCodegen)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool EnsembleModel::setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen) {
+
+    for (int n = 0; n < 4; n++) {
+        for (int m = 0; m < 4; m++) {
+            *alphaParams[n][m] = alphasFromCodegen[n][m];
+        }
+    }
+
+    return true;
+}
+
 
 bool EnsembleModel::reset()
 {
@@ -238,8 +277,22 @@ void EnsembleModel::calculateNewIntervals()
 {
     //==========================================================================
     // Get most recent alphas
-    getLatestAlphas();
-    
+    //getLatestAlphas();
+    auto minimumNumberOfOnsets = 5;
+    bool enoughOnsetsToRecalculateAlpha = true;
+    for (int i = 0; i < getNumPlayers(); ++i) {
+        if (players[i]->onsetTimes.size() < minimumNumberOfOnsets) {
+            enoughOnsetsToRecalculateAlpha = false;
+        }
+    }
+    if (enoughOnsetsToRecalculateAlpha) {
+        //if (!getAlphasFromCodegen()) {
+        //    DBG("ALPHAS CANT BE UPDATED");
+        //}
+    }
+    else {
+        DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
+    }
     //==========================================================================
     // Calculate new onset times for players.
     // Make sure all non-user players update before the user players.
@@ -289,30 +342,30 @@ void EnsembleModel::clearOnsetsAvailable()
 
 void EnsembleModel::getLatestAlphas()
 {
-    if (pollingFifo)
-    {
-        // Consume everything in the buffer, only using the most recent set of alphas.
-        auto reader = pollingFifo->read (pollingFifo->getNumReady()); 
-        
-        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-        {
-            int player2 = 0;
-            
-            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
+    //if (pollingFifo)
+    //{
+    //    // Consume everything in the buffer, only using the most recent set of alphas.
+    //    auto reader = pollingFifo->read (pollingFifo->getNumReady()); 
+    //    
+    //    for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
+    //    {
+    //        int player2 = 0;
+    //        
+    //        int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
 
-            for (int i = block1Start; i < reader.blockSize1; ++i)
-            {
-                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
-            }
-            
-            int block2Start = std::max (block1Start - reader.blockSize1, 0);
-        
-            for (int i = block2Start; i < reader.blockSize2; ++i)
-            {
-                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
-            }
-        }
-    } 
+    //        for (int i = block1Start; i < reader.blockSize1; ++i)
+    //        {
+    //            *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
+    //        }
+    //        
+    //        int block2Start = std::max (block1Start - reader.blockSize1, 0);
+    //    
+    //        for (int i = block2Start; i < reader.blockSize2; ++i)
+    //        {
+    //            *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
+    //        }
+    //    }
+    //} 
 }
 
 void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex)
@@ -400,22 +453,30 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
 void EnsembleModel::createAlphaParameters()
 {
     alphaParams.clear();
-    
+    //alphaParamsCalculated.clear();
     for (int i = 0; i < players.size(); ++i)
     {
         std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
+        //std::vector <std::unique_ptr <juce::AudioParameterFloat> > rowCalculated;
+
+        // CHANGE DEFAULT ALPHA
         double alpha = 0.25;
-        
+
         for (int j = 0; j < players.size(); ++j)
         {
-            row.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
-                                                                         "Alpha " + juce::String (i) + "-" + juce::String (j),
-                                                                         0.0, 1.0, alpha));
-                                                                         
+            row.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+                "Alpha " + juce::String(i) + "-" + juce::String(j),
+                -1.0, 1.0, alpha));
+
+            //rowCalculated.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+            //    "Alpha " + juce::String(i) + "-" + juce::String(j),
+            //    -1.0, 1.0, alpha));
+
             alpha = 0.0;
         }
-        
-        alphaParams.push_back (std::move (row));
+
+        alphaParams.push_back(std::move(row));
+        //alphaParamsCalculated.push_back(std::move(rowCalculated));
     }
 }
 
@@ -722,10 +783,10 @@ void EnsembleModel::initialisePollingBuffers()
 void EnsembleModel::startPollingLoop()
 {
     stopPollingLoop();
-    initialisePollingBuffers();
-        
+    //initialisePollingBuffers();
+    //    
     continuePolling = true;
-    alphasUpToDate.test_and_set();
+    //alphasUpToDate.test_and_set();
     pollingThread = std::thread ([this] () {this->pollingLoop();});
 }
 
@@ -743,9 +804,11 @@ void EnsembleModel::pollingLoop()
 {
     while (continuePolling)
     {
-        if (!alphasUpToDate.test_and_set())
+        if (newOnsetsAvailable())
         {
-            getNewAlphas();
+            //getNewAlphas();
+            calculateNewIntervals();
+            clearOnsetsAvailable();
         }
         
         std::this_thread::sleep_for (50ms);

@@ -11,6 +11,10 @@ public:
     //==============================================================================
     EnsembleModel();
     ~EnsembleModel();
+
+    bool getAlphasFromCodegen(bool test);
+    bool setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen);
+
     
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
@@ -46,7 +50,8 @@ private:
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
     std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
-    
+    //std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParamsCalculated;
+    //std::vector<std::unique_ptr<juce::AudioParameterFloat>> alpha1;
     //==============================================================================
     // Intro countdown
     static const int numIntroTones = 4;

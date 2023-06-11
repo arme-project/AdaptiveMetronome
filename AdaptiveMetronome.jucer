@@ -5,9 +5,83 @@
               jucerFormatVersion="1" pluginAUMainType="'aumi'" pluginManufacturerCode="ARME"
               pluginFormats="buildVST3" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://somagroup.co.uk" pluginManufacturer="ARME"
-              bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome">
+              bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
+              headerPath="&quot;C:\Program Files\MATLAB\R2023a\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\bin\win64&quot;;&#10;&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\lib\getAlphas&quot;;&#10;">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <FILE id="AvXJMZ" name="recalculateAlphas.cpp" compile="1" resource="0"
+            file="Source/recalculateAlphas.cpp"/>
+      <FILE id="OrP23Y" name="recalculateAlphas.h" compile="0" resource="0"
+            file="Source/recalculateAlphas.h"/>
+      <GROUP id="{D7045C2C-F703-2140-93FA-13E9E7EAD148}" name="codegen">
+        <GROUP id="{54EB11B9-2C50-7C9A-3F6E-EB59B05CF2A3}" name="lib">
+          <GROUP id="{DF8A1353-F158-F6CE-A264-81A4C90757AF}" name="getAlphas">
+            <FILE id="qk0p7n" name="_clang-format" compile="0" resource="1" file="Source/codegen/lib/getAlphas/_clang-format"/>
+            <FILE id="rfIISg" name="bgls_from_onsets_and_window.cpp" compile="1"
+                  resource="0" file="Source/codegen/lib/getAlphas/bgls_from_onsets_and_window.cpp"/>
+            <FILE id="PNG15j" name="bgls_from_onsets_and_window.h" compile="0"
+                  resource="0" file="Source/codegen/lib/getAlphas/bgls_from_onsets_and_window.h"/>
+            <FILE id="fOJePA" name="bGLS_phase_model_single_and_multiperson.cpp"
+                  compile="1" resource="0" file="Source/codegen/lib/getAlphas/bGLS_phase_model_single_and_multiperson.cpp"/>
+            <FILE id="svSwGG" name="bGLS_phase_model_single_and_multiperson.h"
+                  compile="0" resource="0" file="Source/codegen/lib/getAlphas/bGLS_phase_model_single_and_multiperson.h"/>
+            <FILE id="jY7Ll7" name="buildInfo.mat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/buildInfo.mat"/>
+            <FILE id="PolSp8" name="coder_bounded_array.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/coder_bounded_array.h"/>
+            <FILE id="fOD009" name="cov.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/cov.cpp"/>
+            <FILE id="OoYhcQ" name="cov.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/cov.h"/>
+            <FILE id="OIvybx" name="diff.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/diff.cpp"/>
+            <FILE id="jIm8O3" name="diff.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/diff.h"/>
+            <FILE id="uXrioq" name="eml_rand_mt19937ar.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar.cpp"/>
+            <FILE id="dmqB50" name="eml_rand_mt19937ar.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar.h"/>
+            <FILE id="fFV6Zp" name="eml_rand_mt19937ar_stateful.cpp" compile="1"
+                  resource="0" file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar_stateful.cpp"/>
+            <FILE id="JAK03Y" name="eml_rand_mt19937ar_stateful.h" compile="0"
+                  resource="0" file="Source/codegen/lib/getAlphas/eml_rand_mt19937ar_stateful.h"/>
+            <FILE id="l3sfbH" name="eml_setop.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/eml_setop.cpp"/>
+            <FILE id="lUBB1z" name="eml_setop.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/eml_setop.h"/>
+            <FILE id="xaYijk" name="getAlphas.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/getAlphas.cpp"/>
+            <FILE id="M4CatE" name="getAlphas.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/getAlphas.h"/>
+            <FILE id="nSWHBo" name="getAlphas_data.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_data.cpp"/>
+            <FILE id="WA9RgQ" name="getAlphas_data.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_data.h"/>
+            <FILE id="UgCu2N" name="getAlphas_initialize.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_initialize.cpp"/>
+            <FILE id="GAi75H" name="getAlphas_initialize.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_initialize.h"/>
+            <FILE id="ACdbXc" name="getAlphas_terminate.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_terminate.cpp"/>
+            <FILE id="dsUH7j" name="getAlphas_terminate.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_terminate.h"/>
+            <FILE id="jvoRy3" name="getAlphas_types.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_types.h"/>
+            <FILE id="XryTWz" name="inv.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/inv.cpp"/>
+            <FILE id="wx30XZ" name="inv.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/inv.h"/>
+            <FILE id="RkIegi" name="randn.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/randn.cpp"/>
+            <FILE id="ABstCB" name="randn.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/randn.h"/>
+            <FILE id="gM0kgZ" name="rt_nonfinite.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/rt_nonfinite.cpp"/>
+            <FILE id="f9dhK7" name="rt_nonfinite.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rt_nonfinite.h"/>
+            <FILE id="RBsrJE" name="rtGetInf.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/rtGetInf.cpp"/>
+            <FILE id="XS4d07" name="rtGetInf.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtGetInf.h"/>
+            <FILE id="JjCelx" name="rtGetNaN.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/rtGetNaN.cpp"/>
+            <FILE id="PnLw38" name="rtGetNaN.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtGetNaN.h"/>
+            <FILE id="eF1P5K" name="rtw_proj.tmw" compile="0" resource="1" file="Source/codegen/lib/getAlphas/rtw_proj.tmw"/>
+            <FILE id="Tl3vnb" name="rtwtypes.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtwtypes.h"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{B82AF04E-8B60-0493-372E-81BF631D617D}" name="R2023a">
+        <GROUP id="{037B4DDB-DC4D-5B8D-08E6-2BC4B2355486}" name="extern">
+          <GROUP id="{25CB9B6F-48FF-27C4-C88C-14E6FF6D0851}" name="include">
+            <FILE id="Hd56TK" name="tmwtypes.h" compile="0" resource="0" file="Source/R2023a/extern/include/tmwtypes.h"
+                  xcodeResource="1"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
       <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
       <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
       <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"
@@ -46,9 +120,10 @@
         <MODULEPATH id="juce_gui_extra" path="../../../Downloads/GitClones/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
-    <VS2022 targetFolder="Builds/VisualStudio2022">
+    <VS2022 targetFolder="Builds/VisualStudio2022" extraCompilerFlags="/FS"
+            externalLibraries="&quot;C:\Program Files\MATLAB\R2023a\extern\lib\win64\microsoft\libMatlabEngine.lib&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\lib\win64\microsoft\libMatlabDataArray.lib&quot;;&#10;">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\codegen\lib\getAlphas&quot;&#10;&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\R2023a\extern\include&quot;&#10;"/>
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
