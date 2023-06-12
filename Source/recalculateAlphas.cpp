@@ -111,7 +111,7 @@ std::vector<std::vector<double>> getAlphasCpp(std::deque<double> vl1_dq, std::de
 
     for (int n = 0; n < 4; n++) {
         for (int m = 0; m < 4; m++) {
-            alphaE_vector[n][m] = alphaE[n][m];
+            alphaE_vector[n][m] = alphaE[m][n];
         }
     }
 

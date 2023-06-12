@@ -50,7 +50,7 @@ private:
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
     std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
-    //std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParamsCalculated;
+    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParamsFixed;
     //std::vector<std::unique_ptr<juce::AudioParameterFloat>> alpha1;
     //==============================================================================
     // Intro countdown

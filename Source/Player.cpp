@@ -88,8 +88,8 @@ void Player::addIntervalToQueue(double interval, double onsetTime)
 
 void Player::emptyIntervalQueue()
 {
-    onsetIntervals.empty();
-    onsetTimes.empty();
+    auto onInt = onsetIntervals.empty();
+    auto onTimes = onsetTimes.empty();
 }
 
 void Player::recalculateOnsetInterval (int samplesPerBeat,
@@ -216,6 +216,14 @@ void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &ou
     ++samplesSinceLastOnset;
 }
 
+std::size_t Player::getCurrentNoteIndex()
+{
+
+    return currentNoteIndex;
+
+}
+
+
 //==============================================================================
 std::size_t Player::getNumNotes()
 {
@@ -293,9 +301,12 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
     
     // Send note off for previous note.
     auto &note = notes [currentNoteIndex - 1];
-        
-    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
-                   sampleIndex);
+    
+    auto vel1 = note.velocity * volumeParam;
+    //midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
+    //               sampleIndex);
+    midi.addEvent(juce::MidiMessage::noteOff(channelParam, note.noteNumber, float(0.0)),
+        sampleIndex);
 }
 
 void Player::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)

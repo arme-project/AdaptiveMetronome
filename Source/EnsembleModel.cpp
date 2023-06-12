@@ -62,11 +62,11 @@ bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
     // This is the main method to call to update alphas
     // This packs the most recent onsets, sends to Matlab,
     // and assigns returned values to alphaParams
-    std::vector<std::vector<double>> alphasFromCodegen;
+    //std::vector<std::vector<double>> alphasFromCodegen;
 
-    if (!players[0]->onsetTimes.empty()) {
-        auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
-    };
+    //if (!players[0]->onsetTimes.empty()) {
+    auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
+    //};
 
 
 
@@ -285,10 +285,16 @@ void EnsembleModel::calculateNewIntervals()
             enoughOnsetsToRecalculateAlpha = false;
         }
     }
+    //auto minimumNumberOfNotePlayed = 45;
+    //for (int i = 0; i < getNumPlayers(); ++i) {
+    //    if (players[i]->getCurrentNoteIndex() < minimumNumberOfNotePlayed) {
+    //        enoughOnsetsToRecalculateAlpha = false;
+    //    }
+    //}
     if (enoughOnsetsToRecalculateAlpha) {
-        //if (!getAlphasFromCodegen()) {
-        //    DBG("ALPHAS CANT BE UPDATED");
-        //}
+        if (!getAlphasFromCodegen()) {
+            DBG("ALPHAS CANT BE UPDATED");
+        }
     }
     else {
         DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
@@ -300,7 +306,7 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (!players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParamsFixed [i]);
         }
     }  
     
@@ -308,7 +314,7 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParamsFixed [i]);
         }
     } 
           
@@ -453,11 +459,11 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
 void EnsembleModel::createAlphaParameters()
 {
     alphaParams.clear();
-    //alphaParamsCalculated.clear();
+    alphaParamsFixed.clear();
     for (int i = 0; i < players.size(); ++i)
     {
         std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
-        //std::vector <std::unique_ptr <juce::AudioParameterFloat> > rowCalculated;
+        std::vector <std::unique_ptr <juce::AudioParameterFloat> > rowCalculated;
 
         // CHANGE DEFAULT ALPHA
         double alpha = 0.25;
@@ -468,15 +474,15 @@ void EnsembleModel::createAlphaParameters()
                 "Alpha " + juce::String(i) + "-" + juce::String(j),
                 -1.0, 1.0, alpha));
 
-            //rowCalculated.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
-            //    "Alpha " + juce::String(i) + "-" + juce::String(j),
-            //    -1.0, 1.0, alpha));
+            rowCalculated.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+                "Alpha " + juce::String(i) + "-" + juce::String(j),
+                -1.0, 1.0, alpha));
 
             alpha = 0.0;
         }
 
         alphaParams.push_back(std::move(row));
-        //alphaParamsCalculated.push_back(std::move(rowCalculated));
+        alphaParamsFixed.push_back(std::move(rowCalculated));
     }
 }
 

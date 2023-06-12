@@ -241,7 +241,9 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
                                                                                               *alphaRow [j]));
                                                                  
             addAndMakeVisible (*alphaRow [j]);
-            alphaRow [j]->setVisible (!ensemble.isPlayerUserOperated (i));
+            //alphaRow [j]->setVisible (!ensemble.isPlayerUserOperated (i));
+            alphaRow[j]->setVisible(true);
+
         }
         
         alphaSliders.push_back (std::move (alphaRow));
