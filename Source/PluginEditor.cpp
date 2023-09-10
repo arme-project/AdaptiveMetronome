@@ -3,13 +3,14 @@
 #include "MetronomeClock.h"
 
 using namespace juce;
+using Editor = AdaptiveMetronomeAudioProcessorEditor;
 
 //==============================================================================
 AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor& p,
                                                                               EnsembleModel& ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
-      instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
+      instructionLabel (juce::String(), "Adaptive Metronome (Standalone)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       midiNoteReceivedLabel (juce::String(), "No"),
       playButton ("Play"),
@@ -60,7 +61,6 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     
     setSize (paramWidth, paramHeight + instructionStripHeight + optionsStripHeight);
 
-
     //==========================================================================
     if (!connect(8080))                       // [3]
         DBG("Error: could not connect to UDP port 8080.");
@@ -75,7 +75,6 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addListener(this, "/synch");
     addListener(this, "/playbackstart");
     addListener(this, "/alphas");
-    //waitForOscStart = true;
 
     startTimer(500);
 
@@ -109,6 +108,19 @@ void AdaptiveMetronomeAudioProcessorEditor::writeToLogger(time_point<system_cloc
         << message;
     Logger::writeToLog(formattedString);
 }
+
+//==============================================================================
+
+//void AdaptiveMetronomeAudioProcessorEditor::oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS) {
+//
+//    auto oscMessage = juce::OSCMessage("/newInterval");
+//    if (!sender.send(oscMessage)) {
+//        DBG("Error: could not send OSC message.");
+//    }
+//
+//}
+
+
 
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::oscMessageReceived(const juce::OSCMessage& message)

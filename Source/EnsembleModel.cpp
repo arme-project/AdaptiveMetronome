@@ -17,8 +17,8 @@ EnsembleModel::EnsembleModel()
     resetFlag.clear();
     currentNoteIndex.set(99);
     // specify here where to send OSC messages to: host URL and UDP port number
-    if (!sender.connect("127.0.0.1", 8060))
-        DBG("Error: could not connect to UDP port 8060.");
+    if (!sender.connect("127.0.0.1", 8000))
+        DBG("Error: could not connect to UDP port 8000.");
     else {
         DBG("OSC SENDER CONNECTED");
     }
@@ -111,7 +111,6 @@ bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
     }
 }
 
-
 bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
     // This is the main method to call to update alphas
     // This packs the most recent onsets, sends to Matlab,
@@ -120,8 +119,6 @@ bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
     // If connected to matlab instance ...
 
     auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
-
-
 
     if (setAlphasFromCodegen(alphasFromCodegen)) {
         return true;
@@ -544,14 +541,17 @@ void EnsembleModel::calculateNewIntervals()
             enoughOnsetsToRecalculateAlpha = false;
         }
     }
-    if (enoughOnsetsToRecalculateAlpha) {
-        if (!getAlphasFromMATLAB()) {
-            DBG("ALPHAS CANT BE UPDATED");
-        }
-    }
-    else {
-        DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
-    }
+    //if (enoughOnsetsToRecalculateAlpha) {
+    //    //if (!getAlphasFromMATLAB()) {
+    //    //    DBG("ALPHAS CANT BE UPDATED");
+    //    //}
+    //    if (!getAlphasFromCodegen()) {
+    //        DBG("ALPHAS CANT BE UPDATED");
+    //    }
+    //}
+    //else {
+    //    DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
+    //}
     //==========================================================================
     // Calculate new onset times for players.
     // Make sure all non-user players update before the user players.
@@ -571,10 +571,14 @@ void EnsembleModel::calculateNewIntervals()
         if (players [i]->isUserOperated())
         {
             players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParamsFixed [i]);
-
         }
     } 
-          
+         
+    for (int i = 0; i < players.size(); ++i)
+    {
+        oscMessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, players[i]->getNextNoteTimeInMS());
+    }
+
     //==========================================================================
     // Add details of most recent onsets to buffers to be logged.
     if (loggingFifo)
@@ -593,6 +597,23 @@ void EnsembleModel::calculateNewIntervals()
             storeOnsetDetailsForPlayer (writer.startIndex2 + i, p++);
         }
     } 
+
+
+
+}
+
+//==============================================================================
+
+void EnsembleModel::oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS) {
+
+    auto oscMessage = juce::OSCMessage("/newInterval");
+    oscMessage.addInt32(playerNum);
+    oscMessage.addInt32(noteNum);
+    oscMessage.addInt32(noteTimeInMS);
+    if (!sender.send(oscMessage)) {
+        DBG("Error: could not send OSC message.");
+    }
+
 }
 
 void EnsembleModel::clearOnsetsAvailable()

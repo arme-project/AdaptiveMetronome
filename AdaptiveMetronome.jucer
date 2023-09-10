@@ -6,7 +6,8 @@
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://somagroup.co.uk" pluginManufacturer="ARME"
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
-              pluginFormats="buildStandalone" cppLanguageStandard="17" headerPath="&quot;C:\Program Files\MATLAB\R2023a\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\bin\win64&quot;;&#10;&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\getAlphas&quot;">
+              cppLanguageStandard="17" headerPath="&quot;C:\Program Files\MATLAB\R2023a\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\bin\win64&quot;;&#10;&quot;C:\Users\genia\Work\AdaptiveMetronome\Source\getAlphas&quot;"
+              pluginFormats="buildStandalone,buildVST3">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{2C8D5889-24C6-6E2C-FF6B-14B68781A631}" name="codegen">
       <GROUP id="{7A40AE10-2720-5DD9-4EDE-6A62AD3CA05A}" name="lib">

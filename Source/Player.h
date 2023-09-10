@@ -68,12 +68,12 @@ public:
     bool hasNotePlayed();
     void resetNotePlayed();
     
-    int getLatestOnsetTimeInSamples();
     int getLatestOnsetDelay();
     double getLatestVolume();
+    int getLatestOnsetTimeInSamples();
     virtual bool wasLatestOnsetUserInput();
     int getCurrentNoteIndex();
-    
+    int getNextNoteTimeInMS();
     //==============================================================================
     void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
 
@@ -119,6 +119,8 @@ protected:
     int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
     
     int currentOnsetTimeInSamples = 0, previousOnsetTimeInSamples = 0;
+    int nextNoteTimeInMS = 0;
+    
     int latestDelay = 0;
     bool notePlayed = false;
     

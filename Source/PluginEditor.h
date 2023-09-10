@@ -11,7 +11,6 @@ class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
     public juce::Button::Listener,
     private juce::OSCReceiver,
     private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>
-
 {
 public:
     AdaptiveMetronomeAudioProcessorEditor(AdaptiveMetronomeAudioProcessor&,
@@ -29,6 +28,7 @@ public:
     //==============================================================================
     void buttonClicked(juce::Button* button) override;
     void oscMessageReceived(const juce::OSCMessage& message) override;
+
     milliseconds millisecond_at_tick;
     MetronomeClock clock;
     juce::File logFile = juce::File("D:/LogTest.txt");

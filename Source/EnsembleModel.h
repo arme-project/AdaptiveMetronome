@@ -28,6 +28,9 @@ public:
     void writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message);
     void oscMessageSend(bool test);
 
+    void oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
+
+
     // MATLAB integration
     matlab::data::ArrayFactory factory;
     bool getAlphasFromMATLAB(bool test);

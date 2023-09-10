@@ -65,11 +65,13 @@ void Player::reset()
     onsetIntervals.clear();
     onsetTimes.clear();
 
+    //Editor::oscMessageSendNewInterval(playerIndex, currentNoteIndex, 0);
+
 }
 
 void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote)
 {
-    float antescofoDelay = 0.00;
+    float antescofoDelay = 0.0;
     int antescofoDelaySamples = (int)(antescofoDelay * sampleRate);
     onsetFromOsc -= antescofoDelay;
     samplesSinceFirstNote -= antescofoDelaySamples;
@@ -138,11 +140,18 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
     
     setOnsetIntervalForNextNote(samplesPerBeat - asyncSum + hNoise);
 
+    float timeForNextNoteInSamples = currentOnsetTimeInSamples + getOnsetIntervalForNextNote();
+    nextNoteTimeInMS = (timeForNextNoteInSamples * 1000.0) / sampleRate;
+
     if (logToLogger) {
         juce::String message;
         message << "Player: " << playerIndex << " : " << onsetIntervalForNextNote/sampleRate;
         Editor::writeToLogger(system_clock::now(), "Player", "recalculateOnsetInterval", message);
     }
+}
+
+int Player::getNextNoteTimeInMS() {
+    return nextNoteTimeInMS;
 }
 
 void Player::addIntervalToQueue(double interval, double onsetTime)
@@ -156,7 +165,7 @@ void Player::addIntervalToQueue(double interval, double onsetTime)
     onsetTimes.push_back(onsetTime);
     if (logToLogger) {
         juce::String message;
-        message << "Player: " << playerIndex << " : " << interval 
+        message << "Player: " << playerIndex << " : " << onsetTime 
             << ", at position: " << onsetIntervals.size();
         Editor::writeToLogger(system_clock::now(), "Player", "addIntervalToQueue", message);
     }
@@ -231,6 +240,16 @@ int Player::getLatestOnsetTimeInSamples()
 {
     return currentOnsetTimeInSamples;
 }
+
+//int Player::getLatestOnsetTimeInSamples() {
+//    
+//    return 1;
+//
+//}
+
+//int Player::getLatestOnsetTimeInSamples() {
+//    return currentOnsetTimeInSamples / sampleRate;
+//}
 
 int Player::getLatestOnsetDelay()
 {
