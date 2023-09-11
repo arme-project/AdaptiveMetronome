@@ -48,8 +48,9 @@ private:
         //==========================================================================
         // Labels
         std::vector <std::unique_ptr <juce::Label> > headingLabels;
-        std::vector <std::unique_ptr <juce::Label> > playerLabels;
-        std::vector <std::unique_ptr <juce::Label> > alphaLabels;
+        std::vector <std::unique_ptr <juce::Label> > playerRowLabels;
+        std::vector <std::unique_ptr <juce::Label> > playerColumnLabels;
+        std::vector <std::unique_ptr <juce::Label> > alphaLabels, betaLabels;
         
         static const juce::StringArray headings;
         
@@ -61,6 +62,7 @@ private:
         std::vector <std::unique_ptr <juce::Slider> > mNoiseStdSliders;
         std::vector <std::unique_ptr <juce::Slider> > tkNoiseStdSliders;
         std::vector <std::vector <std::unique_ptr <juce::Slider> > > alphaSliders;
+        std::vector <std::vector <std::unique_ptr <juce::Slider> > > betaSliders;
     
         std::vector <std::unique_ptr <juce::ComboBoxParameterAttachment> > channelAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > volumeAttachments;
@@ -68,14 +70,17 @@ private:
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > mNoiseStdAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > tkNoiseStdAttachments;
         std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > alphaAttachments;
+        std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > betaAttachments;
 
         //==========================================================================
         // Layout constants
-        static const int headingHeight = 50;
+        static const int headingHeight = 80;
         static const int rowHeight = 100;
         static const int columnWidth = 100;
         static const int padding = 5;
         static const int comboBoxHeight = 30;
+        static const int alphaBetaValWidth = columnWidth / 2;
+        static const int alphaBetaValHeight = rowHeight / 7;
     };
     
     juce::Viewport ensembleParametersViewport;

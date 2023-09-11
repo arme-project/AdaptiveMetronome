@@ -32,7 +32,8 @@ public:
     juce::AudioParameterFloat& getPlayerTimeKeeperNoiseParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
     juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
-    
+    juce::AudioParameterFloat& getBetaParameter (int player1Index, int player2Index);
+
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
 
@@ -46,6 +47,7 @@ private:
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
     std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
+    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > betaParams;
     
     //==============================================================================
     // Intro countdown
@@ -91,7 +93,7 @@ private:
     std::atomic_flag playersInUse;
 
     void createPlayers (const juce::MidiFile &file);
-    void createAlphaParameters();
+    void createAlphaBetaParameters();
     
     void playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
     
@@ -111,6 +113,7 @@ private:
         double motorNoise, timeKeeperNoise;
         std::vector <int> asyncs;
         std::vector <float> alphas;
+        std::vector <float> betas;
         double tkNoiseStd, mNoiseStd;
         double volume;
     };
@@ -140,6 +143,7 @@ private:
                                    juce::String &tkNoiseLog,
                                    juce::String &asyncLog,
                                    juce::String &alphaLog,
+                                   juce::String &betaLog,
                                    juce::String &tkNoiseStdLog,
                                    juce::String &mNoiseStdLog,
                                    juce::String &velocityLog);

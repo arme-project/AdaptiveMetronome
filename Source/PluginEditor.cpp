@@ -138,7 +138,7 @@ const juce::StringArray AdaptiveMetronomeAudioProcessorEditor::EnsembleParameter
                                                                                                       "Delay",
                                                                                                       "Motor Noise STD",
                                                                                                       "Time Keeper Noise STD",
-                                                                                                      "Alphas"};
+                                                                                                      "Alphas and Betas"};
 
 AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsembleParametersComponent (EnsembleModel &ensemble)
 {
@@ -159,13 +159,21 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
     {
         //======================================================================
         // Player Labels
-        playerLabels.push_back (std::make_unique <juce::Label> (juce::String(), juce::String (i + 1)));
-        playerLabels [i]->setJustificationType (juce::Justification::centred);
-        addAndMakeVisible (*playerLabels [i]);
+        playerRowLabels.push_back (std::make_unique <juce::Label> (juce::String(), juce::String (i + 1)));
+        playerRowLabels [i]->setJustificationType (juce::Justification::centred);
+        addAndMakeVisible (*playerRowLabels [i]);
         
-        alphaLabels.push_back (std::make_unique <juce::Label> (juce::String(), juce::String (i + 1)));
+        playerColumnLabels.push_back (std::make_unique <juce::Label> (juce::String(), juce::String (i + 1)));
+        playerColumnLabels [i]->setJustificationType (juce::Justification::centred);
+        addAndMakeVisible (*playerColumnLabels [i]);
+        
+        alphaLabels.push_back (std::make_unique <juce::Label> (juce::String(), "Alpha"));
         alphaLabels [i]->setJustificationType (juce::Justification::centred);
         addAndMakeVisible (*alphaLabels [i]);
+        
+        betaLabels.push_back (std::make_unique <juce::Label> (juce::String(), "Beta"));
+        betaLabels [i]->setJustificationType (juce::Justification::centred);
+        addAndMakeVisible (*betaLabels [i]);
         
         //======================================================================
         // MIDI channel selectors
@@ -227,25 +235,45 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
                                                                                              *tkNoiseStdSliders [i]));
                                                                                             
         //=======================================================================
-        // Alpha controls       
-        std::vector <std::unique_ptr <juce::Slider> > alphaRow;
-        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > alphaAttachmentRow;
+        // Alpha and Beta controls       
+        std::vector <std::unique_ptr <juce::Slider> > alphaRow, betaRow;
+        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > alphaAttachmentRow, betaAttachmentRow;
 
         for (int j = 0; j < nPlayers; ++j)
         {
+            //===================================================================
+            // Alpha
             alphaRow.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                  juce::Slider::TextBoxBelow));                                         
             alphaRow [j]->setColour (juce::Slider::thumbColourId, juce::Colours::indianred);
+            alphaRow [j]->setTextBoxStyle (juce::Slider::TextBoxBelow, true, alphaBetaValWidth, alphaBetaValHeight);
             
             alphaAttachmentRow.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getAlphaParameter (i, j),
                                                                                               *alphaRow [j]));
                                                                  
             addAndMakeVisible (*alphaRow [j]);
             alphaRow [j]->setVisible (!ensemble.isPlayerUserOperated (i));
+            
+            //===================================================================
+            // Beta
+            betaRow.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
+                                                                juce::Slider::TextBoxBelow));                                         
+            betaRow [j]->setColour (juce::Slider::thumbColourId, juce::Colours::greenyellow);
+            betaRow [j]->setTextBoxStyle (juce::Slider::TextBoxBelow, true, alphaBetaValWidth, alphaBetaValHeight);
+
+            
+            betaAttachmentRow.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getBetaParameter (i, j),
+                                                                                             *betaRow [j]));
+                                                                 
+            addAndMakeVisible (*betaRow [j]);
+            betaRow [j]->setVisible (!ensemble.isPlayerUserOperated (i));
         }
         
         alphaSliders.push_back (std::move (alphaRow));
         alphaAttachments.push_back (std::move (alphaAttachmentRow));
+        
+        betaSliders.push_back (std::move (betaRow));
+        betaAttachments.push_back (std::move (betaAttachmentRow));
     }
     
     int width = 0, height = 0;
@@ -266,7 +294,7 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized
 {
     //==========================================================================
     // Don't place anything if there are no players
-    if (alphaLabels.size() == 0)
+    if (playerColumnLabels.size() == 0)
     {
         return;
     }
@@ -282,11 +310,15 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized
         headingLabels [i]->setBounds (headingBounds.removeFromLeft (columnWidth));
     }
     
-    headingLabels [alphaHeadingIdx]->setBounds (headingBounds.removeFromTop (headingBounds.getHeight() / 2));
+    headingLabels [alphaHeadingIdx]->setBounds (headingBounds.removeFromTop (headingBounds.getHeight() / 3));
     
-    for (int i = 0; i < alphaLabels.size(); ++i)
+    auto playerNumberRow = headingBounds.removeFromTop (headingBounds.getHeight() / 2);
+    
+    for (int i = 0; i < playerColumnLabels.size(); ++i)
     {
-        alphaLabels [i]->setBounds (headingBounds.removeFromLeft (columnWidth));
+        playerColumnLabels [i]->setBounds (playerNumberRow.removeFromLeft (columnWidth));
+        alphaLabels [i]->setBounds (headingBounds.removeFromLeft (columnWidth / 2));
+        betaLabels [i]->setBounds (headingBounds.removeFromLeft (columnWidth / 2));
     }
     
     //==========================================================================
@@ -295,7 +327,7 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized
     {
         auto rowBounds = bounds.removeFromTop (rowHeight);
         
-        playerLabels [i]->setBounds (rowBounds.removeFromLeft (columnWidth));
+        playerRowLabels [i]->setBounds (rowBounds.removeFromLeft (columnWidth));
         channelSelectors [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding, (rowHeight - comboBoxHeight) / 2)); 
         volumeSliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
         delaySliders [i]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
@@ -304,7 +336,11 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::resized
         
         for (int j = 0; j < alphaSliders [i].size(); ++j)
         {
-            alphaSliders [i][j]->setBounds (rowBounds.removeFromLeft (columnWidth).reduced (padding));
+            auto alphaBounds = rowBounds.removeFromLeft (columnWidth / 2);
+            auto betaBounds = rowBounds.removeFromLeft (columnWidth / 2);
+
+            alphaSliders [i][j]->setBounds (alphaBounds.reduced (padding / 2, padding));
+            betaSliders [i][j]->setBounds (betaBounds.reduced (padding / 2, padding));
         }
     }
 }

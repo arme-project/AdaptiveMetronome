@@ -151,6 +151,11 @@ juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, i
     return *alphaParams [player1Index][player2Index];
 }
 
+juce::AudioParameterFloat& EnsembleModel::getBetaParameter (int player1Index, int player2Index)
+{
+        return *betaParams [player1Index][player2Index];
+}
+
 //==============================================================================
 void EnsembleModel::soundOffAllChannels (juce::MidiBuffer &midi)
 {
@@ -332,6 +337,7 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     {
         data.asyncs [i] = players [playerIndex]->getLatestOnsetTime() - players [i]->getLatestOnsetTime();
         data.alphas [i] = *alphaParams [playerIndex][i];
+        data.betas [i] = *betaParams [playerIndex][i];
     }
     
     data.tkNoiseStd = players [playerIndex]->getTimeKeeperNoiseStd();
@@ -394,28 +400,38 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
     }
     
     //==========================================================================
-    createAlphaParameters(); // create matrix of parameters for alphas
+    createAlphaBetaParameters(); // create matrix of parameters for alphas
 }
 
-void EnsembleModel::createAlphaParameters()
+void EnsembleModel::createAlphaBetaParameters()
 {
     alphaParams.clear();
+    betaParams.clear();
     
     for (int i = 0; i < players.size(); ++i)
     {
-        std::vector <std::unique_ptr <juce::AudioParameterFloat> > row;
+        std::vector <std::unique_ptr <juce::AudioParameterFloat> > aRow, bRow;
+
         double alpha = 0.25;
+        double beta = 0.25;
         
         for (int j = 0; j < players.size(); ++j)
         {
-            row.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
-                                                                         "Alpha " + juce::String (i) + "-" + juce::String (j),
-                                                                         0.0, 1.0, alpha));
+            aRow.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
+                                                                          "Alpha " + juce::String (i) + "-" + juce::String (j),
+                                                                          0.0, 1.0, alpha));
+                                                                
+            bRow.push_back (std::make_unique <juce::AudioParameterFloat> ("beta-" + juce::String (i) + "-" + juce::String (j),
+                                                                          "Beta " + juce::String (i) + "-" + juce::String (j),
+                                                                          0.0, 1.0, beta));
+                                                                
                                                                          
             alpha = 0.0;
+            beta = 0.0;
         }
         
-        alphaParams.push_back (std::move (row));
+        alphaParams.push_back (std::move (aRow));
+        betaParams.push_back (std::move (bRow));
     }
 }
 
@@ -478,6 +494,7 @@ void EnsembleModel::initialiseLoggingBuffer()
     {
         loggingBuffer [i].asyncs.resize (players.size(), 0.0);
         loggingBuffer [i].alphas.resize (players.size(), 0.0);
+        loggingBuffer [i].betas.resize (players.size(), 0.0);
     }
 }
 
@@ -529,7 +546,7 @@ void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
 {
     juce::String logLine ("N");
     juce::String onsetLog, intervalLog, userInputLog, delayLog,
-                 mNoiseLog, tkNoiseLog, asyncLog, alphaLog, 
+                 mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
                  tkNoiseStdLog, mNoiseStdLog, velocityLog;
                  
     for (int i = 0; i < players.size(); ++i)
@@ -549,6 +566,7 @@ void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
             
             asyncLog += ", Async " + juce::String (playerId) + juce::String (otherPlayerId);
             alphaLog += ", Alpha " + juce::String (playerId) + juce::String (otherPlayerId);
+            betaLog += ", Beta " + juce::String (playerId) + juce::String (otherPlayerId);
         }
         
         tkNoiseStdLog += ", P" + juce::String (playerId) + " TKStd";
@@ -564,6 +582,7 @@ void EnsembleModel::writeLogHeader (juce::FileOutputStream &logStream)
                tkNoiseLog + ", " +
                asyncLog + ", " +
                alphaLog + ", " +
+               betaLog + ", " +
                tkNoiseStdLog + ", " +
                mNoiseStdLog + ", " +
                velocityLog + "\n";
@@ -579,7 +598,7 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
         std::vector <int> latestOnsets (players.size()), latestDelays (players.size());
         juce::String logLine (logLineCounter++);
         juce::String onsetLog, intervalLog, userInputLog, delayLog,
-                     mNoiseLog, tkNoiseLog, asyncLog, alphaLog, 
+                     mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
                      tkNoiseStdLog, mNoiseStdLog, velocityLog;
                  
         int p = 0;
@@ -606,6 +625,7 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                                       tkNoiseLog,
                                       asyncLog,
                                       alphaLog,
+                                      betaLog,
                                       tkNoiseStdLog,
                                       mNoiseStdLog,
                                       velocityLog);                 
@@ -631,6 +651,7 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                                       tkNoiseLog,
                                       asyncLog,
                                       alphaLog,
+                                      betaLog,
                                       tkNoiseStdLog,
                                       mNoiseStdLog,
                                       velocityLog);
@@ -644,6 +665,7 @@ void EnsembleModel::logOnsetDetails (juce::FileOutputStream &logStream)
                    tkNoiseLog + ", " +
                    asyncLog + ", " +
                    alphaLog + ", " +
+                   betaLog + ", " +
                    tkNoiseStdLog + ", " +
                    mNoiseStdLog + ", " +
                    velocityLog + "\n";
@@ -664,6 +686,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
                                               juce::String &tkNoiseLog,
                                               juce::String &asyncLog,
                                               juce::String &alphaLog,
+                                              juce::String &betaLog,
                                               juce::String &tkNoiseStdLog,
                                               juce::String &mNoiseStdLog,
                                               juce::String &velocityLog)
@@ -681,6 +704,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     {
         asyncLog += "," + juce::String (data.asyncs [i] / sampleRate);
         alphaLog += "," + juce::String (data.alphas [i]);
+        betaLog += "," + juce::String (data.betas [i]);
     }
     
     tkNoiseStdLog += ", " + juce::String (data.tkNoiseStd);
