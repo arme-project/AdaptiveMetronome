@@ -20,7 +20,8 @@ bool UserPlayer::isUserOperated()
 //==============================================================================
 void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
-                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas)
+                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
+                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas)
 {
     //==========================================================================
     // Find mean onset and interval for all other players

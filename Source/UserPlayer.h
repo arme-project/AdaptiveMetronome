@@ -15,7 +15,8 @@ public:
     //==============================================================================
     void recalculateOnsetInterval (int samplesPerBeat,
                                    const std::vector <std::unique_ptr <Player> > &players,
-                                   const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas) override;
+                                   const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
+                                   const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas) override;
                                    
     //==============================================================================
     bool wasLatestOnsetUserInput() override;

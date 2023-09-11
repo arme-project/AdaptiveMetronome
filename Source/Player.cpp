@@ -54,6 +54,12 @@ void Player::reset()
     
     // clear note played flag
     notePlayed = false;
+    
+    // noises
+    currentMotorNoise = 0.0;
+    previousMotorNoise = 0.0;
+    currentTimeKeeperNoise = 0.0;
+    timeKeeperMean = 0.0;
 }
 
 //==============================================================================
@@ -74,19 +80,27 @@ int Player::getPlayedOnsetInterval()
 
 void Player::recalculateOnsetInterval (int samplesPerBeat,
                                        const std::vector <std::unique_ptr <Player> > &players,
-                                       const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas)
+                                       const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
+                                       const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas)
 {   
-    double asyncSum = 0;
+    double alphaSum = 0;
+    double betaSum = 0;
         
     for (int i = 0; i < players.size(); ++i)
     {
         double async = currentOnsetTime - players [i]->getLatestOnsetTime();
-        asyncSum += *alphas[i] * async;
+        alphaSum += *alphas[i] * async;
+        betaSum += *betas[i] * async;
     }
+    
+    // update time keeper mean
+    timeKeeperMean -= betaSum / sampleRate;
         
+    // generate noises for this onset
     double hNoise = generateHNoise() * sampleRate;
 
-    onsetInterval = samplesPerBeat - asyncSum + hNoise;
+    // calcualte next onset interval
+    onsetInterval = samplesPerBeat - alphaSum + hNoise;
 }
 
 //==============================================================================
@@ -102,7 +116,7 @@ double Player::generateMotorNoise()
 
 double Player::generateTimeKeeperNoise()
 {
-    tkNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, tkNoiseStdParam.get() / 1000.0));
+    tkNoiseDistribution.param (std::normal_distribution <double>::param_type(timeKeeperMean, tkNoiseStdParam.get() / 1000.0));
     currentTimeKeeperNoise = tkNoiseDistribution (randomEngine);
     
     return currentTimeKeeperNoise;

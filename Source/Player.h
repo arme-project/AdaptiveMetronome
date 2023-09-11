@@ -28,7 +28,8 @@ public:
       
     virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
-                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas);
+                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
+                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas);
     
     //==============================================================================
     double generateMotorNoise();
@@ -103,5 +104,5 @@ private:
     static std::default_random_engine randomEngine;
     std::normal_distribution <double> mNoiseDistribution, tkNoiseDistribution;
     
-    double currentMotorNoise = 0.0, previousMotorNoise = 0.0, currentTimeKeeperNoise = 0.0;
+    double currentMotorNoise = 0.0, previousMotorNoise = 0.0, currentTimeKeeperNoise = 0.0, timeKeeperMean = 0.0;
 };

@@ -252,7 +252,7 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (!players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i], betaParams [i]);
         }
     }  
     
@@ -260,7 +260,7 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i], betaParams [i]);
         }
     } 
           
