@@ -63,12 +63,13 @@ bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
         return false;
     }
 
-    auto matlabOnsetArray = buildMatlabOnsetArray(test);
+    std::vector<matlab::data::Array> matlabOnsetArray = buildMatlabOnsetArray(test);
         
     if (logToLogger) {
         juce::String message;
         message << "Array sizes before sending to MATLAB: ";
-        for (auto array : matlabOnsetArray) {
+        for (matlab::data::Array array : matlabOnsetArray) {
+        //for (auto array : matlabOnsetArray) {
             message << array.getNumberOfElements() << ", ";
         }
         writeToLogger(clock->tick(), "EnsembleModel",
