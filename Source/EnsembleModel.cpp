@@ -617,6 +617,21 @@ void EnsembleModel::oscMessageSendNewInterval(int playerNum, int noteNum, int no
 
 }
 
+void EnsembleModel::oscMessageSendReset() {
+
+    auto oscMessage = juce::OSCMessage("/reset");
+    if (!sender.send(oscMessage)) {
+        DBG("Error: could not send OSC message.");
+    }
+}
+
+void EnsembleModel::oscMessageSendPlayMax() {
+    auto oscMessage = juce::OSCMessage("/playMax");
+    if (!sender.send(oscMessage)) {
+        DBG("Error: could not send OSC message.");
+    }
+}
+
 void EnsembleModel::clearOnsetsAvailable()
 {
    for (auto &player : players)

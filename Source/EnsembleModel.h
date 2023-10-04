@@ -29,7 +29,8 @@ public:
     void oscMessageSend(bool test);
 
     void oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
-
+    void oscMessageSendReset();
+    void oscMessageSendPlayMax();
 
     // MATLAB integration
     matlab::data::ArrayFactory factory;

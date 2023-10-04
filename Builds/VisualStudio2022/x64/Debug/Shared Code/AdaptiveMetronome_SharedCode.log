@@ -1,0 +1,11 @@
+﻿  PluginEditor.cpp
+C:\Program Files\MATLAB\R2023a\extern\include\MatlabDataArray\detail\OrderedIterator.hpp(20,37): warning C4100: 'nDims': unreferenced formal parameter
+C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_execution_interface_impl.hpp(339,68): warning C4100: 'lhs': unreferenced formal parameter
+C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_future_impl.hpp(68,78): warning C4100: 'allowInterrupt': unreferenced formal parameter
+C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_future_impl.hpp(128,84): warning C4100: 'allowInterrupt': unreferenced formal parameter
+C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_factory_impl.hpp(23,37): warning C4100: 'allowInterrupt': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(91,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginEditor.cpp(249,14): warning C4189: 'currentEnsembleNote': local variable is initialized but not referenced
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginEditor.cpp(295,10): warning C4458: declaration of 'flags' hides class member
+C:\Users\genia\Work\AdaptiveMetronome\JuceLibraryCode\modules\juce_gui_basics\components\juce_Component.h(2589,24): message : see declaration of 'juce::Component::flags'
+  AdaptiveMetronome_SharedCode.vcxproj -> C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\Shared Code\AdaptiveMetronome.lib

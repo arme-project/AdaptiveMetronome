@@ -10,7 +10,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
                                                                               EnsembleModel& ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
-      instructionLabel (juce::String(), "Adaptive Metronome (Standalone)"),
+      instructionLabel (juce::String(), "Adaptive Metronome (Standalone v0.2)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       midiNoteReceivedLabel (juce::String(), "No"),
       playButton ("Play"),
@@ -274,13 +274,16 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
 //==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::playButtonCallback()
 {
-    processor.setManualPlaying(!processor.manualPlaying);
+    //processor.setManualPlaying(!processor.manualPlaying);
+    thisEnsemble->oscMessageSendPlayMax();
+
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
 {
     processor.setManualPlaying(false);
     processor.resetEnsemble();
+    thisEnsemble->oscMessageSendReset();
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()

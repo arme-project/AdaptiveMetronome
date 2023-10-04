@@ -1,0 +1,1 @@
+C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\VST3\AdaptiveMetronome.vst3
