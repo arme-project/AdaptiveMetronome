@@ -1,13 +1,16 @@
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
-#include "MatlabEngine.hpp"
-#include "MatlabDataArray.hpp"
 #include "recalculateAlphas.h"
 #include "getAlphas_terminate.h"
 
+using namespace std::chrono;
+
+#ifndef nomatlab
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
 using namespace matlab::engine;
 using namespace matlab::data ;
-using namespace std::chrono;
+#endif
 
 //==============================================================================
 EnsembleModel::EnsembleModel()
@@ -22,12 +25,13 @@ EnsembleModel::EnsembleModel()
     else {
         DBG("OSC SENDER CONNECTED");
     }
+
+#ifndef nomatlab
     auto sharedMATLABs = matlab::engine::findMATLAB();
     if (sharedMATLABs.size() > 0) {
-        //matlabEngine = connectMATLAB(u"MATLAB_4016");
         matlabEngine = connectMATLAB(sharedMATLABs[0]);
-        //matlabEngine->eval(u"[X, Y] = meshgrid(-2:0.2:2);");
     }
+#endif
 
     auto alpha1 = getAlphasCppTest();
     DBG(alpha1);
@@ -52,6 +56,7 @@ void EnsembleModel::writeToLogger(time_point<system_clock> timeStamp, juce::Stri
     juce::Logger::writeToLog(formattedString);
 }
 
+#ifndef nomatlab
 bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
     // This is the main method to call to update alphas
     // This packs the most recent onsets, sends to Matlab,
@@ -112,34 +117,6 @@ bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
     }
 }
 
-bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
-    // This is the main method to call to update alphas
-    // This packs the most recent onsets, sends to Matlab,
-    // and assigns returned values to alphaParams
-
-    // If connected to matlab instance ...
-
-    auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
-
-    if (setAlphasFromCodegen(alphasFromCodegen)) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-bool EnsembleModel::setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen) {
-
-    for (int n = 0; n < 4; n++) {
-        for (int m = 0; m < 4; m++) {
-            *alphaParams[n][m] = alphasFromCodegen[n][m];
-        }
-    }
-
-    return true;
-}
-
 
 bool EnsembleModel::setAlphasFromMATLABArray(TypedArray<double> alphasFromMATLAB)
 {
@@ -169,7 +146,7 @@ bool EnsembleModel::setAlphasFromMATLABArray(TypedArray<double> alphasFromMATLAB
 std::vector<matlab::data::Array> EnsembleModel::buildMatlabOnsetArray(bool test = false) {
     // This packs the recent onsets as a Matlab array to be sent to Matlab
     // if test == true, 20 onsets are randomly generated
-    
+
     // Vector to store Matlab arrays of function inputs
     if (getNumPlayers() != 4) {
         DBG("NUMBER OF PLAYERS MUST BE 4 FOR ALPHA CALC");
@@ -210,6 +187,38 @@ std::vector<matlab::data::Array> EnsembleModel::buildMatlabOnsetArray(bool test 
     }
     return vectorOfOnsetArrays;
 }
+#endif
+
+
+bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
+    // This is the main method to call to update alphas
+    // This packs the most recent onsets, sends to Matlab,
+    // and assigns returned values to alphaParams
+
+    // If connected to matlab instance ...
+
+    auto alphasFromCodegen = getAlphasCpp(players[0]->onsetTimes, players[1]->onsetTimes, players[2]->onsetTimes, players[3]->onsetTimes);
+
+    if (setAlphasFromCodegen(alphasFromCodegen)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool EnsembleModel::setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen) {
+
+    for (int n = 0; n < 4; n++) {
+        for (int m = 0; m < 4; m++) {
+            *alphaParams[n][m] = alphasFromCodegen[n][m];
+        }
+    }
+
+    return true;
+}
+
+
 
 void EnsembleModel::oscMessageSend(bool test)
 {
@@ -542,17 +551,7 @@ void EnsembleModel::calculateNewIntervals()
             enoughOnsetsToRecalculateAlpha = false;
         }
     }
-    //if (enoughOnsetsToRecalculateAlpha) {
-    //    //if (!getAlphasFromMATLAB()) {
-    //    //    DBG("ALPHAS CANT BE UPDATED");
-    //    //}
-    //    if (!getAlphasFromCodegen()) {
-    //        DBG("ALPHAS CANT BE UPDATED");
-    //    }
-    //}
-    //else {
-    //    DBG("NOT ENOUGH ONSETS TO RECALCULATE ALPHA");
-    //}
+
     //==========================================================================
     // Calculate new onset times for players.
     // Make sure all non-user players update before the user players.
@@ -598,9 +597,6 @@ void EnsembleModel::calculateNewIntervals()
             storeOnsetDetailsForPlayer (writer.startIndex2 + i, p++);
         }
     } 
-
-
-
 }
 
 //==============================================================================

@@ -10,7 +10,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
                                                                               EnsembleModel& ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
-      instructionLabel (juce::String(), "Adaptive Metronome (Standalone v0.2)"),
+      instructionLabel (juce::String(), "Adaptive Metronome (Standalone v0.2.1)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       midiNoteReceivedLabel (juce::String(), "No"),
       playButton ("Play"),
@@ -22,7 +22,6 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
     instructionLabel.setFont (instructionStripHeight - padding * 3);
-    //matlabEngine = matlab::engine::startMATLAB({ u"-desktop" });
 
     //==========================================================================
     addAndMakeVisible (userPlayersLabel);

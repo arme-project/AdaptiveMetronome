@@ -1,9 +1,8 @@
 #pragma once
+
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "MetronomeClock.h"
-#include "MatlabEngine.hpp"
-#include "MatlabDataArray.hpp"
 
 using namespace std::chrono;
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,

@@ -1,18 +1,24 @@
 #pragma once
+
+#define nomatlab
+
 #include <JuceHeader.h>
 #include <vector>
 #include <atomic>
 #include <thread>
 #include "Player.h"
 #include "MetronomeClock.h"
-#include "MatlabEngine.hpp"
-#include "MatlabDataArray.hpp"
 #include "rtwtypes.h"
 #include <cstddef>
 #include <cstdlib>
 #include "recalculateAlphas.h"
 
+#ifndef nomatlab
+#include "MatlabEngine.hpp"
+#include "MatlabDataArray.hpp"
 using namespace matlab::engine;
+#endif
+
 
 class EnsembleModel
 {
@@ -23,7 +29,6 @@ public:
     
     //==============================================================================
     // Communication
-    std::unique_ptr<MATLABEngine> matlabEngine;
     juce::OSCSender sender;
     void writeToLogger(time_point<system_clock> timeStamp, juce::String source, juce::String method, juce::String message);
     void oscMessageSend(bool test);
@@ -32,14 +37,16 @@ public:
     void oscMessageSendReset();
     void oscMessageSendPlayMax();
 
+#ifndef nomatlab
     // MATLAB integration
+    std::unique_ptr<MATLABEngine> matlabEngine;
     matlab::data::ArrayFactory factory;
     bool getAlphasFromMATLAB(bool test);
-    bool getAlphasFromCodegen(bool test);
-
     bool setAlphasFromMATLABArray(matlab::data::TypedArray<double> alphasFromMATLAB);
-    bool setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen);
     std::vector<matlab::data::Array> buildMatlabOnsetArray(bool test);
+#endif
+    bool getAlphasFromCodegen(bool test);
+    bool setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen);
 
     //==============================================================================
     // Metronome for accurate time measurements

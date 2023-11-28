@@ -1,11 +1,70 @@
-﻿  PluginEditor.cpp
-C:\Program Files\MATLAB\R2023a\extern\include\MatlabDataArray\detail\OrderedIterator.hpp(20,37): warning C4100: 'nDims': unreferenced formal parameter
-C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_execution_interface_impl.hpp(339,68): warning C4100: 'lhs': unreferenced formal parameter
-C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_future_impl.hpp(68,78): warning C4100: 'allowInterrupt': unreferenced formal parameter
-C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_future_impl.hpp(128,84): warning C4100: 'allowInterrupt': unreferenced formal parameter
-C:\Program Files\MATLAB\R2023a\extern\include\MatlabEngine\detail\engine_factory_impl.hpp(23,37): warning C4100: 'allowInterrupt': unreferenced formal parameter
-C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(91,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\genia\Work\AdaptiveMetronome\Source\PluginEditor.cpp(249,14): warning C4189: 'currentEnsembleNote': local variable is initialized but not referenced
-C:\Users\genia\Work\AdaptiveMetronome\Source\PluginEditor.cpp(295,10): warning C4458: declaration of 'flags' hides class member
-C:\Users\genia\Work\AdaptiveMetronome\JuceLibraryCode\modules\juce_gui_basics\components\juce_Component.h(2589,24): message : see declaration of 'juce::Component::flags'
+﻿  EnsembleModel.cpp
+  Player.cpp
+  PluginEditor.cpp
+  PluginProcessor.cpp
+  UserPlayer.cpp
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(98,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file ..\..\Source\PluginEditor.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(98,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file ..\..\Source\EnsembleModel.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(98,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file ..\..\Source\Player.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(193,47): warning C4100: 'test': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(214,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(299,32): warning C4100: 'skipIntroNotes': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(503,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginEditor.cpp(248,14): warning C4189: 'currentEnsembleNote': local variable is initialized but not referenced
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginEditor.cpp(294,10): warning C4458: declaration of 'flags' hides class member
+C:\Users\genia\Work\AdaptiveMetronome\JuceLibraryCode\modules\juce_gui_basics\components\juce_Component.h(2589,24): message : see declaration of 'juce::Component::flags' (compiling source file ..\..\Source\PluginEditor.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(98,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file ..\..\Source\UserPlayer.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(755,32): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(793,60): warning C4244: 'argument': conversion from 'double' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.h(98,37): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data (compiling source file ..\..\Source\PluginProcessor.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(30,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(941,36): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(966,36): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(141,59): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(143,36): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(144,60): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(130,9): warning C4189: 'previousOnsetInterval': local variable is initialized but not referenced
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(176,25): warning C4858: discarding return value: This member function returns a bool indicating whether the container is empty and has no other effects. It is not useful to call this member function and discard the return value. Use the 'clear()' member function if you want to erase all elements.
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(177,21): warning C4858: discarding return value: This member function returns a bool indicating whether the container is empty and has no other effects. It is not useful to call this member function and discard the return value. Use the 'clear()' member function if you want to erase all elements.
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(350,34): warning C4244: 'initializing': conversion from 'float' to 'juce::uint8', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(356,47): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(373,41): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\UserPlayer.cpp(27,110): warning C4100: 'alphas': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(419,39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\UserPlayer.cpp(25,48): warning C4100: 'samplesPerBeat': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(433,22): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\genia\Work\AdaptiveMetronome\Source\Player.cpp(431,53): warning C4100: 'inMidi': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(1036,97): warning C4100: 'delays': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(1036,64): warning C4100: 'onsets': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(22,77): warning C4100: 'samplesPerBlock': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(131,79): warning C4100: 'destData': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(135,82): warning C4100: 'sizeInBytes': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(135,72): warning C4100: 'data': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(151,62): warning C4100: 'index': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(155,73): warning C4100: 'index': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(160,89): warning C4100: 'newName': unreferenced formal parameter
+C:\Users\genia\Work\AdaptiveMetronome\Source\PluginProcessor.cpp(160,62): warning C4100: 'index': unreferenced formal parameter
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\memory(3393,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data (compiling source file ..\..\Source\EnsembleModel.cpp)
+C:\Users\genia\Work\AdaptiveMetronome\Source\EnsembleModel.cpp(737,33): message : see reference to function template instantiation 'std::unique_ptr<juce::AudioParameterFloat,std::default_delete<juce::AudioParameterFloat>> std::make_unique<juce::AudioParameterFloat,juce::String,juce::String,double,double,double&,0>(juce::String &&,juce::String &&,double &&,double &&,double &)' being compiled
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\memory(3393,56): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=double
+          ] (compiling source file ..\..\Source\EnsembleModel.cpp)
   AdaptiveMetronome_SharedCode.vcxproj -> C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\Shared Code\AdaptiveMetronome.lib
