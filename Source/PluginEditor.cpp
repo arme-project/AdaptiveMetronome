@@ -7,6 +7,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
+      versionLabel(juce::String(), "(v1.0.3.1)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI")
@@ -16,6 +17,10 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addAndMakeVisible (instructionLabel);
     instructionLabel.setJustificationType (juce::Justification::left);
     instructionLabel.setFont (instructionStripHeight - padding * 3);
+
+    addAndMakeVisible(versionLabel);
+    versionLabel.setJustificationType(juce::Justification::right);
+    versionLabel.setFont(instructionStripHeight - padding * 6);
     
     //==========================================================================
     addAndMakeVisible (userPlayersLabel);
@@ -67,7 +72,9 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     
     //==========================================================================
     // Static strip at top of screen.
-    instructionLabel.setBounds (bounds.removeFromTop (instructionStripHeight).reduced (padding));
+    auto headingStripBounds = bounds.removeFromTop(instructionStripHeight);
+    versionLabel.setBounds(headingStripBounds.removeFromRight(100).reduced(padding));
+    instructionLabel.setBounds (headingStripBounds.reduced (padding));
     
     //==========================================================================
     // Static strip at bottom of screen.

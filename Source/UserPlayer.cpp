@@ -79,8 +79,11 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         // Play the next note at the first note on in this beat period
         if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2))
         {
-            playNextNote (outMidi, sampleIndex);
-            noteTriggeredByUser = true;
+            // Check if incomming note is on the midi channel associated with this player (channelParam)
+            if (event.getChannel() == channelParam) {
+                playNextNote (outMidi, sampleIndex);
+                noteTriggeredByUser = true;
+            }
         }
     }
     

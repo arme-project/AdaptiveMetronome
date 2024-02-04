@@ -22,7 +22,7 @@ private:
     AdaptiveMetronomeAudioProcessor &processor;
     
     //==============================================================================
-    juce::Label instructionLabel, userPlayersLabel;
+    juce::Label instructionLabel, userPlayersLabel, versionLabel;
     juce::ComboBox userPlayersSelector;
     juce::TextButton resetButton, loadMidiButton;
     std::unique_ptr <juce::FileChooser> fileChooser;
