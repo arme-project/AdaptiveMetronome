@@ -41,11 +41,12 @@ public:
     
     //==============================================================================
     EnsembleModel& loadMidiFile (const juce::File &file, int userPlayers);
+    EnsembleModel& loadXmlFile (const juce::File &file);
     void resetEnsemble();
+    EnsembleModel ensemble;
 
 private:
     //==============================================================================
-    EnsembleModel ensemble;
     
     //==============================================================================
     juce::MidiBuffer midiOutputBuffer;

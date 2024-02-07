@@ -1,5 +1,6 @@
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
+#include "JuceHeader.h"
 
 using namespace std::chrono_literals;
 
@@ -35,8 +36,9 @@ bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
         
     int fileType = 0;
     
-    juce::MidiFile midiFile;
-    
+    // "midiFile" declared as private variable in EnsembleModel.h
+    //juce::MidiFile midiFile;
+
     if (!midiFile.readFrom (inStream, true, &fileType))
         return false; // more error handling
         
@@ -53,6 +55,7 @@ bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
 
 bool EnsembleModel::reset()
 {
+
     FlagLock lock (playersInUse);
     
     if (!lock.locked)
@@ -392,13 +395,13 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
                 players.push_back (std::make_unique <Player> (playerIndex++,
                                                               track,
                                                               channelToUse,
-                                                              sampleRate,
-                                                              scoreCounter,
-                                                              samplesPerBeat));
+                                                                  sampleRate,
+                                                                  scoreCounter,
+                                                                  samplesPerBeat));
             }
         }
     }
-    
+
     //==========================================================================
     createAlphaBetaParameters(); // create matrix of parameters for alphas
 }
@@ -407,48 +410,48 @@ void EnsembleModel::createAlphaBetaParameters()
 {
     alphaParams.clear();
     betaParams.clear();
-    
+
     for (int i = 0; i < players.size(); ++i)
     {
         std::vector <std::unique_ptr <juce::AudioParameterFloat> > aRow, bRow;
 
         double alpha = 0.25;
         double beta = 0.25;
-        
+
         for (int j = 0; j < players.size(); ++j)
         {
-            aRow.push_back (std::make_unique <juce::AudioParameterFloat> ("alpha-" + juce::String (i) + "-" + juce::String (j),
-                                                                          "Alpha " + juce::String (i) + "-" + juce::String (j),
-                                                                          0.0, 1.0, alpha));
-                                                                
-            bRow.push_back (std::make_unique <juce::AudioParameterFloat> ("beta-" + juce::String (i) + "-" + juce::String (j),
-                                                                          "Beta " + juce::String (i) + "-" + juce::String (j),
-                                                                          0.0, 1.0, beta));
-                                                                
-                                                                         
+            aRow.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+                "Alpha " + juce::String(i) + "-" + juce::String(j),
+                0.0, 1.0, alpha));
+
+            bRow.push_back(std::make_unique <juce::AudioParameterFloat>("beta-" + juce::String(i) + "-" + juce::String(j),
+                "Beta " + juce::String(i) + "-" + juce::String(j),
+                0.0, 1.0, beta));
+
+
             alpha = 0.0;
             beta = 0.0;
         }
-        
-        alphaParams.push_back (std::move (aRow));
-        betaParams.push_back (std::move (bRow));
+
+        alphaParams.push_back(std::move(aRow));
+        betaParams.push_back(std::move(bRow));
     }
 }
 
-void EnsembleModel::playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
-{          
-    for (auto &player : players)
+void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
+{
+    for (auto& player : players)
     {
-        player->processSample (inMidi, outMidi, sampleIndex);
+        player->processSample(inMidi, outMidi, sampleIndex);
     }
-        
+
     // If all players have played a note, update timings.
     if (newOnsetsAvailable())
     {
         calculateNewIntervals();
         clearOnsetsAvailable();
     }
-        
+
     ++scoreCounter;
 }
 
@@ -458,27 +461,129 @@ void EnsembleModel::resetPlayers()
     // Initialise intro countdown
     introCounter = -sampleRate / 2;
     introTonesPlayed = 0;
-     
+
     // Initialise score counter
     scoreCounter = 0;
-    
+
     // make sure to update player tempo when playback starts      
     initialTempoSet = false;
-            
+
     // Start loop for logging onset times or each player
     startLoggerLoop();
-    
+
     // Start loop which polls for new alpha values
     startPollingLoop();
-    
+
     //==========================================================================
     // reset all players
-    for (auto &player : players)
+    for (auto& player : players)
     {
         player->reset();
     }
-    
+
     resetFlag.clear();
+}
+
+// Converts a .xml file to xmlElement (to be used in loadConfigFromXml)
+std::unique_ptr<juce::XmlElement> EnsembleModel::parseXmlConfigFileToXmlElement(juce::File configFile) {
+    return juce::XmlDocument(configFile).getDocumentElement();
+}
+
+
+// loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
+void EnsembleModel::loadConfigFromXml(juce::File configFile) {
+    loadConfigFromXml(parseXmlConfigFileToXmlElement(configFile));
+}
+
+// Loads an ensemble configuration from XmlElement
+void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig)
+{
+    // Flag to keep track if list of players needs to be reinitialised (e.g. number of user players has changed)
+    bool playersNeedRecreating = false;
+
+    // Load xml file -> xmlDocument -> xmlElement
+
+    // Check if numUserPlayers has changed
+    if (loadedConfig->getIntAttribute("numUserPlayers") != numUserPlayers)
+    {
+        numUserPlayers = loadedConfig->getIntAttribute("numUserPlayers");
+        playersNeedRecreating = true;
+    }
+    
+    // Check if new midi file has been specified in config, and load it.
+    if (loadedConfig->hasAttribute("MidiFilename"))
+    {
+        auto midiFilename = loadedConfig->getStringAttribute("MidiFilename");
+        auto midiFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(midiFilename);
+        
+        loadMidiFile(midiFile, numUserPlayers);
+
+        // Players are automatically reinitialised when a new midi file is loaded, so flag can be set back to false
+        playersNeedRecreating = false;
+    }
+
+    // Limit number of user players to the number of available tracks in the loaded midi file
+    if (numUserPlayers > midiFile.getNumTracks()) {
+        numUserPlayers = midiFile.getNumTracks();
+    }
+
+    if (playersNeedRecreating) {
+        createPlayers(midiFile);
+    }
+
+    // Set Alphas and Betas only after players have been recreated
+    auto xmlAlphas = loadedConfig->getChildByName("Alphas");
+    auto xmlBetas = loadedConfig->getChildByName("Betas");
+
+    for (int i = 0; i < players.size(); ++i)
+    {
+        for (int j = 0; j < players.size(); ++j)
+        {
+            juce::String xmlAlphaEntryName;
+            juce::String xmlBetaEntryName;
+
+            xmlAlphaEntryName << "Alpha_" << i << "_" << j;
+            xmlBetaEntryName << "Beta_" << i << "_" << j;
+
+            // If corresponding entries are not found in xml ... alpha is set to 1/number of players ... beta is set to 0.0
+            *alphaParams[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName, 1.0/players.size());
+            *betaParams[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+        }
+    }
+
+    reset();
+}
+
+// Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
+void EnsembleModel::saveConfigToXmlFile()
+{
+    auto xmlOutput = &juce::XmlElement("EnsembleModelConfig");
+    xmlOutput->setAttribute("numUserPlayers", numUserPlayers);
+    xmlOutput->setAttribute("numPlayers", getNumPlayers());
+
+    auto xmlAlphas = xmlOutput->createNewChildElement("Alphas");
+    auto xmlBetas = xmlOutput->createNewChildElement("Betas");
+    for (int i = 0; i < players.size(); ++i)
+    {
+        for (int j = 0; j < players.size(); ++j)
+        {
+            float alpha = *alphaParams[i][j];
+            float beta = *betaParams[i][j];
+
+            juce::String xmlAlphaEntryName;
+            juce::String xmlBetaEntryName;
+
+            xmlAlphaEntryName << "Alpha_" << i << "_" << j;
+            xmlBetaEntryName << "Beta_" << i << "_" << j;
+
+            xmlAlphas->setAttribute(xmlAlphaEntryName, alpha);
+            xmlBetas->setAttribute(xmlBetaEntryName, beta);
+        }
+    }
+    
+    auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
+        //.getChildFile("EnsembleModelConfig.xml");
+    xmlOutput->writeTo(ensembleConfigFile);
 }
 
 //==============================================================================

@@ -37,10 +37,21 @@ public:
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
 
+
+    // Functions for storing and loading ensemble config from XML file
+    void saveConfigToXmlFile();
+    std::unique_ptr<juce::XmlElement> parseXmlConfigFileToXmlElement(juce::File configFile);
+    // Load from parsed xml
+    void loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig);
+    // Load direct from File (.xml)
+    void loadConfigFromXml(juce::File configFile);
 private:
     //==============================================================================
     int numUserPlayers = 1;
     
+    // Previously a local variable in loadMidifile()
+    juce::MidiFile midiFile;
+
     //==============================================================================
     // Timing parameters
     double sampleRate = 44100.0;

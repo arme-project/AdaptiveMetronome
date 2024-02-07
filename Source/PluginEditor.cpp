@@ -7,10 +7,10 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
-      versionLabel(juce::String(), "(v1.0.3.1)"),
+      versionLabel(juce::String(), "(v1.0.3.6)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
-      loadMidiButton ("Load MIDI")
+      loadMidiButton ("Load MIDI") // TODO: Rename this to reflect additional .xml config functionality? 
 {
         
     //==========================================================================
@@ -115,11 +115,12 @@ void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
     processor.resetEnsemble();
 }
 
+
 void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()
 {
     fileChooser = std::make_unique <juce::FileChooser> ("Load MIDI",
                                                         juce::File(),
-                                                        "*.mid");
+                                                        "*.mid;*.xml");
                                                          
     auto flags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
     
@@ -132,10 +133,20 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()
 
 void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
 {
-    ensembleParametersViewport.setViewedComponent (nullptr);
-    
-    auto &ensemble = processor.loadMidiFile (file, userPlayersSelector.getSelectedId() - 1);
-    initialiseEnsembleParameters (ensemble);
+    if (file.hasFileExtension(".mid"))
+    {
+        ensembleParametersViewport.setViewedComponent(nullptr);
+
+        auto& ensemble = processor.loadMidiFile(file, userPlayersSelector.getSelectedId() - 1);
+        initialiseEnsembleParameters(ensemble);
+    }
+    else if (file.hasFileExtension(".xml")) 
+    {
+        ensembleParametersViewport.setViewedComponent(nullptr);
+        
+        auto& ensemble = processor.loadXmlFile(file);
+        initialiseEnsembleParameters(ensemble);        
+    }
 }
 
 //==============================================================================

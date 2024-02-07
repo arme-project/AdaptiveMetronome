@@ -153,6 +153,14 @@ EnsembleModel& AdaptiveMetronomeAudioProcessor::loadMidiFile (const juce::File &
     return ensemble;
 }
 
+//==============================================================================
+EnsembleModel& AdaptiveMetronomeAudioProcessor::loadXmlFile(const juce::File& file)
+{
+    ensemble.loadConfigFromXml(file);
+
+    return ensemble;
+}
+
 void AdaptiveMetronomeAudioProcessor::resetEnsemble()
 {
     ensemble.reset();
