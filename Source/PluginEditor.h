@@ -3,16 +3,20 @@
 #include "PluginProcessor.h"
 
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
-                                              public juce::Button::Listener
+                                              public juce::Button::Listener,
+                                              public juce::ChangeListener
 {
 public:
     AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&,
                                            EnsembleModel &ensemble);
     ~AdaptiveMetronomeAudioProcessorEditor() override;
 
+
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+
+    void changeListenerCallback(juce::ChangeBroadcaster* source);
     
     //==============================================================================
     void buttonClicked (juce::Button *button) override;
@@ -21,6 +25,9 @@ private:
     //==============================================================================
     AdaptiveMetronomeAudioProcessor &processor;
     
+    void CheckForDefaultConfig();
+    bool hasDefaultConfigBeenChecked = false;
+
     //==============================================================================
     juce::Label instructionLabel, userPlayersLabel, versionLabel;
     juce::ComboBox userPlayersSelector;

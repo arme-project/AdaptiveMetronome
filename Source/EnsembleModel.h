@@ -5,7 +5,10 @@
 #include <thread>
 #include "Player.h"
 
-class EnsembleModel
+class EnsembleModel :
+    private juce::OSCReceiver,
+    private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>,
+    public juce::ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -25,6 +28,7 @@ public:
     
     //==============================================================================
     int getNumPlayers();
+    int getNumUserPlayers();
     bool isPlayerUserOperated (int playerIndex);
     juce::AudioParameterInt& getPlayerChannelParameter (int playerIndex);
     juce::AudioParameterFloat& getPlayerDelayParameter (int playerIndex);
@@ -45,12 +49,29 @@ public:
     void loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig);
     // Load direct from File (.xml)
     void loadConfigFromXml(juce::File configFile);
+
+    // Folder structure
+    juce::String logSubfolder = "";
+    juce::String configSubfolder = "";
+
+    // OSC Messaging
+    juce::OSCSender OSCSender;
+    void connectOSCSender(int portNumber, juce::String IPAddress);
+    void connectOSCReceiver(int portNumber);
+
+    void oscMessageReceived(const juce::OSCMessage& message);
+
 private:
-    //==============================================================================
     int numUserPlayers = 1;
+    //==============================================================================
     
     // Previously a local variable in loadMidifile()
     juce::MidiFile midiFile;
+
+    //==============================================================================
+    // Config
+    void CheckForDefaultConfig();
+
 
     //==============================================================================
     // Timing parameters

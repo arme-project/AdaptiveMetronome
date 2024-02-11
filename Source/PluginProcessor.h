@@ -40,10 +40,11 @@ public:
     void changeProgramName (int index, const juce::String& newName) override;
     
     //==============================================================================
+    EnsembleModel ensemble;
+
     EnsembleModel& loadMidiFile (const juce::File &file, int userPlayers);
     EnsembleModel& loadXmlFile (const juce::File &file);
     void resetEnsemble();
-    EnsembleModel ensemble;
 
 private:
     //==============================================================================

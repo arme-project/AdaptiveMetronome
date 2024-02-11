@@ -7,7 +7,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
-      versionLabel(juce::String(), "(v1.0.3.6)"),
+      versionLabel(juce::String(), "(v1.0.3.11)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI") // TODO: Rename this to reflect additional .xml config functionality? 
@@ -46,17 +46,38 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addAndMakeVisible (ensembleParametersViewport);
     
     //==========================================================================
-    initialiseEnsembleParameters (ensemble);
+    initialiseEnsembleParameters (processor.ensemble);
     
     //==========================================================================
     int paramWidth = 0, paramHeight = 0;
     EnsembleParametersComponent::calculateWidthAndHeight (4, paramWidth, paramHeight);
     
     setSize (paramWidth, paramHeight + instructionStripHeight + optionsStripHeight);
+
+    //==========================================================================
+    // Load default config, if it exists
+    CheckForDefaultConfig();
+
+    processor.ensemble.addChangeListener(this);
 }
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
+}
+
+//==============================================================================
+// Checks if the DefaultEnsembleConfig.xml file exists in documents folder, and loads it automatically. 
+void AdaptiveMetronomeAudioProcessorEditor::CheckForDefaultConfig()
+{
+    if (!hasDefaultConfigBeenChecked) 
+    {
+        hasDefaultConfigBeenChecked = true;
+        auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("DefaultEnsembleConfig.xml");
+        if (configFile.existsAsFile())
+        {
+            loadMidiFile(configFile);
+        }
+    }
 }
 
 //==============================================================================
@@ -96,7 +117,15 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     ensembleParametersViewport.setBounds (bounds);
 }
 
+
+void AdaptiveMetronomeAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source) 
+{
+    ensembleParametersViewport.setViewedComponent(nullptr);
+    initialiseEnsembleParameters(processor.ensemble);
+}
+
 //==============================================================================
+// Button callbacks
 void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
 {
     if (button == &resetButton)
@@ -109,7 +138,6 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
     }
 }
 
-//==============================================================================
 void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
 {
     processor.resetEnsemble();
@@ -142,10 +170,7 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
     }
     else if (file.hasFileExtension(".xml")) 
     {
-        ensembleParametersViewport.setViewedComponent(nullptr);
-        
         auto& ensemble = processor.loadXmlFile(file);
-        initialiseEnsembleParameters(ensemble);        
     }
 }
 
@@ -172,7 +197,8 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
     //==========================================================================
     // Player parameters
     int nPlayers = ensemble.getNumPlayers();
-    
+    int numUserPlayers = ensemble.getNumUserPlayers();
+
     for (int i = 0; i < nPlayers; ++i)
     {
         //======================================================================

@@ -9,12 +9,52 @@ EnsembleModel::EnsembleModel()
 {
     playersInUse.clear();
     resetFlag.clear();
+
+    // OSC Listeners
+    addListener(this, "/loadConfig");
 }
 
 EnsembleModel::~EnsembleModel()
 {
     stopLoggerLoop();
     stopPollingLoop();
+}
+
+//==============================================================================
+// OSC Messaging
+void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "127.0.0.1")
+{
+    if (!OSCSender.connect("127.0.0.1", 8000))
+        DBG("Error: could not connect to UDP port 8000.");
+    else {
+        DBG("OSC SENDER CONNECTED");
+    }
+}
+
+void EnsembleModel::connectOSCReceiver(int portNumber)
+{
+    if (!connect(portNumber))                       // [3]
+        DBG("Error: could not connect to UDP.");
+    else
+    {
+        DBG("Connection succeeded");
+    }
+
+}
+
+void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
+{
+    juce::OSCAddressPattern oscPattern = message.getAddressPattern();
+    juce::String oscAddress = oscPattern.toString();
+
+
+    if (oscAddress == "/loadConfig") {
+        if (message[0].isString()) {
+            auto configFilename = message[0].getString();
+            auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
+            loadConfigFromXml(configFile);
+        }
+    }
 }
 
 //==============================================================================
@@ -117,6 +157,11 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
 int EnsembleModel::getNumPlayers()
 {
     return static_cast <int> (players.size());
+}
+
+int EnsembleModel::getNumUserPlayers()
+{
+    return static_cast <int> (numUserPlayers);
 }
 
 bool EnsembleModel::isPlayerUserOperated (int playerIndex)
@@ -484,37 +529,77 @@ void EnsembleModel::resetPlayers()
     resetFlag.clear();
 }
 
+
+
+//==========================================================================
+// XML CONFIG FUNCTIONS
+// Loading requires converting: xml file -> xmlDocument -> xmlElement
+
 // Converts a .xml file to xmlElement (to be used in loadConfigFromXml)
 std::unique_ptr<juce::XmlElement> EnsembleModel::parseXmlConfigFileToXmlElement(juce::File configFile) {
     return juce::XmlDocument(configFile).getDocumentElement();
 }
-
 
 // loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
 void EnsembleModel::loadConfigFromXml(juce::File configFile) {
     loadConfigFromXml(parseXmlConfigFileToXmlElement(configFile));
 }
 
-// Loads an ensemble configuration from XmlElement
+
+// Main xml config loading method
 void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig)
 {
     // Flag to keep track if list of players needs to be reinitialised (e.g. number of user players has changed)
     bool playersNeedRecreating = false;
+    bool ensembleNeedsResetting = false;
 
-    // Load xml file -> xmlDocument -> xmlElement
+    // "LogSubfolder":
+    // Check if new config specifies a new subfolder to save logs to
+    if (loadedConfig->hasAttribute("LogSubfolder")) {
+        auto newLogSubfolder = loadedConfig->getStringAttribute("LogSubfolder", "");
+        if (newLogSubfolder != "")
+        {
+            configSubfolder = newLogSubfolder;
+        }
+    }
 
-    // Check if numUserPlayers has changed
-    if (loadedConfig->getIntAttribute("numUserPlayers") != numUserPlayers)
+    // "ConfigSubfolder":
+    // Check if new config specifies new subfolder to look for config and midi files
+    if (loadedConfig->hasAttribute("ConfigSubfolder")) {
+        auto newConfigSubfolder = loadedConfig->getStringAttribute("ConfigSubfolder", "");
+        if (newConfigSubfolder != "")
+        {
+            configSubfolder = newConfigSubfolder;
+        }
+    }
+
+    // "OSCReceivePort":
+    // Check if new OSC connections requested
+    if (loadedConfig->hasAttribute("OSCReceivePort"))
     {
-        numUserPlayers = loadedConfig->getIntAttribute("numUserPlayers");
+        auto newOSCReceiverPort = loadedConfig->getIntAttribute("OSCReceivePort");
+        if (newOSCReceiverPort != 0)
+        {
+            connectOSCReceiver(newOSCReceiverPort);
+        }
+    }
+
+
+    // "NumUserPlayers":
+    // Check if numUserPlayers has changed
+    if (loadedConfig->hasAttribute("NumUserPlayers"))
+    {
+        numUserPlayers = loadedConfig->getIntAttribute("NumUserPlayers");
         playersNeedRecreating = true;
+        //ensembleNeedsResetting = true;
     }
     
+    // "MidiFilename":
     // Check if new midi file has been specified in config, and load it.
     if (loadedConfig->hasAttribute("MidiFilename"))
     {
         auto midiFilename = loadedConfig->getStringAttribute("MidiFilename");
-        auto midiFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(midiFilename);
+        auto midiFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(midiFilename);
         
         loadMidiFile(midiFile, numUserPlayers);
 
@@ -529,8 +614,10 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 
     if (playersNeedRecreating) {
         createPlayers(midiFile);
+        reset();
     }
 
+    // "Alphas" and "Betas":
     // Set Alphas and Betas only after players have been recreated
     auto xmlAlphas = loadedConfig->getChildByName("Alphas");
     auto xmlBetas = loadedConfig->getChildByName("Betas");
@@ -545,13 +632,33 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
             xmlAlphaEntryName << "Alpha_" << i << "_" << j;
             xmlBetaEntryName << "Beta_" << i << "_" << j;
 
-            // If corresponding entries are not found in xml ... alpha is set to 1/number of players ... beta is set to 0.0
-            *alphaParams[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName, 1.0/players.size());
-            *betaParams[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+            // If corresponding entries are not found in xml, do not change value
+            if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
+                *alphaParams[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
+            }
+            if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
+                *betaParams[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+            }
         }
     }
 
-    reset();
+
+    //// Check if config requests another config to be loaded
+    //auto anotherConfig = loadedConfig->getStringAttribute("LoadConfig", "");
+    //if (anotherConfig != "")
+    //{
+    //    auto anotherConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(anotherConfig);
+    //    if (anotherConfigFile.existsAsFile())
+    //    {
+    //        loadConfigFromXml(anotherConfigFile);
+    //    }
+    //}
+
+    sendChangeMessage();
+
+    if (ensembleNeedsResetting) {
+        reset();
+    }
 }
 
 // Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
@@ -589,7 +696,14 @@ void EnsembleModel::saveConfigToXmlFile()
 //==============================================================================
 void EnsembleModel::initialiseLoggingBuffer()
 {
-    int bufferSize = static_cast <int> (4 * players.size());
+    int bufferSize = 0;
+    if (players.size() > 0)
+    {
+        bufferSize = static_cast <int> (4 * players.size());
+    }
+    else {
+        bufferSize = 4;
+    }
     
     loggingFifo = std::make_unique <juce::AbstractFifo> (bufferSize);
     
@@ -629,7 +743,14 @@ void EnsembleModel::loggerLoop()
     auto time = juce::Time::getCurrentTime();
     auto logFileName = time.formatted ("Log_%H-%M-%S_%d%b%Y.csv");
     
-    auto logFile = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory).getChildFile (logFileName);
+    auto logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+
+    if (logSubfolder != "")
+    {
+        logFile = logFile.getChildFile (logSubfolder);
+        logFile.createDirectory();
+    }
+    logFile = logFile.getChildFile (logFileName);
     juce::FileOutputStream logStream (logFile);
     logStream.setPosition (0);
     logStream.truncate();
