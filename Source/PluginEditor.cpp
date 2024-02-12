@@ -7,7 +7,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
-      versionLabel(juce::String(), "(v1.0.3.12)"),
+      versionLabel(juce::String(), "(v1.0.3.13)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI") // TODO: Rename this to reflect additional .xml config functionality? 
@@ -46,7 +46,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     addAndMakeVisible (ensembleParametersViewport);
     
     // Register this editor as a change listener - to receive change broadcasts from the Ensemble
-    processor.ensemble.addChangeListener(this);
+    processor.ensemble.addActionListener(this);
 
     //==========================================================================
     initialiseEnsembleParameters (processor.ensemble);
@@ -65,15 +65,16 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
+    processor.ensemble.removeActionListener(this);
 }
 
 //==============================================================================
 // Checks if the DefaultEnsembleConfig.xml file exists in documents folder, and loads it automatically. 
 void AdaptiveMetronomeAudioProcessorEditor::CheckForDefaultConfig()
 {
-    if (!hasDefaultConfigBeenChecked) 
+    if (!processor.hasDefaultConfigBeenChecked) 
     {
-        hasDefaultConfigBeenChecked = true;
+        processor.hasDefaultConfigBeenChecked = true;
         auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("DefaultEnsembleConfig.xml");
         if (configFile.existsAsFile())
         {
@@ -119,11 +120,13 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     ensembleParametersViewport.setBounds (bounds);
 }
 
-
-void AdaptiveMetronomeAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source) 
+void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::String& message)
 {
-    ensembleParametersViewport.setViewedComponent(nullptr);
-    initialiseEnsembleParameters(processor.ensemble);
+    if (message == "Ensemble Reset")
+    {
+        ensembleParametersViewport.setViewedComponent(nullptr);
+        initialiseEnsembleParameters(processor.ensemble);
+    }
 }
 
 //==============================================================================

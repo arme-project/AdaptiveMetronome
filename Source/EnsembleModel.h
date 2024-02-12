@@ -8,7 +8,7 @@
 class EnsembleModel :
     private juce::OSCReceiver,
     private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>,
-    public juce::ChangeBroadcaster
+    public juce::ActionBroadcaster
 {
 public:
     //==============================================================================

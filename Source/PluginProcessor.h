@@ -42,6 +42,8 @@ public:
     //==============================================================================
     EnsembleModel ensemble;
 
+    bool hasDefaultConfigBeenChecked = false;
+
     EnsembleModel& loadMidiFile (const juce::File &file, int userPlayers);
     EnsembleModel& loadXmlFile (const juce::File &file);
     void resetEnsemble();

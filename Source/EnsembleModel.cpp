@@ -49,11 +49,13 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
     juce::OSCAddressPattern oscPattern = message.getAddressPattern();
     juce::String oscAddress = oscPattern.toString();
 
-
     if (oscAddress == "/loadConfig") {
         if (message[0].isString()) {
             auto configFilename = message[0].getString();
             auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
+
+            if (!configFile.existsAsFile()) { return; }
+
             loadConfigFromXml(configFile);
         }
     }
@@ -555,6 +557,8 @@ void EnsembleModel::loadConfigFromXml(juce::File configFile) {
 // Main xml config loading method
 void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig)
 {
+    if (loadedConfig == nullptr) { return; }
+
     // Flag to keep track if list of players needs to be reinitialised (e.g. number of user players has changed)
     bool playersNeedRecreating = false;
     bool ensembleNeedsResetting = false;
@@ -614,6 +618,8 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         auto midiFilename = loadedConfig->getStringAttribute("MidiFilename");
         auto midiFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(midiFilename);
         
+        if (!midiFile.existsAsFile()) {return;}
+
         loadMidiFile(midiFile, numUserPlayers);
 
         // Players are automatically reinitialised when a new midi file is loaded, so flag can be set back to false
@@ -645,11 +651,15 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
             xmlBetaEntryName << "Beta_" << i << "_" << j;
 
             // If corresponding entries are not found in xml, do not change value
-            if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
-                *alphaParams[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
+            if (xmlAlphas != nullptr) {
+                if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
+                    *alphaParams[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
+                }
             }
-            if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
-                *betaParams[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+            if (xmlBetas != nullptr) {
+                if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
+                    *betaParams[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+                }
             }
         }
     }
@@ -666,7 +676,7 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
     //    }
     //}
 
-    sendChangeMessage();
+    sendActionMessage("Ensemble Reset");
 
     if (ensembleNeedsResetting) {
         reset();
@@ -678,7 +688,6 @@ void EnsembleModel::saveConfigToXmlFile()
 {
     auto xmlOutput = &juce::XmlElement("EnsembleModelConfig");
     xmlOutput->setAttribute("numUserPlayers", numUserPlayers);
-    xmlOutput->setAttribute("numPlayers", getNumPlayers());
 
     auto xmlAlphas = xmlOutput->createNewChildElement("Alphas");
     auto xmlBetas = xmlOutput->createNewChildElement("Betas");
@@ -701,7 +710,6 @@ void EnsembleModel::saveConfigToXmlFile()
     }
     
     auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
-        //.getChildFile("EnsembleModelConfig.xml");
     xmlOutput->writeTo(ensembleConfigFile);
 }
 

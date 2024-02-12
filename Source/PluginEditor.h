@@ -4,7 +4,7 @@
 
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
                                               public juce::Button::Listener,
-                                              public juce::ChangeListener
+                                              public juce::ActionListener
 {
 public:
     AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&,
@@ -16,8 +16,8 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void changeListenerCallback(juce::ChangeBroadcaster* source);
-    
+    void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::String& message);
+
     //==============================================================================
     void buttonClicked (juce::Button *button) override;
 
@@ -26,7 +26,6 @@ private:
     AdaptiveMetronomeAudioProcessor &processor;
     
     void CheckForDefaultConfig();
-    bool hasDefaultConfigBeenChecked = false;
 
     //==============================================================================
     juce::Label instructionLabel, userPlayersLabel, versionLabel;
