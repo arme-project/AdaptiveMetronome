@@ -7,7 +7,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
-      versionLabel(juce::String(), "(v1.0.3.11)"),
+      versionLabel(juce::String(), "(v1.0.3.12)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI") // TODO: Rename this to reflect additional .xml config functionality? 
@@ -45,6 +45,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     
     addAndMakeVisible (ensembleParametersViewport);
     
+    // Register this editor as a change listener - to receive change broadcasts from the Ensemble
+    processor.ensemble.addChangeListener(this);
+
     //==========================================================================
     initialiseEnsembleParameters (processor.ensemble);
     
@@ -53,12 +56,11 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     EnsembleParametersComponent::calculateWidthAndHeight (4, paramWidth, paramHeight);
     
     setSize (paramWidth, paramHeight + instructionStripHeight + optionsStripHeight);
-
+    
     //==========================================================================
     // Load default config, if it exists
     CheckForDefaultConfig();
 
-    processor.ensemble.addChangeListener(this);
 }
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()

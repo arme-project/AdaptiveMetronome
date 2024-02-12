@@ -10,8 +10,9 @@ EnsembleModel::EnsembleModel()
     playersInUse.clear();
     resetFlag.clear();
 
-    // OSC Listeners
+    // OSC Listener addresses
     addListener(this, "/loadConfig");
+    addListener(this, "/reset");
 }
 
 EnsembleModel::~EnsembleModel()
@@ -31,9 +32,10 @@ void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "1
     }
 }
 
+// Connection can be established via config file parameter "OSCReceivePort"
 void EnsembleModel::connectOSCReceiver(int portNumber)
 {
-    if (!connect(portNumber))                       // [3]
+    if (!connect(portNumber))
         DBG("Error: could not connect to UDP.");
     else
     {
@@ -54,6 +56,10 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
             auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
             loadConfigFromXml(configFile);
         }
+    }
+    else if (oscAddress == "/reset")
+    {
+        reset();
     }
 }
 
@@ -553,9 +559,9 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
     bool playersNeedRecreating = false;
     bool ensembleNeedsResetting = false;
 
-    // "LogSubfolder":
-    // Check if new config specifies a new subfolder to save logs to
-    if (loadedConfig->hasAttribute("LogSubfolder")) {
+    // "LogSubfolder": Check if new config specifies a new subfolder to save logs to
+    if (loadedConfig->hasAttribute("LogSubfolder")) 
+    {
         auto newLogSubfolder = loadedConfig->getStringAttribute("LogSubfolder", "");
         if (newLogSubfolder != "")
         {
@@ -563,13 +569,23 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         }
     }
 
-    // "ConfigSubfolder":
-    // Check if new config specifies new subfolder to look for config and midi files
-    if (loadedConfig->hasAttribute("ConfigSubfolder")) {
+    // "ConfigSubfolder": Check if new config specifies new subfolder to look for config and midi files
+    if (loadedConfig->hasAttribute("ConfigSubfolder")) 
+    {
         auto newConfigSubfolder = loadedConfig->getStringAttribute("ConfigSubfolder", "");
         if (newConfigSubfolder != "")
         {
             configSubfolder = newConfigSubfolder;
+        }
+    }
+
+    // "LogFilename": Check if log filename should be overriden from default
+    if (loadedConfig->hasAttribute("LogFilename")) 
+    {
+        auto newLogFilename = loadedConfig->getStringAttribute("LogFilename", "");
+        if (newLogFilename != "")
+        {
+            logFilenameOverride = newLogFilename;
         }
     }
 
@@ -585,17 +601,14 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
     }
 
 
-    // "NumUserPlayers":
-    // Check if numUserPlayers has changed
+    // "NumUserPlayers": Check if numUserPlayers has changed
     if (loadedConfig->hasAttribute("NumUserPlayers"))
     {
         numUserPlayers = loadedConfig->getIntAttribute("NumUserPlayers");
         playersNeedRecreating = true;
-        //ensembleNeedsResetting = true;
     }
     
-    // "MidiFilename":
-    // Check if new midi file has been specified in config, and load it.
+    // "MidiFilename": Check if new midi file has been specified in config, and load it.
     if (loadedConfig->hasAttribute("MidiFilename"))
     {
         auto midiFilename = loadedConfig->getStringAttribute("MidiFilename");
@@ -617,8 +630,7 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         reset();
     }
 
-    // "Alphas" and "Betas":
-    // Set Alphas and Betas only after players have been recreated
+    // "Alphas" and "Betas": 
     auto xmlAlphas = loadedConfig->getChildByName("Alphas");
     auto xmlBetas = loadedConfig->getChildByName("Betas");
 
@@ -642,7 +654,7 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         }
     }
 
-
+    // TODO Check if this now works since implementing sendChangeMessage();
     //// Check if config requests another config to be loaded
     //auto anotherConfig = loadedConfig->getStringAttribute("LoadConfig", "");
     //if (anotherConfig != "")
@@ -741,17 +753,29 @@ void EnsembleModel::loggerLoop()
     //==========================================================================
     // Expose this option to UI at some point.
     auto time = juce::Time::getCurrentTime();
-    auto logFileName = time.formatted ("Log_%H-%M-%S_%d%b%Y.csv");
-    
-    auto logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
 
+    // Start with default documents folder
+    juce::File logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+
+    // Add subfolder, if this is specified
     if (logSubfolder != "")
     {
         logFile = logFile.getChildFile (logSubfolder);
         logFile.createDirectory();
     }
-    logFile = logFile.getChildFile (logFileName);
+
+    // Check if the log filename has also been overriden via config. 
+    if (logFilenameOverride != "") {
+        // TODO What happens if overriden log file already exists? Override? Create a new one with slightly different name? 
+        logFile = logFile.getChildFile(logFilenameOverride);
+    }
+    else {
+        auto logFileName = time.formatted("Log_%H-%M-%S_%d%b%Y.csv");
+        logFile = logFile.getChildFile(logFileName);
+    }
+
     juce::FileOutputStream logStream (logFile);
+
     logStream.setPosition (0);
     logStream.truncate();
     
@@ -938,6 +962,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     velocityLog += ", " + juce::String (data.volume);
 }
 
+// NOT IMPLEMENTED
 void EnsembleModel::postLatestOnsets (const std::vector <int> &onsets, const std::vector <int> &delays)
 {        
     //==========================================================================
@@ -1002,6 +1027,7 @@ void EnsembleModel::pollingLoop()
     }
 }
 
+// NOT USED
 void EnsembleModel::getNewAlphas()
 {
     //==========================================================================

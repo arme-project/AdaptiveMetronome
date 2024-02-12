@@ -53,25 +53,20 @@ public:
     // Folder structure
     juce::String logSubfolder = "";
     juce::String configSubfolder = "";
+    juce::String logFilenameOverride = "";
 
     // OSC Messaging
     juce::OSCSender OSCSender;
     void connectOSCSender(int portNumber, juce::String IPAddress);
     void connectOSCReceiver(int portNumber);
-
     void oscMessageReceived(const juce::OSCMessage& message);
 
 private:
-    int numUserPlayers = 1;
     //==============================================================================
+    int numUserPlayers = 1;
     
     // Previously a local variable in loadMidifile()
     juce::MidiFile midiFile;
-
-    //==============================================================================
-    // Config
-    void CheckForDefaultConfig();
-
 
     //==============================================================================
     // Timing parameters
