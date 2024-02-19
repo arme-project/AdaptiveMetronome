@@ -7,10 +7,11 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
-      versionLabel(juce::String(), "(v1.0.3.13)"),
+      versionLabel(juce::String(), "(v1.0.3.141)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
-      loadMidiButton ("Load MIDI") // TODO: Rename this to reflect additional .xml config functionality? 
+      loadMidiButton ("Load MIDI"), // TODO: Rename this to reflect additional .xml config functionality? 
+      oscOn("")
 {
         
     //==========================================================================
@@ -22,6 +23,11 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     versionLabel.setJustificationType(juce::Justification::right);
     versionLabel.setFont(instructionStripHeight - padding * 6);
     
+    addAndMakeVisible(oscOn);
+    //oscOn.setToggleable(false);
+    oscOn.setClickingTogglesState(false);
+    oscOn.setAlpha(0.5);
+
     //==========================================================================
     addAndMakeVisible (userPlayersLabel);
     userPlayersLabel.setJustificationType (juce::Justification::right);
@@ -42,7 +48,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     
     addAndMakeVisible (loadMidiButton);    
     loadMidiButton.addListener (this);
-    
+
     addAndMakeVisible (ensembleParametersViewport);
     
     // Register this editor as a change listener - to receive change broadcasts from the Ensemble
@@ -57,6 +63,8 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     
     setSize (paramWidth, paramHeight + instructionStripHeight + optionsStripHeight);
     
+    startTimer(timerInterval);
+
     //==========================================================================
     // Load default config, if it exists
     CheckForDefaultConfig();
@@ -65,7 +73,36 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
+    stopTimer();
     processor.ensemble.removeActionListener(this);
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::reduceAlpha()
+{
+    if (oscOn.getAlpha() > 0.5)
+    {
+        oscOn.setAlpha(oscOn.getAlpha() - 0.1);
+        callAfterDelay(timerInterval, [&] {reduceAlpha(); });
+    }
+    else {
+        oscOn.setAlpha(0.5);
+    }
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
+{
+    auto oscConnected = processor.ensemble.isOscReceiverConnected();
+    if (oscConnected)
+    {
+        oscOn.setToggleState(true, false);
+        auto tooltipString = juce::String("Listening on port ");
+        tooltipString << processor.ensemble.currentReceivePort;
+        oscOn.setTooltip(tooltipString);
+    } else 
+    {
+        oscOn.setToggleState(false, false);
+        oscOn.setTooltip("OSC not connected");
+    }
 }
 
 //==============================================================================
@@ -97,6 +134,7 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     //==========================================================================
     // Static strip at top of screen.
     auto headingStripBounds = bounds.removeFromTop(instructionStripHeight);
+    oscOn.setBounds(headingStripBounds.removeFromRight(45).reduced(padding));
     versionLabel.setBounds(headingStripBounds.removeFromRight(100).reduced(padding));
     instructionLabel.setBounds (headingStripBounds.reduced (padding));
     
@@ -126,6 +164,11 @@ void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::S
     {
         ensembleParametersViewport.setViewedComponent(nullptr);
         initialiseEnsembleParameters(processor.ensemble);
+    }
+    else if (message == "OSC Received")
+    {
+        //oscOn.setAlpha(1);
+        //callAfterDelay(timerInterval, [&] {reduceAlpha(); });
     }
 }
 

@@ -35,13 +35,23 @@ void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "1
 // Connection can be established via config file parameter "OSCReceivePort"
 void EnsembleModel::connectOSCReceiver(int portNumber)
 {
-    if (!connect(portNumber))
+    if (!connect(portNumber)) 
+    {
+        currentReceivePort = -1;
         DBG("Error: could not connect to UDP.");
+    }
     else
     {
+        
+        sendActionMessage("OSC Received");
+        currentReceivePort = portNumber;
         DBG("Connection succeeded");
     }
+}
 
+bool EnsembleModel::isOscReceiverConnected()
+{
+    return (currentReceivePort > -1);
 }
 
 void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
@@ -63,6 +73,7 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
     {
         reset();
     }
+    sendActionMessage("OSC Received");
 }
 
 //==============================================================================

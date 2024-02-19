@@ -60,6 +60,8 @@ public:
     void connectOSCSender(int portNumber, juce::String IPAddress);
     void connectOSCReceiver(int portNumber);
     void oscMessageReceived(const juce::OSCMessage& message);
+    int currentReceivePort = -1;
+    bool isOscReceiverConnected();
 
 private:
     //==============================================================================

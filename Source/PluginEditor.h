@@ -4,14 +4,17 @@
 
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
                                               public juce::Button::Listener,
-                                              public juce::ActionListener
+                                              public juce::ActionListener,
+                                              public juce::Timer
+
 {
 public:
     AdaptiveMetronomeAudioProcessorEditor (AdaptiveMetronomeAudioProcessor&,
                                            EnsembleModel &ensemble);
     ~AdaptiveMetronomeAudioProcessorEditor() override;
 
-
+    void timerCallback() override;
+    void reduceAlpha();
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -25,14 +28,19 @@ private:
     //==============================================================================
     AdaptiveMetronomeAudioProcessor &processor;
     
+    int timerInterval = 50;
+
     void CheckForDefaultConfig();
 
     //==============================================================================
     juce::Label instructionLabel, userPlayersLabel, versionLabel;
     juce::ComboBox userPlayersSelector;
     juce::TextButton resetButton, loadMidiButton;
+    juce::ToggleButton oscOn;
     std::unique_ptr <juce::FileChooser> fileChooser;
-    
+
+    juce::TooltipWindow tooltipWindow{ this };
+
     //==============================================================================
     void resetButtonCallback();
     void loadMidiButtonCallback();
