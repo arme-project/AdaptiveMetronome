@@ -7,7 +7,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     : AudioProcessorEditor (&p),
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
-      versionLabel(juce::String(), "(v1.0.3.141)"),
+      versionLabel(juce::String(), "(v1.0.3.155)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI"), // TODO: Rename this to reflect additional .xml config functionality? 

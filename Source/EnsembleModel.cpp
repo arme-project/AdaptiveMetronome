@@ -580,7 +580,7 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         auto newLogSubfolder = loadedConfig->getStringAttribute("LogSubfolder", "");
         if (newLogSubfolder != "")
         {
-            configSubfolder = newLogSubfolder;
+            logSubfolder = newLogSubfolder;
         }
     }
 
@@ -600,6 +600,9 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         auto newLogFilename = loadedConfig->getStringAttribute("LogFilename", "");
         if (newLogFilename != "")
         {
+            if (!newLogFilename.endsWith(".csv")) {
+                newLogFilename << ".csv";
+            }
             logFilenameOverride = newLogFilename;
         }
     }
@@ -674,6 +677,33 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
             }
         }
     }
+
+    // "Motor" and "Timekeeper" noise:
+
+    auto xmlTkNoise = loadedConfig->getChildByName("tkNoise");
+    auto xmlMNoise = loadedConfig->getChildByName("mNoise");
+
+    for (int i = 0; i < players.size(); ++i)
+    {
+        juce::String xmlTkNoiseEntryName;
+        juce::String xmlMNoiseEntryName;
+
+        xmlTkNoiseEntryName << "tkNoise_" << i;
+        xmlMNoiseEntryName << "mNoise_" << i;
+
+        // If corresponding entries are not found in xml, do not change value
+        if (xmlTkNoise != nullptr) {
+            if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
+                players[i]->tkNoiseStdParam = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
+            }
+        }
+        if (xmlMNoise != nullptr) {
+            if (xmlMNoise->hasAttribute(xmlMNoiseEntryName)) {
+                players[i]->mNoiseStdParam = xmlMNoise->getDoubleAttribute(xmlMNoiseEntryName);
+            }
+        }
+    }
+
 
     // TODO Check if this now works since implementing sendChangeMessage();
     //// Check if config requests another config to be loaded
@@ -780,13 +810,15 @@ void EnsembleModel::loggerLoop()
     if (logSubfolder != "")
     {
         logFile = logFile.getChildFile (logSubfolder);
-        logFile.createDirectory();
+        if (!logFile.exists()) {
+            logFile.createDirectory();
+        }
     }
 
     // Check if the log filename has also been overriden via config. 
     if (logFilenameOverride != "") {
         // TODO What happens if overriden log file already exists? Override? Create a new one with slightly different name? 
-        logFile = logFile.getChildFile(logFilenameOverride);
+        logFile = logFile.getChildFile(logFilenameOverride).getNonexistentSibling();
     }
     else {
         auto logFileName = time.formatted("Log_%H-%M-%S_%d%b%Y.csv");
