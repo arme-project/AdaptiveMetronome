@@ -19,7 +19,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::String& message);
+    void actionListenerCallback(const juce::String& message) override;
 
     //==============================================================================
     void buttonClicked (juce::Button *button) override;

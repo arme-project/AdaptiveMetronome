@@ -727,6 +727,7 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 // Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
 void EnsembleModel::saveConfigToXmlFile()
 {
+    #ifdef JUCE_WINDOWS
     auto xmlOutput = &juce::XmlElement("EnsembleModelConfig");
     xmlOutput->setAttribute("numUserPlayers", numUserPlayers);
 
@@ -752,6 +753,7 @@ void EnsembleModel::saveConfigToXmlFile()
     
     auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
     xmlOutput->writeTo(ensembleConfigFile);
+    #endif
 }
 
 //==============================================================================
