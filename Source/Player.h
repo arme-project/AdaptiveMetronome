@@ -7,13 +7,21 @@
 /**
  * A class for playing back a sequence of MIDI note on/off events at given intervals.
  */
+class AdaptiveMetronomeAudioProcessor;
+
 class Player
 {
 public:
     //==============================================================================
     Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
             const double &sampleRate, const int &scoreCounter, int initialInterval);
+    
+    Player (int index, const juce::MidiMessageSequence *seq, int midiChannel,
+            const double &sampleRate, const int &scoreCounter, int initialInterval, AdaptiveMetronomeAudioProcessor *processorPtr);
+    
     virtual ~Player();
+    
+    AdaptiveMetronomeAudioProcessor *processor;
     
     //==============================================================================
     virtual bool isUserOperated();
@@ -30,6 +38,9 @@ public:
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas);
+    
+    virtual void recalculateOnsetInterval (int samplesPerBeat,
+                                           const std::vector <std::unique_ptr <Player> > &players);
     
     //==============================================================================
     double generateMotorNoise();
@@ -55,9 +66,9 @@ public:
     void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
 
     //==============================================================================
-    // Parameters
-    juce::AudioParameterInt channelParam;
-    juce::AudioParameterFloat delayParam, mNoiseStdParam, tkNoiseStdParam, volumeParam;
+    // Parameters - Moved to processor
+//    juce::AudioParameterInt channelParam;
+//    juce::AudioParameterFloat delayParam, mNoiseStdParam, tkNoiseStdParam, volumeParam;
     
     //==============================================================================
     std::size_t getNumNotes();

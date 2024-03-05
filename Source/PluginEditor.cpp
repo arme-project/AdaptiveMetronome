@@ -8,7 +8,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
       userPlayersLabel (juce::String(), "No. User Players:"),
-      versionLabel(juce::String(), "(v1.0.3.155)"),
+      versionLabel(juce::String(), "(v1.0.3.22)"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI"), // TODO: Rename this to reflect additional .xml config functionality? 
       oscOn("")
@@ -94,13 +94,13 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
     auto oscConnected = processor.ensemble.isOscReceiverConnected();
     if (oscConnected)
     {
-        oscOn.setToggleState(true, false);
+        oscOn.setToggleState(true, juce::dontSendNotification);
         auto tooltipString = juce::String("Listening on port ");
         tooltipString << processor.ensemble.currentReceivePort;
         oscOn.setTooltip(tooltipString);
     } else 
     {
-        oscOn.setToggleState(false, false);
+        oscOn.setToggleState(false, juce::dontSendNotification);
         oscOn.setTooltip("OSC not connected");
     }
 }
@@ -216,9 +216,9 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiFile (juce::File file)
         auto& ensemble = processor.loadMidiFile(file, userPlayersSelector.getSelectedId() - 1);
         initialiseEnsembleParameters(ensemble);
     }
-    else if (file.hasFileExtension(".xml")) 
+    else if (file.hasFileExtension(".xml"))
     {
-        auto& ensemble = processor.loadXmlFile(file);
+        processor.loadXmlFile(file);
     }
 }
 
@@ -231,7 +231,7 @@ const juce::StringArray AdaptiveMetronomeAudioProcessorEditor::EnsembleParameter
                                                                                                       "Time Keeper Noise STD",
                                                                                                       "Alphas and Betas"};
 
-AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsembleParametersComponent (EnsembleModel &ensemble)
+AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsembleParametersComponent (EnsembleModel &ensemble, AdaptiveMetronomeAudioProcessor &processor)
 {
     //==========================================================================
     // Heading Labels
@@ -245,7 +245,6 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
     //==========================================================================
     // Player parameters
     int nPlayers = ensemble.getNumPlayers();
-    int numUserPlayers = ensemble.getNumUserPlayers();
 
     for (int i = 0; i < nPlayers; ++i)
     {
@@ -288,7 +287,7 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
         delaySliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
                                                                  juce::Slider::TextBoxBelow));
         delaySliders [i]->setTextValueSuffix (" ms");
-        delaySliders [i]->setColour (juce::Slider::thumbColourId, juce::Colours::seagreen);                                                        
+        delaySliders [i]->setColour (juce::Slider::thumbColourId, juce::Colours::seagreen);
         
         // Motor Noise                                                         
         mNoiseStdSliders.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
@@ -317,15 +316,19 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
         // Component attachments
         channelAttachments.push_back (std::make_unique <juce::ComboBoxParameterAttachment> (ensemble.getPlayerChannelParameter (i),
                                                                                             *channelSelectors [i]));
+
         volumeAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerVolumeParameter (i),
                                                                                          *volumeSliders [i]));
+        
         delayAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerDelayParameter (i),
                                                                                         *delaySliders [i]));
+
         mNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerMotorNoiseParameter (i),
                                                                                             *mNoiseStdSliders [i]));
+
         tkNoiseStdAttachments.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getPlayerTimeKeeperNoiseParameter (i),
                                                                                              *tkNoiseStdSliders [i]));
-                                                                                            
+                                                                                          
         //=======================================================================
         // Alpha and Beta controls       
         std::vector <std::unique_ptr <juce::Slider> > alphaRow, betaRow;
@@ -336,9 +339,10 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
             //===================================================================
             // Alpha
             alphaRow.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
-                                                                 juce::Slider::TextBoxBelow));                                         
+                                                                 juce::Slider::TextBoxBelow));
             alphaRow [j]->setColour (juce::Slider::thumbColourId, juce::Colours::indianred);
             alphaRow [j]->setTextBoxStyle (juce::Slider::TextBoxBelow, true, alphaBetaValWidth, alphaBetaValHeight);
+            
             
             alphaAttachmentRow.push_back (std::make_unique <juce::SliderParameterAttachment> (ensemble.getAlphaParameter (i, j),
                                                                                               *alphaRow [j]));
@@ -349,7 +353,7 @@ AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::EnsemblePara
             //===================================================================
             // Beta
             betaRow.push_back (std::make_unique <juce::Slider> (juce::Slider::RotaryHorizontalVerticalDrag,
-                                                                juce::Slider::TextBoxBelow));                                         
+                                                                juce::Slider::TextBoxBelow));
             betaRow [j]->setColour (juce::Slider::thumbColourId, juce::Colours::greenyellow);
             betaRow [j]->setTextBoxStyle (juce::Slider::TextBoxBelow, true, alphaBetaValWidth, alphaBetaValHeight);
 
@@ -445,6 +449,6 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::calcula
 
 void AdaptiveMetronomeAudioProcessorEditor::initialiseEnsembleParameters (EnsembleModel &ensemble)
 {
-    ensembleParametersViewport.setViewedComponent (new EnsembleParametersComponent (ensemble));
+    ensembleParametersViewport.setViewedComponent (new EnsembleParametersComponent (ensemble, processor));
 }
 

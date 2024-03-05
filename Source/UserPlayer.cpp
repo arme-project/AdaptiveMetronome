@@ -1,9 +1,16 @@
 #include "UserPlayer.h"
+#include "PluginProcessor.h"
 
 //==============================================================================
 UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
                         const double &sampleRate, const int &scoreCounter, int initialInterval)
   : Player (index, seq, midiChannel, sampleRate, scoreCounter, initialInterval)
+{
+}
+
+UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel,
+                        const double &sampleRate, const int &scoreCounter, int initialInterval, AdaptiveMetronomeAudioProcessor* processorIn)
+  : Player (index, seq, midiChannel, sampleRate, scoreCounter, initialInterval, processorIn)
 {
 }
 
@@ -18,10 +25,18 @@ bool UserPlayer::isUserOperated()
 }
 
 //==============================================================================
+// This will be removed in the future
 void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas)
+{
+    Player::recalculateOnsetInterval(samplesPerBeat, players);
+}
+
+// New function signature
+void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
+                                           const std::vector <std::unique_ptr <Player> > &players)
 {
     //==========================================================================
     // Find mean onset and interval for all other players
@@ -48,7 +63,7 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
     // players, just use the most recently played interval.
     if (nOtherPlayers == 0)
     {
-        // potentially do something clever here
+        // TODO: potentially do something clever here
     }
     else
     {
@@ -80,6 +95,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2))
         {
             // Check if incomming note is on the midi channel associated with this player (channelParam)
+            int channelParam = processor->channelParameter(playerIndex)->get();
             if (event.getChannel() == channelParam) {
                 playNextNote (outMidi, sampleIndex);
                 noteTriggeredByUser = true;

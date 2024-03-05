@@ -7,6 +7,8 @@ public:
     //==============================================================================
     UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
                 const double &sampleRate, const int &scoreCounter, int initialInterval);
+    UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel,
+                const double &sampleRate, const int &scoreCounter, int initialInterval, AdaptiveMetronomeAudioProcessor *processorIn);
     ~UserPlayer();
     
     //==============================================================================
@@ -18,6 +20,9 @@ public:
                                    const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
                                    const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas) override;
                                    
+    void recalculateOnsetInterval (int samplesPerBeat,
+                                   const std::vector <std::unique_ptr <Player> > &players) override;
+    
     //==============================================================================
     bool wasLatestOnsetUserInput() override;
                                            

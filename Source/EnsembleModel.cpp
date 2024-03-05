@@ -1,6 +1,7 @@
+#include "JuceHeader.h"
+#include "PluginProcessor.h"
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
-#include "JuceHeader.h"
 
 using namespace std::chrono_literals;
 
@@ -15,10 +16,33 @@ EnsembleModel::EnsembleModel()
     addListener(this, "/reset");
 }
 
+//==============================================================================
+EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
+: processor(processorPtr)
+{
+    playersInUse.clear();
+    resetFlag.clear();
+
+    // OSC Listener addresses
+    addListener(this, "/loadConfig");
+    addListener(this, "/reset");
+}
+
 EnsembleModel::~EnsembleModel()
 {
     stopLoggerLoop();
     stopPollingLoop();
+}
+
+void EnsembleModel::setAlphaBetaParams(float valueIn)
+{
+    for (int i = 0 ; i < processor->MAX_PLAYERS ; i++)
+    {
+        for (int j = 0 ; j < processor->MAX_PLAYERS ; j++)
+        {
+            processor->alphaParameter(i, j)->setValueNotifyingHost(valueIn);
+        }
+    }
 }
 
 //==============================================================================
@@ -190,37 +214,50 @@ bool EnsembleModel::isPlayerUserOperated (int playerIndex)
 
 juce::AudioParameterInt& EnsembleModel::getPlayerChannelParameter (int playerIndex)
 {
-    return players [playerIndex]->channelParam;
+//    return players [playerIndex]->channelParam;
+    return *processor->channelParameter(playerIndex);
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerDelayParameter (int playerIndex)
 {
-    return players [playerIndex]->delayParam;
+//    return players [playerIndex]->delayParam;
+    return *processor->delayParameter(playerIndex);
+
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
 {
-    return players [playerIndex]->mNoiseStdParam;
+//    return players [playerIndex]->mNoiseStdParam;
+    return *processor->mNoiseStdParameter(playerIndex);
+
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerTimeKeeperNoiseParameter (int playerIndex)
 {
-    return players [playerIndex]->tkNoiseStdParam;
+//    return players [playerIndex]->tkNoiseStdParam;
+    return *processor->tkNoiseStdParameter(playerIndex);
+
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIndex)
 {
-    return players [playerIndex]->volumeParam;
+//    return players [playerIndex]->volumeParam;
+    return *processor->volumeParameter(playerIndex);
+
 }
 
 juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
 {
-    return *alphaParams [player1Index][player2Index];
+//    return *(*alphaParams)[player1Index][player2Index];
+    return *processor->alphaParameter(player1Index, player2Index);
+
 }
 
 juce::AudioParameterFloat& EnsembleModel::getBetaParameter (int player1Index, int player2Index)
 {
-        return *betaParams [player1Index][player2Index];
+//    return *(*betaParams)[player1Index][player2Index];
+    return *processor->betaParameter(player1Index, player2Index);
+
 }
 
 //==============================================================================
@@ -319,7 +356,8 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (!players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i], betaParams [i]);
+//            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i], betaParams [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players);
         }
     }  
     
@@ -327,7 +365,8 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (players [i]->isUserOperated())
         {
-            players [i]->recalculateOnsetInterval (samplesPerBeat, players, alphaParams [i], betaParams [i]);
+//            players [i]->recalculateOnsetInterval (samplesPerBeat, players, (*alphaParams) [i], (*betaParams) [i]);
+            players [i]->recalculateOnsetInterval (samplesPerBeat, players);
         }
     } 
           
@@ -361,30 +400,30 @@ void EnsembleModel::clearOnsetsAvailable()
 
 void EnsembleModel::getLatestAlphas()
 {
-    if (pollingFifo)
-    {
-        // Consume everything in the buffer, only using the most recent set of alphas.
-        auto reader = pollingFifo->read (pollingFifo->getNumReady()); 
-        
-        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-        {
-            int player2 = 0;
-            
-            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
-
-            for (int i = block1Start; i < reader.blockSize1; ++i)
-            {
-                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
-            }
-            
-            int block2Start = std::max (block1Start - reader.blockSize1, 0);
-        
-            for (int i = block2Start; i < reader.blockSize2; ++i)
-            {
-                *alphaParams [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
-            }
-        }
-    } 
+//    if (pollingFifo)
+//    {
+//        // Consume everything in the buffer, only using the most recent set of alphas.
+//        auto reader = pollingFifo->read (pollingFifo->getNumReady());
+//
+//        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
+//        {
+//            int player2 = 0;
+//
+//            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
+//
+//            for (int i = block1Start; i < reader.blockSize1; ++i)
+//            {
+//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
+//            }
+//
+//            int block2Start = std::max (block1Start - reader.blockSize1, 0);
+//
+//            for (int i = block2Start; i < reader.blockSize2; ++i)
+//            {
+//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
+//            }
+//        }
+//    }
 }
 
 void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex)
@@ -403,8 +442,12 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     for (int i = 0; i < players.size(); ++i)
     {
         data.asyncs [i] = players [playerIndex]->getLatestOnsetTime() - players [i]->getLatestOnsetTime();
-        data.alphas [i] = *alphaParams [playerIndex][i];
-        data.betas [i] = *betaParams [playerIndex][i];
+//        data.alphas [i] = *(*alphaParams) [playerIndex][i];
+        data.alphas [i] = processor->alphaParameter(playerIndex , i)->get();
+
+//        data.betas [i] = *(*betaParams) [playerIndex][i];
+        data.betas [i] = processor->betaParameter(playerIndex , i)->get();
+
     }
     
     data.tkNoiseStd = players [playerIndex]->getTimeKeeperNoiseStd();
@@ -452,16 +495,18 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
                                                                   channelToUse,
                                                                   sampleRate,
                                                                   scoreCounter,
-                                                                  samplesPerBeat));
+                                                                  samplesPerBeat,
+                                                                  processor));
             }
             else
             {
                 players.push_back (std::make_unique <Player> (playerIndex++,
                                                               track,
                                                               channelToUse,
-                                                                  sampleRate,
-                                                                  scoreCounter,
-                                                                  samplesPerBeat));
+                                                              sampleRate,
+                                                              scoreCounter,
+                                                              samplesPerBeat,
+                                                              processor));
             }
         }
     }
@@ -472,33 +517,42 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
 
 void EnsembleModel::createAlphaBetaParameters()
 {
-    alphaParams.clear();
-    betaParams.clear();
+//    alphaParamsOld.clear();
+//    betaParamsOld.clear();
 
     for (int i = 0; i < players.size(); ++i)
     {
-        std::vector <std::unique_ptr <juce::AudioParameterFloat> > aRow, bRow;
+        
+        // Old alphaParams
+//        std::vector <std::unique_ptr <juce::AudioParameterFloat> > aRow, bRow;
 
         double alpha = 0.25;
-        double beta = 0.25;
+        double beta = 0.1;
 
         for (int j = 0; j < players.size(); ++j)
         {
-            aRow.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
-                "Alpha " + juce::String(i) + "-" + juce::String(j),
-                0.0, 1.0, alpha));
+//            aRow.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
+//                "Alpha " + juce::String(i) + "-" + juce::String(j),
+//                0.0, 1.0, alpha));
+//
+//            bRow.push_back(std::make_unique <juce::AudioParameterFloat>("beta-" + juce::String(i) + "-" + juce::String(j),
+//                "Beta " + juce::String(i) + "-" + juce::String(j),
+//                0.0, 1.0, beta));
 
-            bRow.push_back(std::make_unique <juce::AudioParameterFloat>("beta-" + juce::String(i) + "-" + juce::String(j),
-                "Beta " + juce::String(i) + "-" + juce::String(j),
-                0.0, 1.0, beta));
 
+//            alpha = 0.0;
+//            beta = 0.0;
+            
+            // New alphaParams
+//            *(*alphaParams)[i][j] = alpha;
+            *processor->alphaParameter(i, j) = alpha;
+            *processor->betaParameter(i, j) = beta;
 
-            alpha = 0.0;
-            beta = 0.0;
+            
         }
 
-        alphaParams.push_back(std::move(aRow));
-        betaParams.push_back(std::move(bRow));
+//        alphaParamsOld.push_back(std::move(aRow));
+//        betaParamsOld.push_back(std::move(bRow));
     }
 }
 
@@ -667,12 +721,17 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
             // If corresponding entries are not found in xml, do not change value
             if (xmlAlphas != nullptr) {
                 if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
-                    *alphaParams[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
+//                    *alphaParamsOld[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
+//                    *(*alphaParams)[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
+                    processor->alphaParameter(i,j)->setValueNotifyingHost(xmlAlphas->getDoubleAttribute(xmlAlphaEntryName));
                 }
             }
             if (xmlBetas != nullptr) {
                 if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
-                    *betaParams[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+//                    *betaParamsOld[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+//                    *(*betaParams)[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
+                    processor->betaParameter(i,j)->setValueNotifyingHost(xmlBetas->getDoubleAttribute(xmlBetaEntryName));
+
                 }
             }
         }
@@ -694,12 +753,16 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         // If corresponding entries are not found in xml, do not change value
         if (xmlTkNoise != nullptr) {
             if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
-                players[i]->tkNoiseStdParam = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
+//                players[i]->tkNoiseStdParam = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
+                processor->tkNoiseStdParameter(i)->setValueNotifyingHost(xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName));
+
             }
         }
         if (xmlMNoise != nullptr) {
             if (xmlMNoise->hasAttribute(xmlMNoiseEntryName)) {
-                players[i]->mNoiseStdParam = xmlMNoise->getDoubleAttribute(xmlMNoiseEntryName);
+//                players[i]->mNoiseStdParam = xmlMNoise->getDoubleAttribute(xmlMNoiseEntryName);
+                processor->mNoiseStdParameter(i)->setValueNotifyingHost(xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName));
+
             }
         }
     }

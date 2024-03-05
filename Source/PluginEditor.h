@@ -50,7 +50,7 @@ private:
     class EnsembleParametersComponent : public juce::Component
     {
     public:
-        EnsembleParametersComponent (EnsembleModel &ensemble);
+        EnsembleParametersComponent (EnsembleModel &ensemble, AdaptiveMetronomeAudioProcessor &processor);
         ~EnsembleParametersComponent();
         
         void paint (juce::Graphics &g) override;
@@ -78,14 +78,16 @@ private:
         std::vector <std::vector <std::unique_ptr <juce::Slider> > > alphaSliders;
         std::vector <std::vector <std::unique_ptr <juce::Slider> > > betaSliders;
     
-        std::vector <std::unique_ptr <juce::ComboBoxParameterAttachment> > channelAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > volumeAttachments;
+        std::vector <std::unique_ptr <juce::ComboBoxParameterAttachment> > channelAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > delayAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > mNoiseStdAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > tkNoiseStdAttachments;
         std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > alphaAttachments;
         std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > betaAttachments;
 
+        std::vector <std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> > volumeAttachmentsApvts;
+        
         //==========================================================================
         // Layout constants
         static const int headingHeight = 80;

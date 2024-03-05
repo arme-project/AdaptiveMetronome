@@ -1,30 +1,20 @@
+#include "PluginProcessor.h"
 #include "Player.h"
 
 //==============================================================================
 Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
                 const double &sampleRate, const int &scoreCounter, int initialInterval)
-  : channelParam ("player" + juce::String (index) + "-channel",
-                  "Player " + juce::String (index) + " MIDI Channel",
-                  1, 16, midiChannel),
-    delayParam ("player" + juce::String (index) + "-delay",
-                "Player " + juce::String (index) + " Delay",
-                0.0, 200.0, 0.0),
-    mNoiseStdParam ("player" + juce::String (index) + "-mnoise-std",
-                    "Player " + juce::String (index) + " Motor Noise Std",
-                    0.0, 10.0, 0.1),
-    tkNoiseStdParam ("player" + juce::String (index) + "-tknoise-std",
-                     "Player " + juce::String (index) + " Time Keeper Noise Std",
-                     0.0, 50.0, 1.0),
-    volumeParam ("player" + juce::String (index) + "-volume",
-                 "Player " + juce::String (index) + " Volume",
-                 0.0, 1.0, 1.0),
+: Player ( index, seq, midiChannel, sampleRate, scoreCounter, initialInterval, nullptr) {}
+
+Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel,
+                const double &sampleRate, const int &scoreCounter, int initialInterval, AdaptiveMetronomeAudioProcessor *processorPtr)
+  : processor(processorPtr),
     playerIndex (index),
     sampleRate (sampleRate),
     scoreCounter (scoreCounter),
-    onsetInterval (initialInterval),
-    mNoiseDistribution (0.0, mNoiseStdParam.get() / 1000.0),
-    tkNoiseDistribution (0.0, tkNoiseStdParam.get() / 1000.0)
+    onsetInterval (initialInterval)
 {
+    processor->channelParameter(playerIndex)->setValueNotifyingHost(playerIndex);
     initialiseScore (seq);
 }
 
@@ -103,12 +93,39 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
     onsetInterval = samplesPerBeat - alphaSum + hNoise;
 }
 
+void Player::recalculateOnsetInterval (int samplesPerBeat,
+                                       const std::vector <std::unique_ptr <Player> > &players)
+{
+    double alphaSum = 0;
+    double betaSum = 0;
+        
+    for (int i = 0; i < players.size(); ++i)
+    {
+        double async = currentOnsetTime - players [i]->getLatestOnsetTime();
+        auto alpha = processor->alphaParameter(playerIndex, i)->get();
+        auto beta = processor->betaParameter(playerIndex, i)->get();
+        alphaSum += alpha * async;
+        betaSum += beta * async;
+    }
+    
+    // update time keeper mean
+    timeKeeperMean -= betaSum / sampleRate;
+        
+    // generate noises for this onset
+    double hNoise = generateHNoise() * sampleRate;
+
+    // calcualte next onset interval
+    onsetInterval = samplesPerBeat - alphaSum + hNoise;
+}
+
 //==============================================================================
 double Player::generateMotorNoise()
 {
     previousMotorNoise = currentMotorNoise;
-    
-    mNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, mNoiseStdParam.get() / 1000.0));
+    //    mNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, mNoiseStdParam.get() / 1000.0));
+    float mNoiseStdParam = processor->mNoiseStdParameter(playerIndex)->get();
+    mNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, mNoiseStdParam / 1000.0));
+
     currentMotorNoise = mNoiseDistribution (randomEngine);
     
     return currentMotorNoise;
@@ -116,7 +133,10 @@ double Player::generateMotorNoise()
 
 double Player::generateTimeKeeperNoise()
 {
-    tkNoiseDistribution.param (std::normal_distribution <double>::param_type(timeKeeperMean, tkNoiseStdParam.get() / 1000.0));
+    //    tkNoiseDistribution.param (std::normal_distribution <double>::param_type(timeKeeperMean, tkNoiseStdParam.get() / 1000.0));
+    float tkNoiseStdParam = processor->tkNoiseStdParameter(playerIndex)->get();
+    tkNoiseDistribution.param (std::normal_distribution <double>::param_type(timeKeeperMean, tkNoiseStdParam / 1000.0));
+
     currentTimeKeeperNoise = tkNoiseDistribution (randomEngine);
     
     return currentTimeKeeperNoise;
@@ -250,8 +270,9 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
 
     // Add note to buffer.
     auto &note = notes [currentNoteIndex];
-    juce::uint8 velocity = note.velocity * volumeParam;
-        
+    juce::uint8 velocity = note.velocity * processor->volumeParameter(playerIndex)->get();
+    int channelParam = processor->channelParameter(playerIndex)->get();
+    
     midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, velocity),
                    sampleIndex);
                    
@@ -280,13 +301,15 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
     
     // Send note off for previous note.
     auto &note = notes [currentNoteIndex - 1];
-        
+    auto channelParam = processor->channelParameter(playerIndex)->get();
+    auto volumeParam = processor->volumeParameter(playerIndex)->get();
     midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
                    sampleIndex);
 }
 
 void Player::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
+    auto delayParam = processor->delayParameter(playerIndex)->get();
     int samplesDelay = sampleRate * delayParam / 1000.0;
     
     if (samplesSinceLastOnset >= onsetInterval + samplesDelay || scoreCounter == samplesDelay)

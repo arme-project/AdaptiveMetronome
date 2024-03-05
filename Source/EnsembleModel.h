@@ -5,6 +5,8 @@
 #include <thread>
 #include "Player.h"
 
+class AdaptiveMetronomeAudioProcessor;
+
 class EnsembleModel :
     private juce::OSCReceiver,
     private juce::OSCReceiver::ListenerWithOSCAddress <juce::OSCReceiver::MessageLoopCallback>,
@@ -13,8 +15,11 @@ class EnsembleModel :
 public:
     //==============================================================================
     EnsembleModel();
+    EnsembleModel(AdaptiveMetronomeAudioProcessor *processorPtr);
+
     ~EnsembleModel();
     
+    AdaptiveMetronomeAudioProcessor *processor = nullptr;
     //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
     bool reset();
@@ -63,6 +68,8 @@ public:
     int currentReceivePort = -1;
     bool isOscReceiverConnected();
 
+    void setAlphaBetaParams(float valueIn);
+    
 private:
     //==============================================================================
     int numUserPlayers = 1;
@@ -75,8 +82,10 @@ private:
     double sampleRate = 44100.0;
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
-    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParams;
-    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > betaParams;
+//    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParamsOld;
+//    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > betaParamsOld;
+//    std::vector < std::vector < juce::AudioParameterFloat* > > *alphaParams;
+//    std::vector < std::vector < juce::AudioParameterFloat* > > *betaParams;
     
     //==============================================================================
     // Intro countdown
