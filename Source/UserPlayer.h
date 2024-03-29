@@ -28,7 +28,7 @@ public:
                                            
 protected:
     //==============================================================================
-    bool noteTriggeredByUser = false;
+    // bool noteTriggeredByUser = false;
     
     //==============================================================================
     void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex) override;

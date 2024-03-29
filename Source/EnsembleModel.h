@@ -5,6 +5,8 @@
 #include <thread>
 #include "Player.h"
 
+using std::function;
+
 class AdaptiveMetronomeAudioProcessor;
 
 class EnsembleModel :
@@ -89,8 +91,10 @@ private:
     
     //==============================================================================
     // Intro countdown
-    static const int numIntroTones = 4;
-    static const int introToneNote = 69;
+    const int introToneChannel = 16;
+    int numIntroTones = 7;
+    static const int introToneNoteFirst = 84;
+    static const int introToneNoteOther = 72;
     static const juce::uint8 introToneVel = 100;
     int introCounter = 0;
     int introTonesPlayed = 0;
@@ -98,7 +102,7 @@ private:
     void playIntroTones (juce::MidiBuffer &midi, int sampleIndex);
     void introToneOn (juce::MidiBuffer &midi, int sampleIndex);
     void introToneOff (juce::MidiBuffer &midi, int sampleIndex);
-    
+    void introToneOnOff (juce::MidiBuffer &midi, juce::MidiMessage (*function)(int, int, juce::uint8), int sampleIndex);
     //==============================================================================
     // Funtions for ammendinding timings for each player in this ensemble. These
     // should only be called from within processMidiBlock().

@@ -14,6 +14,8 @@ EnsembleModel::EnsembleModel()
     // OSC Listener addresses
     addListener(this, "/loadConfig");
     addListener(this, "/reset");
+    addListener(this, "/setLogname");
+    addListener(this, "/numIntroTones");
 }
 
 //==============================================================================
@@ -26,6 +28,8 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
     // OSC Listener addresses
     addListener(this, "/loadConfig");
     addListener(this, "/reset");
+    addListener(this, "/setLogname");
+    addListener(this, "/numIntroTones");
 }
 
 EnsembleModel::~EnsembleModel()
@@ -40,7 +44,7 @@ void EnsembleModel::setAlphaBetaParams(float valueIn)
     {
         for (int j = 0 ; j < processor->MAX_PLAYERS ; j++)
         {
-            processor->alphaParameter(i, j)->setValueNotifyingHost(valueIn);
+            *processor->alphaParameter(i, j) = valueIn;
         }
     }
 }
@@ -96,6 +100,24 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
     else if (oscAddress == "/reset")
     {
         reset();
+    }
+    else if (oscAddress == "/setLogname")
+    {
+        if (message[0].isString())
+        {
+            auto newLogFilename = message[0].getString();
+            if (!newLogFilename.endsWith(".csv")) {
+                newLogFilename << ".csv";
+            }
+            logFilenameOverride = newLogFilename;
+        }
+    }
+    else if (oscAddress == "/numIntroTones")
+    {
+        if (message[0].isInt32())
+        {
+            numIntroTones = message[0].getInt32();
+        }
     }
     sendActionMessage("OSC Received");
 }
@@ -276,11 +298,13 @@ void EnsembleModel::playIntroTones (juce::MidiBuffer &midi, int sampleIndex)
 {
     if (introCounter == 0)
     {
-        introToneOn (midi, sampleIndex);
+//        introToneOn (midi, sampleIndex);
+        introToneOnOff (midi, &juce::MidiMessage::noteOn, sampleIndex);
     }
     else if (introCounter == samplesPerBeat / 4)
     {
-        introToneOff (midi, sampleIndex);
+//        introToneOff (midi, sampleIndex);
+        introToneOnOff (midi, &juce::MidiMessage::noteOff, sampleIndex);
     }
     else if (introCounter >= samplesPerBeat - 1)
     {
@@ -291,15 +315,41 @@ void EnsembleModel::playIntroTones (juce::MidiBuffer &midi, int sampleIndex)
     ++introCounter;
 }
 
+void EnsembleModel::introToneOnOff (juce::MidiBuffer &midi, juce::MidiMessage (*function)(int, int, juce::uint8), int sampleIndex)
+{
+    if (introTonesPlayed % 4 == 0)
+    {
+        midi.addEvent (function(introToneChannel, introToneNoteFirst, introToneVel), sampleIndex);
+    }
+    else
+    {
+        midi.addEvent (function (introToneChannel, introToneNoteOther, introToneVel), sampleIndex);
+    }
+}
+
+
 void EnsembleModel::introToneOn (juce::MidiBuffer &midi, int sampleIndex)
 {
-    midi.addEvent (juce::MidiMessage::noteOn (1, introToneNote, introToneVel), sampleIndex);
+    if (introTonesPlayed % 4 == 0)
+    {
+        midi.addEvent (juce::MidiMessage::noteOn (1, introToneNoteFirst, introToneVel), sampleIndex);
+    }
+    else
+    {
+        midi.addEvent (juce::MidiMessage::noteOn (1, introToneNoteOther, introToneVel), sampleIndex);
+    }
 }
 
 void EnsembleModel::introToneOff (juce::MidiBuffer &midi, int sampleIndex)
 {
-    midi.addEvent (juce::MidiMessage::noteOff (1, introToneNote, introToneVel), sampleIndex);
-}
+    if (introTonesPlayed % 4 == 0)
+    {
+        midi.addEvent (juce::MidiMessage::noteOff (1, introToneNoteFirst, introToneVel), sampleIndex);
+    }
+    else
+    {
+        midi.addEvent (juce::MidiMessage::noteOff (1, introToneNoteOther, introToneVel), sampleIndex);
+    }}
 
 //==============================================================================
 void EnsembleModel::setTempo (double bpm)
@@ -447,7 +497,6 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
 
 //        data.betas [i] = *(*betaParams) [playerIndex][i];
         data.betas [i] = processor->betaParameter(playerIndex , i)->get();
-
     }
     
     data.tkNoiseStd = players [playerIndex]->getTimeKeeperNoiseStd();
@@ -638,6 +687,12 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         }
     }
 
+    // "LogSubfolder": Check if new config specifies a new subfolder to save logs to
+    if (loadedConfig->hasAttribute("numIntroTones"))
+    {
+        numIntroTones = loadedConfig->getIntAttribute("numIntroTones", 7);;
+    }
+    
     // "ConfigSubfolder": Check if new config specifies new subfolder to look for config and midi files
     if (loadedConfig->hasAttribute("ConfigSubfolder")) 
     {
@@ -723,14 +778,14 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
                 if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
 //                    *alphaParamsOld[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
 //                    *(*alphaParams)[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
-                    processor->alphaParameter(i,j)->setValueNotifyingHost(xmlAlphas->getDoubleAttribute(xmlAlphaEntryName));
+                    *processor->alphaParameter(i,j) = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
                 }
             }
             if (xmlBetas != nullptr) {
                 if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
 //                    *betaParamsOld[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
 //                    *(*betaParams)[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
-                    processor->betaParameter(i,j)->setValueNotifyingHost(xmlBetas->getDoubleAttribute(xmlBetaEntryName));
+                    *processor->betaParameter(i,j) = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
 
                 }
             }
@@ -754,15 +809,14 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         if (xmlTkNoise != nullptr) {
             if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
 //                players[i]->tkNoiseStdParam = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
-                processor->tkNoiseStdParameter(i)->setValueNotifyingHost(xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName));
+                *processor->tkNoiseStdParameter(i) = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
 
             }
         }
         if (xmlMNoise != nullptr) {
             if (xmlMNoise->hasAttribute(xmlMNoiseEntryName)) {
 //                players[i]->mNoiseStdParam = xmlMNoise->getDoubleAttribute(xmlMNoiseEntryName);
-                processor->mNoiseStdParameter(i)->setValueNotifyingHost(xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName));
-
+                *processor->mNoiseStdParameter(i) = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
             }
         }
     }

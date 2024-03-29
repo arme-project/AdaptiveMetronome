@@ -116,4 +116,6 @@ private:
     std::normal_distribution <double> mNoiseDistribution, tkNoiseDistribution;
     
     double currentMotorNoise = 0.0, previousMotorNoise = 0.0, currentTimeKeeperNoise = 0.0, timeKeeperMean = 0.0;
+protected:
+    bool noteTriggeredByUser = false;
 };

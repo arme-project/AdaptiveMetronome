@@ -14,7 +14,7 @@ Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel
     scoreCounter (scoreCounter),
     onsetInterval (initialInterval)
 {
-    processor->channelParameter(playerIndex)->setValueNotifyingHost(playerIndex);
+    *processor->channelParameter(playerIndex) = (playerIndex + 1);
     initialiseScore (seq);
 }
 
@@ -273,9 +273,11 @@ void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesD
     juce::uint8 velocity = note.velocity * processor->volumeParameter(playerIndex)->get();
     int channelParam = processor->channelParameter(playerIndex)->get();
     
-    midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, velocity),
-                   sampleIndex);
-                   
+    if (!isUserOperated() || noteTriggeredByUser)
+    {
+        midi.addEvent (juce::MidiMessage::noteOn (channelParam, note.noteNumber, velocity),
+                       sampleIndex);
+    }
     latestVolume = velocity / 127.0;
             
     // Ignoring delay this onset should have happened samplesDelay samples ago.

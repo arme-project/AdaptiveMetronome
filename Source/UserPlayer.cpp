@@ -80,33 +80,60 @@ bool UserPlayer::wasLatestOnsetUserInput()
 //==============================================================================
 void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
+    // If first sample in score ... play the first note automatically
+     if (scoreCounter == 0)
+     {
+         noteTriggeredByUser = true;
+         playNextNote (outMidi, sampleIndex);
+         return;
+     }
+    
     // Loop over all MIDI events at this sample position
     for (auto it = inMidi.findNextSamplePosition (sampleIndex); it != inMidi.end(); ++it)
     {
+        // Filters ... ignore if following conditions are true ....
+        
+        // Ignore if score has not progressed half an interval length
+        if (scoreCounter <= (onsetInterval / 2))
+        {
+           break;
+        }
+        
+        // Ignore If previous note has not yet been processed
+        if (notePlayed) {
+            break;
+        }
+        
+        // Ignore If time since last onset is less than 50% of onset interval
+        if (samplesSinceLastOnset < onsetInterval/2) {
+            break;
+        }
+        
         // Stop early if there are MIDI events after this time.
         if ((*it).samplePosition != sampleIndex)
         {
             break;
         }
         
+        // If filters have passed ... continue here
         auto event = (*it).getMessage();
         
         // Play the next note at the first note on in this beat period
-        if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2))
+        if (event.isNoteOn() && !notePlayed)
         {
             // Check if incomming note is on the midi channel associated with this player (channelParam)
             int channelParam = processor->channelParameter(playerIndex)->get();
             if (event.getChannel() == channelParam) {
-                playNextNote (outMidi, sampleIndex);
                 noteTriggeredByUser = true;
+                playNextNote (outMidi, sampleIndex);
             }
         }
-    }
+    } // Finish sample loop
     
-    // If no user input trigger a note automatically
-    if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || scoreCounter == 0))
+    // If no user input trigger a note automatically if no note has been played for 70% of interval time
+    if (!notePlayed && (samplesSinceLastOnset >= (onsetInterval * 1.7)))
     {
-        playNextNote (outMidi, sampleIndex);
         noteTriggeredByUser = false;
+        playNextNote (outMidi, sampleIndex);
     }
 }

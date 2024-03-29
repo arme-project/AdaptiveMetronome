@@ -8,7 +8,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
       userPlayersLabel (juce::String(), "No. User Players:"),
-      versionLabel(juce::String(), "(v1.0.3.22)"),
+      versionLabel(juce::String(), "(v1.0.3.232)"),
       resetButton ("Reset"),
       loadMidiButton ("Load MIDI"), // TODO: Rename this to reflect additional .xml config functionality? 
       oscOn("")
@@ -24,7 +24,6 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     versionLabel.setFont(instructionStripHeight - padding * 6);
     
     addAndMakeVisible(oscOn);
-    //oscOn.setToggleable(false);
     oscOn.setClickingTogglesState(false);
     oscOn.setAlpha(0.5);
 
@@ -103,6 +102,9 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
         oscOn.setToggleState(false, juce::dontSendNotification);
         oscOn.setTooltip("OSC not connected");
     }
+    
+    versionLabel.setTooltip(processor.ensemble.logFilenameOverride);
+    
 }
 
 //==============================================================================
