@@ -775,6 +775,7 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 }
 
 // Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
+// Note: This currently only saves alpha and beta parameters. 
 void EnsembleModel::saveConfigToXmlFile()
 {
     #ifdef JUCE_WINDOWS
@@ -787,8 +788,8 @@ void EnsembleModel::saveConfigToXmlFile()
     {
         for (int j = 0; j < players.size(); ++j)
         {
-            float alpha = *alphaParams[i][j];
-            float beta = *betaParams[i][j];
+            float alpha = getAlphaParameter(i, j);
+            float beta = getBetaParameter(i, j);
 
             juce::String xmlAlphaEntryName;
             juce::String xmlBetaEntryName;
