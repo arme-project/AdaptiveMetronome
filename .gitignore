@@ -4,3 +4,8 @@ JuceLibraryCode
 *.pdb
 *.ipch
 *.db
+Audio/HaydnAllNotes_x_47.mid
+Audio/HaydnAllNotes_x_48.mid
+Audio/HaydnFirstNoteRepeated_x_47.mid
+Audio/HaydnFirstNoteRepeated_x_48.mid
+Reaper/Test.filtergraph

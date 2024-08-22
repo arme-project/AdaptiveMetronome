@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<EnsembleModelConfig MidiFilename="haydn2.mid" numUserPlayers="3" sampleRate="48000.0" numPlayers="4">
+  <Alphas Alpha_0_0="0.4" Alpha_0_1="0.0" Alpha_0_2="0.0" Alpha_0_3="0.0"
+          Alpha_1_0="0.4" Alpha_1_1="0.0" Alpha_1_2="0.0" Alpha_1_3="0.0"
+          Alpha_2_0="0.4" Alpha_2_1="0.0" Alpha_2_2="0.0" Alpha_2_3="0.0"
+          Alpha_3_0="0.4" Alpha_3_1="0.0" Alpha_3_2="0.0" Alpha_3_3="0.0"/>
+  <Betas Beta_0_0="0.25" Beta_0_1="0.0" Beta_0_2="0.0" Beta_0_3="0.0"
+         Beta_1_0="0.25" Beta_1_1="0.0" Beta_1_2="0.0" Beta_1_3="0.0"
+         Beta_2_0="0.25" Beta_2_1="0.0" Beta_2_2="0.0" Beta_2_3="0.0"
+         Beta_3_0="0.25" Beta_3_1="0.0" Beta_3_2="0.0" Beta_3_3="0.0"/>
+</EnsembleModelConfig>
