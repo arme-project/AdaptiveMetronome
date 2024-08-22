@@ -8,9 +8,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
       userPlayersLabel (juce::String(), "No. User Players:"),
-      versionLabel(juce::String(), "(v1.0.3.232)"),
+      versionLabel(juce::String(), "(v1.0.3)"),
       resetButton ("Reset"),
-      loadMidiButton ("Load MIDI"), // TODO: Rename this to reflect additional .xml config functionality? 
+      loadMidiButton ("Load File"), // TODO: Rename this to reflect additional .xml config functionality?
       oscOn("")
 {
         
@@ -21,7 +21,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
 
     addAndMakeVisible(versionLabel);
     versionLabel.setJustificationType(juce::Justification::right);
-    versionLabel.setFont(instructionStripHeight - padding * 6);
+    versionLabel.setFont(instructionStripHeight - padding * 4);
     
     addAndMakeVisible(oscOn);
     oscOn.setClickingTogglesState(false);
@@ -169,8 +169,7 @@ void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::S
     }
     else if (message == "OSC Received")
     {
-        //oscOn.setAlpha(1);
-        //callAfterDelay(timerInterval, [&] {reduceAlpha(); });
+        // Can be used for additional functionality when an OSC message has been received
     }
 }
 

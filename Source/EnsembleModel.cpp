@@ -6,19 +6,6 @@
 using namespace std::chrono_literals;
 
 //==============================================================================
-EnsembleModel::EnsembleModel()
-{
-    playersInUse.clear();
-    resetFlag.clear();
-
-    // OSC Listener addresses
-    addListener(this, "/loadConfig");
-    addListener(this, "/reset");
-    addListener(this, "/setLogname");
-    addListener(this, "/numIntroTones");
-}
-
-//==============================================================================
 EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 : processor(processorPtr)
 {
@@ -70,7 +57,6 @@ void EnsembleModel::connectOSCReceiver(int portNumber)
     }
     else
     {
-        
         sendActionMessage("OSC Received");
         currentReceivePort = portNumber;
         DBG("Connection succeeded");
@@ -140,9 +126,6 @@ bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
         return false; // put some error handling here
         
     int fileType = 0;
-    
-    // "midiFile" declared as private variable in EnsembleModel.h
-    //juce::MidiFile midiFile;
 
     if (!midiFile.readFrom (inStream, true, &fileType))
         return false; // more error handling
@@ -184,6 +167,7 @@ void EnsembleModel::releaseResources()
 }
 
 //==============================================================================
+// Main method for processing incoming midi stream
 void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int numSamples, double tempo)
 {
     FlagLock lock (playersInUse);
@@ -211,6 +195,7 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
         if (introTonesPlayed < numIntroTones)
         {
             playIntroTones (outMidi, i);
+            playUserIntro (inMidi, outMidi, i);
             continue;
         }
         
@@ -236,48 +221,41 @@ bool EnsembleModel::isPlayerUserOperated (int playerIndex)
 
 juce::AudioParameterInt& EnsembleModel::getPlayerChannelParameter (int playerIndex)
 {
-//    return players [playerIndex]->channelParam;
     return *processor->channelParameter(playerIndex);
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerDelayParameter (int playerIndex)
 {
-//    return players [playerIndex]->delayParam;
     return *processor->delayParameter(playerIndex);
 
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
 {
-//    return players [playerIndex]->mNoiseStdParam;
     return *processor->mNoiseStdParameter(playerIndex);
 
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerTimeKeeperNoiseParameter (int playerIndex)
 {
-//    return players [playerIndex]->tkNoiseStdParam;
     return *processor->tkNoiseStdParameter(playerIndex);
 
 }
 
 juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIndex)
 {
-//    return players [playerIndex]->volumeParam;
     return *processor->volumeParameter(playerIndex);
 
 }
 
 juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
 {
-//    return *(*alphaParams)[player1Index][player2Index];
     return *processor->alphaParameter(player1Index, player2Index);
 
 }
 
 juce::AudioParameterFloat& EnsembleModel::getBetaParameter (int player1Index, int player2Index)
 {
-//    return *(*betaParams)[player1Index][player2Index];
     return *processor->betaParameter(player1Index, player2Index);
 
 }
@@ -296,15 +274,14 @@ void EnsembleModel::soundOffAllChannels (juce::MidiBuffer &midi)
 //==============================================================================
 void EnsembleModel::playIntroTones (juce::MidiBuffer &midi, int sampleIndex)
 {
+    
     if (introCounter == 0)
     {
-//        introToneOn (midi, sampleIndex);
-        introToneOnOff (midi, &juce::MidiMessage::noteOn, sampleIndex);
+        introToneOn (midi, sampleIndex);
     }
     else if (introCounter == samplesPerBeat / 4)
     {
-//        introToneOff (midi, sampleIndex);
-        introToneOnOff (midi, &juce::MidiMessage::noteOff, sampleIndex);
+        introToneOff (midi, sampleIndex);
     }
     else if (introCounter >= samplesPerBeat - 1)
     {
@@ -315,28 +292,16 @@ void EnsembleModel::playIntroTones (juce::MidiBuffer &midi, int sampleIndex)
     ++introCounter;
 }
 
-void EnsembleModel::introToneOnOff (juce::MidiBuffer &midi, juce::MidiMessage (*function)(int, int, juce::uint8), int sampleIndex)
-{
-    if (introTonesPlayed % 4 == 0)
-    {
-        midi.addEvent (function(introToneChannel, introToneNoteFirst, introToneVel), sampleIndex);
-    }
-    else
-    {
-        midi.addEvent (function (introToneChannel, introToneNoteOther, introToneVel), sampleIndex);
-    }
-}
-
 
 void EnsembleModel::introToneOn (juce::MidiBuffer &midi, int sampleIndex)
 {
     if (introTonesPlayed % 4 == 0)
     {
-        midi.addEvent (juce::MidiMessage::noteOn (1, introToneNoteFirst, introToneVel), sampleIndex);
+        midi.addEvent (juce::MidiMessage::noteOn (introToneChannel, introToneNoteFirst, introToneVel), sampleIndex);
     }
     else
     {
-        midi.addEvent (juce::MidiMessage::noteOn (1, introToneNoteOther, introToneVel), sampleIndex);
+        midi.addEvent (juce::MidiMessage::noteOn (introToneChannel, introToneNoteOther, introToneVel), sampleIndex);
     }
 }
 
@@ -344,11 +309,11 @@ void EnsembleModel::introToneOff (juce::MidiBuffer &midi, int sampleIndex)
 {
     if (introTonesPlayed % 4 == 0)
     {
-        midi.addEvent (juce::MidiMessage::noteOff (1, introToneNoteFirst, introToneVel), sampleIndex);
+        midi.addEvent (juce::MidiMessage::noteOff (introToneChannel, introToneNoteFirst, introToneVel), sampleIndex);
     }
     else
     {
-        midi.addEvent (juce::MidiMessage::noteOff (1, introToneNoteOther, introToneVel), sampleIndex);
+        midi.addEvent (juce::MidiMessage::noteOff (introToneChannel, introToneNoteOther, introToneVel), sampleIndex);
     }}
 
 //==============================================================================
@@ -392,6 +357,7 @@ bool EnsembleModel::newOnsetsAvailable()
     
     return available;
 }
+
 
 void EnsembleModel::calculateNewIntervals()
 {
@@ -564,47 +530,34 @@ void EnsembleModel::createPlayers (const juce::MidiFile &file)
     createAlphaBetaParameters(); // create matrix of parameters for alphas
 }
 
+// Initialise matrix of alpha and beta parameters
 void EnsembleModel::createAlphaBetaParameters()
 {
-//    alphaParamsOld.clear();
-//    betaParamsOld.clear();
-
     for (int i = 0; i < players.size(); ++i)
     {
-        
-        // Old alphaParams
-//        std::vector <std::unique_ptr <juce::AudioParameterFloat> > aRow, bRow;
-
         double alpha = 0.25;
         double beta = 0.1;
 
         for (int j = 0; j < players.size(); ++j)
         {
-//            aRow.push_back(std::make_unique <juce::AudioParameterFloat>("alpha-" + juce::String(i) + "-" + juce::String(j),
-//                "Alpha " + juce::String(i) + "-" + juce::String(j),
-//                0.0, 1.0, alpha));
-//
-//            bRow.push_back(std::make_unique <juce::AudioParameterFloat>("beta-" + juce::String(i) + "-" + juce::String(j),
-//                "Beta " + juce::String(i) + "-" + juce::String(j),
-//                0.0, 1.0, beta));
-
-
-//            alpha = 0.0;
-//            beta = 0.0;
-            
-            // New alphaParams
-//            *(*alphaParams)[i][j] = alpha;
             *processor->alphaParameter(i, j) = alpha;
             *processor->betaParameter(i, j) = beta;
-
-            
         }
-
-//        alphaParamsOld.push_back(std::move(aRow));
-//        betaParamsOld.push_back(std::move(bRow));
     }
 }
 
+void EnsembleModel::playUserIntro(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
+{
+    for (auto& player : players)
+    {
+        if (player->isUserOperated())
+        {
+            player->processIntroSample(inMidi, outMidi, sampleIndex, introToneNoteOther);
+        }
+    }
+}
+
+// Called from EnsembleModel::processMidiBlock
 void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
 {
     for (auto& player : players)
@@ -626,7 +579,7 @@ void EnsembleModel::resetPlayers()
 {
     //==========================================================================
     // Initialise intro countdown
-    introCounter = -sampleRate / 2;
+    introCounter = 0; //-sampleRate / 2;
     introTonesPlayed = 0;
 
     // Initialise score counter
@@ -668,7 +621,7 @@ void EnsembleModel::loadConfigFromXml(juce::File configFile) {
 }
 
 
-// Main xml config loading method
+// Main method to load an XML config file
 void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig)
 {
     if (loadedConfig == nullptr) { return; }
@@ -776,15 +729,11 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
             // If corresponding entries are not found in xml, do not change value
             if (xmlAlphas != nullptr) {
                 if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
-//                    *alphaParamsOld[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
-//                    *(*alphaParams)[i][j] = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
                     *processor->alphaParameter(i,j) = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
                 }
             }
             if (xmlBetas != nullptr) {
                 if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
-//                    *betaParamsOld[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
-//                    *(*betaParams)[i][j] = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
                     *processor->betaParameter(i,j) = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
 
                 }
@@ -793,7 +742,6 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
     }
 
     // "Motor" and "Timekeeper" noise:
-
     auto xmlTkNoise = loadedConfig->getChildByName("tkNoise");
     auto xmlMNoise = loadedConfig->getChildByName("mNoise");
 
@@ -808,31 +756,16 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
         // If corresponding entries are not found in xml, do not change value
         if (xmlTkNoise != nullptr) {
             if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
-//                players[i]->tkNoiseStdParam = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
                 *processor->tkNoiseStdParameter(i) = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
 
             }
         }
         if (xmlMNoise != nullptr) {
             if (xmlMNoise->hasAttribute(xmlMNoiseEntryName)) {
-//                players[i]->mNoiseStdParam = xmlMNoise->getDoubleAttribute(xmlMNoiseEntryName);
-                *processor->mNoiseStdParameter(i) = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
+                *processor->mNoiseStdParameter(i) = xmlMNoise->getDoubleAttribute(xmlTkNoiseEntryName);
             }
         }
     }
-
-
-    // TODO Check if this now works since implementing sendChangeMessage();
-    //// Check if config requests another config to be loaded
-    //auto anotherConfig = loadedConfig->getStringAttribute("LoadConfig", "");
-    //if (anotherConfig != "")
-    //{
-    //    auto anotherConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(anotherConfig);
-    //    if (anotherConfigFile.existsAsFile())
-    //    {
-    //        loadConfigFromXml(anotherConfigFile);
-    //    }
-    //}
 
     sendActionMessage("Ensemble Reset");
 
@@ -874,6 +807,7 @@ void EnsembleModel::saveConfigToXmlFile()
 }
 
 //==============================================================================
+// Logging functionality
 void EnsembleModel::initialiseLoggingBuffer()
 {
     int bufferSize = 0;

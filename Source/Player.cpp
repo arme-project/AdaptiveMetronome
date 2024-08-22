@@ -68,31 +68,9 @@ int Player::getPlayedOnsetInterval()
     return currentOnsetTime - previousOnsetTime;
 }
 
-void Player::recalculateOnsetInterval (int samplesPerBeat,
-                                       const std::vector <std::unique_ptr <Player> > &players,
-                                       const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
-                                       const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas)
-{   
-    double alphaSum = 0;
-    double betaSum = 0;
-        
-    for (int i = 0; i < players.size(); ++i)
-    {
-        double async = currentOnsetTime - players [i]->getLatestOnsetTime();
-        alphaSum += *alphas[i] * async;
-        betaSum += *betas[i] * async;
-    }
-    
-    // update time keeper mean
-    timeKeeperMean -= betaSum / sampleRate;
-        
-    // generate noises for this onset
-    double hNoise = generateHNoise() * sampleRate;
 
-    // calcualte next onset interval
-    onsetInterval = samplesPerBeat - alphaSum + hNoise;
-}
-
+// primary method to recalculate the next interval, based on alpha/beta parameters, and other player onsets
+// called from EnsembleModel::playScore => EnsembleModel::calculateNewIntervals, when all onsets for previous note have been registered
 void Player::recalculateOnsetInterval (int samplesPerBeat,
                                        const std::vector <std::unique_ptr <Player> > &players)
 {
@@ -122,7 +100,6 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
 double Player::generateMotorNoise()
 {
     previousMotorNoise = currentMotorNoise;
-    //    mNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, mNoiseStdParam.get() / 1000.0));
     float mNoiseStdParam = processor->mNoiseStdParameter(playerIndex)->get();
     mNoiseDistribution.param (std::normal_distribution <double>::param_type(0.0, mNoiseStdParam / 1000.0));
 
@@ -264,6 +241,8 @@ void Player::initialiseScore (const juce::MidiMessageSequence *seq)
     reset();
 }
 
+// Adds midi note to midioutput stream
+// Called from processSample -> processNoteOn -> playNextNote
 void Player::playNextNote (juce::MidiBuffer &midi, int sampleIndex, int samplesDelay)
 {
     stopPreviousNote (midi, sampleIndex);
@@ -309,6 +288,8 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
                    sampleIndex);
 }
 
+// Checks if new note should be played on this sample
+// processSample -> processNoteOn -> playNextNote
 void Player::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
     auto delayParam = processor->delayParameter(playerIndex)->get();

@@ -84,15 +84,11 @@ private:
     double sampleRate = 44100.0;
     int samplesPerBeat = sampleRate / 4;
     int scoreCounter = 0;
-//    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > alphaParamsOld;
-//    std::vector <std::vector <std::unique_ptr <juce::AudioParameterFloat> > > betaParamsOld;
-//    std::vector < std::vector < juce::AudioParameterFloat* > > *alphaParams;
-//    std::vector < std::vector < juce::AudioParameterFloat* > > *betaParams;
     
     //==============================================================================
     // Intro countdown
     const int introToneChannel = 16;
-    int numIntroTones = 7;
+    int numIntroTones = 4;
     static const int introToneNoteFirst = 84;
     static const int introToneNoteOther = 72;
     static const juce::uint8 introToneVel = 100;
@@ -138,7 +134,7 @@ private:
     void createAlphaBetaParameters();
     
     void playScore (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
-    
+    void playUserIntro(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex);
     std::atomic_flag resetFlag;
     void resetPlayers();
     

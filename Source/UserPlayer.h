@@ -16,16 +16,13 @@ public:
     
     //==============================================================================
     void recalculateOnsetInterval (int samplesPerBeat,
-                                   const std::vector <std::unique_ptr <Player> > &players,
-                                   const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
-                                   const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas) override;
-                                   
-    void recalculateOnsetInterval (int samplesPerBeat,
                                    const std::vector <std::unique_ptr <Player> > &players) override;
     
     //==============================================================================
     bool wasLatestOnsetUserInput() override;
-                                           
+                  
+    void processIntroSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex, int introNote) override;
+
 protected:
     //==============================================================================
     // bool noteTriggeredByUser = false;
@@ -33,5 +30,7 @@ protected:
     //==============================================================================
     void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex) override;
 
+    int introToneLength = 100;
+    int samplesToIntroToneOff = -1;
 private:
 };

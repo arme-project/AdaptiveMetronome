@@ -24,16 +24,6 @@ bool UserPlayer::isUserOperated()
     return true;
 }
 
-//==============================================================================
-// This will be removed in the future
-void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
-                                           const std::vector <std::unique_ptr <Player> > &players,
-                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
-                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas)
-{
-    Player::recalculateOnsetInterval(samplesPerBeat, players);
-}
-
 // New function signature
 void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players)
@@ -76,6 +66,39 @@ bool UserPlayer::wasLatestOnsetUserInput()
 {
     return noteTriggeredByUser;
 }
+
+
+void UserPlayer::processIntroSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex, int introNote)
+{
+    int channelParam = processor->channelParameter(playerIndex)->get();
+    juce::uint8 velocity = 100;
+
+    if (samplesToIntroToneOff == 0)
+    {
+        outMidi.addEvent (juce::MidiMessage::noteOff (channelParam, introNote, velocity),
+                       sampleIndex);
+    }
+    
+    // Loop through samples and check for a noteOn event
+    for (auto it = inMidi.findNextSamplePosition (sampleIndex); it != inMidi.end(); ++it)
+    {
+        auto event = (*it).getMessage();
+        
+        // Play the next note at the first note on in this beat period
+        if (event.isNoteOn())
+        {
+            // Check if incomming note is on the midi channel associated with this player (channelParam)
+            if (event.getChannel() == channelParam) {
+                
+                outMidi.addEvent (juce::MidiMessage::noteOn (channelParam, introNote, velocity),
+                                   sampleIndex);
+                samplesToIntroToneOff = introToneLength;
+            }
+        }
+    } // Finish sample loop
+    samplesToIntroToneOff--;
+}
+
 
 //==============================================================================
 void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
@@ -130,8 +153,8 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         }
     } // Finish sample loop
     
-    // If no user input trigger a note automatically if no note has been played for 70% of interval time
-    if (!notePlayed && (samplesSinceLastOnset >= (onsetInterval * 1.7)))
+    // If no user input trigger a note automatically if no note has been played for 50% of interval time
+    if (!notePlayed && (samplesSinceLastOnset >= (onsetInterval * 1.5)))
     {
         noteTriggeredByUser = false;
         playNextNote (outMidi, sampleIndex);

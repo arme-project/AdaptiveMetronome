@@ -35,11 +35,6 @@ public:
     int getPlayedOnsetInterval();
       
     virtual void recalculateOnsetInterval (int samplesPerBeat,
-                                           const std::vector <std::unique_ptr <Player> > &players,
-                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
-                                           const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas);
-    
-    virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players);
     
     //==============================================================================
@@ -64,6 +59,7 @@ public:
     
     //==============================================================================
     void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
+    virtual void processIntroSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex, int introNote) {};
 
     //==============================================================================
     // Parameters - Moved to processor
@@ -95,7 +91,6 @@ protected:
     void stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex);
     
     virtual void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
-    
     //==============================================================================
     // Timing information
     const double &sampleRate;
