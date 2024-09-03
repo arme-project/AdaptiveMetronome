@@ -2,13 +2,23 @@
 
 <JUCERPROJECT id="Y9CQrD" name="AdaptiveMetronome" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1"
-              pluginAUMainType="'aumi'" pluginManufacturerCode="ARME" pluginFormats="buildAU,buildVST3"
+              pluginAUMainType="'aumi'" pluginManufacturerCode="ARME" pluginFormats="buildStandalone"
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://arme-project.co.uk/" pluginManufacturer="ARME"
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
               displaySplashScreen="1">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <FILE id="JAJnPw" name="TimingModelParameter.cpp" compile="1" resource="0"
+            file="Source/TimingModelParameter.cpp"/>
+      <FILE id="QbBilG" name="TimingModelParameter.h" compile="0" resource="0"
+            file="Source/TimingModelParameter.h"/>
+      <FILE id="JfaDVF" name="TimingModelParametersGroup.cpp" compile="1"
+            resource="0" file="Source/TimingModelParametersGroup.cpp"/>
+      <FILE id="mGX35C" name="TimingModelParametersGroup.h" compile="0" resource="0"
+            file="Source/TimingModelParametersGroup.h"/>
+      <FILE id="GkCJrf" name="TimingModel.cpp" compile="1" resource="0" file="Source/TimingModel.cpp"/>
+      <FILE id="e44Df8" name="TimingModel.h" compile="0" resource="0" file="Source/TimingModel.h"/>
       <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
       <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
       <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"

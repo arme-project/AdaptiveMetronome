@@ -1,16 +1,19 @@
 #pragma once
 #include <JuceHeader.h>
 #include "EnsembleModel.h"
+#include "TimingModelParametersGroup.h"
 
 class AdaptiveMetronomeAudioProcessor : public juce::AudioProcessor
 {
 public:
     //==============================================================================
     AdaptiveMetronomeAudioProcessor();
+    void TestFloatParameters();
     ~AdaptiveMetronomeAudioProcessor() override;
 
     EnsembleModel ensemble;
-    
+    ARMETimingModel::StdModelParameters stdModelParams;
+
     // Parameters stored in APVTS
     juce::AudioProcessorValueTreeState apvts;
 
