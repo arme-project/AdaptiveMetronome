@@ -8,7 +8,12 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
       processor (p),
       instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
       userPlayersLabel (juce::String(), "No. User Players:"),
-      versionLabel(juce::String(), "(v1.0.3)"),
+#ifdef _DEBUG 
+      versionLabel(juce::String(), "DEBUG"),
+#else
+      versionLabel(juce::String(), "REL"),
+#endif
+      midiNoteReceivedLabel(juce::String(), "Initialised"),
       resetButton ("Reset"),
       loadMidiButton ("Load File"), // TODO: Rename this to reflect additional .xml config functionality?
       oscOn("")
@@ -33,6 +38,8 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     userPlayersLabel.setFont (optionsStripHeight - padding * 5);
     
     addAndMakeVisible (userPlayersSelector);
+
+    addAndMakeVisible(midiNoteReceivedLabel);
     
     for (int s = 0; s <= 4; ++s)
     {
@@ -153,7 +160,10 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     auto userPlayersBounds = optionsStripBounds.removeFromRight (100);
     userPlayersSelector.setBounds (userPlayersBounds.reduced (padding));
     
-    userPlayersLabel.setBounds (optionsStripBounds);
+    auto userPlayersLabelBounds = optionsStripBounds.removeFromRight(100);
+    userPlayersLabel.setBounds (userPlayersLabelBounds);
+
+    midiNoteReceivedLabel.setBounds(optionsStripBounds);
     
     //==========================================================================
     // Ensemble Parameters Area
@@ -171,6 +181,12 @@ void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::S
     {
         // Can be used for additional functionality when an OSC message has been received
     }
+    else {
+        midiNoteReceivedLabel.setText(message, juce::NotificationType::dontSendNotification);
+    }
+
+
+
 }
 
 //==============================================================================

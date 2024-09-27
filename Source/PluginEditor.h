@@ -33,7 +33,7 @@ private:
     void CheckForDefaultConfig();
 
     //==============================================================================
-    juce::Label instructionLabel, userPlayersLabel, versionLabel;
+    juce::Label instructionLabel, userPlayersLabel, versionLabel, midiNoteReceivedLabel;
     juce::ComboBox userPlayersSelector;
     juce::TextButton resetButton, loadMidiButton;
     juce::ToggleButton oscOn;

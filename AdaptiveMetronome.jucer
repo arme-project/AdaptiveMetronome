@@ -2,13 +2,73 @@
 
 <JUCERPROJECT id="Y9CQrD" name="AdaptiveMetronome" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1"
-              pluginAUMainType="'aumi'" pluginManufacturerCode="ARME" pluginFormats="buildAU,buildVST3"
-              pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
+              pluginAUMainType="'aumi'" pluginManufacturerCode="ARME" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
               companyWebsite="https://arme-project.co.uk/" pluginManufacturer="ARME"
               bundleIdentifier="com.ARME.AdaptiveMetronome" aaxIdentifier="com.ARME.AdaptiveMetronome"
-              displaySplashScreen="1">
+              displaySplashScreen="1" headerPath="&quot;C:\Program Files\MATLAB\R2023a\extern\include&quot;;&#10;&quot;C:\Program Files\MATLAB\R2023a\extern\bin\win64&quot;;&#10;C:\Users\genia\Work\AdaptiveMetronome\Source\codegen\lib\getAlphas"
+              pluginFormats="buildVST3">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <GROUP id="{15E649CB-38F2-07A3-CAB9-FB788B8AFB4E}" name="codegen">
+        <GROUP id="{B9F78596-9CC7-387F-63EB-1B81F79B1F95}" name="lib">
+          <GROUP id="{0FFCC7F5-9B2E-CD31-B88E-25651EF1FE53}" name="getAlphas">
+            <FILE id="AUXQQF" name="_clang-format" compile="0" resource="1" file="Source/codegen/lib/getAlphas/_clang-format"/>
+            <FILE id="tfzgmr" name="buildInfo.mat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/buildInfo.mat"/>
+            <FILE id="JCUIgr" name="codedescriptor.dmr" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/codedescriptor.dmr"/>
+            <FILE id="uFawZ2" name="codeInfo.mat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/codeInfo.mat"/>
+            <FILE id="KoGAfT" name="coder_bounded_array.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/coder_bounded_array.h"/>
+            <FILE id="RcIwoe" name="compileInfo.mat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/compileInfo.mat"/>
+            <FILE id="Iw5WrR" name="eml_setop.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/eml_setop.cpp"/>
+            <FILE id="XlIMPX" name="eml_setop.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/eml_setop.h"/>
+            <FILE id="rB1A7o" name="gcGuiReport.mat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/gcGuiReport.mat"/>
+            <FILE id="H1MxEz" name="getAlphas.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/getAlphas.cpp"/>
+            <FILE id="PTTuNP" name="getAlphas.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/getAlphas.h"/>
+            <FILE id="v4lsKw" name="getAlphas_data.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_data.h"/>
+            <FILE id="XnXhwg" name="getAlphas_initialize.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_initialize.cpp"/>
+            <FILE id="IqgKVs" name="getAlphas_initialize.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_initialize.h"/>
+            <FILE id="ldvXXT" name="getAlphas_manifest.txt" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/getAlphas_manifest.txt"/>
+            <FILE id="sUiTBN" name="getAlphas_rtw.bat" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/getAlphas_rtw.bat"/>
+            <FILE id="M4nBvV" name="getAlphas_rtw.mk" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/getAlphas_rtw.mk"/>
+            <FILE id="eT8ejO" name="getAlphas_rtw.rsp" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/getAlphas_rtw.rsp"/>
+            <FILE id="RKBWKE" name="getAlphas_rtw_comp.rsp" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/getAlphas_rtw_comp.rsp"/>
+            <FILE id="Z7gW2f" name="getAlphas_rtw_ref.rsp" compile="0" resource="1"
+                  file="Source/codegen/lib/getAlphas/getAlphas_rtw_ref.rsp"/>
+            <FILE id="SMMQgu" name="getAlphas_terminate.cpp" compile="1" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_terminate.cpp"/>
+            <FILE id="kine3U" name="getAlphas_terminate.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_terminate.h"/>
+            <FILE id="OFVCn6" name="getAlphas_types.h" compile="0" resource="0"
+                  file="Source/codegen/lib/getAlphas/getAlphas_types.h"/>
+            <FILE id="JznxLc" name="mlEnv.txt" compile="0" resource="1" file="Source/codegen/lib/getAlphas/mlEnv.txt"/>
+            <FILE id="fsd5oA" name="rtw_proj.tmw" compile="0" resource="1" file="Source/codegen/lib/getAlphas/rtw_proj.tmw"/>
+            <FILE id="cHo8C6" name="rtwtypes.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/rtwtypes.h"/>
+            <FILE id="r2TEl7" name="setup_msvc.bat" compile="0" resource="1" file="Source/codegen/lib/getAlphas/setup_msvc.bat"/>
+            <FILE id="uXHrvt" name="xgetrf.cpp" compile="1" resource="0" file="Source/codegen/lib/getAlphas/xgetrf.cpp"/>
+            <FILE id="y7G8qQ" name="xgetrf.h" compile="0" resource="0" file="Source/codegen/lib/getAlphas/xgetrf.h"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{261A485E-52EE-5BAE-3101-8296367C0509}" name="R2023a">
+        <GROUP id="{FED11F79-5E39-D12B-2E80-0870110A146D}" name="extern">
+          <GROUP id="{2791D349-E7E1-1CE6-1B61-5EA97E2050FD}" name="include">
+            <FILE id="k6fA0q" name="tmwtypes.h" compile="0" resource="0" file="Source/R2023a/extern/include/tmwtypes.h"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
+      <FILE id="NoQFo7" name="recalculateAlphas.cpp" compile="1" resource="0"
+            file="Source/recalculateAlphas.cpp"/>
+      <FILE id="bi5VGH" name="recalculateAlphas.h" compile="0" resource="0"
+            file="Source/recalculateAlphas.h"/>
       <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
       <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
       <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"

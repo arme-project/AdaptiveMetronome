@@ -51,6 +51,7 @@ public:
     //==============================================================================
     bool hasNotePlayed();
     void resetNotePlayed();
+    bool finishedPlayingAllNotes = false;
     
     int getLatestOnsetTime();
     int getLatestOnsetDelay();

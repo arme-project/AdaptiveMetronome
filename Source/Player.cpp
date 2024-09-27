@@ -33,6 +33,7 @@ void Player::reset()
 {
     // rewind to start of score
     currentNoteIndex = 0;
+    finishedPlayingAllNotes = false;
     
     // reset note on/off counters
     samplesSinceLastOnset = 0;
@@ -197,6 +198,7 @@ void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &ou
     // Check if we're at the end of the score.
     if (currentNoteIndex >= notes.size())
     {
+        finishedPlayingAllNotes = true;
         return;
     }
     
@@ -284,7 +286,9 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
     auto &note = notes [currentNoteIndex - 1];
     auto channelParam = processor->channelParameter(playerIndex)->get();
     auto volumeParam = processor->volumeParameter(playerIndex)->get();
-    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
+
+    auto noteVelocityFloat = (float)(note.velocity / 127.0);
+    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, noteVelocityFloat * volumeParam),
                    sampleIndex);
 }
 

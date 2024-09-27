@@ -2,7 +2,8 @@
 #include "PluginProcessor.h"
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
-
+#include "recalculateAlphas.h"
+#include <format>
 using namespace std::chrono_literals;
 
 //==============================================================================
@@ -188,6 +189,34 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
         soundOffAllChannels (outMidi);
     }
     
+    // CHECK IF FINISHED AND CALCULATE ALPHAS
+    bool finishedScore = true;
+
+    if (!haveCurrentAlphasBeenCalculated)
+    {
+        for (auto& player : players)
+        {
+            if (!player->finishedPlayingAllNotes)
+            {
+                finishedScore = false;
+
+                break;
+            }
+        }
+
+        if (finishedScore)
+        {
+            calculateAlphas();
+            haveCurrentAlphasBeenCalculated = true;
+        }
+        else
+        {
+            sendActionMessage("Playing ...");
+        }
+    }
+
+    // FINISH ALPHAS
+
     //==============================================================================
     // Process each sample of the buffer for each player.
     for (int i = 0; i < numSamples; ++i)
@@ -200,6 +229,13 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
         }
         
         playScore (inMidi, outMidi, i);
+    }
+
+    // If all players have played a note, update timings.
+    if (newOnsetsAvailable())
+    {
+        calculateNewIntervals();
+        clearOnsetsAvailable();
     }
 }
 
@@ -385,6 +421,11 @@ void EnsembleModel::calculateNewIntervals()
             players [i]->recalculateOnsetInterval (samplesPerBeat, players);
         }
     } 
+
+    p1Onsets.push_back((players[0]->getLatestOnsetTime() / sampleRate));
+    p2Onsets.push_back((players[1]->getLatestOnsetTime() / sampleRate));
+    p3Onsets.push_back((players[2]->getLatestOnsetTime() / sampleRate));
+    p4Onsets.push_back((players[3]->getLatestOnsetTime() / sampleRate));
           
     //==========================================================================
     // Add details of most recent onsets to buffers to be logged.
@@ -565,18 +606,20 @@ void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& 
         player->processSample(inMidi, outMidi, sampleIndex);
     }
 
-    // If all players have played a note, update timings.
-    if (newOnsetsAvailable())
-    {
-        calculateNewIntervals();
-        clearOnsetsAvailable();
-    }
+    //// If all players have played a note, update timings.
+    //if (newOnsetsAvailable())
+    //{
+    //    calculateNewIntervals();
+    //    clearOnsetsAvailable();
+    //}
 
     ++scoreCounter;
 }
 
 void EnsembleModel::resetPlayers()
 {
+    haveCurrentAlphasBeenCalculated = false;
+    
     //==========================================================================
     // Initialise intro countdown
     introCounter = 0; //-sampleRate / 2;
@@ -601,7 +644,52 @@ void EnsembleModel::resetPlayers()
         player->reset();
     }
 
+    sendActionMessage("Players Reset");
+
     resetFlag.clear();
+}
+
+void EnsembleModel::calculateAlphas()
+{
+    bool sendAlphaMessage = false;
+#ifdef RANDOM_ALPHAS
+    alphaE = getAlphasCpp(p1Onsets, p2Onsets, p3Onsets, p4Onsets);
+    sendAlphaMessage = true;
+#else
+    if (p1Onsets.size() >= 46)
+    {
+        alphaE = getAlphasCpp(p1Onsets, p2Onsets, p3Onsets, p4Onsets);
+        sendAlphaMessage = true;
+    }
+#endif
+
+    if (sendAlphaMessage)
+    {
+        std::stringstream ss;
+        juce::String noteIndexString = juce::String("Alphas:    ");
+
+        ss << std::fixed << std::setprecision(2) << alphaE[0][1];
+        noteIndexString += juce::String(ss.str());
+
+        noteIndexString += juce::String("   -   ");
+
+        ss.str(std::string());
+        ss << std::fixed << std::setprecision(2) << alphaE[0][2];
+        noteIndexString += juce::String(ss.str());
+
+        noteIndexString += juce::String("   -   ");
+
+        ss.str(std::string());
+        ss << std::fixed << std::setprecision(2) << alphaE[0][3];
+        noteIndexString += juce::String(ss.str());
+
+        sendActionMessage(noteIndexString);
+    }
+
+    p1Onsets.clear();
+    p2Onsets.clear();
+    p3Onsets.clear();
+    p4Onsets.clear();
 }
 
 

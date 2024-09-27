@@ -48,8 +48,7 @@ public:
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
 
-
-    // Functions for storing and loading ensemble config from XML file
+        // Functions for storing and loading ensemble config from XML file
     void saveConfigToXmlFile();
     std::unique_ptr<juce::XmlElement> parseXmlConfigFileToXmlElement(juce::File configFile);
     // Load from parsed xml
@@ -72,6 +71,16 @@ public:
 
     void setAlphaBetaParams(float valueIn);
     
+    // ALPHA CALC
+    std::deque<double> p1Onsets;
+    std::deque<double> p2Onsets;
+    std::deque<double> p3Onsets;
+    std::deque<double> p4Onsets;
+    std::vector<std::vector<double>> alphaE; // (4, std::vector<double>(4));
+
+    bool haveCurrentAlphasBeenCalculated = false;
+    void calculateAlphas();
+
 private:
     //==============================================================================
     int numUserPlayers = 1;
@@ -137,6 +146,8 @@ private:
     void playUserIntro(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex);
     std::atomic_flag resetFlag;
     void resetPlayers();
+
+    void calculateAlphas2();
     
     //==============================================================================
     // A bunch of stuff for safely logging onset times and sending them out to the
