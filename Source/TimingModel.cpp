@@ -25,7 +25,7 @@ namespace ARMETimingModel
         addRandomFloatParameter("testRandomParameter", &testSigma);
     }
 
-    void StdModelParameters::overrideFloatParameterValue(std::string paramName, afloat* newFloatRef)
+    void StdModelParameters::overrideFloatParameterValue(std::string paramName, a_float* newFloatRef)
     {
         int index = getIndexOfFloatParamByName(paramName);
         if (index != -1 && index <= listOfFloatParameters.size())
@@ -39,7 +39,7 @@ namespace ARMETimingModel
         }
     }
 
-    void StdModelParameters::addFloatParameter(std::string paramName, afloat* floatValue)
+    void StdModelParameters::addFloatParameter(std::string paramName, a_float* floatValue)
     {
         listOfParameterNames.push_back(paramName);
         auto newFloatParameter = new ModelParameterFloat(floatValue);
@@ -53,7 +53,7 @@ namespace ARMETimingModel
         listOfFloatParameters.push_back(newFloatParameter);
     }
 
-    void StdModelParameters::addRandomFloatParameter(std::string paramName, afloat* sigmaValue)
+    void StdModelParameters::addRandomFloatParameter(std::string paramName, a_float* sigmaValue)
     {
         listOfParameterNames.push_back(paramName);
         auto newFloatParameter = new ModelParameterRandomNormalFloat(sigmaValue);

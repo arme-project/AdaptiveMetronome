@@ -12,7 +12,7 @@
 
 namespace ARMETimingModel
 {
-    // MODEL
+// MODEL
 #pragma region Base Timing Model
     class TimingModel
     {
@@ -54,6 +54,11 @@ namespace ARMETimingModel
 
     // 2.0 STANDARD MODEL IMPLEMENTATIONS
 #pragma region Standard Timing Model
+    /**
+     * \brief Implementation of the most basic TimingModel.
+     * 
+     *  Implements Alpha, Timekeeper Noise and Motor Noise parameters.
+     */
     class StdTimingModel : public TimingModel
     {
     public:
