@@ -5,6 +5,15 @@
 
 using namespace std::chrono_literals;
 
+#pragma region Constructor and Deconstructor
+#pragma endregion
+
+#pragma region OSC Functions
+#pragma endregion OSC related functions that interacts with the OSCManager Class object
+
+#pragma region XML Functions
+#pragma endregion XML related functions that interacts with the (possible) XMLManager Class object
+
 //==============================================================================
 EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 : processor(processorPtr)
