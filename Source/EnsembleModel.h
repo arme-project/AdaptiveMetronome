@@ -4,10 +4,13 @@
 #include <atomic>
 #include <thread>
 #include "Player.h"
+#include "OSCManager.h"
 
 using std::function;
 
 class AdaptiveMetronomeAudioProcessor;
+
+class OSCManager;
 
 class EnsembleModel :
     private juce::OSCReceiver,
@@ -15,6 +18,7 @@ class EnsembleModel :
     public juce::ActionBroadcaster
 {
 public:
+    int numIntroTones = 4;
     //==============================================================================
     EnsembleModel();
     EnsembleModel(AdaptiveMetronomeAudioProcessor *processorPtr);
@@ -88,7 +92,7 @@ private:
     //==============================================================================
     // Intro countdown
     const int introToneChannel = 16;
-    int numIntroTones = 4;
+    
     static const int introToneNoteFirst = 84;
     static const int introToneNoteOther = 72;
     static const juce::uint8 introToneVel = 100;
