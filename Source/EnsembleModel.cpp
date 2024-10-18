@@ -2,8 +2,11 @@
 #include "PluginProcessor.h"
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
+#include "OSCManager.h"
 
 using namespace std::chrono_literals;
+
+class OSCManager;
 
 //==============================================================================
 
@@ -12,14 +15,13 @@ using namespace std::chrono_literals;
 EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 	: processor(processorPtr)
 {
+
+	oscManager = std::make_unique<OSCManager>(this);
+
 	playersInUse.clear();
 	resetFlag.clear();
 
-	// OSC Listener addresses
-	addListener(this, "/loadConfig");
-	addListener(this, "/reset");
-	addListener(this, "/setLogname");
-	addListener(this, "/numIntroTones");
+	oscManager->addOSCAddresses();
 }
 
 EnsembleModel::~EnsembleModel()
@@ -160,94 +162,35 @@ void EnsembleModel::createAlphaBetaParameters()
 
 #pragma endregion Functions mainly related to Alpha and Betas, GUI, and others
 
-
 //==============================================================================
 
 #pragma region OSC Functions
 
 // Establishes a connection to an OSC sender at the specified IP address and port number.
 // Default IP is "127.0.0.1" and the default port is 8000.
-void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "127.0.0.1")
+void EnsembleModel::connectOSCSender(int portNumber=8000, juce::String IPAddress = "127.0.0.1")
 {
-    if (!OSCSender.connect("127.0.0.1", 8000))
-        DBG("Error: could not connect to UDP port 8000.");
-    else {
-        DBG("OSC SENDER CONNECTED");
-    }
+	oscManager->connectOSCSender(portNumber, IPAddress);
 }
 
 // Establishes a connection to an OSC receiver at the specified port number.
 // If the connection is successful, the current receive port is updated, otherwise an error is logged.
 void EnsembleModel::connectOSCReceiver(int portNumber)
 {
-    if (!connect(portNumber))
-    {
-        currentReceivePort = -1;
-        DBG("Error: could not connect to UDP.");
-    }
-    else
-    {
-        sendActionMessage("OSC Received");
-        currentReceivePort = portNumber;
-        DBG("Connection succeeded");
-    }
+	oscManager->connectOSCReceiver(portNumber);
 }
 
 // Checks if the OSC receiver is currently connected by verifying if the port number is valid.
 bool EnsembleModel::isOscReceiverConnected()
 {
-    return (currentReceivePort > -1);
+	return oscManager->isOscReceiverConnected();
 }
 
-// Handles the reception of OSC messages.
-// The function processes specific OSC addresses and performs actions like loading configuration files, resetting the model, 
-// setting log filenames, and updating the number of intro tones.
-void EnsembleModel::oscMessageReceived(const juce::OSCMessage & message)
+// Handles the retrieval of OSC messages.
+void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
 {
-    juce::OSCAddressPattern oscPattern = message.getAddressPattern();
-    juce::String oscAddress = oscPattern.toString();
-
-    // Handle the "/loadConfig" message to load a configuration file from the user's documents directory.
-    if (oscAddress == "/loadConfig") {
-        if (message[0].isString()) {
-            auto configFilename = message[0].getString();
-            auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
-
-            if (!configFile.existsAsFile()) { return; }
-
-            loadConfigFromXml(configFile);
-        }
-    }
-    // Handle the "/reset" message to reset the model.
-    else if (oscAddress == "/reset")
-    {
-        reset();
-    }
-    // Handle the "/setLogname" message to override the log file name.
-    else if (oscAddress == "/setLogname")
-    {
-        if (message[0].isString())
-        {
-            auto newLogFilename = message[0].getString();
-            if (!newLogFilename.endsWith(".csv")) {
-                newLogFilename << ".csv";
-            }
-            logFilenameOverride = newLogFilename;
-        }
-    }
-    // Handle the "/numIntroTones" message to set the number of intro tones.
-    else if (oscAddress == "/numIntroTones")
-    {
-        if (message[0].isInt32())
-        {
-            numIntroTones = message[0].getInt32();
-        }
-    }
-
-    // Send a notification that an OSC message was received.
-    sendActionMessage("OSC Received");
+	oscManager->oscMessageReceived(message);
 }
-
 #pragma endregion OSC related functions that interact with the OSCManager Class object
 
 //==============================================================================
@@ -709,7 +652,6 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 	}
 
 #pragma endregion Logging related functions that interacts with the (possible) LoggingManager Class object
-
 
 //==============================================================================
 
