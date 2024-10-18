@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-	OSCManager.cpp
-	Created: 17 Oct 2024 4:40:15pm
-	Author:  jhund
-
-  ==============================================================================
-*/
-
 #include "OSCManager.h"
 
 //==============================================================================
@@ -92,4 +82,9 @@ void OSCManager::oscMessageReceived(const juce::OSCMessage& message) {
 // Checks if the OSC receiver is currently connected by verifying if the port number is valid.
 bool OSCManager::isOscReceiverConnected() {
 	return (currentReceivePort > -1);
+}
+
+int OSCManager::getCurrentReceivePort()
+{
+	return currentReceivePort;
 }

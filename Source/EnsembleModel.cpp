@@ -191,6 +191,10 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
 {
 	oscManager->oscMessageReceived(message);
 }
+
+int EnsembleModel::getCurrentReceivePort() {
+	return oscManager->getCurrentReceivePort();
+}
 #pragma endregion OSC related functions that interact with the OSCManager Class object
 
 //==============================================================================

@@ -38,7 +38,7 @@ public:
 	bool isPlayerUserOperated(int playerIndex);
 
 	// Getters for Player Parameters
-#pragma region Getters
+	#pragma region Player Getters
 	juce::AudioParameterInt& getPlayerChannelParameter(int playerIndex);
 	juce::AudioParameterFloat& getPlayerDelayParameter(int playerIndex);
 	juce::AudioParameterFloat& getPlayerMotorNoiseParameter(int playerIndex);
@@ -49,7 +49,7 @@ public:
 #pragma endregion
 
 	// XML Configuration
-#pragma region XML Functions
+	#pragma region XML Functions
 	void saveConfigToXmlFile();
 	std::unique_ptr<juce::XmlElement> parseXmlConfigFileToXmlElement(juce::File configFile);
 	void loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig);
@@ -57,13 +57,14 @@ public:
 #pragma endregion
 
 	// OSC Messaging
-#pragma region OSC Functions
+	#pragma region OSC Functions
 	void connectOSCSender(int portNumber, juce::String IPAddress);
 	void connectOSCReceiver(int portNumber);
 	void oscMessageReceived(const juce::OSCMessage& message);
 	bool isOscReceiverConnected();
 	void setAlphaBetaParams(float valueIn);
-#pragma endregion
+	int getCurrentReceivePort();
+	#pragma endregion
 
 	// Static Utility
 	static void soundOffAllChannels(juce::MidiBuffer& midi);
@@ -179,10 +180,6 @@ public:
 	juce::String logSubfolder = "";
 	juce::String configSubfolder = "";
 	juce::String logFilenameOverride = "";
-
-	// OSC Members
-	juce::OSCSender OSCSender;
-	int currentReceivePort = -1;
 
 	// Into tones
 	int numIntroTones = 4;
