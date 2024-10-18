@@ -89,6 +89,7 @@ juce::AudioParameterFloat& EnsembleModel::getBetaParameter(int player1Index, int
 
 #pragma region Helpful Functions
 
+// Sets the alpha parameters for all players in the processor to a specified value
 void EnsembleModel::setAlphaBetaParams(float valueIn)
 {
 	for (int i = 0; i < processor->MAX_PLAYERS; i++)
@@ -100,52 +101,54 @@ void EnsembleModel::setAlphaBetaParams(float valueIn)
 	}
 }
 
+// Prepares the model for playback by setting the new sample rate
 void EnsembleModel::prepareToPlay(double newSampleRate)
 {
 	sampleRate = newSampleRate;
 }
 
+// Releases resources used by the model
 void EnsembleModel::releaseResources()
 {
 	return;
 }
 
+// Resets the state of all players and re-initialises variables, such as counters and loops for logging and polling
 void EnsembleModel::resetPlayers()
 {
-	//==========================================================================
-	// Initialise intro countdown
-	introCounter = 0; //-sampleRate / 2;
+	// Initialize intro countdown and set intro tones played to 0
+	introCounter = 0;
 	introTonesPlayed = 0;
 
-	// Initialise score counter
+	// Reset score counter
 	scoreCounter = 0;
 
-	// make sure to update player tempo when playback starts
+	// Ensure tempo will be set on playback start
 	initialTempoSet = false;
 
-	// Start loop for logging onset times or each player
+	// Start logger loop for recording onset times of each player
 	startLoggerLoop();
 
-	// Start loop which polls for new alpha values
+	// Start polling loop to fetch new alpha values
 	startPollingLoop();
 
-	//==========================================================================
-	// reset all players
+	// Reset each player in the players array
 	for (auto& player : players)
 	{
 		player->reset();
 	}
 
+	// Clear reset flag to indicate players have been reset
 	resetFlag.clear();
 }
 
-// Initialise matrix of alpha and beta parameters
+// Initialises the alpha and beta parameters for each player in the matrix, setting default values
 void EnsembleModel::createAlphaBetaParameters()
 {
 	for (int i = 0; i < players.size(); ++i)
 	{
-		double alpha = 0.25;
-		double beta = 0.1;
+		double alpha = 0.25;  // Default alpha value
+		double beta = 0.1;    // Default beta value
 
 		for (int j = 0; j < players.size(); ++j)
 		{
@@ -157,81 +160,95 @@ void EnsembleModel::createAlphaBetaParameters()
 
 #pragma endregion Functions mainly related to Alpha and Betas, GUI, and others
 
+
 //==============================================================================
 
 #pragma region OSC Functions
 
+// Establishes a connection to an OSC sender at the specified IP address and port number.
+// Default IP is "127.0.0.1" and the default port is 8000.
 void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "127.0.0.1")
 {
-	if (!OSCSender.connect("127.0.0.1", 8000))
-		DBG("Error: could not connect to UDP port 8000.");
-	else {
-		DBG("OSC SENDER CONNECTED");
-	}
+    if (!OSCSender.connect("127.0.0.1", 8000))
+        DBG("Error: could not connect to UDP port 8000.");
+    else {
+        DBG("OSC SENDER CONNECTED");
+    }
 }
 
-// Connection can be established via config file parameter "OSCReceivePort"
+// Establishes a connection to an OSC receiver at the specified port number.
+// If the connection is successful, the current receive port is updated, otherwise an error is logged.
 void EnsembleModel::connectOSCReceiver(int portNumber)
 {
-	if (!connect(portNumber))
-	{
-		currentReceivePort = -1;
-		DBG("Error: could not connect to UDP.");
-	}
-	else
-	{
-		sendActionMessage("OSC Received");
-		currentReceivePort = portNumber;
-		DBG("Connection succeeded");
-	}
+    if (!connect(portNumber))
+    {
+        currentReceivePort = -1;
+        DBG("Error: could not connect to UDP.");
+    }
+    else
+    {
+        sendActionMessage("OSC Received");
+        currentReceivePort = portNumber;
+        DBG("Connection succeeded");
+    }
 }
 
+// Checks if the OSC receiver is currently connected by verifying if the port number is valid.
 bool EnsembleModel::isOscReceiverConnected()
 {
-	return (currentReceivePort > -1);
+    return (currentReceivePort > -1);
 }
 
+// Handles the reception of OSC messages.
+// The function processes specific OSC addresses and performs actions like loading configuration files, resetting the model, 
+// setting log filenames, and updating the number of intro tones.
 void EnsembleModel::oscMessageReceived(const juce::OSCMessage & message)
 {
-	juce::OSCAddressPattern oscPattern = message.getAddressPattern();
-	juce::String oscAddress = oscPattern.toString();
+    juce::OSCAddressPattern oscPattern = message.getAddressPattern();
+    juce::String oscAddress = oscPattern.toString();
 
-	if (oscAddress == "/loadConfig") {
-		if (message[0].isString()) {
-			auto configFilename = message[0].getString();
-			auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
+    // Handle the "/loadConfig" message to load a configuration file from the user's documents directory.
+    if (oscAddress == "/loadConfig") {
+        if (message[0].isString()) {
+            auto configFilename = message[0].getString();
+            auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
 
-			if (!configFile.existsAsFile()) { return; }
+            if (!configFile.existsAsFile()) { return; }
 
-			loadConfigFromXml(configFile);
-		}
-	}
-	else if (oscAddress == "/reset")
-	{
-		reset();
-	}
-	else if (oscAddress == "/setLogname")
-	{
-		if (message[0].isString())
-		{
-			auto newLogFilename = message[0].getString();
-			if (!newLogFilename.endsWith(".csv")) {
-				newLogFilename << ".csv";
-			}
-			logFilenameOverride = newLogFilename;
-		}
-	}
-	else if (oscAddress == "/numIntroTones")
-	{
-		if (message[0].isInt32())
-		{
-			numIntroTones = message[0].getInt32();
-		}
-	}
-	sendActionMessage("OSC Received");
+            loadConfigFromXml(configFile);
+        }
+    }
+    // Handle the "/reset" message to reset the model.
+    else if (oscAddress == "/reset")
+    {
+        reset();
+    }
+    // Handle the "/setLogname" message to override the log file name.
+    else if (oscAddress == "/setLogname")
+    {
+        if (message[0].isString())
+        {
+            auto newLogFilename = message[0].getString();
+            if (!newLogFilename.endsWith(".csv")) {
+                newLogFilename << ".csv";
+            }
+            logFilenameOverride = newLogFilename;
+        }
+    }
+    // Handle the "/numIntroTones" message to set the number of intro tones.
+    else if (oscAddress == "/numIntroTones")
+    {
+        if (message[0].isInt32())
+        {
+            numIntroTones = message[0].getInt32();
+        }
+    }
+
+    // Send a notification that an OSC message was received.
+    sendActionMessage("OSC Received");
 }
 
-#pragma endregion OSC related functions that interacts with the OSCManager Class object
+#pragma endregion OSC related functions that interact with the OSCManager Class object
 
 //==============================================================================
 
@@ -439,208 +456,129 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 
 #pragma region Logging Functions
 
-//==============================================================================
-// Logging functionality
-void EnsembleModel::initialiseLoggingBuffer()
-{
-	int bufferSize = 0;
-	if (players.size() > 0)
+// Initializes the logging buffer based on the number of players.
+// Sets the size of the buffer, creates the FIFO (First In, First Out) structure, and initializes the async, alpha, and beta parameters for logging.
+	void EnsembleModel::initialiseLoggingBuffer()
 	{
-		bufferSize = static_cast <int> (4 * players.size());
-	}
-	else {
-		bufferSize = 4;
-	}
-
-	loggingFifo = std::make_unique <juce::AbstractFifo>(bufferSize);
-
-	loggingBuffer.resize(bufferSize);
-
-	for (int i = 0; i < loggingBuffer.size(); ++i)
-	{
-		loggingBuffer[i].asyncs.resize(players.size(), 0.0);
-		loggingBuffer[i].alphas.resize(players.size(), 0.0);
-		loggingBuffer[i].betas.resize(players.size(), 0.0);
-	}
-}
-
-void EnsembleModel::startLoggerLoop()
-{
-	stopLoggerLoop();
-	initialiseLoggingBuffer();
-
-	continueLogging = true;
-	loggerThread = std::thread([this]() {this->loggerLoop(); });
-}
-
-void EnsembleModel::stopLoggerLoop()
-{
-	continueLogging = false;
-
-	if (loggerThread.joinable())
-	{
-		loggerThread.join();
-	}
-}
-
-void EnsembleModel::loggerLoop()
-{
-	//==========================================================================
-	// Expose this option to UI at some point.
-	auto time = juce::Time::getCurrentTime();
-
-	// Start with default documents folder
-	juce::File logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
-
-	// Add subfolder, if this is specified
-	if (logSubfolder != "")
-	{
-		logFile = logFile.getChildFile(logSubfolder);
-		if (!logFile.exists()) {
-			logFile.createDirectory();
-		}
-	}
-
-	// Check if the log filename has also been overriden via config.
-	if (logFilenameOverride != "") {
-		// TODO What happens if overriden log file already exists? Override? Create a new one with slightly different name?
-		logFile = logFile.getChildFile(logFilenameOverride).getNonexistentSibling();
-	}
-	else {
-		auto logFileName = time.formatted("Log_%H-%M-%S_%d%b%Y.csv");
-		logFile = logFile.getChildFile(logFileName);
-	}
-
-	juce::FileOutputStream logStream(logFile);
-
-	logStream.setPosition(0);
-	logStream.truncate();
-
-	//==========================================================================
-	// Write log file
-	writeLogHeader(logStream);
-
-	logLineCounter = 0;
-
-	while (continueLogging)
-	{
-		logOnsetDetails(logStream);
-		std::this_thread::sleep_for(50ms);
-	}
-}
-
-void EnsembleModel::writeLogHeader(juce::FileOutputStream & logStream)
-{
-	juce::String logLine("N");
-	juce::String onsetLog, intervalLog, userInputLog, delayLog,
-		mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
-		tkNoiseStdLog, mNoiseStdLog, velocityLog;
-
-	for (int i = 0; i < players.size(); ++i)
-	{
-		int playerId = i + 1;
-
-		onsetLog += ", P" + juce::String(playerId) + (players[i]->isUserOperated() ? " (input)" : "");
-		intervalLog += ", P" + juce::String(playerId) + " Int";
-		userInputLog += ", P" + juce::String(playerId) + " User Input";
-		delayLog += ", P" + juce::String(playerId) + " Delay";
-		mNoiseLog += ", P" + juce::String(playerId) + " MVar";
-		tkNoiseLog += ", P" + juce::String(playerId) + " TKVar";
-
-		for (int j = 0; j < players.size(); ++j)
+		int bufferSize = 0;
+		if (players.size() > 0)
 		{
-			int otherPlayerId = j + 1;
-
-			asyncLog += ", Async " + juce::String(playerId) + juce::String(otherPlayerId);
-			alphaLog += ", Alpha " + juce::String(playerId) + juce::String(otherPlayerId);
-			betaLog += ", Beta " + juce::String(playerId) + juce::String(otherPlayerId);
+			bufferSize = static_cast<int>(4 * players.size());
+		}
+		else {
+			bufferSize = 4;
 		}
 
-		tkNoiseStdLog += ", P" + juce::String(playerId) + " TKStd";
-		mNoiseStdLog += ", P" + juce::String(playerId) + " MStd";
-		velocityLog += ", P" + juce::String(playerId) + " Vol";
+		loggingFifo = std::make_unique<juce::AbstractFifo>(bufferSize);
+		loggingBuffer.resize(bufferSize);
+
+		for (int i = 0; i < loggingBuffer.size(); ++i)
+		{
+			loggingBuffer[i].asyncs.resize(players.size(), 0.0);
+			loggingBuffer[i].alphas.resize(players.size(), 0.0);
+			loggingBuffer[i].betas.resize(players.size(), 0.0);
+		}
 	}
 
-	logLine += onsetLog + ", " +
-		intervalLog + ", " +
-		userInputLog + ", " +
-		delayLog + ", " +
-		mNoiseLog + ", " +
-		tkNoiseLog + ", " +
-		asyncLog + ", " +
-		alphaLog + ", " +
-		betaLog + ", " +
-		tkNoiseStdLog + ", " +
-		mNoiseStdLog + ", " +
-		velocityLog + "\n";
-
-	logStream.writeText(logLine, false, false, nullptr);
-}
-
-void EnsembleModel::logOnsetDetails(juce::FileOutputStream & logStream)
-{
-	while (loggingFifo->getNumReady() > 0)
+	// Starts the logger loop in a separate thread, initializing the logging buffer and setting a flag to continue logging.
+	void EnsembleModel::startLoggerLoop()
 	{
-		std::vector <int> latestOnsets(players.size()), latestDelays(players.size());
-		juce::String logLine(logLineCounter++);
+		stopLoggerLoop();
+		initialiseLoggingBuffer();
+
+		continueLogging = true;
+		loggerThread = std::thread([this]() { this->loggerLoop(); });
+	}
+
+	// Stops the logger loop by setting the flag to false and joining the logging thread.
+	void EnsembleModel::stopLoggerLoop()
+	{
+		continueLogging = false;
+
+		if (loggerThread.joinable())
+		{
+			loggerThread.join();
+		}
+	}
+
+	// Main logging loop that writes log data to a file at regular intervals.
+	// Creates a log file in the user's documents folder (with optional subfolder and file name overrides), writes a header, and logs onset details.
+	void EnsembleModel::loggerLoop()
+	{
+		// Get the current time to use in log file naming.
+		auto time = juce::Time::getCurrentTime();
+
+		// Start with default documents folder.
+		juce::File logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+
+		// Add subfolder if specified.
+		if (logSubfolder != "")
+		{
+			logFile = logFile.getChildFile(logSubfolder);
+			if (!logFile.exists()) {
+				logFile.createDirectory();
+			}
+		}
+
+		// Check if the log filename has been overridden via config.
+		if (logFilenameOverride != "")
+		{
+			logFile = logFile.getChildFile(logFilenameOverride).getNonexistentSibling();
+		}
+		else {
+			auto logFileName = time.formatted("Log_%H-%M-%S_%d%b%Y.csv");
+			logFile = logFile.getChildFile(logFileName);
+		}
+
+		// Open the log file for writing.
+		juce::FileOutputStream logStream(logFile);
+		logStream.setPosition(0);
+		logStream.truncate();
+
+		// Write the header for the log file.
+		writeLogHeader(logStream);
+
+		logLineCounter = 0;
+
+		// Main logging loop, logs onset details every 50ms.
+		while (continueLogging)
+		{
+			logOnsetDetails(logStream);
+			std::this_thread::sleep_for(50ms);
+		}
+	}
+
+	// Writes the header (column names) for the log file, including player information, delays, noise, asyncs, alphas, betas, etc.
+	void EnsembleModel::writeLogHeader(juce::FileOutputStream& logStream)
+	{
+		juce::String logLine("N");
 		juce::String onsetLog, intervalLog, userInputLog, delayLog,
 			mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
 			tkNoiseStdLog, mNoiseStdLog, velocityLog;
 
-		int p = 0;
-
-		auto reader = loggingFifo->read(static_cast <int> (players.size()));
-
-		for (int i = 0; i < reader.blockSize1; ++i)
+		for (int i = 0; i < players.size(); ++i)
 		{
-			// Append to array to send to server.
-			int bufferIndex = reader.startIndex1 + i;
+			int playerId = i + 1;
 
-			auto& data = loggingBuffer[bufferIndex];
-			latestOnsets[p] = data.onsetTime;
-			latestDelays[p] = data.delay;
-			++p;
+			onsetLog += ", P" + juce::String(playerId) + (players[i]->isUserOperated() ? " (input)" : "");
+			intervalLog += ", P" + juce::String(playerId) + " Int";
+			userInputLog += ", P" + juce::String(playerId) + " User Input";
+			delayLog += ", P" + juce::String(playerId) + " Delay";
+			mNoiseLog += ", P" + juce::String(playerId) + " MVar";
+			tkNoiseLog += ", P" + juce::String(playerId) + " TKVar";
 
-			// Log to log file
-			logOnsetDetailsForPlayer(bufferIndex,
-				onsetLog,
-				intervalLog,
-				userInputLog,
-				delayLog,
-				mNoiseLog,
-				tkNoiseLog,
-				asyncLog,
-				alphaLog,
-				betaLog,
-				tkNoiseStdLog,
-				mNoiseStdLog,
-				velocityLog);
-		}
+			for (int j = 0; j < players.size(); ++j)
+			{
+				int otherPlayerId = j + 1;
 
-		for (int i = 0; i < reader.blockSize2; ++i)
-		{
-			// Append to array to send to server.
-			int bufferIndex = reader.startIndex2 + i;
+				asyncLog += ", Async " + juce::String(playerId) + juce::String(otherPlayerId);
+				alphaLog += ", Alpha " + juce::String(playerId) + juce::String(otherPlayerId);
+				betaLog += ", Beta " + juce::String(playerId) + juce::String(otherPlayerId);
+			}
 
-			auto& data = loggingBuffer[bufferIndex];
-			latestOnsets[p] = data.onsetTime;
-			latestDelays[p] = data.delay;
-			++p;
-
-			// Log to log file
-			logOnsetDetailsForPlayer(bufferIndex,
-				onsetLog,
-				intervalLog,
-				userInputLog,
-				delayLog,
-				mNoiseLog,
-				tkNoiseLog,
-				asyncLog,
-				alphaLog,
-				betaLog,
-				tkNoiseStdLog,
-				mNoiseStdLog,
-				velocityLog);
+			tkNoiseStdLog += ", P" + juce::String(playerId) + " TKStd";
+			mNoiseStdLog += ", P" + juce::String(playerId) + " MStd";
+			velocityLog += ", P" + juce::String(playerId) + " Vol";
 		}
 
 		logLine += onsetLog + ", " +
@@ -657,65 +595,121 @@ void EnsembleModel::logOnsetDetails(juce::FileOutputStream & logStream)
 			velocityLog + "\n";
 
 		logStream.writeText(logLine, false, false, nullptr);
-
-		// Send onset detail to wherever they need to go.
-		postLatestOnsets(latestOnsets, latestDelays);
 	}
-}
 
-void EnsembleModel::logOnsetDetailsForPlayer(int bufferIndex,
-	juce::String & onsetLog,
-	juce::String & intervalLog,
-	juce::String & userInputLog,
-	juce::String & delayLog,
-	juce::String & mNoiseLog,
-	juce::String & tkNoiseLog,
-	juce::String & asyncLog,
-	juce::String & alphaLog,
-	juce::String & betaLog,
-	juce::String & tkNoiseStdLog,
-	juce::String & mNoiseStdLog,
-	juce::String & velocityLog)
-{
-	auto& data = loggingBuffer[bufferIndex];
-
-	onsetLog += ", " + juce::String(data.onsetTime / sampleRate);
-	intervalLog += ", " + juce::String(data.onsetInterval / sampleRate);
-	userInputLog += ", " + juce::String(data.userInput ? "true" : "false");
-	delayLog += ", " + juce::String(data.delay / sampleRate);
-	mNoiseLog += ", " + juce::String(data.motorNoise);
-	tkNoiseLog += ", " + juce::String(data.timeKeeperNoise);
-
-	for (int i = 0; i < data.asyncs.size(); ++i)
+	// Logs onset details for each player and writes them to the log file.
+	// This function reads from the logging FIFO, writes onset data for all players, and sends the latest onsets to a server.
+	void EnsembleModel::logOnsetDetails(juce::FileOutputStream& logStream)
 	{
-		asyncLog += "," + juce::String(data.asyncs[i] / sampleRate);
-		alphaLog += "," + juce::String(data.alphas[i]);
-		betaLog += "," + juce::String(data.betas[i]);
+		while (loggingFifo->getNumReady() > 0)
+		{
+			std::vector<int> latestOnsets(players.size()), latestDelays(players.size());
+			juce::String logLine(logLineCounter++);
+			juce::String onsetLog, intervalLog, userInputLog, delayLog,
+				mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
+				tkNoiseStdLog, mNoiseStdLog, velocityLog;
+
+			int p = 0;
+
+			auto reader = loggingFifo->read(static_cast<int>(players.size()));
+
+			for (int i = 0; i < reader.blockSize1; ++i)
+			{
+				int bufferIndex = reader.startIndex1 + i;
+				auto& data = loggingBuffer[bufferIndex];
+				latestOnsets[p] = data.onsetTime;
+				latestDelays[p] = data.delay;
+				++p;
+
+				logOnsetDetailsForPlayer(bufferIndex, onsetLog, intervalLog, userInputLog, delayLog, mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog, tkNoiseStdLog, mNoiseStdLog, velocityLog);
+			}
+
+			for (int i = 0; i < reader.blockSize2; ++i)
+			{
+				int bufferIndex = reader.startIndex2 + i;
+				auto& data = loggingBuffer[bufferIndex];
+				latestOnsets[p] = data.onsetTime;
+				latestDelays[p] = data.delay;
+				++p;
+
+				logOnsetDetailsForPlayer(bufferIndex, onsetLog, intervalLog, userInputLog, delayLog, mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog, tkNoiseStdLog, mNoiseStdLog, velocityLog);
+			}
+
+			logLine += onsetLog + ", " +
+				intervalLog + ", " +
+				userInputLog + ", " +
+				delayLog + ", " +
+				mNoiseLog + ", " +
+				tkNoiseLog + ", " +
+				asyncLog + ", " +
+				alphaLog + ", " +
+				betaLog + ", " +
+				tkNoiseStdLog + ", " +
+				mNoiseStdLog + ", " +
+				velocityLog + "\n";
+
+			logStream.writeText(logLine, false, false, nullptr);
+
+			// Send onset detail to wherever they need to go.
+			postLatestOnsets(latestOnsets, latestDelays);
+		}
 	}
 
-	tkNoiseStdLog += ", " + juce::String(data.tkNoiseStd);
-	mNoiseStdLog += ", " + juce::String(data.mNoiseStd);
-	velocityLog += ", " + juce::String(data.volume);
-}
+	// Logs onset details for a specific player based on the buffer index, filling the relevant log strings with data.
+	void EnsembleModel::logOnsetDetailsForPlayer(int bufferIndex,
+		juce::String& onsetLog,
+		juce::String& intervalLog,
+		juce::String& userInputLog,
+		juce::String& delayLog,
+		juce::String& mNoiseLog,
+		juce::String& tkNoiseLog,
+		juce::String& asyncLog,
+		juce::String& alphaLog,
+		juce::String& betaLog,
+		juce::String& tkNoiseStdLog,
+		juce::String& mNoiseStdLog,
+		juce::String& velocityLog)
+	{
+		auto& data = loggingBuffer[bufferIndex];
 
-// NOT IMPLEMENTED
-void EnsembleModel::postLatestOnsets(const std::vector <int>&onsets, const std::vector <int>&delays)
-{
-	//==========================================================================
-	// onsets contains the onset time in samples for each of the players' most
-	// recently played notes.
-	//
-	// delays contains the delays for each player in samples
-	//
-	// Send these to the server however you want here. The current sampling
-	// frequency is available in the sampleRate variable.
+		onsetLog += ", " + juce::String(data.onsetTime / sampleRate);
+		intervalLog += ", " + juce::String(data.onsetInterval / sampleRate);
+		userInputLog += ", " + juce::String(data.userInput ? "true" : "false");
+		delayLog += ", " + juce::String(data.delay / sampleRate);
+		mNoiseLog += ", " + juce::String(data.motorNoise);
+		tkNoiseLog += ", " + juce::String(data.timeKeeperNoise);
 
-	// Once you've sent those to the server indicate to the polling thread that
-	// it should start to poll for new alphas.
-	alphasUpToDate.clear();
-}
+		for (int i = 0; i < data.asyncs.size(); ++i)
+		{
+			asyncLog += "," + juce::String(data.asyncs[i] / sampleRate);
+			alphaLog += "," + juce::String(data.alphas[i]);
+			betaLog += "," + juce::String(data.betas[i]);
+		}
+
+		tkNoiseStdLog += ", " + juce::String(data.tkNoiseStd);
+		mNoiseStdLog += ", " + juce::String(data.mNoiseStd);
+		velocityLog += ", " + juce::String(data.volume);
+	}
+
+	// NOT IMPLEMENTED
+	void EnsembleModel::postLatestOnsets(const std::vector <int>& onsets, const std::vector <int>& delays)
+	{
+		//==========================================================================
+		// onsets contains the onset time in samples for each of the players' most
+		// recently played notes.
+		//
+		// delays contains the delays for each player in samples
+		//
+		// Send these to the server however you want here. The current sampling
+		// frequency is available in the sampleRate variable.
+
+		// Once you've sent those to the server indicate to the polling thread that
+		// it should start to poll for new alphas.
+		alphasUpToDate.clear();
+	}
 
 #pragma endregion Logging related functions that interacts with the (possible) LoggingManager Class object
+
 
 //==============================================================================
 
