@@ -18,6 +18,10 @@ class EnsembleModel :
 	public juce::ActionBroadcaster
 {
 public:
+	int numUserPlayers = 1;
+	std::vector<std::unique_ptr<Player>> players;
+	juce::MidiFile midiFile;
+
 	// Constructor & Destructor
 	EnsembleModel();
 	EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr);
@@ -46,7 +50,7 @@ public:
 	juce::AudioParameterFloat& getPlayerVolumeParameter(int playerIndex);
 	juce::AudioParameterFloat& getAlphaParameter(int player1Index, int player2Index);
 	juce::AudioParameterFloat& getBetaParameter(int player1Index, int player2Index);
-#pragma endregion
+	#pragma endregion
 
 	// XML Configuration
 	#pragma region XML Functions
@@ -54,7 +58,7 @@ public:
 	std::unique_ptr<juce::XmlElement> parseXmlConfigFileToXmlElement(juce::File configFile);
 	void loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig);
 	void loadConfigFromXml(juce::File configFile);
-#pragma endregion
+	#pragma endregion
 
 	// OSC Messaging
 	#pragma region OSC Functions
@@ -69,13 +73,14 @@ public:
 	// Static Utility
 	static void soundOffAllChannels(juce::MidiBuffer& midi);
 
+	void createPlayers(const juce::MidiFile& file);
 private:
 	// Private Members
 	std::unique_ptr<OSCManager> oscManager;
 	AdaptiveMetronomeAudioProcessor* processor = nullptr;
 
-	int numUserPlayers = 1;
-	juce::MidiFile midiFile;
+	
+	
 
 	// Timing & Score Management
 	double sampleRate = 44100.0;
@@ -92,10 +97,9 @@ private:
 	int introTonesPlayed = 0;
 
 	// Player Initialisation & Playback
-	std::vector<std::unique_ptr<Player>> players;
 	std::atomic_flag playersInUse;
 	std::atomic_flag resetFlag;
-	void createPlayers(const juce::MidiFile& file);
+	
 	void createAlphaBetaParameters();
 	void resetPlayers();
 	void playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex);

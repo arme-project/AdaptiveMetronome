@@ -18,6 +18,7 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 
 	oscManager = std::make_unique<OSCManager>(this);
 
+
 	playersInUse.clear();
 	resetFlag.clear();
 
