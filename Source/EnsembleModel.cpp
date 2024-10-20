@@ -202,14 +202,10 @@ int EnsembleModel::getCurrentReceivePort() {
 
 #pragma region XML Functions
 
-// XML CONFIG FUNCTIONS
-// Loading requires converting: xml file -> xmlDocument -> xmlElement
-
 // loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
 void EnsembleModel::loadConfigFromXml(juce::File configFile) {
 	xmlManager->loadConfig(configFile);
 }
-
 
 void EnsembleModel::saveConfigToXmlFile() {
 	xmlManager->saveConfig();
