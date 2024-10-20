@@ -27,11 +27,13 @@ class OSCManager :
     public juce::ActionBroadcaster
 {
 private:
-    int currentReceivePort = -1;
+    
     EnsembleModel* ensembleModel;  // Use the forward-declared class
     juce::OSCSender oscSender;     // Corrected name to avoid confusion with class name
 
 public:
+    int currentReceivePort = -1;
+
     // Constructor and Destructor
     OSCManager(EnsembleModel* model);
     ~OSCManager();
@@ -43,4 +45,6 @@ public:
     void connectOSCReceiver(int portNumber);
     void oscMessageReceived(const juce::OSCMessage& message);
     bool isOscReceiverConnected();
+    int getCurrentReceivePort();
+    
 };

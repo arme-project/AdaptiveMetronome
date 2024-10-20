@@ -1,20 +1,10 @@
-/*
-  ==============================================================================
-
-    OSCManager.cpp
-    Created: 17 Oct 2024 4:40:15pm
-    Author:  jhund
-
-  ==============================================================================
-*/
-
 #include "OSCManager.h"
 
 //==============================================================================
 
 OSCManager::OSCManager(EnsembleModel* model)
+	: ensembleModel(model)
 {
-	ensembleModel = model; // Used to call for functions that are within the calling object
 }
 
 OSCManager::~OSCManager() = default;
@@ -28,6 +18,7 @@ void OSCManager::addOSCAddresses() {
 	addListener(this, "/numIntroTones");
 }
 
+// Establishes a connection to an OSC sender at the specified IP address and port number.
 void OSCManager::connectOSCSender(int portNumber, juce::String ip) {
 	if (oscSender.connect(ip, portNumber)) {  // Fixed naming here
 		DBG("OSC SENDER CONNECTED");
@@ -37,6 +28,8 @@ void OSCManager::connectOSCSender(int portNumber, juce::String ip) {
 	}
 }
 
+// Establishes a connection to an OSC receiver at the specified port number.
+// If the connection is successful, the current receive port  is updated, otherwise an error is logged.
 void OSCManager::connectOSCReceiver(int portNumber) {
 	if (!connect(portNumber)) {
 		currentReceivePort = -1;
@@ -49,6 +42,9 @@ void OSCManager::connectOSCReceiver(int portNumber) {
 	}
 }
 
+// Handles the retrieval of OSC messages.
+// The function processes specific OSC addresses and performs actions like loading configuration files, resetting the model,
+// setting log filenames, and updating the number of intro tones.
 void OSCManager::oscMessageReceived(const juce::OSCMessage& message) {
 	juce::OSCAddressPattern oscPattern = message.getAddressPattern();
 	juce::String oscAddress = oscPattern.toString();
@@ -83,7 +79,12 @@ void OSCManager::oscMessageReceived(const juce::OSCMessage& message) {
 	sendActionMessage("OSC Received");
 }
 
+// Checks if the OSC receiver is currently connected by verifying if the port number is valid.
 bool OSCManager::isOscReceiverConnected() {
 	return (currentReceivePort > -1);
 }
 
+int OSCManager::getCurrentReceivePort()
+{
+	return currentReceivePort;
+}
