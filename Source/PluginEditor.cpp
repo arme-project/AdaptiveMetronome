@@ -95,7 +95,7 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
     {
         oscOn.setToggleState(true, juce::dontSendNotification);
         auto tooltipString = juce::String("Listening on port ");
-        tooltipString << processor.ensemble.currentReceivePort;
+        tooltipString << processor.ensemble.getCurrentReceivePort();
         oscOn.setTooltip(tooltipString);
     } else 
     {
