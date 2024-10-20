@@ -118,6 +118,37 @@ void XMLManager::loadConfig(juce::File configFile) {
 	}
 }
 
+void XMLManager::saveConfig()
+{
+#ifdef JUCE_WINDOWS
+	auto xmlOutput = &juce::XmlElement("EnsembleModelConfig");
+	xmlOutput->setAttribute("numUserPlayers", ensembleModel->numUserPlayers);
+
+	auto xmlAlphas = xmlOutput->createNewChildElement("Alphas");
+	auto xmlBetas = xmlOutput->createNewChildElement("Betas");
+	for (int i = 0; i < ensembleModel->players.size(); ++i)
+	{
+		for (int j = 0; j < ensembleModel->players.size(); ++j)
+		{
+			float alpha = ensembleModel->getAlphaParameter(i, j);
+			float beta = ensembleModel->getBetaParameter(i, j);
+
+			juce::String xmlAlphaEntryName;
+			juce::String xmlBetaEntryName;
+
+			xmlAlphaEntryName << "Alpha_" << i << "_" << j;
+			xmlBetaEntryName << "Beta_" << i << "_" << j;
+
+			xmlAlphas->setAttribute(xmlAlphaEntryName, alpha);
+			xmlBetas->setAttribute(xmlBetaEntryName, beta);
+		}
+	}
+
+	auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
+	xmlOutput->writeTo(ensembleConfigFile);
+#endif
+}
+
 // Takes a config file and converts it into an XML element 
 std::unique_ptr<juce::XmlElement> XMLManager::parseXmlConfigFileToXmlElement(juce::File configFile) {
 	return juce::XmlDocument(configFile).getDocumentElement();

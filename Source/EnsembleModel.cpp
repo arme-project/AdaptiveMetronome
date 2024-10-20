@@ -17,7 +17,7 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 {
 
 	oscManager = std::make_unique<OSCManager>(this);
-
+	xmlManager = std::make_unique<XMLManager>(this);
 
 	playersInUse.clear();
 	resetFlag.clear();
@@ -205,198 +205,16 @@ int EnsembleModel::getCurrentReceivePort() {
 // XML CONFIG FUNCTIONS
 // Loading requires converting: xml file -> xmlDocument -> xmlElement
 
-// Converts a .xml file to xmlElement (to be used in loadConfigFromXml)
-std::unique_ptr<juce::XmlElement> EnsembleModel::parseXmlConfigFileToXmlElement(juce::File configFile) {
-	return juce::XmlDocument(configFile).getDocumentElement();
-}
-
 // loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
 void EnsembleModel::loadConfigFromXml(juce::File configFile) {
-	loadConfigFromXml(parseXmlConfigFileToXmlElement(configFile));
+	xmlManager->loadConfig(configFile);
 }
 
-// Main method to load an XML config file
-void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig)
-{
-	if (loadedConfig == nullptr) { return; }
-
-	// Flag to keep track if list of players needs to be reinitialised (e.g. number of user players has changed)
-	bool playersNeedRecreating = false;
-	bool ensembleNeedsResetting = false;
-
-	// "LogSubfolder": Check if new config specifies a new subfolder to save logs to
-	if (loadedConfig->hasAttribute("LogSubfolder"))
-	{
-		auto newLogSubfolder = loadedConfig->getStringAttribute("LogSubfolder", "");
-		if (newLogSubfolder != "")
-		{
-			logSubfolder = newLogSubfolder;
-		}
-	}
-
-	// "LogSubfolder": Check if new config specifies a new subfolder to save logs to
-	if (loadedConfig->hasAttribute("numIntroTones"))
-	{
-		numIntroTones = loadedConfig->getIntAttribute("numIntroTones", 7);;
-	}
-
-	// "ConfigSubfolder": Check if new config specifies new subfolder to look for config and midi files
-	if (loadedConfig->hasAttribute("ConfigSubfolder"))
-	{
-		auto newConfigSubfolder = loadedConfig->getStringAttribute("ConfigSubfolder", "");
-		if (newConfigSubfolder != "")
-		{
-			configSubfolder = newConfigSubfolder;
-		}
-	}
-
-	// "LogFilename": Check if log filename should be overriden from default
-	if (loadedConfig->hasAttribute("LogFilename"))
-	{
-		auto newLogFilename = loadedConfig->getStringAttribute("LogFilename", "");
-		if (newLogFilename != "")
-		{
-			if (!newLogFilename.endsWith(".csv")) {
-				newLogFilename << ".csv";
-			}
-			logFilenameOverride = newLogFilename;
-		}
-	}
-
-	// "OSCReceivePort":
-	// Check if new OSC connections requested
-	if (loadedConfig->hasAttribute("OSCReceivePort"))
-	{
-		auto newOSCReceiverPort = loadedConfig->getIntAttribute("OSCReceivePort");
-		if (newOSCReceiverPort != 0)
-		{
-			connectOSCReceiver(newOSCReceiverPort);
-		}
-	}
-
-	// "NumUserPlayers": Check if numUserPlayers has changed
-	if (loadedConfig->hasAttribute("NumUserPlayers"))
-	{
-		numUserPlayers = loadedConfig->getIntAttribute("NumUserPlayers");
-		playersNeedRecreating = true;
-	}
-
-	// "MidiFilename": Check if new midi file has been specified in config, and load it.
-	if (loadedConfig->hasAttribute("MidiFilename"))
-	{
-		auto midiFilename = loadedConfig->getStringAttribute("MidiFilename");
-		auto midiFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(midiFilename);
-
-		if (!midiFile.existsAsFile()) { return; }
-
-		loadMidiFile(midiFile, numUserPlayers);
-
-		// Players are automatically reinitialised when a new midi file is loaded, so flag can be set back to false
-		playersNeedRecreating = false;
-	}
-
-	// Limit number of user players to the number of available tracks in the loaded midi file
-	if (numUserPlayers > midiFile.getNumTracks()) {
-		numUserPlayers = midiFile.getNumTracks();
-	}
-
-	if (playersNeedRecreating) {
-		createPlayers(midiFile);
-		reset();
-	}
-
-	// "Alphas" and "Betas":
-	auto xmlAlphas = loadedConfig->getChildByName("Alphas");
-	auto xmlBetas = loadedConfig->getChildByName("Betas");
-
-	for (int i = 0; i < players.size(); ++i)
-	{
-		for (int j = 0; j < players.size(); ++j)
-		{
-			juce::String xmlAlphaEntryName;
-			juce::String xmlBetaEntryName;
-
-			xmlAlphaEntryName << "Alpha_" << i << "_" << j;
-			xmlBetaEntryName << "Beta_" << i << "_" << j;
-
-			// If corresponding entries are not found in xml, do not change value
-			if (xmlAlphas != nullptr) {
-				if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
-					*processor->alphaParameter(i, j) = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
-				}
-			}
-			if (xmlBetas != nullptr) {
-				if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
-					*processor->betaParameter(i, j) = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
-				}
-			}
-		}
-	}
-
-	// "Motor" and "Timekeeper" noise:
-	auto xmlTkNoise = loadedConfig->getChildByName("tkNoise");
-	auto xmlMNoise = loadedConfig->getChildByName("mNoise");
-
-	for (int i = 0; i < players.size(); ++i)
-	{
-		juce::String xmlTkNoiseEntryName;
-		juce::String xmlMNoiseEntryName;
-
-		xmlTkNoiseEntryName << "tkNoise_" << i;
-		xmlMNoiseEntryName << "mNoise_" << i;
-
-		// If corresponding entries are not found in xml, do not change value
-		if (xmlTkNoise != nullptr) {
-			if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
-				*processor->tkNoiseStdParameter(i) = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
-			}
-		}
-		if (xmlMNoise != nullptr) {
-			if (xmlMNoise->hasAttribute(xmlMNoiseEntryName)) {
-				*processor->mNoiseStdParameter(i) = xmlMNoise->getDoubleAttribute(xmlTkNoiseEntryName);
-			}
-		}
-	}
-
-	sendActionMessage("Ensemble Reset");
-
-	if (ensembleNeedsResetting) {
-		reset();
-	}
+// Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
+// Note: This currently only saves alpha and beta parameters.
+void EnsembleModel::saveConfigToXmlFile() {
+	xmlManager->saveConfig();
 }
-
-	// Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
-	// Note: This currently only saves alpha and beta parameters.
-	void EnsembleModel::saveConfigToXmlFile()
-	{
-#ifdef JUCE_WINDOWS
-		auto xmlOutput = &juce::XmlElement("EnsembleModelConfig");
-		xmlOutput->setAttribute("numUserPlayers", numUserPlayers);
-
-		auto xmlAlphas = xmlOutput->createNewChildElement("Alphas");
-		auto xmlBetas = xmlOutput->createNewChildElement("Betas");
-		for (int i = 0; i < players.size(); ++i)
-		{
-			for (int j = 0; j < players.size(); ++j)
-			{
-				float alpha = getAlphaParameter(i, j);
-				float beta = getBetaParameter(i, j);
-
-				juce::String xmlAlphaEntryName;
-				juce::String xmlBetaEntryName;
-
-				xmlAlphaEntryName << "Alpha_" << i << "_" << j;
-				xmlBetaEntryName << "Beta_" << i << "_" << j;
-
-				xmlAlphas->setAttribute(xmlAlphaEntryName, alpha);
-				xmlBetas->setAttribute(xmlBetaEntryName, beta);
-			}
-		}
-
-		auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
-		xmlOutput->writeTo(ensembleConfigFile);
-#endif
-	}
 
 #pragma endregion XML related functions that interacts with the (possible) XMLManager Class object
 

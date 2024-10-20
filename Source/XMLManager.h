@@ -38,6 +38,7 @@ public:
     ~XMLManager();
 
     void XMLManager::loadConfig(juce::File configFile);
+    void XMLManager::saveConfig();
     std::unique_ptr<juce::XmlElement> XMLManager::parseXmlConfigFileToXmlElement(juce::File configFile);
 
 };

@@ -5,12 +5,14 @@
 #include <thread>
 #include "Player.h"
 #include "OSCManager.h"
+#include "XMLManager.h"
 
 using std::function;
 
 class AdaptiveMetronomeAudioProcessor;
 
 class OSCManager;
+class XMLManager;
 
 class EnsembleModel :
 	private juce::OSCReceiver,
@@ -77,6 +79,7 @@ public:
 private:
 	// Private Members
 	std::unique_ptr<OSCManager> oscManager;
+	std::unique_ptr<XMLManager> xmlManager;
 	AdaptiveMetronomeAudioProcessor* processor = nullptr;
 
 	
