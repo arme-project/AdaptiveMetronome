@@ -224,37 +224,37 @@ juce::AudioParameterInt& EnsembleModel::getPlayerChannelParameter (int playerInd
     return *processor->channelParameter(playerIndex);
 }
 
-juce::AudioParameterFloat& EnsembleModel::getPlayerDelayParameter (int playerIndex)
+AudioParameterFloatToUse& EnsembleModel::getPlayerDelayParameter (int playerIndex)
 {
     return *processor->delayParameter(playerIndex);
 
 }
 
-juce::AudioParameterFloat& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
+AudioParameterFloatToUse& EnsembleModel::getPlayerMotorNoiseParameter (int playerIndex)
 {
     return *processor->mNoiseStdParameter(playerIndex);
 
 }
 
-juce::AudioParameterFloat& EnsembleModel::getPlayerTimeKeeperNoiseParameter (int playerIndex)
+AudioParameterFloatToUse& EnsembleModel::getPlayerTimeKeeperNoiseParameter (int playerIndex)
 {
     return *processor->tkNoiseStdParameter(playerIndex);
 
 }
 
-juce::AudioParameterFloat& EnsembleModel::getPlayerVolumeParameter (int playerIndex)
+AudioParameterFloatToUse& EnsembleModel::getPlayerVolumeParameter (int playerIndex)
 {
     return *processor->volumeParameter(playerIndex);
 
 }
 
-juce::AudioParameterFloat& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
+AudioParameterFloatToUse& EnsembleModel::getAlphaParameter (int player1Index, int player2Index)
 {
     return *processor->alphaParameter(player1Index, player2Index);
 
 }
 
-juce::AudioParameterFloat& EnsembleModel::getBetaParameter (int player1Index, int player2Index)
+AudioParameterFloatToUse& EnsembleModel::getBetaParameter (int player1Index, int player2Index)
 {
     return *processor->betaParameter(player1Index, player2Index);
 

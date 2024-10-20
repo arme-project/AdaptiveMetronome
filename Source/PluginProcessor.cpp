@@ -19,39 +19,38 @@ AdaptiveMetronomeAudioProcessor::AdaptiveMetronomeAudioProcessor()
     // Test only ... sets default Alpha and Beta parameters on initialisation
     ensemble.setAlphaBetaParams(0.25);
 
-    //TestFloatParameters();
-    //std::mt19937 gen(0);
-    //std::normal_distribution<float> nd(0.0f, 1.0f);
-    //float testParamValue1 = nd(gen);
-    //float testParamValue2 = nd(gen);
-    //float testParamValue3 = nd(gen);
+    // Get alpha parameter
 
+    juce::AudioParameterFloat* parameter = alphaParameter(0, 0);
+    std::function<float()> getFloat = [parameter]() { return parameter->get(); };
 
-    float testParamValue1 = stdModelParams.getFloatParameterByName("testRandomParameter");
-    float testParamValue2 = stdModelParams.getFloatParameterByName("testRandomParameter");
-    float testParamValue3 = stdModelParams.getFloatParameterByName("testRandomParameter");
+    auto testIndexGetter0 = stdModelParams.alphaParameter(0,0)->getRawValue();
+    stdModelParams.alphaParameter(0,0)->setNewReference(getFloat);
+    auto testIndexGetter1 = stdModelParams.alphaParameter(0,0)->getRawValue();
+    ensemble.setAlphaBetaParams(0.13);
+    auto testIndexGetter2 = stdModelParams.alphaParameter(0,0)->getRawValue();
 }
 
 void AdaptiveMetronomeAudioProcessor::TestFloatParameters()
 {
-    // Test parameters
-    float testParamValue = stdModelParams.getFloatParameterByName("testParameter");
-    std::atomic<float> newFloat = 5.999f;
-    stdModelParams.overrideFloatParameterValue("testParameter", &newFloat);
-    float testParamValue2 = stdModelParams.getFloatParameterByName("testParameter");
-    newFloat = 8.4561f;
-    float testParamValue3 = stdModelParams.getFloatParameterByName("testParameter");
-    stdModelParams.setFloatParameterByName("testParameter", 17.16454f);
-    float testParamValue4 = stdModelParams.getFloatParameterByName("testParameter");
-    juce::AudioParameterFloat* parameter = alphaParameter(0, 0);
-    std::function<float()> getFloat = [parameter]() { return parameter->get(); };
-    if (true)
-    {
-        stdModelParams.addFloatParameter("testParameter2", getFloat);
-    }
-    float testParamValue5 = stdModelParams.getFloatParameterByName("testParameter2");
-    ensemble.setAlphaBetaParams(0.55);
-    float testParamValue6 = stdModelParams.getFloatParameterByName("testParameter2");
+    //// Test parameters
+    //float testParamValue = stdModelParams.getFloatValueByName("testParameter");
+    //std::atomic<float> newFloat = 5.999f;
+    //stdModelParams.overrideModelParameterFloat("testParameter", &newFloat);
+    //float testParamValue2 = stdModelParams.getFloatValueByName("testParameter");
+    //newFloat = 8.4561f;
+    //float testParamValue3 = stdModelParams.getFloatValueByName("testParameter");
+    //stdModelParams.setFloatParameterByName("testParameter", 17.16454f);
+    //float testParamValue4 = stdModelParams.getFloatValueByName("testParameter");
+    //juce::AudioParameterFloat* parameter = alphaParameter(0, 0);
+    //std::function<float()> getFloat = [parameter]() { return parameter->get(); };
+    //if (true)
+    //{
+    //    stdModelParams.addFloatParameter("testParameter2", getFloat);
+    //}
+    //float testParamValue5 = stdModelParams.getFloatValueByName("testParameter2");
+    //ensemble.setAlphaBetaParams(0.55);
+    //float testParamValue6 = stdModelParams.getFloatValueByName("testParameter2");
 }
 
 AdaptiveMetronomeAudioProcessor::~AdaptiveMetronomeAudioProcessor()

@@ -12,112 +12,69 @@
 
 namespace ARMETimingModel
 {
-    ModelParameters::ModelParameters(int numberOfPlayers) :
-        numberOfPlayers(numberOfPlayers)
+    PhaseCorrectionTimingModel::PhaseCorrectionTimingModel(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval, ModelParameters& modelParams)
+        : TimingModel(numberOfPlayers, numberOfUserPlayers, initialOnsetInterval, modelParams)
     {
-
+        reset();
     }
 
-    StdModelParameters::StdModelParameters(int numberOfPlayers) :
-        ModelParameters(numberOfPlayers)
+    void PhaseCorrectionTimingModel::reset()
     {
-        addFloatParameter("testParameter", &testParameter);
-        addRandomFloatParameter("testRandomParameter", &testSigma);
+        int numberOfNotesRegisteredByAllPlayers = 0;
+        int numberOfNextOnsetsCalculated = 0;
+
+        resetOnsets(300);
     }
 
-    void StdModelParameters::overrideFloatParameterValue(std::string paramName, a_float* newFloatRef)
+    void PhaseCorrectionTimingModel::resetOnsets(int maxNumberOfOnsets = defaultMaxNumberOfOnsets)
     {
-        int index = getIndexOfFloatParamByName(paramName);
-        if (index != -1 && index <= listOfFloatParameters.size())
+        for (auto playerOnsets = onsetTimes.begin(); playerOnsets != onsetTimes.end(); ++playerOnsets) 
         {
-            auto floatParam = listOfFloatParameters[index];
+            //auto i = std::distance(onsetTimes.begin(), playerOnsets);
 
-            if (floatParam != nullptr)
-            {
-                return floatParam->setNewReference(newFloatRef);
-            }
+            playerOnsets->clear();
+            playerOnsets->reserve(maxNumberOfOnsets);
         }
     }
 
-    void StdModelParameters::addFloatParameter(std::string paramName, a_float* floatValue)
+    void PhaseCorrectionTimingModel::registerNewOnset(int playerNumber, float onsetTime, int onsetNumber)
     {
-        listOfParameterNames.push_back(paramName);
-        auto newFloatParameter = new ModelParameterFloat(floatValue);
-        listOfFloatParameters.push_back(newFloatParameter);
-    }
-
-    void StdModelParameters::addFloatParameter(std::string paramName, std::function<float()> getFloatFcn)
-    {
-        listOfParameterNames.push_back(paramName);
-        auto newFloatParameter = new ModelParameterFloatRef(getFloatFcn);
-        listOfFloatParameters.push_back(newFloatParameter);
-    }
-
-    void StdModelParameters::addRandomFloatParameter(std::string paramName, a_float* sigmaValue)
-    {
-        listOfParameterNames.push_back(paramName);
-        auto newFloatParameter = new ModelParameterRandomNormalFloat(sigmaValue);
-        listOfFloatParameters.push_back(newFloatParameter);
-    }
-
-    float StdModelParameters::getFloatParameterByName(std::string paramName)
-    {
-        int index = getIndexOfFloatParamByName(paramName);
-
-        if (index != -1 && index <= listOfFloatParameters.size())
+        if (onsetNumber < 0 || onsetNumber >= onsetTimes[playerNumber].size())
         {
-            auto floatParam = listOfFloatParameters[index];
-
-            if (floatParam != nullptr)
-            {
-                return floatParam->getRawValue();
-            }
-            else
-            {
-                return -990.0f;
-            }
+            onsetTimes[playerNumber].push_back(onsetTime);
         }
-        else
         {
-            return -991.0f;
+            onsetTimes[playerNumber][onsetNumber] = onsetTime;
         }
     }
 
-    void StdModelParameters::setFloatParameterByName(std::string paramName, float newFloatValue)
+    float PhaseCorrectionTimingModel::getLatestOnset(int playerNumber)
     {
-        int index = getIndexOfFloatParamByName(paramName);
-
-        if (index != -1 && index <= listOfFloatParameters.size())
-        {
-            auto floatParam = listOfFloatParameters[index];
-
-            if (floatParam != nullptr)
-            {
-                floatParam->setNewValue(newFloatValue);
-            }
-        }
+        return onsetTimes[playerNumber].back();
     }
 
-    int StdModelParameters::getIndexOfFloatParamByName(std::string paramName)
+    float PhaseCorrectionTimingModel::getOnsetForNoteNumber(int playerNumber, int onsetNumber)
     {
-        auto it = find(listOfParameterNames.begin(), listOfParameterNames.end(), paramName);
+        if (onsetNumber > onsetTimes[playerNumber].size()) return -999.0f;
 
-        if (it != listOfParameterNames.end())
-        {
-            // calculating the index 
-            // of K 
-            int index = it - listOfParameterNames.begin();
-            return index;
-        }
-        else {
-            // If the element is not 
-            // present in the vector 
-            return -1;
-        }
+        return onsetTimes[playerNumber][onsetNumber];
     }
 
-    ModelParameterFloatRef::ModelParameterFloatRef(std::function<float()> getValueFcn) :
-        getValueFcn(getValueFcn)
+    float PhaseCorrectionTimingModel::getNumberOfOnsetsRegisteredForPlayer(int playerNumber)
     {
+        return onsetTimes[playerNumber].size();
+    }
+
+    float PhaseCorrectionTimingModel::getNextOnset(int playerNumber)
+    {
+        return -999.0f;
+    }
+
+    std::vector<float> PhaseCorrectionTimingModel::getNextOnsets()
+    {
+        // Check if needs calculating. If not, return previous values
+        if (numberOfNotesRegisteredByAllPlayers <= numberOfNextOnsetsCalculated) return std::vector<float>(numberOfPlayers);
+        
+        return std::vector<float>();
     }
 }

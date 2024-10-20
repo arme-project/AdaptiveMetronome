@@ -3,6 +3,8 @@
 #include "EnsembleModel.h"
 #include "TimingModelParametersGroup.h"
 
+using AudioParameterFloatToUse = juce::AudioParameterFloat;
+
 class AdaptiveMetronomeAudioProcessor : public juce::AudioProcessor
 {
 public:
@@ -12,7 +14,7 @@ public:
     ~AdaptiveMetronomeAudioProcessor() override;
 
     EnsembleModel ensemble;
-    ARMETimingModel::StdModelParameters stdModelParams;
+    ARMETimingModel::PhaseCorrectionModelParameters stdModelParams;
 
     // Parameters stored in APVTS
     juce::AudioProcessorValueTreeState apvts;
@@ -59,8 +61,8 @@ public:
     void resetEnsemble();
 
     // These are no longer used and will be removed
-//    std::vector < std::vector < juce::AudioParameterFloat* > > alphaParameters, betaParameters;
-//    std::vector < juce::AudioParameterFloat* > volumeParameters, delayParameters, mNoiseStdParameters, tkNoiseStdParameters;
+//    std::vector < std::vector < AudioParameterFloatToUse* > > alphaParameters, betaParameters;
+//    std::vector < AudioParameterFloatToUse* > volumeParameters, delayParameters, mNoiseStdParameters, tkNoiseStdParameters;
 //    std::vector < juce::AudioParameterInt* > channelParameters;
     
     //==============================================================================
@@ -79,7 +81,7 @@ public:
         for (int i = 0 ; i < MAX_PLAYERS ; i ++)
         {
             // Volume
-            params.add(std::make_unique < juce::AudioParameterFloat > ("player" + juce::String (i) + "-volume",
+            params.add(std::make_unique < AudioParameterFloatToUse > ("player" + juce::String (i) + "-volume",
                                                                        "Player " + juce::String (i) + " Volume",
                                                                        0.0, 1.0, defaultVolume));
             
@@ -89,17 +91,17 @@ public:
                                                                      1, 16, (i+1)));
 
             // Delay
-            params.add(std::make_unique < juce::AudioParameterFloat > ("player" + juce::String (i) + "-delay",
+            params.add(std::make_unique < AudioParameterFloatToUse > ("player" + juce::String (i) + "-delay",
                                                                        "Player " + juce::String (i) + " Delay",
                                                                        0.0, 200.0, defaultDelay));
 
             // Motor Noise
-            params.add(std::make_unique < juce::AudioParameterFloat > ("player" + juce::String (i) + "-mnoise-std",
+            params.add(std::make_unique < AudioParameterFloatToUse > ("player" + juce::String (i) + "-mnoise-std",
                                                                        "Player " + juce::String (i) + " Motor Noise Std",
                                                                        0.0, 10.0, defaultMNoise));
 
             // Timekeeper Noise
-            params.add(std::make_unique < juce::AudioParameterFloat > ("player" + juce::String (i) + "-tknoise-std",
+            params.add(std::make_unique < AudioParameterFloatToUse > ("player" + juce::String (i) + "-tknoise-std",
                                                                        "Player " + juce::String (i) + " Time Keeper Noise Std",
                                                                        0.0, 50.0, defaultTkNoise));
             
@@ -107,12 +109,12 @@ public:
             for (int j = 0 ; j < MAX_PLAYERS ; j++)
             {
                 // Alpha
-                params.add(std::make_unique < juce::AudioParameterFloat > ("alpha-" + juce::String(i) + "-" + juce::String(j),
+                params.add(std::make_unique < AudioParameterFloatToUse > ("alpha-" + juce::String(i) + "-" + juce::String(j),
                                                                            "Alpha " + juce::String(i) + "-" + juce::String(j),
                                                                            0.0, 1.0, defaultAlpha));
 
                 // Beta
-                params.add(std::make_unique < juce::AudioParameterFloat > ("beta-" + juce::String(i) + "-" + juce::String(j),
+                params.add(std::make_unique < AudioParameterFloatToUse > ("beta-" + juce::String(i) + "-" + juce::String(j),
                                                                            "Beta " + juce::String(i) + "-" + juce::String(j),
                                                                            0.0, 1.0, defaultBeta));
             }
@@ -166,9 +168,9 @@ public:
     };
     
     // Initialise getters for all parameters - Defined in processor constructor
-    ParameterIndexGetter < juce::AudioParameterFloat > volumeParameter, delayParameter, mNoiseStdParameter, tkNoiseStdParameter;
+    ParameterIndexGetter < AudioParameterFloatToUse > volumeParameter, delayParameter, mNoiseStdParameter, tkNoiseStdParameter;
     ParameterIndexGetter < juce::AudioParameterInt > channelParameter;
-    ParameterIndexGetter < juce::AudioParameterFloat > alphaParameter, betaParameter;
+    ParameterIndexGetter < AudioParameterFloatToUse > alphaParameter, betaParameter;
     
 private:
     //==============================================================================

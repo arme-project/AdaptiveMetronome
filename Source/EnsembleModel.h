@@ -5,9 +5,12 @@
 #include <thread>
 #include "Player.h"
 
+
 using std::function;
 
 class AdaptiveMetronomeAudioProcessor;
+
+using AudioParameterFloatToUse = juce::AudioParameterFloat;
 
 class EnsembleModel :
     private juce::OSCReceiver,
@@ -38,12 +41,12 @@ public:
     int getNumUserPlayers();
     bool isPlayerUserOperated (int playerIndex);
     juce::AudioParameterInt& getPlayerChannelParameter (int playerIndex);
-    juce::AudioParameterFloat& getPlayerDelayParameter (int playerIndex);
-    juce::AudioParameterFloat& getPlayerMotorNoiseParameter (int playerIndex);
-    juce::AudioParameterFloat& getPlayerTimeKeeperNoiseParameter (int playerIndex);
-    juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
-    juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
-    juce::AudioParameterFloat& getBetaParameter (int player1Index, int player2Index);
+    AudioParameterFloatToUse& getPlayerDelayParameter (int playerIndex);
+    AudioParameterFloatToUse& getPlayerMotorNoiseParameter (int playerIndex);
+    AudioParameterFloatToUse& getPlayerTimeKeeperNoiseParameter (int playerIndex);
+    AudioParameterFloatToUse& getPlayerVolumeParameter (int playerIndex);
+    AudioParameterFloatToUse& getAlphaParameter (int player1Index, int player2Index);
+    AudioParameterFloatToUse& getBetaParameter (int player1Index, int player2Index);
 
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
