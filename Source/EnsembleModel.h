@@ -57,8 +57,6 @@ public:
 	// XML Configuration
 	#pragma region XML Functions
 	void saveConfigToXmlFile();
-	std::unique_ptr<juce::XmlElement> parseXmlConfigFileToXmlElement(juce::File configFile);
-	void loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig);
 	void loadConfigFromXml(juce::File configFile);
 	#pragma endregion
 

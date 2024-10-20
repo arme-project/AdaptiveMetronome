@@ -1,7 +1,10 @@
 #include "XMLManager.h"
 
 XMLManager::XMLManager(EnsembleModel* model, AdaptiveMetronomeAudioProcessor* processor)
-	: ensembleModel(model), processor(processor) {}
+{
+	ensembleModel = model;
+	XMLManager::processor = processor;
+}
 
 XMLManager::~XMLManager() = default;
 
