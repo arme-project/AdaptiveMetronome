@@ -10,6 +10,7 @@
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
       <GROUP id="{48CA9AA9-4BBE-3A35-2F80-7B9E2520CEEA}" name="Headers">
+        <FILE id="BGydxo" name="XMLManager.h" compile="0" resource="0" file="Source/XMLManager.h"/>
         <FILE id="O5rzNn" name="OSCManager.h" compile="0" resource="0" file="Source/OSCManager.h"/>
         <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
         <FILE id="S9PNfy" name="EnsembleModel.h" compile="0" resource="0" file="Source/EnsembleModel.h"/>
@@ -18,8 +19,9 @@
               file="Source/PluginProcessor.h"/>
         <FILE id="wHARtp" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       </GROUP>
-      <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
       <FILE id="QSGtJJ" name="OSCManager.cpp" compile="1" resource="0" file="Source/OSCManager.cpp"/>
+      <FILE id="sej3xv" name="XMLManager.cpp" compile="1" resource="0" file="Source/XMLManager.cpp"/>
+      <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
       <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"
             file="Source/EnsembleModel.cpp"/>
       <FILE id="q7q2PM" name="Player.cpp" compile="1" resource="0" file="Source/Player.cpp"/>
