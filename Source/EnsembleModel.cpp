@@ -210,8 +210,7 @@ void EnsembleModel::loadConfigFromXml(juce::File configFile) {
 	xmlManager->loadConfig(configFile);
 }
 
-// Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
-// Note: This currently only saves alpha and beta parameters.
+
 void EnsembleModel::saveConfigToXmlFile() {
 	xmlManager->saveConfig();
 }

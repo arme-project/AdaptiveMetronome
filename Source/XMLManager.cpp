@@ -5,6 +5,8 @@ XMLManager::XMLManager(EnsembleModel* model, AdaptiveMetronomeAudioProcessor* pr
 
 XMLManager::~XMLManager() = default;
 
+// Loading requires converting: xml file -> xmlDocument -> xmlElement
+// loadConfigFromXml can be called directly with XmlElement 
 void XMLManager::loadConfig(juce::File configFile) {
 
 	// Parse the file into an element that we can use
@@ -16,8 +18,8 @@ void XMLManager::loadConfig(juce::File configFile) {
 	bool playersNeedRecreating = false;
 	bool ensembleNeedsResetting = false;
 
-	// Load configuration attributes as getStringAtringAttribute would default to "" if it doesn't have anything
-	if (config->hasAttribute("LogSubfolder")) {
+	// Load configuration attributes
+	/*if (config->hasAttribute("LogSubfolder")) {
 		ensembleModel->logSubfolder = config->getStringAttribute("LogSubfolder", ensembleModel->logSubfolder);
 	}
 	if (config->hasAttribute("numIntroTones")) {
@@ -32,10 +34,21 @@ void XMLManager::loadConfig(juce::File configFile) {
 			newLogFilename << ".csv";
 		}
 		ensembleModel->logFilenameOverride = newLogFilename;
+	}*/
+
+	// Wouldn't this work too? get_Attribute and hasAttribute works similarily where it checks if it has an attribute and assigns the value found (first parameter) or assign another value (second value) if not found 
+	ensembleModel->logSubfolder = config->getStringAttribute("LogSubfolder", ensembleModel->logSubfolder);
+	ensembleModel->numIntroTones = config->getIntAttribute("numIntroTones", ensembleModel->numIntroTones);
+	ensembleModel->configSubfolder = config->getStringAttribute("ConfigSubfolder", ensembleModel->configSubfolder);
+
+	// Log filename handling
+	auto newLogFilename = config->getStringAttribute("LogFilename", ensembleModel->logFilenameOverride);
+	if (!newLogFilename.isEmpty() && !newLogFilename.endsWith(".csv")) {
+		newLogFilename << ".csv";
 	}
+	ensembleModel->logFilenameOverride = newLogFilename;
 
 	// "OSCReceivePort":
-	// 
 	// Handle OSC receiver port - Check if new OSC connections requested
 	if (config->hasAttribute("OSCReceivePort")) {
 		int newOSCReceiverPort = config->getIntAttribute("OSCReceivePort", 0);
@@ -149,6 +162,8 @@ void XMLManager::saveConfig()
 #endif
 }
 
+// Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
+// Note: This currently only saves alpha and beta parameters.
 // Takes a config file and converts it into an XML element 
 std::unique_ptr<juce::XmlElement> XMLManager::parseXmlConfigFileToXmlElement(juce::File configFile) {
 	return juce::XmlDocument(configFile).getDocumentElement();
