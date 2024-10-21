@@ -38,7 +38,7 @@ void LogManager::initialiseLoggingBuffer()
 void LogManager::startLoggerLoop() {
     stopLoggerLoop(); // Stops any existing loops that might be occuring
     initialiseLoggingBuffer();
-
+	
     continueLogging = true;
     loggerThread = std::thread([this]() { this->loggerLoop(); });
 }

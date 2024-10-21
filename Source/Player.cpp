@@ -284,8 +284,9 @@ void Player::stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex)
     auto &note = notes [currentNoteIndex - 1];
     auto channelParam = processor->channelParameter(playerIndex)->get();
     auto volumeParam = processor->volumeParameter(playerIndex)->get();
-    midi.addEvent (juce::MidiMessage::noteOff (channelParam, note.noteNumber, note.velocity * volumeParam),
-                   sampleIndex);
+    auto noteVelocityFloat = (float)(note.velocity / 127.0);
+    midi.addEvent(juce::MidiMessage::noteOff(channelParam, note.noteNumber, noteVelocityFloat * volumeParam),
+        sampleIndex);
 }
 
 // Checks if new note should be played on this sample
