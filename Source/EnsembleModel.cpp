@@ -17,6 +17,8 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 {
 
 	oscManager = std::make_unique<OSCManager>(this);
+	xmlManager = std::make_unique<XMLManager>(this, processorPtr);
+	logManager = std::make_unique<LogManager>(this);
 
 	playersInUse.clear();
 	resetFlag.clear();
@@ -201,201 +203,14 @@ int EnsembleModel::getCurrentReceivePort() {
 
 #pragma region XML Functions
 
-// XML CONFIG FUNCTIONS
-// Loading requires converting: xml file -> xmlDocument -> xmlElement
-
-// Converts a .xml file to xmlElement (to be used in loadConfigFromXml)
-std::unique_ptr<juce::XmlElement> EnsembleModel::parseXmlConfigFileToXmlElement(juce::File configFile) {
-	return juce::XmlDocument(configFile).getDocumentElement();
-}
-
 // loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
 void EnsembleModel::loadConfigFromXml(juce::File configFile) {
-	loadConfigFromXml(parseXmlConfigFileToXmlElement(configFile));
+	xmlManager->loadConfig(configFile);
 }
 
-// Main method to load an XML config file
-void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig)
-{
-	if (loadedConfig == nullptr) { return; }
-
-	// Flag to keep track if list of players needs to be reinitialised (e.g. number of user players has changed)
-	bool playersNeedRecreating = false;
-	bool ensembleNeedsResetting = false;
-
-	// "LogSubfolder": Check if new config specifies a new subfolder to save logs to
-	if (loadedConfig->hasAttribute("LogSubfolder"))
-	{
-		auto newLogSubfolder = loadedConfig->getStringAttribute("LogSubfolder", "");
-		if (newLogSubfolder != "")
-		{
-			logSubfolder = newLogSubfolder;
-		}
-	}
-
-	// "LogSubfolder": Check if new config specifies a new subfolder to save logs to
-	if (loadedConfig->hasAttribute("numIntroTones"))
-	{
-		numIntroTones = loadedConfig->getIntAttribute("numIntroTones", 7);;
-	}
-
-	// "ConfigSubfolder": Check if new config specifies new subfolder to look for config and midi files
-	if (loadedConfig->hasAttribute("ConfigSubfolder"))
-	{
-		auto newConfigSubfolder = loadedConfig->getStringAttribute("ConfigSubfolder", "");
-		if (newConfigSubfolder != "")
-		{
-			configSubfolder = newConfigSubfolder;
-		}
-	}
-
-	// "LogFilename": Check if log filename should be overriden from default
-	if (loadedConfig->hasAttribute("LogFilename"))
-	{
-		auto newLogFilename = loadedConfig->getStringAttribute("LogFilename", "");
-		if (newLogFilename != "")
-		{
-			if (!newLogFilename.endsWith(".csv")) {
-				newLogFilename << ".csv";
-			}
-			logFilenameOverride = newLogFilename;
-		}
-	}
-
-	// "OSCReceivePort":
-	// Check if new OSC connections requested
-	if (loadedConfig->hasAttribute("OSCReceivePort"))
-	{
-		auto newOSCReceiverPort = loadedConfig->getIntAttribute("OSCReceivePort");
-		if (newOSCReceiverPort != 0)
-		{
-			connectOSCReceiver(newOSCReceiverPort);
-		}
-	}
-
-	// "NumUserPlayers": Check if numUserPlayers has changed
-	if (loadedConfig->hasAttribute("NumUserPlayers"))
-	{
-		numUserPlayers = loadedConfig->getIntAttribute("NumUserPlayers");
-		playersNeedRecreating = true;
-	}
-
-	// "MidiFilename": Check if new midi file has been specified in config, and load it.
-	if (loadedConfig->hasAttribute("MidiFilename"))
-	{
-		auto midiFilename = loadedConfig->getStringAttribute("MidiFilename");
-		auto midiFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(midiFilename);
-
-		if (!midiFile.existsAsFile()) { return; }
-
-		loadMidiFile(midiFile, numUserPlayers);
-
-		// Players are automatically reinitialised when a new midi file is loaded, so flag can be set back to false
-		playersNeedRecreating = false;
-	}
-
-	// Limit number of user players to the number of available tracks in the loaded midi file
-	if (numUserPlayers > midiFile.getNumTracks()) {
-		numUserPlayers = midiFile.getNumTracks();
-	}
-
-	if (playersNeedRecreating) {
-		createPlayers(midiFile);
-		reset();
-	}
-
-	// "Alphas" and "Betas":
-	auto xmlAlphas = loadedConfig->getChildByName("Alphas");
-	auto xmlBetas = loadedConfig->getChildByName("Betas");
-
-	for (int i = 0; i < players.size(); ++i)
-	{
-		for (int j = 0; j < players.size(); ++j)
-		{
-			juce::String xmlAlphaEntryName;
-			juce::String xmlBetaEntryName;
-
-			xmlAlphaEntryName << "Alpha_" << i << "_" << j;
-			xmlBetaEntryName << "Beta_" << i << "_" << j;
-
-			// If corresponding entries are not found in xml, do not change value
-			if (xmlAlphas != nullptr) {
-				if (xmlAlphas->hasAttribute(xmlAlphaEntryName)) {
-					*processor->alphaParameter(i, j) = xmlAlphas->getDoubleAttribute(xmlAlphaEntryName);
-				}
-			}
-			if (xmlBetas != nullptr) {
-				if (xmlBetas->hasAttribute(xmlBetaEntryName)) {
-					*processor->betaParameter(i, j) = xmlBetas->getDoubleAttribute(xmlBetaEntryName);
-				}
-			}
-		}
-	}
-
-	// "Motor" and "Timekeeper" noise:
-	auto xmlTkNoise = loadedConfig->getChildByName("tkNoise");
-	auto xmlMNoise = loadedConfig->getChildByName("mNoise");
-
-	for (int i = 0; i < players.size(); ++i)
-	{
-		juce::String xmlTkNoiseEntryName;
-		juce::String xmlMNoiseEntryName;
-
-		xmlTkNoiseEntryName << "tkNoise_" << i;
-		xmlMNoiseEntryName << "mNoise_" << i;
-
-		// If corresponding entries are not found in xml, do not change value
-		if (xmlTkNoise != nullptr) {
-			if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
-				*processor->tkNoiseStdParameter(i) = xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName);
-			}
-		}
-		if (xmlMNoise != nullptr) {
-			if (xmlMNoise->hasAttribute(xmlMNoiseEntryName)) {
-				*processor->mNoiseStdParameter(i) = xmlMNoise->getDoubleAttribute(xmlTkNoiseEntryName);
-			}
-		}
-	}
-
-	sendActionMessage("Ensemble Reset");
-
-	if (ensembleNeedsResetting) {
-		reset();
-	}
+void EnsembleModel::saveConfigToXmlFile() {
+	xmlManager->saveConfig();
 }
-
-	// Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
-	// Note: This currently only saves alpha and beta parameters.
-	void EnsembleModel::saveConfigToXmlFile()
-	{
-#ifdef JUCE_WINDOWS
-		auto xmlOutput = &juce::XmlElement("EnsembleModelConfig");
-		xmlOutput->setAttribute("numUserPlayers", numUserPlayers);
-
-		auto xmlAlphas = xmlOutput->createNewChildElement("Alphas");
-		auto xmlBetas = xmlOutput->createNewChildElement("Betas");
-		for (int i = 0; i < players.size(); ++i)
-		{
-			for (int j = 0; j < players.size(); ++j)
-			{
-				float alpha = getAlphaParameter(i, j);
-				float beta = getBetaParameter(i, j);
-
-				juce::String xmlAlphaEntryName;
-				juce::String xmlBetaEntryName;
-
-				xmlAlphaEntryName << "Alpha_" << i << "_" << j;
-				xmlBetaEntryName << "Beta_" << i << "_" << j;
-
-				xmlAlphas->setAttribute(xmlAlphaEntryName, alpha);
-				xmlBetas->setAttribute(xmlBetaEntryName, beta);
-			}
-		}
-
-		auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
-		xmlOutput->writeTo(ensembleConfigFile);
-#endif
-	}
 
 #pragma endregion XML related functions that interacts with the (possible) XMLManager Class object
 
@@ -407,199 +222,39 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 // Sets the size of the buffer, creates the FIFO (First In, First Out) structure, and initializes the async, alpha, and beta parameters for logging.
 	void EnsembleModel::initialiseLoggingBuffer()
 	{
-		int bufferSize = 0;
-		if (players.size() > 0)
-		{
-			bufferSize = static_cast<int>(4 * players.size());
-		}
-		else {
-			bufferSize = 4;
-		}
-
-		loggingFifo = std::make_unique<juce::AbstractFifo>(bufferSize);
-		loggingBuffer.resize(bufferSize);
-
-		for (int i = 0; i < loggingBuffer.size(); ++i)
-		{
-			loggingBuffer[i].asyncs.resize(players.size(), 0.0);
-			loggingBuffer[i].alphas.resize(players.size(), 0.0);
-			loggingBuffer[i].betas.resize(players.size(), 0.0);
-		}
+		logManager->initialiseLoggingBuffer();
 	}
 
 	// Starts the logger loop in a separate thread, initializing the logging buffer and setting a flag to continue logging.
 	void EnsembleModel::startLoggerLoop()
 	{
-		stopLoggerLoop();
-		initialiseLoggingBuffer();
-
-		continueLogging = true;
-		loggerThread = std::thread([this]() { this->loggerLoop(); });
+		logManager->startLoggerLoop();
 	}
 
 	// Stops the logger loop by setting the flag to false and joining the logging thread.
 	void EnsembleModel::stopLoggerLoop()
 	{
-		continueLogging = false;
-
-		if (loggerThread.joinable())
-		{
-			loggerThread.join();
-		}
+		logManager->stopLoggerLoop();
 	}
 
 	// Main logging loop that writes log data to a file at regular intervals.
 	// Creates a log file in the user's documents folder (with optional subfolder and file name overrides), writes a header, and logs onset details.
 	void EnsembleModel::loggerLoop()
 	{
-		// Get the current time to use in log file naming.
-		auto time = juce::Time::getCurrentTime();
-
-		// Start with default documents folder.
-		juce::File logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
-
-		// Add subfolder if specified.
-		if (logSubfolder != "")
-		{
-			logFile = logFile.getChildFile(logSubfolder);
-			if (!logFile.exists()) {
-				logFile.createDirectory();
-			}
-		}
-
-		// Check if the log filename has been overridden via config.
-		if (logFilenameOverride != "")
-		{
-			logFile = logFile.getChildFile(logFilenameOverride).getNonexistentSibling();
-		}
-		else {
-			auto logFileName = time.formatted("Log_%H-%M-%S_%d%b%Y.csv");
-			logFile = logFile.getChildFile(logFileName);
-		}
-
-		// Open the log file for writing.
-		juce::FileOutputStream logStream(logFile);
-		logStream.setPosition(0);
-		logStream.truncate();
-
-		// Write the header for the log file.
-		writeLogHeader(logStream);
-
-		logLineCounter = 0;
-
-		// Main logging loop, logs onset details every 50ms.
-		while (continueLogging)
-		{
-			logOnsetDetails(logStream);
-			std::this_thread::sleep_for(50ms);
-		}
+		logManager->loggerLoop();
 	}
 
 	// Writes the header (column names) for the log file, including player information, delays, noise, asyncs, alphas, betas, etc.
 	void EnsembleModel::writeLogHeader(juce::FileOutputStream& logStream)
 	{
-		juce::String logLine("N");
-		juce::String onsetLog, intervalLog, userInputLog, delayLog,
-			mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
-			tkNoiseStdLog, mNoiseStdLog, velocityLog;
-
-		for (int i = 0; i < players.size(); ++i)
-		{
-			int playerId = i + 1;
-
-			onsetLog += ", P" + juce::String(playerId) + (players[i]->isUserOperated() ? " (input)" : "");
-			intervalLog += ", P" + juce::String(playerId) + " Int";
-			userInputLog += ", P" + juce::String(playerId) + " User Input";
-			delayLog += ", P" + juce::String(playerId) + " Delay";
-			mNoiseLog += ", P" + juce::String(playerId) + " MVar";
-			tkNoiseLog += ", P" + juce::String(playerId) + " TKVar";
-
-			for (int j = 0; j < players.size(); ++j)
-			{
-				int otherPlayerId = j + 1;
-
-				asyncLog += ", Async " + juce::String(playerId) + juce::String(otherPlayerId);
-				alphaLog += ", Alpha " + juce::String(playerId) + juce::String(otherPlayerId);
-				betaLog += ", Beta " + juce::String(playerId) + juce::String(otherPlayerId);
-			}
-
-			tkNoiseStdLog += ", P" + juce::String(playerId) + " TKStd";
-			mNoiseStdLog += ", P" + juce::String(playerId) + " MStd";
-			velocityLog += ", P" + juce::String(playerId) + " Vol";
-		}
-
-		logLine += onsetLog + ", " +
-			intervalLog + ", " +
-			userInputLog + ", " +
-			delayLog + ", " +
-			mNoiseLog + ", " +
-			tkNoiseLog + ", " +
-			asyncLog + ", " +
-			alphaLog + ", " +
-			betaLog + ", " +
-			tkNoiseStdLog + ", " +
-			mNoiseStdLog + ", " +
-			velocityLog + "\n";
-
-		logStream.writeText(logLine, false, false, nullptr);
+		logManager->writeLogHeader(logStream);
 	}
 
 	// Logs onset details for each player and writes them to the log file.
 	// This function reads from the logging FIFO, writes onset data for all players, and sends the latest onsets to a server.
 	void EnsembleModel::logOnsetDetails(juce::FileOutputStream& logStream)
 	{
-		while (loggingFifo->getNumReady() > 0)
-		{
-			std::vector<int> latestOnsets(players.size()), latestDelays(players.size());
-			juce::String logLine(logLineCounter++);
-			juce::String onsetLog, intervalLog, userInputLog, delayLog,
-				mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
-				tkNoiseStdLog, mNoiseStdLog, velocityLog;
-
-			int p = 0;
-
-			auto reader = loggingFifo->read(static_cast<int>(players.size()));
-
-			for (int i = 0; i < reader.blockSize1; ++i)
-			{
-				int bufferIndex = reader.startIndex1 + i;
-				auto& data = loggingBuffer[bufferIndex];
-				latestOnsets[p] = data.onsetTime;
-				latestDelays[p] = data.delay;
-				++p;
-
-				logOnsetDetailsForPlayer(bufferIndex, onsetLog, intervalLog, userInputLog, delayLog, mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog, tkNoiseStdLog, mNoiseStdLog, velocityLog);
-			}
-
-			for (int i = 0; i < reader.blockSize2; ++i)
-			{
-				int bufferIndex = reader.startIndex2 + i;
-				auto& data = loggingBuffer[bufferIndex];
-				latestOnsets[p] = data.onsetTime;
-				latestDelays[p] = data.delay;
-				++p;
-
-				logOnsetDetailsForPlayer(bufferIndex, onsetLog, intervalLog, userInputLog, delayLog, mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog, tkNoiseStdLog, mNoiseStdLog, velocityLog);
-			}
-
-			logLine += onsetLog + ", " +
-				intervalLog + ", " +
-				userInputLog + ", " +
-				delayLog + ", " +
-				mNoiseLog + ", " +
-				tkNoiseLog + ", " +
-				asyncLog + ", " +
-				alphaLog + ", " +
-				betaLog + ", " +
-				tkNoiseStdLog + ", " +
-				mNoiseStdLog + ", " +
-				velocityLog + "\n";
-
-			logStream.writeText(logLine, false, false, nullptr);
-
-			// Send onset detail to wherever they need to go.
-			postLatestOnsets(latestOnsets, latestDelays);
-		}
+		logManager->logOnsetDetails(logStream);
 	}
 
 	// Logs onset details for a specific player based on the buffer index, filling the relevant log strings with data.
@@ -617,42 +272,13 @@ void EnsembleModel::loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedCo
 		juce::String& mNoiseStdLog,
 		juce::String& velocityLog)
 	{
-		auto& data = loggingBuffer[bufferIndex];
-
-		onsetLog += ", " + juce::String(data.onsetTime / sampleRate);
-		intervalLog += ", " + juce::String(data.onsetInterval / sampleRate);
-		userInputLog += ", " + juce::String(data.userInput ? "true" : "false");
-		delayLog += ", " + juce::String(data.delay / sampleRate);
-		mNoiseLog += ", " + juce::String(data.motorNoise);
-		tkNoiseLog += ", " + juce::String(data.timeKeeperNoise);
-
-		for (int i = 0; i < data.asyncs.size(); ++i)
-		{
-			asyncLog += "," + juce::String(data.asyncs[i] / sampleRate);
-			alphaLog += "," + juce::String(data.alphas[i]);
-			betaLog += "," + juce::String(data.betas[i]);
-		}
-
-		tkNoiseStdLog += ", " + juce::String(data.tkNoiseStd);
-		mNoiseStdLog += ", " + juce::String(data.mNoiseStd);
-		velocityLog += ", " + juce::String(data.volume);
+		logManager->logOnsetDetailsForPlayer(bufferIndex, onsetLog, intervalLog, userInputLog, delayLog, mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog, tkNoiseStdLog, mNoiseStdLog, velocityLog);
 	}
 
 	// NOT IMPLEMENTED
 	void EnsembleModel::postLatestOnsets(const std::vector <int>& onsets, const std::vector <int>& delays)
 	{
-		//==========================================================================
-		// onsets contains the onset time in samples for each of the players' most
-		// recently played notes.
-		//
-		// delays contains the delays for each player in samples
-		//
-		// Send these to the server however you want here. The current sampling
-		// frequency is available in the sampleRate variable.
-
-		// Once you've sent those to the server indicate to the polling thread that
-		// it should start to poll for new alphas.
-		alphasUpToDate.clear();
+		logManager->postLatestOnsets(onsets, delays);
 	}
 
 #pragma endregion Logging related functions that interacts with the (possible) LoggingManager Class object
