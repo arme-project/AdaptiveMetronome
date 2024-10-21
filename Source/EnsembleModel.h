@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "OSCManager.h"
 #include "XMLManager.h"
+#include "LogManager.h"
 
 using std::function;
 
@@ -13,6 +14,7 @@ class AdaptiveMetronomeAudioProcessor;
 
 class OSCManager;
 class XMLManager;
+class LogManager;
 
 class EnsembleModel :
 	private juce::OSCReceiver,
@@ -20,6 +22,9 @@ class EnsembleModel :
 	public juce::ActionBroadcaster
 {
 public:
+	std::atomic_flag alphasUpToDate;
+	double sampleRate = 44100.0;
+	int logLineCounter = 0;
 	int numUserPlayers = 1;
 	std::vector<std::unique_ptr<Player>> players;
 	juce::MidiFile midiFile;
@@ -78,13 +83,14 @@ private:
 	// Private Members
 	std::unique_ptr<OSCManager> oscManager;
 	std::unique_ptr<XMLManager> xmlManager;
+	std::unique_ptr<LogManager> logManager;
+
 	AdaptiveMetronomeAudioProcessor* processor = nullptr;
 
 	
 	
 
 	// Timing & Score Management
-	double sampleRate = 44100.0;
 	int samplesPerBeat = sampleRate / 4;
 	int scoreCounter = 0;
 	bool initialTempoSet = false;
@@ -139,7 +145,7 @@ private:
 	std::unique_ptr<juce::AbstractFifo> loggingFifo;
 	std::thread loggerThread;
 	std::atomic<bool> continueLogging;
-	int logLineCounter = 0;
+
 	void initialiseLoggingBuffer();
 	void startLoggerLoop();
 	void stopLoggerLoop();
@@ -160,7 +166,7 @@ private:
 	std::vector<std::vector<float>> pollingBuffer;
 	std::thread pollingThread;
 	std::atomic<bool> continuePolling;
-	std::atomic_flag alphasUpToDate;
+	/*std::atomic_flag alphasUpToDate;*/
 	void initialisePollingBuffers();
 	void startPollingLoop();
 	void stopPollingLoop();
