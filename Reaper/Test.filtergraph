@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FILTERGRAPH>
+  <FILTER uid="7" x="0.5" y="0.1" useARA="0">
+    <PLUGIN name="Audio Input" descriptiveName="" format="Internal" category="I/O devices"
+            manufacturer="JUCE" version="1.0" file="" uniqueId="246006c0"
+            isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="0"
+            numOutputs="2" isShell="0" hasARAExtension="0" uid="246006c0"/>
+    <STATE>0.</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="disabled"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="L R"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
+  <FILTER uid="8" x="0.25" y="0.1" useARA="0">
+    <PLUGIN name="MIDI Input" descriptiveName="" format="Internal" category="I/O devices"
+            manufacturer="JUCE" version="1.0" file="" uniqueId="a9e4f9eb"
+            isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="0"
+            numOutputs="0" isShell="0" hasARAExtension="0" uid="a9e4f9eb"/>
+    <STATE>0.</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="disabled"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="disabled"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
+  <FILTER uid="9" x="0.5" y="0.9" useARA="0">
+    <PLUGIN name="Audio Output" descriptiveName="" format="Internal" category="I/O devices"
+            manufacturer="JUCE" version="1.0" file="" uniqueId="724248cb"
+            isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="2"
+            numOutputs="0" isShell="0" hasARAExtension="0" uid="724248cb"/>
+    <STATE>0.</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="L R"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="disabled"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
+  <FILTER uid="10" x="0.25" y="0.9" useARA="0">
+    <PLUGIN name="MIDI Output" descriptiveName="" format="Internal" category="I/O devices"
+            manufacturer="JUCE" version="1.0" file="" uniqueId="9d5bbb00"
+            isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="0"
+            numOutputs="0" isShell="0" hasARAExtension="0" uid="9d5bbb00"/>
+    <STATE>0.</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="disabled"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="disabled"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
+  <FILTER uid="11" x="0.5052192066805845" y="0.5926339285714286" useARA="0">
+    <PLUGIN name="Drum Synth" format="VST3" category="Instrument|Synth" manufacturer="yourcompany"
+            version="1.0.0" file="C:\Users\genia\Work\Misc Projects\Drum Synth\Builds\VisualStudio2022\x64\Debug\VST3\Drum Synth.vst3\Contents\x86_64-win\Drum Synth.vst3"
+            uniqueId="298da29" isInstrument="1" fileTime="18c15f6d14e" infoUpdateTime="18c15f766c7"
+            numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
+            uid="e95aa100"/>
+    <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="L R"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="L R"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
+  <CONNECTION srcFilter="8" srcChannel="4096" dstFilter="11" dstChannel="4096"/>
+  <CONNECTION srcFilter="11" srcChannel="0" dstFilter="9" dstChannel="0"/>
+  <CONNECTION srcFilter="11" srcChannel="1" dstFilter="9" dstChannel="1"/>
+</FILTERGRAPH>

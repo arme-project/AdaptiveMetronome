@@ -10,9 +10,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AdaptiveMetronome - VST3", "AdaptiveMetronome_VST3.vcxproj", "{74CC4A3D-1A8B-584D-BF45-84ED2DDB55E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA} = {D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}
+		{C14101C7-A2C8-01B1-AE92-BF2184EF49A7} = {C14101C7-A2C8-01B1-AE92-BF2184EF49A7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AdaptiveMetronome - Shared Code", "AdaptiveMetronome_SharedCode.vcxproj", "{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AdaptiveMetronome - VST3 Manifest Helper", "AdaptiveMetronome_VST3ManifestHelper.vcxproj", "{C14101C7-A2C8-01B1-AE92-BF2184EF49A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +35,10 @@ Global
 		{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}.Debug|x64.Build.0 = Debug|x64
 		{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}.Release|x64.ActiveCfg = Release|x64
 		{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}.Release|x64.Build.0 = Release|x64
+		{C14101C7-A2C8-01B1-AE92-BF2184EF49A7}.Debug|x64.ActiveCfg = Debug|x64
+		{C14101C7-A2C8-01B1-AE92-BF2184EF49A7}.Debug|x64.Build.0 = Debug|x64
+		{C14101C7-A2C8-01B1-AE92-BF2184EF49A7}.Release|x64.ActiveCfg = Release|x64
+		{C14101C7-A2C8-01B1-AE92-BF2184EF49A7}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
