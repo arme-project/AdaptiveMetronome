@@ -16,15 +16,24 @@ class EnsembleModel :
 {
 public:
     //==============================================================================
-    EnsembleModel();
+    //EnsembleModel();
     EnsembleModel(AdaptiveMetronomeAudioProcessor *processorPtr);
 
     ~EnsembleModel();
     
     AdaptiveMetronomeAudioProcessor *processor = nullptr;
     //==============================================================================
+// Communication
+	bool OSCAutoConnect = false;
+    void oscMessageSend(bool test);
+    void oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
+    void oscMessageSendReset();
+    void oscMessageSendPlayMax();
+    //==============================================================================
     bool loadMidiFile (const juce::File &file, int userPlayers);
     bool reset();
+    bool reset(bool skipIntroNotes);
+    void setTempo (double bpm);
     
     //==============================================================================
     void prepareToPlay (double newSampleRate);
@@ -32,8 +41,11 @@ public:
     
     //==============================================================================
     void processMidiBlock (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int numSamples, double tempo);
-    
+    void setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber, int msMax);
+
     //==============================================================================
+    bool waitingForFirstNote = true;
+    void triggerFirstNote(); 
     int getNumPlayers();
     int getNumUserPlayers();
     bool isPlayerUserOperated (int playerIndex);
@@ -44,6 +56,9 @@ public:
     juce::AudioParameterFloat& getPlayerVolumeParameter (int playerIndex);
     juce::AudioParameterFloat& getAlphaParameter (int player1Index, int player2Index);
     juce::AudioParameterFloat& getBetaParameter (int player1Index, int player2Index);
+    
+    // TODO: Change to a JUCE parameter
+    juce::Atomic<int> currentNoteIndex;
 
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
@@ -94,16 +109,20 @@ private:
     static const juce::uint8 introToneVel = 100;
     int introCounter = 0;
     int introTonesPlayed = 0;
+    bool playbackStarted = false;
+    bool introFinishedPlaying = false;
+
+    bool firstSampleProcessed = false;
     
     void playIntroTones (juce::MidiBuffer &midi, int sampleIndex);
     void introToneOn (juce::MidiBuffer &midi, int sampleIndex);
     void introToneOff (juce::MidiBuffer &midi, int sampleIndex);
-    void introToneOnOff (juce::MidiBuffer &midi, juce::MidiMessage (*function)(int, int, juce::uint8), int sampleIndex);
+    //void introToneOnOff (juce::MidiBuffer &midi, juce::MidiMessage (*function)(int, int, juce::uint8), int sampleIndex);
     //==============================================================================
     // Funtions for ammendinding timings for each player in this ensemble. These
     // should only be called from within processMidiBlock().
     bool initialTempoSet = false;
-    void setTempo (double bpm);
+    //void setTempo (double bpm);
     void setInitialPlayerTempo();
     
     bool newOnsetsAvailable();

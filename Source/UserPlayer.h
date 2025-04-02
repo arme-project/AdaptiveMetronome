@@ -22,6 +22,7 @@ public:
     bool wasLatestOnsetUserInput() override;
                   
     void processIntroSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex, int introNote) override;
+    bool useOSCinput = false;
 
 protected:
     //==============================================================================

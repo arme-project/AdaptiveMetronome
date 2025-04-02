@@ -2,7 +2,9 @@
 #include "PluginProcessor.h"
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
+#include <chrono>
 
+using namespace std::chrono;
 using namespace std::chrono_literals;
 
 //==============================================================================
@@ -11,12 +13,26 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 {
     playersInUse.clear();
     resetFlag.clear();
+    currentNoteIndex.set(99);
 
     // OSC Listener addresses
     addListener(this, "/loadConfig");
     addListener(this, "/reset");
     addListener(this, "/setLogname");
     addListener(this, "/numIntroTones");
+
+	// OSC Listener addresses for standalone full-system
+    addListener(this, "/plugin");     // [4]
+    addListener(this, "/oscstart");     // [4]
+    addListener(this, "/playbackstart");
+    addListener(this, "/alphas");
+
+    OSCAutoConnect = true;
+
+	if (OSCAutoConnect)
+	{
+        connectOSCSender(8000);
+		connectOSCReceiver(8001);
 }
 
 EnsembleModel::~EnsembleModel()
@@ -68,6 +84,27 @@ bool EnsembleModel::isOscReceiverConnected()
     return (currentReceivePort > -1);
 }
 
+void EnsembleModel::oscMessageSend(bool test)
+{
+    if (test) {
+        auto oscMessage = juce::OSCMessage("/test");
+        if (!OSCSender.send(oscMessage)) {
+            DBG("Error: could not send OSC message.");
+        }
+    }
+	else {
+        auto oscMessage = juce::OSCMessage("/onsets");
+        for (int i = 0; i < 4; i++) {
+            auto randomFloat = 5.0f; // randomizer.nextFloat() / (float)20.0 + (float)0.5;
+            oscMessage.addArgument(randomFloat);
+        }
+
+        if (!OSCSender.send(oscMessage)) {
+            DBG("Error: could not send OSC message.");
+        }
+    }
+}
+
 void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
 {
     juce::OSCAddressPattern oscPattern = message.getAddressPattern();
@@ -105,6 +142,42 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
             numIntroTones = message[0].getInt32();
         }
     }
+	else if (oscAddress == "/plugin") // New User Note from external (e.g. Max). The third argument is the time per the MaxMSP cpu clock, and is now redundant.
+    {
+        if (message[0].isFloat32() && message[1].isInt32()
+            && message[2].isInt32() && message[3].isFloat32()) {
+
+            float oscOnsetTime = message[0].getFloat32();
+			int onsetNoteNumber = message[1].getInt32();
+			int msMax = message[2].getInt32();
+
+            if (processor->manualPlaying) {
+                if (waitingForFirstNote && onsetNoteNumber == 0) {
+                    triggerFirstNote();
+                    setUserOnsetFromOsc(oscOnsetTime, onsetNoteNumber, msMax);
+                }
+                else if (onsetNoteNumber > 0) {
+                    setUserOnsetFromOsc(oscOnsetTime, onsetNoteNumber, msMax);
+                }
+            }
+        }
+    }
+    else if (oscAddress == "/playbackstart") // Only used to set timer at start of playback. No longer needed.
+    {
+        if (message[0].isInt32()) {                             // [5]
+            if (waitingForFirstNote && processor->manualPlaying) {
+                //clock.setStartOfPlayback(message[0].getInt32());
+                //DBG("Start playback - " << clock.tickToString(clock.tick()));
+
+            }
+        }
+    }
+    else if (oscAddress == "/oscstart") 
+    {
+        reset(true);
+        processor->setManualPlaying(true);
+    }
+
     sendActionMessage("OSC Received");
 }
 
@@ -141,6 +214,10 @@ bool EnsembleModel::loadMidiFile (const juce::File &file, int userPlayers)
     return true;
 }
 
+void EnsembleModel::triggerFirstNote() {
+    waitingForFirstNote = false;
+}
+
 bool EnsembleModel::reset()
 {
 
@@ -154,6 +231,14 @@ bool EnsembleModel::reset()
     resetPlayers();
     
     return true;
+}
+
+bool EnsembleModel::reset(bool skipIntroNotes)
+{
+    reset();
+    introTonesPlayed = numIntroTones;
+
+    return false;
 }
 
 //==============================================================================
@@ -200,6 +285,27 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
         }
         
         playScore (inMidi, outMidi, i);
+    }
+}
+
+//==============================================================================
+// This method is called from the PluginProcessor when a note is played via OSC from Max
+// oscOnsetTime is in seconds, msMax is the time of the onset in ms according to Max's cpu clock
+void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber, int msMax)
+{
+    for (auto& player : players)
+    {
+        if (player->isUserOperated()) {
+            //auto tickOfOnset = clock->convertMsMaxToTick(msMax);
+            //int msOnsetSinceFirstSample = clock->getDurationSincePlayback(tickOfOnset);
+            //int onsetInSamples = (int)(msOnsetSinceFirstSample * (sampleRate / 1000));
+            
+			// This is a simplified version of the above, as we are not using the clock anymore. Onset time is simply whenever the note is received
+            int onsetInSamples = scoreCounter;
+			int onsetInSamplesFromOnsetTime = oscOnsetTime * sampleRate;
+			float errorInOnset = (onsetInSamples - onsetInSamplesFromOnsetTime)/(float)sampleRate;
+            player->setOscOnsetTime(oscOnsetTime, onsetNoteNumber, onsetInSamples);
+        }
     }
 }
 
@@ -381,11 +487,19 @@ void EnsembleModel::calculateNewIntervals()
     {
         if (players [i]->isUserOperated())
         {
-//            players [i]->recalculateOnsetInterval (samplesPerBeat, players, (*alphaParams) [i], (*betaParams) [i]);
             players [i]->recalculateOnsetInterval (samplesPerBeat, players);
         }
     } 
           
+    for (int i = 0; i < players.size(); ++i)
+    {
+        int onsetInterval = players[i]->getOnsetInterval();
+		int onsetTime = players[i]->getLatestOnsetTime();
+		int nextNoteTime = onsetTime + onsetInterval;
+		int nextNoteTimeInMS = nextNoteTime * 1000 / sampleRate;
+        oscMessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, nextNoteTimeInMS);
+    }
+
     //==========================================================================
     // Add details of most recent onsets to buffers to be logged.
     if (loggingFifo)
@@ -404,6 +518,33 @@ void EnsembleModel::calculateNewIntervals()
             storeOnsetDetailsForPlayer (writer.startIndex2 + i, p++);
         }
     } 
+}
+
+void EnsembleModel::oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS) {
+
+    auto oscMessage = juce::OSCMessage("/newInterval");
+    oscMessage.addInt32(playerNum);
+    oscMessage.addInt32(noteNum);
+    oscMessage.addInt32(noteTimeInMS);
+    if (!OSCSender.send(oscMessage)) {
+        DBG("Error: could not send OSC message.");
+    }
+
+}
+
+void EnsembleModel::oscMessageSendReset() {
+
+    auto oscMessage = juce::OSCMessage("/reset");
+    if (!OSCSender.send(oscMessage)) {
+        DBG("Error: could not send OSC message.");
+    }
+}
+
+void EnsembleModel::oscMessageSendPlayMax() {
+    auto oscMessage = juce::OSCMessage("/playMax");
+    if (!OSCSender.send(oscMessage)) {
+        DBG("Error: could not send OSC message.");
+    }
 }
 
 void EnsembleModel::clearOnsetsAvailable()
@@ -584,6 +725,7 @@ void EnsembleModel::resetPlayers()
 
     // Initialise score counter
     scoreCounter = 0;
+    firstSampleProcessed = false;
 
     // make sure to update player tempo when playback starts      
     initialTempoSet = false;
@@ -893,7 +1035,7 @@ void EnsembleModel::loggerLoop()
     while (continueLogging)
     {
         logOnsetDetails (logStream);
-        std::this_thread::sleep_for (50ms);
+        std::this_thread::sleep_for(50ms);
     }
 }
 

@@ -20,11 +20,15 @@ public:
     
     //==============================================================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-
     //==============================================================================
+    void setManualPlaying(bool shouldPlay); // used in standalone mode
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+
+	//==============================================================================
+    bool manualPlaying;
+    bool reaperPlaying;
 
     //==============================================================================
     bool hasEditor() const override;

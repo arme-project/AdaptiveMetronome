@@ -33,10 +33,27 @@ public:
     void setOnsetInterval (int interval);
     int getOnsetInterval();
     int getPlayedOnsetInterval();
-      
+
+    std::deque<double> onsetIntervals;
+    std::deque<double> onsetTimes;
     virtual void recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <Player> > &players);
-    
+    /**
+ * Add an onset interval to the queue. Make sure this is an IOI in seconds.
+ */
+    void addIntervalToQueue(double interval, double onsetTime);
+    void emptyIntervalQueue();
+    int numOfIntervalsInQueue = 0;
+    //==============================================================================
+        // OSC RELATED
+    float oscOnsetTime;
+    int oscOnsetTimeInSamples;
+    int latestOscOnsetNoteNumber;
+    void setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote);
+    //void setOscOnsetTimeInSamples(float oscOnsetTime);
+
+    bool newOSCOnsetAvailable = false;
+
     //==============================================================================
     double generateMotorNoise();
     double generateTimeKeeperNoise();
@@ -56,7 +73,8 @@ public:
     int getLatestOnsetDelay();
     double getLatestVolume();
     virtual bool wasLatestOnsetUserInput();
-    
+    int getCurrentNoteIndex();
+    //int getNextNoteTimeInMS();
     //==============================================================================
     void processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
     virtual void processIntroSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex, int introNote) {};
@@ -68,7 +86,7 @@ public:
     
     //==============================================================================
     std::size_t getNumNotes();
-    
+
 protected:
     //==============================================================================
     int playerIndex = 0;
@@ -100,6 +118,8 @@ protected:
     int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
     
     int currentOnsetTime = 0, previousOnsetTime = 0;
+    int nextNoteTimeInMS = 0;
+
     int latestDelay = 0;
     bool notePlayed = false;
     

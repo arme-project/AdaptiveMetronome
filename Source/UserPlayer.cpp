@@ -6,6 +6,7 @@ UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int mid
                         const double &sampleRate, const int &scoreCounter, int initialInterval)
   : Player (index, seq, midiChannel, sampleRate, scoreCounter, initialInterval)
 {
+    useOSCinput = true;
 }
 
 UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel,
@@ -110,10 +111,18 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
          playNextNote (outMidi, sampleIndex);
          return;
      }
-    
+
+     if (useOSCinput && newOSCOnsetAvailable) {
+         noteTriggeredByUser = true;
+         newOSCOnsetAvailable = false;
+         playNextNote(outMidi, sampleIndex);
+     }
     // Loop over all MIDI events at this sample position
     for (auto it = inMidi.findNextSamplePosition (sampleIndex); it != inMidi.end(); ++it)
     {
+        if (useOSCinput) {
+            break;
+        }
         // Filters ... ignore if following conditions are true ....
         
         // Ignore if score has not progressed half an interval length
@@ -142,6 +151,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         auto event = (*it).getMessage();
         
         // Play the next note at the first note on in this beat period
+        // IF NOT OSC NOTE?
         if (event.isNoteOn() && !notePlayed)
         {
             // Check if incomming note is on the midi channel associated with this player (channelParam)

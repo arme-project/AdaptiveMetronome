@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Source"
   ],
-  "SelectedNode": "\\C:\\Users\\genia\\Work\\AdaptiveMetronome",
+  "SelectedNode": "\\Source\\PluginProcessor.cpp",
   "PreviewInSolutionExplorer": false
 }
