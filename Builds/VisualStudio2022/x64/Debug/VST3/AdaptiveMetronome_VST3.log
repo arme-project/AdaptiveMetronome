@@ -1,2 +1,2 @@
-﻿     Creating library C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\VST3\AdaptiveMetronome.lib and object C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\VST3\AdaptiveMetronome.exp
-  AdaptiveMetronome_VST3.vcxproj -> C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\VST3\AdaptiveMetronome.vst3
+﻿  include_juce_audio_plugin_client_VST3.cpp
+LINK : fatal error LNK1104: cannot open file 'AdaptiveMetronome.lib'

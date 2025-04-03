@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\VST3 Manifest Helper\juce_vst3_helper.exe</FullPath>
+      <FullPath>C:\Users\VR-Lab\ARME Project\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\VST3 Manifest Helper\juce_vst3_helper.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

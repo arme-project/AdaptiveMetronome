@@ -1,5 +1,6 @@
 // Include files
 #include "recalculateAlphas.h"
+#ifndef NO_ALPHA_CALC
 #include "getAlphas.h"
 #include "rt_nonfinite.h"
 
@@ -120,4 +121,5 @@ std::vector<std::vector<double>> getAlphasCpp(std::deque<double> vl1_dq, std::de
 }
 
 
-// End of code generation (main.cpp)
+// End of code generation (main.cpp
+#endif

@@ -1,3 +1,4 @@
+#ifndef NO_ALPHA_CALC
 // Include files
 #include "rtwtypes.h"
 #include <cstddef>
@@ -11,3 +12,4 @@
 
 double getAlphasCppTest();
 std::vector<std::vector<double>> getAlphasCpp(std::deque<double> vl1_dq, std::deque<double> vl2_dq, std::deque<double> vla_dq, std::deque<double> vlc_dq);
+#endif

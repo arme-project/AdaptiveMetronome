@@ -1,19 +1,20 @@
 #pragma once
 
-#define nomatlab
-
 #include <JuceHeader.h>
 #include <vector>
 #include <atomic>
 #include <thread>
 #include "Player.h"
 #include "MetronomeClock.h"
-#include "rtwtypes.h"
 #include <cstddef>
 #include <cstdlib>
-#include "recalculateAlphas.h"
 
-#ifndef nomatlab
+#include "recalculateAlphas.h"
+#ifndef NO_ALPHA_CALC
+#include "rtwtypes.h"
+#endif
+
+#ifndef NO_MATLAB
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
 using namespace matlab::engine;
@@ -37,7 +38,7 @@ public:
     void oscMessageSendReset();
     void oscMessageSendPlayMax();
 
-#ifndef nomatlab
+#ifndef NO_MATLAB
     // MATLAB integration
     std::unique_ptr<MATLABEngine> matlabEngine;
     matlab::data::ArrayFactory factory;
@@ -45,8 +46,11 @@ public:
     bool setAlphasFromMATLABArray(matlab::data::TypedArray<double> alphasFromMATLAB);
     std::vector<matlab::data::Array> buildMatlabOnsetArray(bool test);
 #endif
+
+#ifndef NO_ALPHA_CALC
     bool getAlphasFromCodegen(bool test);
     bool setAlphasFromCodegen(std::vector<std::vector<double>> alphasFromCodegen);
+#endif
 
     //==============================================================================
     // Metronome for accurate time measurements

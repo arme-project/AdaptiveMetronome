@@ -2,24 +2,6 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="AdaptiveMetronome\codegen\lib\getAlphas">
-      <UniqueIdentifier>{3F4348D3-7367-3BBA-B40D-F85A5B53B7FA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AdaptiveMetronome\codegen\lib">
-      <UniqueIdentifier>{650BB061-2C93-772D-92E8-35840886FD7A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AdaptiveMetronome\codegen">
-      <UniqueIdentifier>{9EDF6E28-C145-B095-C608-BE286F90C624}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AdaptiveMetronome\R2023a\extern\include">
-      <UniqueIdentifier>{D06B4296-7678-8351-CD25-64C60E0AC0D6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AdaptiveMetronome\R2023a\extern">
-      <UniqueIdentifier>{CFD1F107-38CF-A9D8-5B40-3B0D96375E9A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AdaptiveMetronome\R2023a">
-      <UniqueIdentifier>{3E73F631-2E96-E7DA-124F-F69BF6522716}</UniqueIdentifier>
-    </Filter>
     <Filter Include="AdaptiveMetronome\Source">
       <UniqueIdentifier>{A194DC84-73E6-69F2-ED73-12487CA3CF60}</UniqueIdentifier>
     </Filter>
@@ -619,54 +601,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\bgls_from_onsets_and_window.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\bGLS_phase_model_single_and_multiperson.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\cov.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\diff.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\eml_rand_mt19937ar.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\eml_rand_mt19937ar_stateful.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\eml_setop.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\getAlphas.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\getAlphas_data.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\getAlphas_initialize.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\getAlphas_terminate.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\inv.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\randn.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\rt_nonfinite.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\rtGetInf.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\codegen\lib\getAlphas\rtGetNaN.cpp">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\recalculateAlphas.cpp">
       <Filter>AdaptiveMetronome\Source</Filter>
     </ClCompile>
@@ -3103,9 +3037,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_osc\juce_osc.cpp">
       <Filter>JUCE Modules\juce_osc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
-      <Filter>JUCE Library Code</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
@@ -3153,66 +3084,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\bgls_from_onsets_and_window.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\bGLS_phase_model_single_and_multiperson.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\coder_bounded_array.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\cov.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\diff.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\eml_rand_mt19937ar.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\eml_rand_mt19937ar_stateful.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\eml_setop.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\getAlphas.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\getAlphas_data.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\getAlphas_initialize.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\getAlphas_terminate.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\getAlphas_types.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\inv.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\randn.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\rt_nonfinite.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\rtGetInf.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\rtGetNaN.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\codegen\lib\getAlphas\rtwtypes.h">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\R2023a\extern\include\tmwtypes.h">
-      <Filter>AdaptiveMetronome\R2023a\extern\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\recalculateAlphas.h">
       <Filter>AdaptiveMetronome\Source</Filter>
     </ClInclude>
@@ -6111,9 +5982,6 @@
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_osc\juce_osc.h">
       <Filter>JUCE Modules\juce_osc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
-      <Filter>JUCE Library Code</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>
     </ClInclude>
@@ -6122,15 +5990,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\codegen\lib\getAlphas\_clang-format">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </None>
-    <None Include="..\..\Source\codegen\lib\getAlphas\buildInfo.mat">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </None>
-    <None Include="..\..\Source\codegen\lib\getAlphas\rtw_proj.tmw">
-      <Filter>AdaptiveMetronome\codegen\lib\getAlphas</Filter>
-    </None>
     <None Include="..\..\JuceLibraryCode\modules\juce_audio_devices\native\oboe\CMakeLists.txt">
       <Filter>JUCE Modules\juce_audio_devices\native\oboe</Filter>
     </None>

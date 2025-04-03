@@ -1,15 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Builds\\VisualStudio2022\\",
+  "WorkspaceRootPath": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Builds\\VisualStudio2022\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\EnsembleModel.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\EnsembleModel.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\PluginEditor.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\MetronomeClock.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\PluginEditor.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6B63AAC-2E0C-2B73-83E8-97DF4F8E66DA}|AdaptiveMetronome_SharedCode.vcxproj|C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\PluginProcessor.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,53 +22,58 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Player.cpp",
-              "DocumentMoniker": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\Player.cpp",
-              "RelativeDocumentMoniker": "..\\..\\Source\\Player.cpp",
-              "ToolTip": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\Player.cpp",
-              "RelativeToolTip": "..\\..\\Source\\Player.cpp",
-              "ViewState": "AgIAAEYBAAAAAAAAAAAtwFwBAAAeAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "MetronomeClock.cpp",
+              "DocumentMoniker": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\MetronomeClock.cpp",
+              "RelativeDocumentMoniker": "..\\..\\Source\\MetronomeClock.cpp",
+              "ToolTip": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\MetronomeClock.cpp",
+              "RelativeToolTip": "..\\..\\Source\\MetronomeClock.cpp",
+              "ViewState": "AQIAABYAAAAAAAAAAAAawCkAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-02T21:23:52.73Z",
+              "WhenOpened": "2025-04-03T14:44:21.89Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PluginEditor.cpp",
-              "DocumentMoniker": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\PluginEditor.cpp",
-              "RelativeDocumentMoniker": "..\\..\\Source\\PluginEditor.cpp",
-              "ToolTip": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\PluginEditor.cpp",
-              "RelativeToolTip": "..\\..\\Source\\PluginEditor.cpp",
-              "ViewState": "AgIAAJEAAAAAAAAAAAArwJ8AAAA/AAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "PluginProcessor.cpp",
+              "DocumentMoniker": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\PluginProcessor.cpp",
+              "RelativeDocumentMoniker": "..\\..\\Source\\PluginProcessor.cpp",
+              "ToolTip": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\PluginProcessor.cpp",
+              "RelativeToolTip": "..\\..\\Source\\PluginProcessor.cpp",
+              "ViewState": "AQIAAIEAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-02T21:10:35.216Z",
+              "WhenOpened": "2025-04-03T14:21:51.187Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PluginEditor.cpp",
+              "DocumentMoniker": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\PluginEditor.cpp",
+              "RelativeDocumentMoniker": "..\\..\\Source\\PluginEditor.cpp",
+              "ToolTip": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\PluginEditor.cpp",
+              "RelativeToolTip": "..\\..\\Source\\PluginEditor.cpp",
+              "ViewState": "AQIAAK4AAAAAAAAAAAAAAL0AAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-03T14:21:36.475Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "EnsembleModel.cpp",
-              "DocumentMoniker": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\EnsembleModel.cpp",
+              "DocumentMoniker": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\EnsembleModel.cpp",
               "RelativeDocumentMoniker": "..\\..\\Source\\EnsembleModel.cpp",
-              "ToolTip": "C:\\Users\\genia\\Work\\AdaptiveMetronome - Copy\\Source\\EnsembleModel.cpp",
+              "ToolTip": "C:\\Users\\VR-Lab\\ARME Project\\AdaptiveMetronome\\Source\\EnsembleModel.cpp",
               "RelativeToolTip": "..\\..\\Source\\EnsembleModel.cpp",
-              "ViewState": "AgIAAEUBAAAAAAAAAAAMwEMBAAAAAAAAAAAAAA==",
+              "ViewState": "AQIAAGkBAAAAAAAAAAAnwHYBAABAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-02T21:09:55.297Z",
+              "WhenOpened": "2025-04-03T13:44:54.516Z",
               "EditorCaption": ""
             }
           ]

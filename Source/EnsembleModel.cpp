@@ -1,16 +1,19 @@
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
+
+#ifndef NO_ALPHA_CALC
 #include "recalculateAlphas.h"
 #include "getAlphas_terminate.h"
+#endif
 
-using namespace std::chrono;
-
-#ifndef nomatlab
+#ifndef NO_MATLAB
 #include "MatlabEngine.hpp"
 #include "MatlabDataArray.hpp"
 using namespace matlab::engine;
 using namespace matlab::data ;
 #endif
+
+using namespace std::chrono;
 
 //==============================================================================
 EnsembleModel::EnsembleModel()
@@ -26,16 +29,17 @@ EnsembleModel::EnsembleModel()
         DBG("OSC SENDER CONNECTED");
     }
 
-#ifndef nomatlab
+#ifndef NO_MATLAB
     auto sharedMATLABs = matlab::engine::findMATLAB();
     if (sharedMATLABs.size() > 0) {
         matlabEngine = connectMATLAB(sharedMATLABs[0]);
     }
 #endif
-
+#ifndef NO_ALPHA_CALC
     auto alpha1 = getAlphasCppTest();
     DBG(alpha1);
     getAlphas_terminate();
+#endif
 
 }
 
@@ -56,7 +60,7 @@ void EnsembleModel::writeToLogger(time_point<system_clock> timeStamp, juce::Stri
     juce::Logger::writeToLog(formattedString);
 }
 
-#ifndef nomatlab
+#ifndef NO_MATLAB
 bool EnsembleModel::getAlphasFromMATLAB(bool test = false) {
     // This is the main method to call to update alphas
     // This packs the most recent onsets, sends to Matlab,
@@ -189,7 +193,7 @@ std::vector<matlab::data::Array> EnsembleModel::buildMatlabOnsetArray(bool test 
 }
 #endif
 
-
+#ifndef NO_ALPHA_CALC
 bool EnsembleModel::getAlphasFromCodegen(bool test = false) {
     // This is the main method to call to update alphas
     // This packs the most recent onsets, sends to Matlab,
@@ -217,6 +221,7 @@ bool EnsembleModel::setAlphasFromCodegen(std::vector<std::vector<double>> alphas
 
     return true;
 }
+#endif
 
 
 
@@ -368,7 +373,11 @@ void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber,
     {
         if (player->isUserOperated()) {
             auto tickOfOnset = clock->convertMsMaxToTick(msMax);
+#ifdef USE_CLOCK
             int msOnsetSinceFirstSample = clock->getDurationSincePlayback(tickOfOnset);
+#else
+            int msOnsetSinceFirstSample = (int)(oscOnsetTime * 1000.0f);
+#endif
             int onsetInSamples = (int)(msOnsetSinceFirstSample * (sampleRate / 1000));
             player->setOscOnsetTime(oscOnsetTime, onsetNoteNumber, onsetInSamples);
         }

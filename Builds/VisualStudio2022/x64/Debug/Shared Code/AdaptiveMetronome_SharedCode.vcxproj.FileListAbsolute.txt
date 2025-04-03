@@ -1,1 +1,2 @@
 C:\Users\genia\Work\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\Shared Code\AdaptiveMetronome.lib
+C:\Users\VR-Lab\ARME Project\AdaptiveMetronome\Builds\VisualStudio2022\x64\Debug\Shared Code\AdaptiveMetronome.lib
