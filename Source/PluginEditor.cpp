@@ -10,7 +10,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
                                                                               EnsembleModel& ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
-      instructionLabel (juce::String(), "Adaptive Metronome (Standalone v0.2.1)"),
+      instructionLabel (juce::String(), "Adaptive Metronome (Standalone v0.2.2)"),
       userPlayersLabel (juce::String(), "No. User Players:"),
       midiNoteReceivedLabel (juce::String(), "No"),
       playButton ("Play"),
