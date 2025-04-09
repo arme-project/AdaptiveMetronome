@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+      {
+        "name": "Launch AdaptiveMetronome",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/Builds/VisualStudio2022/x64/Debug/Standalone Plugin/AdaptiveMetronome.exe",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}/Builds/VisualStudio2022/x64/Debug/",
+        "environment": [],
+        "console": "internalConsole",
+        "preLaunchTask": "Build Solution"
+      }
+    ]
+  }
+  

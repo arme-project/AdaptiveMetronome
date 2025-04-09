@@ -4,3 +4,4 @@ JuceLibraryCode
 Reaper/BasicPluginTest.filtergraph
 Audio/TestOnly/*
 /Projucer.exe - Shortcut.lnk
+.vscode/settings.json
