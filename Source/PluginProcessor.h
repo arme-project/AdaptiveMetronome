@@ -10,7 +10,6 @@ class AdaptiveMetronomeAudioProcessor : public juce::AudioProcessor
 public:
     //==============================================================================
     AdaptiveMetronomeAudioProcessor();
-    void TestFloatParameters();
     ~AdaptiveMetronomeAudioProcessor() override;
 
     EnsembleModel ensemble;
