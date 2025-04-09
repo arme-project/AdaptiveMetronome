@@ -6,9 +6,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
                                                                               EnsembleModel &ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
-      instructionLabel (juce::String(), "Wait for 4 tones, then start tapping along..."),
+      instructionLabel (juce::String(), "Waiting for message from MAX/MSP"),
       userPlayersLabel (juce::String(), "No. User Players:"),
-      versionLabel(juce::String(), "(v1.0.3)"),
+      versionLabel(juce::String(), "(v1.0.3(SA))"),
       resetButton ("Reset"),
       loadMidiButton ("Load File"), // TODO: Rename this to reflect additional .xml config functionality?
       oscOn("")

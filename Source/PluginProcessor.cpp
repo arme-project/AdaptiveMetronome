@@ -48,6 +48,23 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samp
     midiOutputBuffer.ensureSize (4096);
     
     wasPlaying = false;
+
+    // Used in standalone
+    manualPlaying = false;
+    reaperPlaying = false;
+}
+
+inline const char* const BoolToString(bool b)
+{
+    return b ? "true" : "false";
+}
+
+// Where is this called from?
+void AdaptiveMetronomeAudioProcessor::setManualPlaying(bool shouldPlay)
+{
+    manualPlaying = shouldPlay;
+    ensemble.waitingForFirstNote = true;
+    DBG("SETTING PLAYBACK TO " << BoolToString(manualPlaying) << ", " << BoolToString(ensemble.waitingForFirstNote));
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -61,7 +78,8 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     if (playHeadPosition.hasValue())
     {
         playing = playHeadPosition->getIsPlaying();
-        bpm = playHeadPosition->getBpm();
+        //bpm = playHeadPosition->getBpm();
+		bpm = 120.0;
     }
     
     double tempo = bpm.hasValue() ? *bpm : 60;
@@ -72,18 +90,20 @@ void AdaptiveMetronomeAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     
     //==========================================================================
     // If playback has just stopped, stop all sound
-    bool playbackStopped = !playing && wasPlaying;
+    bool playbackStopped = !manualPlaying && wasPlaying;
     
     if (playbackStopped)
     {
         EnsembleModel::soundOffAllChannels (midiOutputBuffer);
     }
     
-    wasPlaying = playing;
+    //wasPlaying = playing;
+    wasPlaying = manualPlaying;
+
     
     //==========================================================================
     // If the playhead is moving start processing MIDI
-    if (playing)
+    if (manualPlaying)
     {
         ensemble.processMidiBlock (midiMessages, midiOutputBuffer, buffer.getNumSamples(), tempo);
     }

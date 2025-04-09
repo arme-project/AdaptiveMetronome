@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "Player.h"
+using namespace std::chrono;
 
 //==============================================================================
 Player::Player (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
@@ -44,6 +45,8 @@ void Player::reset()
     
     // clear note played flag
     notePlayed = false;
+    onsetIntervals.clear();
+    onsetTimes.clear();
     
     // noises
     currentMotorNoise = 0.0;
@@ -52,6 +55,33 @@ void Player::reset()
     timeKeeperMean = 0.0;
 }
 
+//==============================================================================
+// Called from EnsembleModel::setUserOnsetFromOsc
+// This sets newOSCOnsetAvailable to true, and sets the onset time in samples. 
+// newOSCOnsetAvailable is checked in UserPlayer::processNoteOn. 
+void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote)
+{
+    float antescofoDelay = 0.0;
+    int antescofoDelaySamples = (int)(antescofoDelay * sampleRate);
+
+    onsetFromOsc -= antescofoDelay;
+    samplesSinceFirstNote -= antescofoDelaySamples;
+    if (currentNoteIndex >= 0) {
+        oscOnsetTime = onsetFromOsc; // Onset in seconds
+        oscOnsetTimeInSamples = samplesSinceFirstNote;
+        latestOscOnsetNoteNumber = onsetNoteNumber;
+        newOSCOnsetAvailable = true;
+        previousOnsetTime = currentOnsetTime;
+        currentOnsetTime = oscOnsetTimeInSamples;
+        setOnsetInterval(currentOnsetTime - previousOnsetTime);
+    }
+    else { // Why is this needed? Is it ever called?
+        oscOnsetTime = onsetFromOsc; // Onset in seconds
+        oscOnsetTimeInSamples = samplesSinceFirstNote;
+        latestOscOnsetNoteNumber = onsetNoteNumber;
+        newOSCOnsetAvailable = true;
+    }
+}
 //==============================================================================
 void Player::setOnsetInterval (int interval)
 {
@@ -92,7 +122,7 @@ void Player::recalculateOnsetInterval (int samplesPerBeat,
     // generate noises for this onset
     double hNoise = generateHNoise() * sampleRate;
 
-    // calcualte next onset interval
+    // calculate next onset interval
     onsetInterval = samplesPerBeat - alphaSum + hNoise;
 }
 
@@ -178,6 +208,10 @@ bool Player::wasLatestOnsetUserInput()
     return false;
 }
 
+int Player::getCurrentNoteIndex()
+{
+    return (int)(currentNoteIndex);
+}
 //==============================================================================
 void Player::processSample (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex)
 {
