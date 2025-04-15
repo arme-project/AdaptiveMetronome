@@ -18,15 +18,14 @@ namespace ARMETimingModel
     {
     public:
         // Parameters
-        TimingModel(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval, ModelParameters& modelParams) :
-            numberOfPlayers(numberOfPlayers),
-            numberOfUserPlayers(numberOfUserPlayers),
-            initialOnsetInterval(initialOnsetInterval),
-            modelParams(modelParams),
-            nextOnsetTimes(numberOfPlayers) {}
+        TimingModel(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval, ModelParameters &modelParams) : numberOfPlayers(numberOfPlayers),
+                                                                                                                              numberOfUserPlayers(numberOfUserPlayers),
+                                                                                                                              initialOnsetInterval(initialOnsetInterval),
+                                                                                                                              modelParams(modelParams),
+                                                                                                                              nextOnsetTimes(numberOfPlayers) {}
 
         virtual void createNewParameters(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval) {};
-        virtual void setModelParameters(ModelParameters& newModelParams) {};
+        virtual void setModelParameters(ModelParameters &newModelParams) {};
 
         // Onsets
         virtual void reset() {};
@@ -47,7 +46,7 @@ namespace ARMETimingModel
         // Basic constructor with number of players
         ~TimingModel() {};
         // Parameters
-        ModelParameters& modelParams;
+        ModelParameters &modelParams;
 
         // Global Parameters
         int numberOfPlayers = 4;
@@ -68,17 +67,17 @@ namespace ARMETimingModel
 #pragma region Standard Phase Correction Timing Model
     /**
      * \brief Implementation of the most basic TimingModel.
-     * 
+     *
      *  Implements Alpha, Timekeeper Noise and Motor Noise parameters.
      */
     class PhaseCorrectionTimingModel : public TimingModel
     {
     public:
-        PhaseCorrectionTimingModel(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval, ModelParameters& modelParams);
+        PhaseCorrectionTimingModel(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval, ModelParameters &modelParams);
         ~PhaseCorrectionTimingModel() {}
 
         virtual void createNewParameters(int numberOfPlayers, int numberOfUserPlayers, float initialOnsetInterval) override {};
-        virtual void setModelParameters(ModelParameters& newModelParams) override { modelParams = newModelParams; };
+        virtual void setModelParameters(ModelParameters &newModelParams) override { modelParams = newModelParams; };
 
         // Onsets
         virtual void reset();
@@ -88,7 +87,7 @@ namespace ARMETimingModel
         virtual float getLatestOnset(int playerNumber) override;
         virtual float getOnsetForNoteNumber(int playerNumber, int noteNumber) override;
         virtual float getNumberOfOnsetsRegisteredForPlayer(int playerNumber) override;
-        
+
         virtual float getNextOnset(int playerNumber) override;
         virtual std::vector<float> getNextOnsets() override;
     };
