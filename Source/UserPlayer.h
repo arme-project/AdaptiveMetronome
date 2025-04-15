@@ -1,3 +1,11 @@
+/**
+ * \file UserPlayer.h
+ * \brief Header file for the UserPlayer class.
+ *
+ * This file contains the definition of the UserPlayer class, which is a subclass of the Player class.
+ * The UserPlayer class is responsible for handling user input and generating MIDI messages based on that input.
+ */
+
 #pragma once
 #include "Player.h"
 

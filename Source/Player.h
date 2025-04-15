@@ -1,3 +1,11 @@
+/**
+ * \file Player.h
+ * \brief Header file for the Player class.
+ *
+ * This file contains the definition of the Player class, which is responsible for playing back a sequence of MIDI notes.
+ * The Player class handles the timing of the notes, including the onset intervals and the playback of MIDI messages.
+ */
+
 #pragma once
 #include <JuceHeader.h>
 #include <vector>
