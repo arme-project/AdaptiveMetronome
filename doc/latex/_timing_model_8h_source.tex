@@ -1,0 +1,96 @@
+\doxysection{Timing\+Model.\+h}
+\hypertarget{_timing_model_8h_source}{}\label{_timing_model_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/TimingModel.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/TimingModel.h}}
+\mbox{\hyperlink{_timing_model_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ \ ==============================================================================}}
+\DoxyCodeLine{00003\ \textcolor{comment}{}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ \ \ \ TimingModel.h}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ Created:\ 22\ Aug\ 2024\ 2:07:50pm}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ Author:\ \ Genia\ Penksik}}
+\DoxyCodeLine{00007\ \textcolor{comment}{}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ ==============================================================================}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_timing_model_parameters_group_8h}{TimingModelParametersGroup.h}}"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_a_r_m_e_timing_model}{ARMETimingModel}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ MODEL}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#pragma\ region\ Base\ Timing\ Model}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_aac8f77980ab8794a042ef9c375765920}{TimingModel}}}
+\DoxyCodeLine{00018\ \ \ \ \ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parameters}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_aac8f77980ab8794a042ef9c375765920}{TimingModel}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}},\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}},\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{modelParams}})\ :\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}}),}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}}),}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}}),}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{modelParams}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{modelParams}}),}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ad995b8c5350d8e4dbf0537ced594feac}{nextOnsetTimes}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}})\ \{\}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a175bb4186371a4ca4d841d2f9036c007}{createNewParameters}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}},\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}})\ \{\};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a2c5c46badddbbff46f86dabd4a7712da}{setModelParameters}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ModelParameters}}\ \&newModelParams)\ \{\};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Onsets}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_aedde9cbd5a8bf9036907aff87253290d}{reset}}()\ \{\};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a6775f84656162784c8b742ac4ce4385f}{resetOnsets}}(\textcolor{keywordtype}{int}\ maxNumberOfOnsets)\ \{\};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a4c71cac142af234f79878ba300c21566}{registerNewOnset}}(\textcolor{keywordtype}{int}\ playerNumber,\ \textcolor{keywordtype}{float}\ onsetTime,\ \textcolor{keywordtype}{int}\ onsetNumber\ =\ -\/1.0f)\ \{\};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a32a66d85518505e6cf101463ee2af5ab}{getLatestOnset}}(\textcolor{keywordtype}{int}\ playerNumber)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a0b9465b070b772ed0f68c91b2e44124d}{getOnsetForNoteNumber}}(\textcolor{keywordtype}{int}\ playerNumber,\ \textcolor{keywordtype}{int}\ noteNumber)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7c445dde434f0f2c0f314f7b79ae16eb}{getNumberOfOnsetsRegisteredForPlayer}}(\textcolor{keywordtype}{int}\ playerNumber)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a2f2b5e5e1b2e06837d3788737d350f05}{getNextOnset}}(\textcolor{keywordtype}{int}\ playerNumber)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ std::vector<float>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a3331fe11c73b166df12b6b512534fcb4}{getNextOnsets}}()\ \{\ \textcolor{keywordflow}{return}\ std::vector<float>(0);\ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Getters/Setters}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a4c7dd428d8a4d4cee450461d9e40af6d}{getNumberOfPlayers}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}};\ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ace4268da9c0427da90e912f340644026}{getNumberOfUserPlayers}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}};\ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Basic\ constructor\ with\ number\ of\ players}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a103349a22f0f901692a88d98dc44d0cb}{\string~TimingModel}}()\ \{\};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parameters}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{modelParams}};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Global\ Parameters}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}}\ =\ 4;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}}\ =\ 1;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}}\ =\ 0.5f;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ab6e11ca143335bf0df19a943f63f38f1}{numberOfNotesRegisteredByAllPlayers}}\ =\ 0;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a29f6b0df386315b8a2db1ff94755694e}{numberOfNextOnsetsCalculated}}\ =\ 0;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Onsets}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a9f5dbedfbc060f5d33db33fcd4417705}{defaultMaxNumberOfOnsets}}\ =\ 300;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ std::vector<std::vector<float>>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a42f7bcb7acea7e0701e62e242feb2881}{onsetTimes}};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::vector<float>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ad995b8c5350d8e4dbf0537ced594feac}{nextOnsetTimes}};}
+\DoxyCodeLine{00063\ \ \ \ \ \};}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ 2.0\ STANDARD\ MODEL\ IMPLEMENTATIONS}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#pragma\ region\ Standard\ Phase\ Correction\ Timing\ Model}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_afacbac41cd3709d66bb4478c64c64154}{PhaseCorrectionTimingModel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_aac8f77980ab8794a042ef9c375765920}{TimingModel}}}
+\DoxyCodeLine{00074\ \ \ \ \ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_afacbac41cd3709d66bb4478c64c64154}{PhaseCorrectionTimingModel}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}},\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}},\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{modelParams}});}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a14105241d6008fd56d467f6bde4c0781}{\string~PhaseCorrectionTimingModel}}()\ \{\}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ae0380967f5c2d0b9b171e6aa3e822ca6}{createNewParameters}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{numberOfPlayers}},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{numberOfUserPlayers}},\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initialOnsetInterval}})\textcolor{keyword}{\ override\ }\{\};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a438e7d18389b177b9d7997d55c5beb9e}{setModelParameters}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ModelParameters}}\ \&newModelParams)\textcolor{keyword}{\ override\ }\{\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{modelParams}}\ =\ newModelParams;\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Onsets}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_aa35f613ae55c8567d9f3f6770c4fa523}{reset}}();}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ad3f3dcb3f56a92fbf71f6503e1b721d1}{resetOnsets}}(\textcolor{keywordtype}{int}\ maxNumberOfOnsets)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a2bc6ffcf71130de19f6a927101761df3}{registerNewOnset}}(\textcolor{keywordtype}{int}\ playerNumber,\ \textcolor{keywordtype}{float}\ onsetTime,\ \textcolor{keywordtype}{int}\ onsetNumber\ =\ -\/1.0f)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_acd1d1a8586265f25fa918fd2fd961542}{getLatestOnset}}(\textcolor{keywordtype}{int}\ playerNumber)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a03418b8dac02b45ddac8ed007439e7d2}{getOnsetForNoteNumber}}(\textcolor{keywordtype}{int}\ playerNumber,\ \textcolor{keywordtype}{int}\ noteNumber)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a49bf617304918a1f3f4bfd09763097a0}{getNumberOfOnsetsRegisteredForPlayer}}(\textcolor{keywordtype}{int}\ playerNumber)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a6ea67c51b468e3f8fa8004734c4a725e}{getNextOnset}}(\textcolor{keywordtype}{int}\ playerNumber)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ std::vector<float>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a957f5d611387362c4f663bed73524b00}{getNextOnsets}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00093\ \ \ \ \ \};}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00095\ \}}
+
+\end{DoxyCode}

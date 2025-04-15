@@ -1,0 +1,212 @@
+\doxysection{ARMETiming\+Model\+::Phase\+Correction\+Timing\+Model Class Reference}
+\hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model}{}\label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+
+
+Implementation of the most basic \doxylink{class_a_r_m_e_timing_model_1_1_timing_model}{Timing\+Model}.  
+
+
+
+
+{\ttfamily \#include $<$Timing\+Model.\+h$>$}
+
+Inheritance diagram for ARMETiming\+Model\+::Phase\+Correction\+Timing\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_afacbac41cd3709d66bb4478c64c64154}{Phase\+Correction\+Timing\+Model}} (int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{number\+Of\+Players}}, int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{number\+Of\+User\+Players}}, float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initial\+Onset\+Interval}}, \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}} \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{model\+Params}})
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a14105241d6008fd56d467f6bde4c0781}{\texorpdfstring{$\sim$}{\string~}\+Phase\+Correction\+Timing\+Model}} ()
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ae0380967f5c2d0b9b171e6aa3e822ca6}{create\+New\+Parameters}} (int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{number\+Of\+Players}}, int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{number\+Of\+User\+Players}}, float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initial\+Onset\+Interval}}) override
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a438e7d18389b177b9d7997d55c5beb9e}{set\+Model\+Parameters}} (\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}} \&new\+Model\+Params) override
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_aa35f613ae55c8567d9f3f6770c4fa523}{reset}} ()
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ad3f3dcb3f56a92fbf71f6503e1b721d1}{reset\+Onsets}} (int max\+Number\+Of\+Onsets) override
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a2bc6ffcf71130de19f6a927101761df3}{register\+New\+Onset}} (int player\+Number, float onset\+Time, int onset\+Number=-\/1.\+0f) override
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_acd1d1a8586265f25fa918fd2fd961542}{get\+Latest\+Onset}} (int player\+Number) override
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a03418b8dac02b45ddac8ed007439e7d2}{get\+Onset\+For\+Note\+Number}} (int player\+Number, int note\+Number) override
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a49bf617304918a1f3f4bfd09763097a0}{get\+Number\+Of\+Onsets\+Registered\+For\+Player}} (int player\+Number) override
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a6ea67c51b468e3f8fa8004734c4a725e}{get\+Next\+Onset}} (int player\+Number) override
+\item 
+virtual std\+::vector$<$ float $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a957f5d611387362c4f663bed73524b00}{get\+Next\+Onsets}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model}{ARMETiming\+Model\+::\+Timing\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_aac8f77980ab8794a042ef9c375765920}{Timing\+Model}} (int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{number\+Of\+Players}}, int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{number\+Of\+User\+Players}}, float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initial\+Onset\+Interval}}, \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}} \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{model\+Params}})
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a4c7dd428d8a4d4cee450461d9e40af6d}{get\+Number\+Of\+Players}} ()
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ace4268da9c0427da90e912f340644026}{get\+Number\+Of\+User\+Players}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model}{ARMETiming\+Model\+::\+Timing\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a103349a22f0f901692a88d98dc44d0cb}{\texorpdfstring{$\sim$}{\string~}\+Timing\+Model}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model}{ARMETiming\+Model\+::\+Timing\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}} \& \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_acb8b10afaaae153a366bf2513d2fcccc}{model\+Params}}
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7de0590d88928b5db14615e53c9f1ae3}{number\+Of\+Players}} = 4
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a1a19c01ff32ad34d0ea52dd65a0cf35b}{number\+Of\+User\+Players}} = 1
+\item 
+float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a329bcb7cac63870d090bd54eb92e6df8}{initial\+Onset\+Interval}} = 0.\+5f
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ab6e11ca143335bf0df19a943f63f38f1}{number\+Of\+Notes\+Registered\+By\+All\+Players}} = 0
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a29f6b0df386315b8a2db1ff94755694e}{number\+Of\+Next\+Onsets\+Calculated}} = 0
+\item 
+std\+::vector$<$ std\+::vector$<$ float $>$ $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a42f7bcb7acea7e0701e62e242feb2881}{onset\+Times}}
+\item 
+std\+::vector$<$ float $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_ad995b8c5350d8e4dbf0537ced594feac}{next\+Onset\+Times}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model}{ARMETiming\+Model\+::\+Timing\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+static const int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a9f5dbedfbc060f5d33db33fcd4417705}{default\+Max\+Number\+Of\+Onsets}} = 300
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of the most basic \doxylink{class_a_r_m_e_timing_model_1_1_timing_model}{Timing\+Model}. 
+
+Implements Alpha, Timekeeper Noise and Motor Noise parameters. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_afacbac41cd3709d66bb4478c64c64154}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!PhaseCorrectionTimingModel@{PhaseCorrectionTimingModel}}
+\index{PhaseCorrectionTimingModel@{PhaseCorrectionTimingModel}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{PhaseCorrectionTimingModel()}{PhaseCorrectionTimingModel()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_afacbac41cd3709d66bb4478c64c64154} 
+ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::\+Phase\+Correction\+Timing\+Model (\begin{DoxyParamCaption}\item[{int}]{number\+Of\+Players}{, }\item[{int}]{number\+Of\+User\+Players}{, }\item[{float}]{initial\+Onset\+Interval}{, }\item[{\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}} \&}]{model\+Params}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a14105241d6008fd56d467f6bde4c0781}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!````~PhaseCorrectionTimingModel@{\texorpdfstring{$\sim$}{\string~}PhaseCorrectionTimingModel}}
+\index{````~PhaseCorrectionTimingModel@{\texorpdfstring{$\sim$}{\string~}PhaseCorrectionTimingModel}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}PhaseCorrectionTimingModel()}{\string~PhaseCorrectionTimingModel()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a14105241d6008fd56d467f6bde4c0781} 
+ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::\texorpdfstring{$\sim$}{\string~}\+Phase\+Correction\+Timing\+Model (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ae0380967f5c2d0b9b171e6aa3e822ca6}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!createNewParameters@{createNewParameters}}
+\index{createNewParameters@{createNewParameters}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{createNewParameters()}{createNewParameters()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ae0380967f5c2d0b9b171e6aa3e822ca6} 
+virtual void ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::create\+New\+Parameters (\begin{DoxyParamCaption}\item[{int}]{number\+Of\+Players}{, }\item[{int}]{number\+Of\+User\+Players}{, }\item[{float}]{initial\+Onset\+Interval}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a175bb4186371a4ca4d841d2f9036c007}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_acd1d1a8586265f25fa918fd2fd961542}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!getLatestOnset@{getLatestOnset}}
+\index{getLatestOnset@{getLatestOnset}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{getLatestOnset()}{getLatestOnset()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_acd1d1a8586265f25fa918fd2fd961542} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::get\+Latest\+Onset (\begin{DoxyParamCaption}\item[{int}]{player\+Number}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a32a66d85518505e6cf101463ee2af5ab}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a6ea67c51b468e3f8fa8004734c4a725e}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!getNextOnset@{getNextOnset}}
+\index{getNextOnset@{getNextOnset}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{getNextOnset()}{getNextOnset()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a6ea67c51b468e3f8fa8004734c4a725e} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::get\+Next\+Onset (\begin{DoxyParamCaption}\item[{int}]{player\+Number}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a2f2b5e5e1b2e06837d3788737d350f05}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a957f5d611387362c4f663bed73524b00}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!getNextOnsets@{getNextOnsets}}
+\index{getNextOnsets@{getNextOnsets}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{getNextOnsets()}{getNextOnsets()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a957f5d611387362c4f663bed73524b00} 
+std\+::vector$<$ float $>$ ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::get\+Next\+Onsets (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a3331fe11c73b166df12b6b512534fcb4}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a49bf617304918a1f3f4bfd09763097a0}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!getNumberOfOnsetsRegisteredForPlayer@{getNumberOfOnsetsRegisteredForPlayer}}
+\index{getNumberOfOnsetsRegisteredForPlayer@{getNumberOfOnsetsRegisteredForPlayer}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{getNumberOfOnsetsRegisteredForPlayer()}{getNumberOfOnsetsRegisteredForPlayer()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a49bf617304918a1f3f4bfd09763097a0} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::get\+Number\+Of\+Onsets\+Registered\+For\+Player (\begin{DoxyParamCaption}\item[{int}]{player\+Number}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a7c445dde434f0f2c0f314f7b79ae16eb}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a03418b8dac02b45ddac8ed007439e7d2}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!getOnsetForNoteNumber@{getOnsetForNoteNumber}}
+\index{getOnsetForNoteNumber@{getOnsetForNoteNumber}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{getOnsetForNoteNumber()}{getOnsetForNoteNumber()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a03418b8dac02b45ddac8ed007439e7d2} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::get\+Onset\+For\+Note\+Number (\begin{DoxyParamCaption}\item[{int}]{player\+Number}{, }\item[{int}]{note\+Number}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a0b9465b070b772ed0f68c91b2e44124d}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a2bc6ffcf71130de19f6a927101761df3}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!registerNewOnset@{registerNewOnset}}
+\index{registerNewOnset@{registerNewOnset}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{registerNewOnset()}{registerNewOnset()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a2bc6ffcf71130de19f6a927101761df3} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::register\+New\+Onset (\begin{DoxyParamCaption}\item[{int}]{player\+Number}{, }\item[{float}]{onset\+Time}{, }\item[{int}]{onset\+Number}{ = {\ttfamily -\/1.0f}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a4c71cac142af234f79878ba300c21566}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_aa35f613ae55c8567d9f3f6770c4fa523}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!reset@{reset}}
+\index{reset@{reset}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_aa35f613ae55c8567d9f3f6770c4fa523} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_aedde9cbd5a8bf9036907aff87253290d}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ad3f3dcb3f56a92fbf71f6503e1b721d1}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!resetOnsets@{resetOnsets}}
+\index{resetOnsets@{resetOnsets}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{resetOnsets()}{resetOnsets()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_ad3f3dcb3f56a92fbf71f6503e1b721d1} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::reset\+Onsets (\begin{DoxyParamCaption}\item[{int}]{max\+Number\+Of\+Onsets}{ = {\ttfamily \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a9f5dbedfbc060f5d33db33fcd4417705}{default\+Max\+Number\+Of\+Onsets}}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a6775f84656162784c8b742ac4ce4385f}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a438e7d18389b177b9d7997d55c5beb9e}\index{ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}!setModelParameters@{setModelParameters}}
+\index{setModelParameters@{setModelParameters}!ARMETimingModel::PhaseCorrectionTimingModel@{ARMETimingModel::PhaseCorrectionTimingModel}}
+\doxysubsubsection{\texorpdfstring{setModelParameters()}{setModelParameters()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model_a438e7d18389b177b9d7997d55c5beb9e} 
+virtual void ARMETiming\+Model\+::\+Phase\+Correction\+Timing\+Model\+::set\+Model\+Parameters (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}} \&}]{new\+Model\+Params}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model_a2c5c46badddbbff46f86dabd4a7712da}{ARMETiming\+Model\+::\+Timing\+Model}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_8h}{Timing\+Model.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_8cpp}{Timing\+Model.\+cpp}}\end{DoxyCompactItemize}

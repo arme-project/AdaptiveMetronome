@@ -1,0 +1,353 @@
+\doxysection{ARMETiming\+Model\+::Phase\+Correction\+Model\+Parameters Class Reference}
+\hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters}{}\label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+
+
+Implementation of basic \doxylink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}.  
+
+
+
+
+{\ttfamily \#include $<$Timing\+Model\+Parameters\+Group.\+h$>$}
+
+Inheritance diagram for ARMETiming\+Model\+::Phase\+Correction\+Model\+Parameters\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3af78e0fc3982d3d5353c0ee15043920}{Phase\+Correction\+Model\+Parameters}} (int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{number\+Of\+Players}}=4)
+\begin{DoxyCompactList}\small\item\em Initialise a parameter group for a Std\+Timing\+Model with a set number of players. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a38f607c20a060608478e5d8ad5e25ef3}{\texorpdfstring{$\sim$}{\string~}\+Phase\+Correction\+Model\+Parameters}} ()
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a7aba94008ab11e134fe89b572f86426a}{add\+Float\+Parameter}} (std\+::string param\+Name, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}float\+Value=new \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}(0.\+0f)) override
+\begin{DoxyCompactList}\small\item\em Register a new \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} for the model. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aaeb6edd38dc6f32042e693b0aa291e0d}{add\+Float\+Parameter}} (std\+::string param\+Name, std\+::function$<$ float()$>$ get\+Float\+Fcn)
+\begin{DoxyCompactList}\small\item\em Register a new Model\+Parameter\+Float\+Ref for the model. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a52b1addbf682fca36b81690ea057582a}{add\+Random\+Float\+Parameter}} (std\+::string param\+Name, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}float\+Value=new \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}(0.\+0f)) override
+\begin{DoxyCompactList}\small\item\em Register a new Model\+Parameter\+Float\+Ref for the model. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aa259c5a6fa273885777aebe396a31fd4}{add\+Float\+Vector\+Parameter}} (std\+::string param\+Name, size\+\_\+t size, float default\+Value=0.\+0f, bool is\+Random\+Param=false)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_ab954735f2ca76799e553bf42986ee375}{add\+Float\+Matrix\+Parameter}} (std\+::string param\+Name, size\+\_\+t size\+\_\+a, size\+\_\+t size\+\_\+b, float default\+Value=0.\+0f, bool is\+Random\+Param=false)
+\item 
+virtual \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c3eb757b06ab7e7a872e6471e2c89da}{get\+Float\+Ref\+By\+Name}} (std\+::string param\+Name) override
+\item 
+virtual \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aabbdcdf8c915579597f62972fac5d8da}{get\+Vector\+Ref\+By\+Name}} (std\+::string param\+Name) override
+\item 
+virtual \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{Model\+Float\+Matrix}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_afdf57b8f478f0603181ee35039db44dc}{get\+Matrix\+Ref\+By\+Name}} (std\+::string param\+Name) override
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a95125dda5c9c3c7b15d66beb79fd9023}{get\+Float\+Value\+By\+Name}} (std\+::string param\+Name) override
+\begin{DoxyCompactList}\small\item\em Returns the raw float value of a parameter by name. \end{DoxyCompactList}\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a992033769e48da20c9a73a8c3c419150}{get\+Float\+Value\+By\+Name}} (std\+::string param\+Name, size\+\_\+t index\+Of\+Value) override
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8ca263c187326395a7bfd8960152b66f}{get\+Float\+Value\+By\+Name}} (std\+::string param\+Name, size\+\_\+t index\+Of\+Value1, size\+\_\+t index\+Of\+Value2) override
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19f378fda8d8f5d07558b10d0e8d0afb}{set\+Float\+Parameter\+By\+Name}} (std\+::string param\+Name, float new\+Float\+Value)
+\begin{DoxyCompactList}\small\item\em Sets the raw float value of a parameter by name. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07}{override\+Model\+Parameter\+Float}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*}ptr\+To\+Model\+Float\+Ptr, std\+::function$<$ float()$>$ new\+Get\+Float\+Fcn)
+\begin{DoxyCompactList}\small\item\em Changes the pointer to the underlying std\+::atomic$<$float$>$ value of this parameter. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8858195b3849484b155266af5c921127}{override\+Float\+Parameter\+By\+Name}} (std\+::string param\+Name, std\+::function$<$ float()$>$ new\+Get\+Float\+Fcn)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19d06b46476738318ebe82d4929e37b0}{override\+Float\+Parameter\+By\+Name}} (std\+::string param\+Name, size\+\_\+t index\+Of\+Value, std\+::function$<$ float()$>$ new\+Get\+Float\+Fcn)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ARMETiming\+Model\+::\+Model\+Parameters}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{Model\+Parameters\+::\+Model\+Parameters}} (int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{number\+Of\+Players}})
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3cc094b5133b959a47d24320ea8df997}{\texorpdfstring{$\sim$}{\string~}\+Model\+Parameters}} ()
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ad8270066bdb44525bd652f32bdfa8b95}{add\+Float\+Vector\+Parameter}} (std\+::string parameter\+Name)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3cc1286e1c3de176d082208cf2ed5b2b}{add\+Float\+Matrix\+Parameter}} (std\+::string parameter\+Name)
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a9830121f8fc24e304b55808c9c66b01d}{get\+Number\+Of\+Players}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{Model\+Parameter\+Index\+Getter}} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a29c0d9096d8672bbee92d34e7a89c449}{m\+Noise\+Std\+Parameter}}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{Model\+Parameter\+Index\+Getter}} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c349e3a5a79b7c1a62ceea8666fb5c5}{tk\+Noise\+Std\+Parameter}}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{Model\+Parameter\+Index\+Getter}} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a591f2590833f3822475a7444f7aa8fe9}{alpha\+Parameter}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ARMETiming\+Model\+::\+Model\+Parameters}}}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{number\+Of\+Players}}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ab2c3b3f3319525bebabe889a3fd34335}{dict\+Of\+Float\+Params}}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a6f63fa1d6b453e99fb392cac6677adba}{dict\+Of\+Vector\+Params}}
+\item 
+std\+::map$<$ std\+::string, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{Model\+Float\+Matrix}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a11bbb7a0aca121a02f2b76d46bca135c}{dict\+Of\+Matrix\+Params}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Param\+Type$>$ }\\Param\+Type \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a5f2806858e6c9afd55523b83bb816898}{find\+In\+Map}} (std\+::string param\+Name, std\+::map$<$ std\+::string, Param\+Type $>$ search\+Map)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{ARMETiming\+Model\+::\+Model\+Parameters}}}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{param\+Type}} = \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of basic \doxylink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}. 
+
+Includes Alpha, Timekeeper Noise and Motor Noise parameters. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3af78e0fc3982d3d5353c0ee15043920}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!PhaseCorrectionModelParameters@{PhaseCorrectionModelParameters}}
+\index{PhaseCorrectionModelParameters@{PhaseCorrectionModelParameters}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{PhaseCorrectionModelParameters()}{PhaseCorrectionModelParameters()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3af78e0fc3982d3d5353c0ee15043920} 
+ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::\+Phase\+Correction\+Model\+Parameters (\begin{DoxyParamCaption}\item[{int}]{number\+Of\+Players}{ = {\ttfamily 4}}\end{DoxyParamCaption})}
+
+
+
+Initialise a parameter group for a Std\+Timing\+Model with a set number of players. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em number\+Of\+Players} & Number of players that this model uses. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a38f607c20a060608478e5d8ad5e25ef3}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!````~PhaseCorrectionModelParameters@{\texorpdfstring{$\sim$}{\string~}PhaseCorrectionModelParameters}}
+\index{````~PhaseCorrectionModelParameters@{\texorpdfstring{$\sim$}{\string~}PhaseCorrectionModelParameters}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}PhaseCorrectionModelParameters()}{\string~PhaseCorrectionModelParameters()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a38f607c20a060608478e5d8ad5e25ef3} 
+ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::\texorpdfstring{$\sim$}{\string~}\+Phase\+Correction\+Model\+Parameters (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_ab954735f2ca76799e553bf42986ee375}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!addFloatMatrixParameter@{addFloatMatrixParameter}}
+\index{addFloatMatrixParameter@{addFloatMatrixParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{addFloatMatrixParameter()}{addFloatMatrixParameter()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_ab954735f2ca76799e553bf42986ee375} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::add\+Float\+Matrix\+Parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{size\+\_\+t}]{size\+\_\+a}{, }\item[{size\+\_\+t}]{size\+\_\+b}{, }\item[{float}]{default\+Value}{ = {\ttfamily 0.0f}, }\item[{bool}]{is\+Random\+Param}{ = {\ttfamily false}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a7aba94008ab11e134fe89b572f86426a}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!addFloatParameter@{addFloatParameter}}
+\index{addFloatParameter@{addFloatParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{addFloatParameter()}{addFloatParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a7aba94008ab11e134fe89b572f86426a} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::add\+Float\+Parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}}]{float\+Value}{ = {\ttfamily new~\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}(0.0f)}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Register a new \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} for the model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+Name} & A name for the Parameter, used for future access. \\
+\hline
+{\em float\+Value} & Pointer to the underlying std\+::atomic$<$float$>$ used by the parameter. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a40342ec265edfb8298995ae55e7a1647}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aaeb6edd38dc6f32042e693b0aa291e0d}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!addFloatParameter@{addFloatParameter}}
+\index{addFloatParameter@{addFloatParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{addFloatParameter()}{addFloatParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aaeb6edd38dc6f32042e693b0aa291e0d} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::add\+Float\+Parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{std\+::function$<$ float()$>$}]{get\+Float\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Register a new Model\+Parameter\+Float\+Ref for the model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+Name} & A name for the Parameter, used for future access. \\
+\hline
+{\em get\+Float\+Fcn} & The underlying std\+::function$<$float()$>$ that returns the float value of this Parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aa259c5a6fa273885777aebe396a31fd4}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!addFloatVectorParameter@{addFloatVectorParameter}}
+\index{addFloatVectorParameter@{addFloatVectorParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{addFloatVectorParameter()}{addFloatVectorParameter()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aa259c5a6fa273885777aebe396a31fd4} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::add\+Float\+Vector\+Parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{size\+\_\+t}]{size}{, }\item[{float}]{default\+Value}{ = {\ttfamily 0.0f}, }\item[{bool}]{is\+Random\+Param}{ = {\ttfamily false}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a52b1addbf682fca36b81690ea057582a}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!addRandomFloatParameter@{addRandomFloatParameter}}
+\index{addRandomFloatParameter@{addRandomFloatParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{addRandomFloatParameter()}{addRandomFloatParameter()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a52b1addbf682fca36b81690ea057582a} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::add\+Random\+Float\+Parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}}]{float\+Value}{ = {\ttfamily new~\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}(0.0f)}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Register a new Model\+Parameter\+Float\+Ref for the model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+Name} & A name for the Parameter, used for future access. \\
+\hline
+{\em float\+Value} & Pointer to the underlying std\+::atomic$<$float$>$ used by the parameter as it\textquotesingle{}s Sigma (standard deviation) \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a415d01440a8c86af8da8c1b01d6acfe8}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a5f2806858e6c9afd55523b83bb816898}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!findInMap@{findInMap}}
+\index{findInMap@{findInMap}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{findInMap()}{findInMap()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a5f2806858e6c9afd55523b83bb816898} 
+template$<$typename Param\+Type$>$ \\
+Param\+Type ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::find\+In\+Map (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{std\+::map$<$ std\+::string, Param\+Type $>$}]{search\+Map}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c3eb757b06ab7e7a872e6471e2c89da}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!getFloatRefByName@{getFloatRefByName}}
+\index{getFloatRefByName@{getFloatRefByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{getFloatRefByName()}{getFloatRefByName()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c3eb757b06ab7e7a872e6471e2c89da} 
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Float\+Ref\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ada4e49d416a372c0e4c2ac677102c0d1}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a95125dda5c9c3c7b15d66beb79fd9023}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!getFloatValueByName@{getFloatValueByName}}
+\index{getFloatValueByName@{getFloatValueByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{getFloatValueByName()}{getFloatValueByName()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a95125dda5c9c3c7b15d66beb79fd9023} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Float\+Value\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns the raw float value of a parameter by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+Name} & The name of the Parameter to access \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The raw float value represented by this Parameter 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3b8f699fc9fe205b1abced9044ea2b24}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a992033769e48da20c9a73a8c3c419150}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!getFloatValueByName@{getFloatValueByName}}
+\index{getFloatValueByName@{getFloatValueByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{getFloatValueByName()}{getFloatValueByName()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a992033769e48da20c9a73a8c3c419150} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Float\+Value\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{size\+\_\+t}]{index\+Of\+Value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a7877d8ce9bd316ceeeeb7774c7e39e06}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8ca263c187326395a7bfd8960152b66f}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!getFloatValueByName@{getFloatValueByName}}
+\index{getFloatValueByName@{getFloatValueByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{getFloatValueByName()}{getFloatValueByName()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8ca263c187326395a7bfd8960152b66f} 
+float ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Float\+Value\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{size\+\_\+t}]{index\+Of\+Value1}{, }\item[{size\+\_\+t}]{index\+Of\+Value2}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_aef3418c80bcaee0da79c7ec89510ef29}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_afdf57b8f478f0603181ee35039db44dc}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!getMatrixRefByName@{getMatrixRefByName}}
+\index{getMatrixRefByName@{getMatrixRefByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{getMatrixRefByName()}{getMatrixRefByName()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_afdf57b8f478f0603181ee35039db44dc} 
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{Model\+Float\+Matrix}} \texorpdfstring{$\ast$}{*} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Matrix\+Ref\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4edbe76c1e3a4388a6da5896ef7f0323}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aabbdcdf8c915579597f62972fac5d8da}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!getVectorRefByName@{getVectorRefByName}}
+\index{getVectorRefByName@{getVectorRefByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{getVectorRefByName()}{getVectorRefByName()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aabbdcdf8c915579597f62972fac5d8da} 
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}} \texorpdfstring{$\ast$}{*} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Vector\+Ref\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a0712e3c1305a1e7fe0a06ba64a191461}{ARMETiming\+Model\+::\+Model\+Parameters}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19d06b46476738318ebe82d4929e37b0}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!overrideFloatParameterByName@{overrideFloatParameterByName}}
+\index{overrideFloatParameterByName@{overrideFloatParameterByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{overrideFloatParameterByName()}{overrideFloatParameterByName()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19d06b46476738318ebe82d4929e37b0} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::override\+Float\+Parameter\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{size\+\_\+t}]{index\+Of\+Value}{, }\item[{std\+::function$<$ float()$>$}]{new\+Get\+Float\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8858195b3849484b155266af5c921127}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!overrideFloatParameterByName@{overrideFloatParameterByName}}
+\index{overrideFloatParameterByName@{overrideFloatParameterByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{overrideFloatParameterByName()}{overrideFloatParameterByName()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8858195b3849484b155266af5c921127} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::override\+Float\+Parameter\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{std\+::function$<$ float()$>$}]{new\+Get\+Float\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!overrideModelParameterFloat@{overrideModelParameterFloat}}
+\index{overrideModelParameterFloat@{overrideModelParameterFloat}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{overrideModelParameterFloat()}{overrideModelParameterFloat()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::override\+Model\+Parameter\+Float (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*}}]{ptr\+To\+Model\+Float\+Ptr}{, }\item[{std\+::function$<$ float()$>$}]{new\+Get\+Float\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Changes the pointer to the underlying std\+::atomic$<$float$>$ value of this parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+Name} & The name of the Parameter to change. \\
+\hline
+{\em new\+Float\+Ref} & The new pointer to a std\+::atomic$<$float$>$ value to use for this parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19f378fda8d8f5d07558b10d0e8d0afb}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!setFloatParameterByName@{setFloatParameterByName}}
+\index{setFloatParameterByName@{setFloatParameterByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{setFloatParameterByName()}{setFloatParameterByName()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19f378fda8d8f5d07558b10d0e8d0afb} 
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::set\+Float\+Parameter\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{, }\item[{float}]{new\+Float\+Value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Sets the raw float value of a parameter by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+Name} & The name of the Parameter to change \\
+\hline
+{\em new\+Float\+Value} & The new value to assign to this Parameter \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a591f2590833f3822475a7444f7aa8fe9}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!alphaParameter@{alphaParameter}}
+\index{alphaParameter@{alphaParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{alphaParameter}{alphaParameter}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a591f2590833f3822475a7444f7aa8fe9} 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{Model\+Parameter\+Index\+Getter}} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::alpha\+Parameter}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a29c0d9096d8672bbee92d34e7a89c449}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!mNoiseStdParameter@{mNoiseStdParameter}}
+\index{mNoiseStdParameter@{mNoiseStdParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{mNoiseStdParameter}{mNoiseStdParameter}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a29c0d9096d8672bbee92d34e7a89c449} 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{Model\+Parameter\+Index\+Getter}} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::m\+Noise\+Std\+Parameter}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c349e3a5a79b7c1a62ceea8666fb5c5}\index{ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}!tkNoiseStdParameter@{tkNoiseStdParameter}}
+\index{tkNoiseStdParameter@{tkNoiseStdParameter}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
+\doxysubsubsection{\texorpdfstring{tkNoiseStdParameter}{tkNoiseStdParameter}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c349e3a5a79b7c1a62ceea8666fb5c5} 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{Model\+Parameter\+Index\+Getter}} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::tk\+Noise\+Std\+Parameter}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameters_group_8h}{Timing\+Model\+Parameters\+Group.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameters_group_8cpp}{Timing\+Model\+Parameters\+Group.\+cpp}}\end{DoxyCompactItemize}

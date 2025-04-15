@@ -1,0 +1,55 @@
+\doxysection{ARMETiming\+Model Namespace Reference}
+\hypertarget{namespace_a_r_m_e_timing_model}{}\label{namespace_a_r_m_e_timing_model}\index{ARMETimingModel@{ARMETimingModel}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}}
+\begin{DoxyCompactList}\small\item\em Base class for float parameter. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float}{Model\+Parameter\+Random\+Normal\+Float}}
+\begin{DoxyCompactList}\small\item\em A read-\/only child class of \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} where the underlying value is the float value result of a stored std\+::function$<$float()$>$. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}}
+\begin{DoxyCompactList}\small\item\em Base class for a structure of \doxylink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters} used by a \doxylink{class_a_r_m_e_timing_model_1_1_timing_model}{Timing\+Model}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters}{Phase\+Correction\+Model\+Parameters}}
+\begin{DoxyCompactList}\small\item\em Implementation of basic \doxylink{class_a_r_m_e_timing_model_1_1_model_parameters}{Model\+Parameters}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_timing_model}{Phase\+Correction\+Timing\+Model}}
+\begin{DoxyCompactList}\small\item\em Implementation of the most basic \doxylink{class_a_r_m_e_timing_model_1_1_timing_model}{Timing\+Model}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_timing_model}{Timing\+Model}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::atomic$<$ float $>$ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}
+\item 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} = \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*}
+\item 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}} = std\+::vector$<$\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}}$>$
+\item 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{Model\+Float\+Matrix}} = std\+::vector$<$\mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}}$>$
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}\index{ARMETimingModel@{ARMETimingModel}!a\_float@{a\_float}}
+\index{a\_float@{a\_float}!ARMETimingModel@{ARMETimingModel}}
+\doxysubsubsection{\texorpdfstring{a\_float}{a\_float}}
+{\footnotesize\ttfamily \label{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b} 
+typedef std\+::atomic$<$float$>$ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{ARMETiming\+Model\+::a\+\_\+float}}}
+
+\Hypertarget{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}\index{ARMETimingModel@{ARMETimingModel}!ModelFloatMatrix@{ModelFloatMatrix}}
+\index{ModelFloatMatrix@{ModelFloatMatrix}!ARMETimingModel@{ARMETimingModel}}
+\doxysubsubsection{\texorpdfstring{ModelFloatMatrix}{ModelFloatMatrix}}
+{\footnotesize\ttfamily \label{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4} 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{ARMETiming\+Model\+::\+Model\+Float\+Matrix}} = std\+::vector$<$\mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}}$>$}
+
+\Hypertarget{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}\index{ARMETimingModel@{ARMETimingModel}!ModelFloatPtr@{ModelFloatPtr}}
+\index{ModelFloatPtr@{ModelFloatPtr}!ARMETimingModel@{ARMETimingModel}}
+\doxysubsubsection{\texorpdfstring{ModelFloatPtr}{ModelFloatPtr}}
+{\footnotesize\ttfamily \label{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b} 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{ARMETiming\+Model\+::\+Model\+Float\+Ptr}} = \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*}}
+
+\Hypertarget{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}\index{ARMETimingModel@{ARMETimingModel}!ModelFloatVector@{ModelFloatVector}}
+\index{ModelFloatVector@{ModelFloatVector}!ARMETimingModel@{ARMETimingModel}}
+\doxysubsubsection{\texorpdfstring{ModelFloatVector}{ModelFloatVector}}
+{\footnotesize\ttfamily \label{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e} 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{ARMETiming\+Model\+::\+Model\+Float\+Vector}} = std\+::vector$<$\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}}$>$}
+

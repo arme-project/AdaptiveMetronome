@@ -1,0 +1,25 @@
+var class_a_r_m_e_timing_model_1_1_timing_model =
+[
+    [ "TimingModel", "class_a_r_m_e_timing_model_1_1_timing_model.html#aac8f77980ab8794a042ef9c375765920", null ],
+    [ "~TimingModel", "class_a_r_m_e_timing_model_1_1_timing_model.html#a103349a22f0f901692a88d98dc44d0cb", null ],
+    [ "createNewParameters", "class_a_r_m_e_timing_model_1_1_timing_model.html#a175bb4186371a4ca4d841d2f9036c007", null ],
+    [ "getLatestOnset", "class_a_r_m_e_timing_model_1_1_timing_model.html#a32a66d85518505e6cf101463ee2af5ab", null ],
+    [ "getNextOnset", "class_a_r_m_e_timing_model_1_1_timing_model.html#a2f2b5e5e1b2e06837d3788737d350f05", null ],
+    [ "getNextOnsets", "class_a_r_m_e_timing_model_1_1_timing_model.html#a3331fe11c73b166df12b6b512534fcb4", null ],
+    [ "getNumberOfOnsetsRegisteredForPlayer", "class_a_r_m_e_timing_model_1_1_timing_model.html#a7c445dde434f0f2c0f314f7b79ae16eb", null ],
+    [ "getNumberOfPlayers", "class_a_r_m_e_timing_model_1_1_timing_model.html#a4c7dd428d8a4d4cee450461d9e40af6d", null ],
+    [ "getNumberOfUserPlayers", "class_a_r_m_e_timing_model_1_1_timing_model.html#ace4268da9c0427da90e912f340644026", null ],
+    [ "getOnsetForNoteNumber", "class_a_r_m_e_timing_model_1_1_timing_model.html#a0b9465b070b772ed0f68c91b2e44124d", null ],
+    [ "registerNewOnset", "class_a_r_m_e_timing_model_1_1_timing_model.html#a4c71cac142af234f79878ba300c21566", null ],
+    [ "reset", "class_a_r_m_e_timing_model_1_1_timing_model.html#aedde9cbd5a8bf9036907aff87253290d", null ],
+    [ "resetOnsets", "class_a_r_m_e_timing_model_1_1_timing_model.html#a6775f84656162784c8b742ac4ce4385f", null ],
+    [ "setModelParameters", "class_a_r_m_e_timing_model_1_1_timing_model.html#a2c5c46badddbbff46f86dabd4a7712da", null ],
+    [ "initialOnsetInterval", "class_a_r_m_e_timing_model_1_1_timing_model.html#a329bcb7cac63870d090bd54eb92e6df8", null ],
+    [ "modelParams", "class_a_r_m_e_timing_model_1_1_timing_model.html#acb8b10afaaae153a366bf2513d2fcccc", null ],
+    [ "nextOnsetTimes", "class_a_r_m_e_timing_model_1_1_timing_model.html#ad995b8c5350d8e4dbf0537ced594feac", null ],
+    [ "numberOfNextOnsetsCalculated", "class_a_r_m_e_timing_model_1_1_timing_model.html#a29f6b0df386315b8a2db1ff94755694e", null ],
+    [ "numberOfNotesRegisteredByAllPlayers", "class_a_r_m_e_timing_model_1_1_timing_model.html#ab6e11ca143335bf0df19a943f63f38f1", null ],
+    [ "numberOfPlayers", "class_a_r_m_e_timing_model_1_1_timing_model.html#a7de0590d88928b5db14615e53c9f1ae3", null ],
+    [ "numberOfUserPlayers", "class_a_r_m_e_timing_model_1_1_timing_model.html#a1a19c01ff32ad34d0ea52dd65a0cf35b", null ],
+    [ "onsetTimes", "class_a_r_m_e_timing_model_1_1_timing_model.html#a42f7bcb7acea7e0701e62e242feb2881", null ]
+];

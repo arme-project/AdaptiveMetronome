@@ -1,0 +1,171 @@
+\doxysection{Timing\+Model\+Parameters\+Group.\+h}
+\hypertarget{_timing_model_parameters_group_8h_source}{}\label{_timing_model_parameters_group_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/TimingModelParametersGroup.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/TimingModelParametersGroup.h}}
+\mbox{\hyperlink{_timing_model_parameters_group_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ \ ==============================================================================}}
+\DoxyCodeLine{00003\ \textcolor{comment}{}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ \ \ \ TimingModelParametersGroup.h}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \ \ \ Created:\ 2\ Sep\ 2024\ 12:12:47pm}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ Author:\ \ genia}}
+\DoxyCodeLine{00007\ \textcolor{comment}{}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ ==============================================================================}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_timing_model_parameter_8h}{TimingModelParameter.h}}"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_a_r_m_e_timing_model}{ARMETimingModel}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#pragma\ region\ Base\ Model\ Parameters}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters}}}
+\DoxyCodeLine{00026\ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters::ModelParameters}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{numberOfPlayers}})\ :\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{numberOfPlayers}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{numberOfPlayers}})\ \{\};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3cc094b5133b959a47d24320ea8df997}{\string~ModelParameters}}()\ \{\};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add/Register\ Parameter\ names}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a40342ec265edfb8298995ae55e7a1647}{addFloatParameter}}(std::string\ paramName,\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\_float}}\ *floatValue)\ \{\};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a415d01440a8c86af8da8c1b01d6acfe8}{addRandomFloatParameter}}(std::string\ paramName,\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\_float}}\ *floatValue)\ \{\};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ Parameters}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ModelParameterFloat}}\ **\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ada4e49d416a372c0e4c2ac677102c0d1}{getFloatRefByName}}(std::string\ paramName)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};\ \};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{ModelFloatVector}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a0712e3c1305a1e7fe0a06ba64a191461}{getVectorRefByName}}(std::string\ paramName)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};\ \};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{ModelFloatMatrix}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4edbe76c1e3a4388a6da5896ef7f0323}{getMatrixRefByName}}(std::string\ paramName)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};\ \};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3b8f699fc9fe205b1abced9044ea2b24}{getFloatValueByName}}(std::string\ paramName)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a7877d8ce9bd316ceeeeb7774c7e39e06}{getFloatValueByName}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ indexOfValue)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_aef3418c80bcaee0da79c7ec89510ef29}{getFloatValueByName}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ indexOfValue1,\ \textcolor{keywordtype}{size\_t}\ indexOfValue2)\ \{\ \textcolor{keywordflow}{return}\ -\/999.0f;\ \};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ad8270066bdb44525bd652f32bdfa8b95}{addFloatVectorParameter}}(std::string\ parameterName)\ \{\};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3cc1286e1c3de176d082208cf2ed5b2b}{addFloatMatrixParameter}}(std::string\ parameterName)\ \{\};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Getters/Setters}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a9830121f8fc24e304b55808c9c66b01d}{getNumberOfPlayers}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{numberOfPlayers}};\ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ Set\ this\ to\ private\ and\ replace\ with\ Getters\ and\ Setters}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lists\ of\ parameter\ names}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{numberOfPlayers}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO\ Create\ a\ single\ parameter\ container\ parent\ class,\ and\ implement\ for\ Single,\ N\ Vector\ and\ NxN\ Matrix\ types.}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dictionaries\ (std::map)\ of\ parameter\ name,\ to\ actual\ parameters.}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ OR\ map\ to\ ModelParameterIndexGetter?}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::map<std::string,\ ModelParameterFloat\ *>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ab2c3b3f3319525bebabe889a3fd34335}{dictOfFloatParams}};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::map<std::string,\ ModelFloatVector\ *>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a6f63fa1d6b453e99fb392cac6677adba}{dictOfVectorParams}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ std::map<std::string,\ ModelFloatMatrix\ *>\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a11bbb7a0aca121a02f2b76d46bca135c}{dictOfMatrixParams}};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ INDEX\ GETTER}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{paramType}}\ =\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ModelParameterFloat}};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a823bf43d38c08c9bdb5ffa8f35f530f7}{ModelParameterIndexGetter}}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reference\ to\ the\ ModelParameters\ to\ search\ for\ parameter.}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a823bf43d38c08c9bdb5ffa8f35f530f7}{ModelParameterIndexGetter}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}},\ std::string\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}})\ :\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}),\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}})\ \{\}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a69ca6bb7e0a511f377113de2c84c51da}{ModelParameterIndexGetter}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}})\ :\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}})\ \{\}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a01bf11db7e3d54ad2e75a05e7cb7fb23}{\string~ModelParameterIndexGetter}}()\ \{\};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{paramType}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a81b9188663e751935a3b4643c906a50c}{operator()}}(\textcolor{keywordtype}{int}\ i,\ \textcolor{keywordtype}{int}\ j)}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}.getMatrixRefByName(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}}))-\/>at(i).at(j);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{paramType}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a4fc52eaf3f1bdc5a1afed037adc1ac6d}{operator()}}(\textcolor{keywordtype}{int}\ i)}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}.getVectorRefByName(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}}))-\/>at(i);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{paramType}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a208e14f45dc231c765cad9fc56552140}{operator()}}()}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}.getFloatRefByName(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}}));}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_acf69bc3c9396c7169677c43ee40e0c2c}{ModelParameterIndexGetterFullName}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a823bf43d38c08c9bdb5ffa8f35f530f7}{ModelParameterIndexGetter}}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ String\ that\ preceedes\ first\ player\ index\ in\ parameter\ name}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ std::string\ before\_I;}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ now\ reuses\ the\ paramName\ variable\ from\ ModelParameterIndexGetter}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ String\ after\ first\ player\ index\ (and\ before\ second\ player\ index)\ in\ parameter\ name}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_a1f0f8c21b5df3526a2495844e19b9351}{after\_I}};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_acf69bc3c9396c7169677c43ee40e0c2c}{ModelParameterIndexGetterFullName}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters}}\ \&\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}},\ std::string\ before\_i,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ after\_i)\ :\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a823bf43d38c08c9bdb5ffa8f35f530f7}{ModelParameterIndexGetter}}(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}},\ before\_i),}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_a1f0f8c21b5df3526a2495844e19b9351}{after\_I}}(after\_i)}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_a235a6ece50b0037f433e723f1b6e0170}{\string~ModelParameterIndexGetterFullName}}()\ \{\}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allows\ alphaParameter(i,\ j)\ type\ access\ to\ alpha\ and\ beta\ parameters}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{paramType}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_a74279be9f7d4e121fb7c0441107d9cda}{operator()}}(\textcolor{keywordtype}{int}\ i,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00111\ \textcolor{keyword}{\ \ \ \ \ \ \ \ \ \ \ \ }\{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ matchString(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}}\ +\ std::to\_string(i)\ +\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_a1f0f8c21b5df3526a2495844e19b9351}{after\_I}}\ +\ std::to\_string(j));}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ audioParamPtr\ =\ *(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}.getFloatRefByName(matchString));}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ audioParamPtr;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allows\ volumeParameter(i)\ type\ access\ to\ all\ other\ parameters}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a89b1f5a408d609b0d6e80f370af3f017}{paramType}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_aa2271fd7dbfba33902e82c41bf2af460}{operator()}}(\textcolor{keywordtype}{int}\ i)\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00119\ \textcolor{keyword}{\ \ \ \ \ \ \ \ \ \ \ \ }\{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ matchString(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_a2f4c7cdfecef3745d47b388f2a7695a0}{paramName}}\ +\ std::to\_string(i)\ +\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_full_name_a1f0f8c21b5df3526a2495844e19b9351}{after\_I}});}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ auto\ audioParamPtr\ =\ dynamic\_cast\ <paramType>\ (**(paramGroup.getFloatRefByName(matchString)));}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ audioParamPtr\ =\ *(\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter_ac4b11b3e31569b58a82041de47b0f0a6}{paramGroup}}.getFloatRefByName(matchString));}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ audioParamPtr;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00126\ \ \ \ \ \};}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#pragma\ region\ Standard\ Model\ Parameters}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3af78e0fc3982d3d5353c0ee15043920}{PhaseCorrectionModelParameters}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a4a448fb661c6ba53adc6cbf86f055805}{ModelParameters}}}
+\DoxyCodeLine{00136\ \ \ \ \ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3af78e0fc3982d3d5353c0ee15043920}{PhaseCorrectionModelParameters}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{numberOfPlayers}}\ =\ 4);}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3af78e0fc3982d3d5353c0ee15043920}{\string~PhaseCorrectionModelParameters}}();}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ INDEX\ GETTERS}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{ModelParameterIndexGetter}}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a29c0d9096d8672bbee92d34e7a89c449}{mNoiseStdParameter}},\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c349e3a5a79b7c1a62ceea8666fb5c5}{tkNoiseStdParameter}};}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_1_1_model_parameter_index_getter}{ModelParameterIndexGetter}}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a591f2590833f3822475a7444f7aa8fe9}{alphaParameter}};}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ADD\ PARAMETERS}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a7aba94008ab11e134fe89b572f86426a}{addFloatParameter}}(std::string\ paramName,\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\_float}}\ *floatValue\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\_float}}(0.0f))\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a7aba94008ab11e134fe89b572f86426a}{addFloatParameter}}(std::string\ paramName,\ std::function<\textcolor{keywordtype}{float}()>\ getFloatFcn);}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a52b1addbf682fca36b81690ea057582a}{addRandomFloatParameter}}(std::string\ paramName,\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\_float}}\ *floatValue\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\_float}}(0.0f))\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aa259c5a6fa273885777aebe396a31fd4}{addFloatVectorParameter}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{float}\ defaultValue\ =\ 0.0f,\ \textcolor{keywordtype}{bool}\ isRandomParam\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_ab954735f2ca76799e553bf42986ee375}{addFloatMatrixParameter}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ size\_a,\ \textcolor{keywordtype}{size\_t}\ size\_b,\ \textcolor{keywordtype}{float}\ defaultValue\ =\ 0.0f,\ \textcolor{keywordtype}{bool}\ isRandomParam\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GET\ PARAMETERS}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ModelParameterFloat}}\ **\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c3eb757b06ab7e7a872e6471e2c89da}{getFloatRefByName}}(std::string\ paramName)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{ModelFloatVector}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_aabbdcdf8c915579597f62972fac5d8da}{getVectorRefByName}}(std::string\ paramName)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{ModelFloatMatrix}}\ *\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_afdf57b8f478f0603181ee35039db44dc}{getMatrixRefByName}}(std::string\ paramName)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a95125dda5c9c3c7b15d66beb79fd9023}{getFloatValueByName}}(std::string\ paramName)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a95125dda5c9c3c7b15d66beb79fd9023}{getFloatValueByName}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ indexOfValue)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a95125dda5c9c3c7b15d66beb79fd9023}{getFloatValueByName}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ indexOfValue1,\ \textcolor{keywordtype}{size\_t}\ indexOfValue2)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SET\ PARAMETERS}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19f378fda8d8f5d07558b10d0e8d0afb}{setFloatParameterByName}}(std::string\ paramName,\ \textcolor{keywordtype}{float}\ newFloatValue);}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07}{overrideModelParameterFloat}}(\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{ModelFloatPtr}}\ *ptrToModelFloatPtr,\ std::function<\textcolor{keywordtype}{float}()>\ newGetFloatFcn);}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8858195b3849484b155266af5c921127}{overrideFloatParameterByName}}(std::string\ paramName,\ std::function<\textcolor{keywordtype}{float}()>\ newGetFloatFcn);}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8858195b3849484b155266af5c921127}{overrideFloatParameterByName}}(std::string\ paramName,\ \textcolor{keywordtype}{size\_t}\ indexOfValue,\ std::function<\textcolor{keywordtype}{float}()>\ newGetFloatFcn);}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ ParamType>}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ ParamType\ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a5f2806858e6c9afd55523b83bb816898}{findInMap}}(std::string\ paramName,\ std::map<std::string,\ ParamType>\ searchMap);}
+\DoxyCodeLine{00215\ \ \ \ \ \};}
+\DoxyCodeLine{00216\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00217\ \}}
+
+\end{DoxyCode}
