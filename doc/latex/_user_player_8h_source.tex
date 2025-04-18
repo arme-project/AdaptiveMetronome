@@ -2,51 +2,53 @@
 \hypertarget{_user_player_8h_source}{}\label{_user_player_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/UserPlayer.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/UserPlayer.h}}
 \mbox{\hyperlink{_user_player_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
-\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_player_8h}{Player.h}}"{}}}
-\DoxyCodeLine{00003\ }
-\DoxyCodeLine{00004\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{UserPlayer}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_player_a321dff0097d18da8e5277f5c9f15c104}{Player}}}
-\DoxyCodeLine{00005\ \{}
-\DoxyCodeLine{00006\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00007\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00001\ }
 \DoxyCodeLine{00008\ }
-\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{UserPlayer}}(\textcolor{keywordtype}{int}\ index,\ \textcolor{keyword}{const}\ juce::MidiMessageSequence\ *seq,\ \textcolor{keywordtype}{int}\ midiChannel,}
-\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sampleRate}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{scoreCounter}},\ \textcolor{keywordtype}{int}\ initialInterval);}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{UserPlayer}}(\textcolor{keywordtype}{int}\ index,\ \textcolor{keyword}{const}\ juce::MidiMessageSequence\ *seq,\ \textcolor{keywordtype}{int}\ midiChannel,}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sampleRate}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{scoreCounter}},\ \textcolor{keywordtype}{int}\ initialInterval,\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\ *processorIn);}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{class_user_player_a8b01dcdd90aec1dfb6f2d68acf92d0fa}{\string~UserPlayer}}();}
-\DoxyCodeLine{00040\ }
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_user_player_aff03f7afdbbfadfdb970a2795baa2dca}{isUserOperated}}()\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_user_player_afea89ab4a72d677f77cb860e3e88e0c7}{recalculateOnsetInterval}}(\textcolor{keywordtype}{int}\ samplesPerBeat,}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::unique\_ptr<Player>>\ \&players)\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_user_player_a07bd2f3a604aa164d0713da4b190f245}{wasLatestOnsetUserInput}}()\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00073\ }
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_user_player_af78da569c3293f6823041ae14a3d12b9}{processIntroSample}}(\textcolor{keyword}{const}\ juce::MidiBuffer\ \&inMidi,\ juce::MidiBuffer\ \&outMidi,\ \textcolor{keywordtype}{int}\ sampleIndex,\ \textcolor{keywordtype}{int}\ introNote)\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_user_player_aad1cac06520a7c1ac755295758dd90ea}{useOSCinput}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00089\ }
-\DoxyCodeLine{00090\ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{//\ bool\ noteTriggeredByUser\ =\ false;}}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_player_8h}{Player.h}}"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{UserPlayer}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_player_a321dff0097d18da8e5277f5c9f15c104}{Player}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{UserPlayer}}(\textcolor{keywordtype}{int}\ index,\ \textcolor{keyword}{const}\ juce::MidiMessageSequence\ *seq,\ \textcolor{keywordtype}{int}\ midiChannel,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sampleRate}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{scoreCounter}},\ \textcolor{keywordtype}{int}\ initialInterval);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{UserPlayer}}(\textcolor{keywordtype}{int}\ index,\ \textcolor{keyword}{const}\ juce::MidiMessageSequence\ *seq,\ \textcolor{keywordtype}{int}\ midiChannel,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sampleRate}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{scoreCounter}},\ \textcolor{keywordtype}{int}\ initialInterval,\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\ *processorIn);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{class_user_player_a8b01dcdd90aec1dfb6f2d68acf92d0fa}{\string~UserPlayer}}();}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_user_player_aff03f7afdbbfadfdb970a2795baa2dca}{isUserOperated}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_user_player_afea89ab4a72d677f77cb860e3e88e0c7}{recalculateOnsetInterval}}(\textcolor{keywordtype}{int}\ samplesPerBeat,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::unique\_ptr<Player>>\ \&players)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_user_player_a07bd2f3a604aa164d0713da4b190f245}{wasLatestOnsetUserInput}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_user_player_af78da569c3293f6823041ae14a3d12b9}{processIntroSample}}(\textcolor{keyword}{const}\ juce::MidiBuffer\ \&inMidi,\ juce::MidiBuffer\ \&outMidi,\ \textcolor{keywordtype}{int}\ sampleIndex,\ \textcolor{keywordtype}{int}\ introNote)\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00095\ }
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_user_player_a63918fa2e6b3021a7f37771cc128ff18}{processNoteOn}}(\textcolor{keyword}{const}\ juce::MidiBuffer\ \&inMidi,\ juce::MidiBuffer\ \&outMidi,\ \textcolor{keywordtype}{int}\ sampleIndex)\ \textcolor{keyword}{override};}
-\DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_user_player_ab594ed8f7f55bf4c96da2c3bb4154241}{introToneLength}}\ =\ 100;}
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_user_player_ae30c2556421c8dd45d154937785ad627}{samplesToIntroToneOff}}\ =\ -\/1;}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00111\ \};}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_user_player_aad1cac06520a7c1ac755295758dd90ea}{useOSCinput}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//\ bool\ noteTriggeredByUser\ =\ false;}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_user_player_a63918fa2e6b3021a7f37771cc128ff18}{processNoteOn}}(\textcolor{keyword}{const}\ juce::MidiBuffer\ \&inMidi,\ juce::MidiBuffer\ \&outMidi,\ \textcolor{keywordtype}{int}\ sampleIndex)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_user_player_ab594ed8f7f55bf4c96da2c3bb4154241}{introToneLength}}\ =\ 100;}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_user_player_ae30c2556421c8dd45d154937785ad627}{samplesToIntroToneOff}}\ =\ -\/1;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00119\ \};}
 
 \end{DoxyCode}

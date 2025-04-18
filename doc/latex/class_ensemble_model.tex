@@ -14,41 +14,41 @@ Inheritance diagram for Ensemble\+Model\+:\begin{figure}[H]
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_ensemble_model_a9d561a3e3f1b84781fcf504ba7d3860a}{Ensemble\+Model}} (\mbox{\hyperlink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}} \texorpdfstring{$\ast$}{*}processor\+Ptr)
-\item 
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_ensemble_model}{Ensemble\+Model}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_ensemble_model_a9ceb0658e35ae43a2a92d6a12afed985}{\texorpdfstring{$\sim$}{\string~}\+Ensemble\+Model}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Destructor for the \doxylink{class_ensemble_model}{Ensemble\+Model} class. Stops the logger loop and polling loop to ensure proper cleanup of resources. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a0e8763514c990fdad07f0e985541510e}{osc\+Message\+Send}} (bool test)
-\item 
+\begin{DoxyCompactList}\small\item\em Sends an OSC message either as a test or with onset data. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_af766754f79c5218211b042b28733e694}{osc\+Message\+Send\+New\+Interval}} (int player\+Num, int note\+Num, int note\+Time\+In\+MS)
 \item 
 void \mbox{\hyperlink{class_ensemble_model_a4ea6cacb165106b15ce5524fbf0d0f26}{osc\+Message\+Send\+Reset}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Sends an OSC message to trigger a reset in the Max/\+MSP patch. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a0551d0845dc769b04aa92ff5d761c549}{osc\+Message\+Send\+Play\+Max}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Send an OSC message to trigger Max to start playing. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_ensemble_model_aa9c846c94a467886c1d2a7c648c362a1}{load\+Midi\+File}} (const juce\+::\+File \&file, int user\+Players)
-\item 
+\begin{DoxyCompactList}\small\item\em Loads a MIDI file into the ensemble model. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_ensemble_model_a8c5e69d3481a64524323aa84d98e6027}{reset}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Resets all players to the beginning of their scores, and resets the onset times of all players to 0.\+0. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_ensemble_model_af6e7ae599b8c84c51a391298f3781657}{reset}} (bool skip\+Intro\+Notes)
 \item 
 void \mbox{\hyperlink{class_ensemble_model_afaad68729d6e76b099e3161bc4990d12}{set\+Tempo}} (double bpm)
-\item 
+\begin{DoxyCompactList}\small\item\em Sets the tempo of the ensemble to the given beats per minute (bpm). \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a0bf43a9c5c50c3853ba5e01ebef909dc}{prepare\+To\+Play}} (double new\+Sample\+Rate)
-\item 
+\begin{DoxyCompactList}\small\item\em Sets the sample rate of the ensemble model. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_ab19459d025312f1524ff7a2192c4ba2d}{release\+Resources}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Releases any resources used by the ensemble model. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_af06ee8adbc8e34be8e3c81d69da78373}{process\+Midi\+Block}} (const juce\+::\+Midi\+Buffer \&in\+Midi, juce\+::\+Midi\+Buffer \&out\+Midi, int num\+Samples, double tempo)
-\item 
+\begin{DoxyCompactList}\small\item\em Processes a block of incoming MIDI data and generates corresponding output MIDI data. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a2ba5b6f5965a28024e15fbb950cf3bc5}{set\+User\+Onset\+From\+Osc}} (float osc\+Onset\+Time, int onset\+Note\+Number, int ms\+Max)
-\item 
+\begin{DoxyCompactList}\small\item\em This synchronises both Max MSP and the Adapative Metronone. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_aa612b587d40d732c8f15bccb34ff090b}{trigger\+First\+Note}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Trigger the first note to be played by the player. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{class_ensemble_model_ab582aa9121cf83c2218f0eed64e580a5}{get\+Num\+Players}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Gets the number of players in the ensemble. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{class_ensemble_model_a1b192d0906fd4456709b3067196de68f}{get\+Num\+User\+Players}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Gets the number of user players in the ensemble. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_ensemble_model_a399a635c8b17e8fa2cfd20f86bb509cd}{is\+Player\+User\+Operated}} (int player\+Index)
-\item 
+\begin{DoxyCompactList}\small\item\em Checks if a player is user operated or not. \end{DoxyCompactList}\item 
 juce\+::\+Audio\+Parameter\+Int \& \mbox{\hyperlink{class_ensemble_model_a8037d9b35af2415e8b0aa0ba94960d67}{get\+Player\+Channel\+Parameter}} (int player\+Index)
 \item 
 \mbox{\hyperlink{_ensemble_model_8h_a11613cf950fb026f0bed472b5d797dcf}{Audio\+Parameter\+Float\+To\+Use}} \& \mbox{\hyperlink{class_ensemble_model_ae43331502278806047909e65ecfdee49}{get\+Player\+Delay\+Parameter}} (int player\+Index)
@@ -64,28 +64,28 @@ juce\+::\+Audio\+Parameter\+Int \& \mbox{\hyperlink{class_ensemble_model_a8037d9
 \mbox{\hyperlink{_ensemble_model_8h_a11613cf950fb026f0bed472b5d797dcf}{Audio\+Parameter\+Float\+To\+Use}} \& \mbox{\hyperlink{class_ensemble_model_a457d7da10bd5bef84c7e4e862296de7c}{get\+Beta\+Parameter}} (int player1\+Index, int player2\+Index)
 \item 
 void \mbox{\hyperlink{class_ensemble_model_a5da733fe74f486ab15c5c26a7d90be2e}{save\+Config\+To\+Xml\+File}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Saves the current configuration of the ensemble model to an XML file. \end{DoxyCompactList}\item 
 std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$ \mbox{\hyperlink{class_ensemble_model_a47c749e4e0b905fec8a88d0761d28176}{parse\+Xml\+Config\+File\+To\+Xml\+Element}} (juce\+::\+File config\+File)
 \item 
 void \mbox{\hyperlink{class_ensemble_model_afde6a97f8d242fcca15c5af37e9b5e57}{load\+Config\+From\+Xml}} (std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$ loaded\+Config)
-\item 
+\begin{DoxyCompactList}\small\item\em Saves the current configuration of the ensemble model to an XML file. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a2bae6d708716fe8d2c27e98d38fe6e5e}{load\+Config\+From\+Xml}} (juce\+::\+File config\+File)
 \item 
 void \mbox{\hyperlink{class_ensemble_model_a5600a255d4e106d196b777a687dadaaa}{connect\+OSCSender}} (int port\+Number, juce\+::\+String IPAddress)
 \item 
 void \mbox{\hyperlink{class_ensemble_model_a49d70f101c56ee7a23b6167d0beb4a5d}{connect\+OSCReceiver}} (int port\+Number)
-\item 
+\begin{DoxyCompactList}\small\item\em Attempts to connect an OSC receiver to the specified UDP port. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a92d696efea2517eb7ddd85dc93f4393b}{osc\+Message\+Received}} (const juce\+::\+OSCMessage \&message)
-\item 
+\begin{DoxyCompactList}\small\item\em Handles incoming OSC messages by processing them based on their address pattern. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_ensemble_model_ad6f0f8594780ec4f7e9b6e955bc6465e}{is\+Osc\+Receiver\+Connected}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Checks if the OSC receiver is connected. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_ensemble_model_a4a2e36b8ff17e56bbfcb26e76c0ea7eb}{set\+Alpha\+Beta\+Params}} (float value\+In)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Sets the alpha parameters for all player pairs in the processor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-static void \mbox{\hyperlink{class_ensemble_model_ac694a4f912cd095cf2d0058a19f2f57b}{sound\+Off\+All\+Channels}} (juce\+::\+Midi\+Buffer \&midi)
-\end{DoxyCompactItemize}
+static void \mbox{\hyperlink{class_ensemble_model_aca0da6aff00966cb55da0bea171a9b1f}{sound\+Off\+All\+Channels}} (juce\+::\+Midi\+Buffer \&midi)
+\begin{DoxyCompactList}\small\item\em Sends messages to turn off all notes, sounds and controllers on all MIDI channels to the given Midi\+Buffer. This is useful for stopping all sound when the user closes the plugin or changes presets. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -116,11 +116,24 @@ int \mbox{\hyperlink{class_ensemble_model_aa394d06e7e24a023c8183f3129371cbf}{cur
 {\footnotesize\ttfamily \label{class_ensemble_model_a9d561a3e3f1b84781fcf504ba7d3860a} 
 Ensemble\+Model\+::\+Ensemble\+Model (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}} \texorpdfstring{$\ast$}{*}}]{processor\+Ptr}{}\end{DoxyParamCaption})}
 
+
+
+Constructor for \doxylink{class_ensemble_model}{Ensemble\+Model}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em processor\+Ptr} & The audio processor which owns this model. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_a9ceb0658e35ae43a2a92d6a12afed985}\index{EnsembleModel@{EnsembleModel}!````~EnsembleModel@{\texorpdfstring{$\sim$}{\string~}EnsembleModel}}
 \index{````~EnsembleModel@{\texorpdfstring{$\sim$}{\string~}EnsembleModel}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}EnsembleModel()}{\string~EnsembleModel()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a9ceb0658e35ae43a2a92d6a12afed985} 
 Ensemble\+Model\+::\texorpdfstring{$\sim$}{\string~}\+Ensemble\+Model (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Destructor for the \doxylink{class_ensemble_model}{Ensemble\+Model} class. Stops the logger loop and polling loop to ensure proper cleanup of resources. 
 
 
 
@@ -131,12 +144,30 @@ Ensemble\+Model\+::\texorpdfstring{$\sim$}{\string~}\+Ensemble\+Model (\begin{Do
 {\footnotesize\ttfamily \label{class_ensemble_model_a49d70f101c56ee7a23b6167d0beb4a5d} 
 void Ensemble\+Model\+::connect\+OSCReceiver (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{}\end{DoxyParamCaption})}
 
-\Hypertarget{class_ensemble_model_a5600a255d4e106d196b777a687dadaaa}\index{EnsembleModel@{EnsembleModel}!connectOSCSender@{connectOSCSender}}
+
+
+Attempts to connect an OSC receiver to the specified UDP port. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port\+Number} & The port number to attempt the connection on.\\
+\hline
+\end{DoxyParams}
+If the connection fails, sets current\+Receive\+Port to -\/1 and logs an error message. If the connection succeeds, sets current\+Receive\+Port to the port number and logs a success message. \Hypertarget{class_ensemble_model_a5600a255d4e106d196b777a687dadaaa}\index{EnsembleModel@{EnsembleModel}!connectOSCSender@{connectOSCSender}}
 \index{connectOSCSender@{connectOSCSender}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{connectOSCSender()}{connectOSCSender()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a5600a255d4e106d196b777a687dadaaa} 
-void Ensemble\+Model\+::connect\+OSCSender (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{, }\item[{juce\+::\+String}]{IPAddress}{}\end{DoxyParamCaption})}
+void Ensemble\+Model\+::connect\+OSCSender (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{, }\item[{juce\+::\+String}]{IPAddress}{ = {\ttfamily "{}127.0.0.1"{}}}\end{DoxyParamCaption})}
 
+Connect the OSC sender to a UDP port for sending messages to the Max/\+MSP system.
+
+
+\begin{DoxyParams}{Parameters}
+{\em port\+Number} & the UDP port number to connect to \\
+\hline
+{\em IPAddress} & the IP address to connect to (default is "{}127.\+0.\+0.\+1"{}) \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_a35f2ded5641d8879248279ac77aefdc4}\index{EnsembleModel@{EnsembleModel}!getAlphaParameter@{getAlphaParameter}}
 \index{getAlphaParameter@{getAlphaParameter}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{getAlphaParameter()}{getAlphaParameter()}}
@@ -155,11 +186,19 @@ void Ensemble\+Model\+::connect\+OSCSender (\begin{DoxyParamCaption}\item[{int}]
 {\footnotesize\ttfamily \label{class_ensemble_model_ab582aa9121cf83c2218f0eed64e580a5} 
 int Ensemble\+Model\+::get\+Num\+Players (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
+
+
+Gets the number of players in the ensemble. 
+
 \Hypertarget{class_ensemble_model_a1b192d0906fd4456709b3067196de68f}\index{EnsembleModel@{EnsembleModel}!getNumUserPlayers@{getNumUserPlayers}}
 \index{getNumUserPlayers@{getNumUserPlayers}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{getNumUserPlayers()}{getNumUserPlayers()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a1b192d0906fd4456709b3067196de68f} 
 int Ensemble\+Model\+::get\+Num\+User\+Players (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the number of user players in the ensemble. 
 
 \Hypertarget{class_ensemble_model_a8037d9b35af2415e8b0aa0ba94960d67}\index{EnsembleModel@{EnsembleModel}!getPlayerChannelParameter@{getPlayerChannelParameter}}
 \index{getPlayerChannelParameter@{getPlayerChannelParameter}!EnsembleModel@{EnsembleModel}}
@@ -197,11 +236,22 @@ juce\+::\+Audio\+Parameter\+Int \& Ensemble\+Model\+::get\+Player\+Channel\+Para
 {\footnotesize\ttfamily \label{class_ensemble_model_ad6f0f8594780ec4f7e9b6e955bc6465e} 
 bool Ensemble\+Model\+::is\+Osc\+Receiver\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
+
+
+Checks if the OSC receiver is connected. 
+
+\begin{DoxyReturn}{Returns}
+true if the OSC receiver is connected, false otherwise. 
+\end{DoxyReturn}
 \Hypertarget{class_ensemble_model_a399a635c8b17e8fa2cfd20f86bb509cd}\index{EnsembleModel@{EnsembleModel}!isPlayerUserOperated@{isPlayerUserOperated}}
 \index{isPlayerUserOperated@{isPlayerUserOperated}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{isPlayerUserOperated()}{isPlayerUserOperated()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a399a635c8b17e8fa2cfd20f86bb509cd} 
 bool Ensemble\+Model\+::is\+Player\+User\+Operated (\begin{DoxyParamCaption}\item[{int}]{player\+Index}{}\end{DoxyParamCaption})}
+
+
+
+Checks if a player is user operated or not. 
 
 \Hypertarget{class_ensemble_model_a2bae6d708716fe8d2c27e98d38fe6e5e}\index{EnsembleModel@{EnsembleModel}!loadConfigFromXml@{loadConfigFromXml}}
 \index{loadConfigFromXml@{loadConfigFromXml}!EnsembleModel@{EnsembleModel}}
@@ -209,11 +259,25 @@ bool Ensemble\+Model\+::is\+Player\+User\+Operated (\begin{DoxyParamCaption}\ite
 {\footnotesize\ttfamily \label{class_ensemble_model_a2bae6d708716fe8d2c27e98d38fe6e5e} 
 void Ensemble\+Model\+::load\+Config\+From\+Xml (\begin{DoxyParamCaption}\item[{juce\+::\+File}]{config\+File}{}\end{DoxyParamCaption})}
 
+Converts a given XML file into an Xml\+Element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em config\+File} & The juce\+::\+File representing the XML file to be parsed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A unique\+\_\+ptr to a juce\+::\+Xml\+Element that represents the root element of the parsed XML document. 
+\end{DoxyReturn}
 \Hypertarget{class_ensemble_model_afde6a97f8d242fcca15c5af37e9b5e57}\index{EnsembleModel@{EnsembleModel}!loadConfigFromXml@{loadConfigFromXml}}
 \index{loadConfigFromXml@{loadConfigFromXml}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{loadConfigFromXml()}{loadConfigFromXml()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily \label{class_ensemble_model_afde6a97f8d242fcca15c5af37e9b5e57} 
 void Ensemble\+Model\+::load\+Config\+From\+Xml (\begin{DoxyParamCaption}\item[{std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$}]{loaded\+Config}{}\end{DoxyParamCaption})}
+
+
+
+Saves the current configuration of the ensemble model to an XML file. 
 
 \Hypertarget{class_ensemble_model_aa9c846c94a467886c1d2a7c648c362a1}\index{EnsembleModel@{EnsembleModel}!loadMidiFile@{loadMidiFile}}
 \index{loadMidiFile@{loadMidiFile}!EnsembleModel@{EnsembleModel}}
@@ -221,35 +285,99 @@ void Ensemble\+Model\+::load\+Config\+From\+Xml (\begin{DoxyParamCaption}\item[{
 {\footnotesize\ttfamily \label{class_ensemble_model_aa9c846c94a467886c1d2a7c648c362a1} 
 bool Ensemble\+Model\+::load\+Midi\+File (\begin{DoxyParamCaption}\item[{const juce\+::\+File \&}]{file}{, }\item[{int}]{user\+Players}{}\end{DoxyParamCaption})}
 
+
+
+Loads a MIDI file into the ensemble model. 
+
+The file is read into a juce\+::\+Midi\+File, and then the tracks are converted into \doxylink{class_player}{Player} objects. The user\+Players parameter determines how many of the tracks are set to be user-\/operated. The method returns false if the file cannot be read, or if the players\+In\+Use flag is set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & The MIDI file to load. \\
+\hline
+{\em user\+Players} & The number of user players tracks in the file. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Whether the file was loaded successfully. 
+\end{DoxyReturn}
 \Hypertarget{class_ensemble_model_a92d696efea2517eb7ddd85dc93f4393b}\index{EnsembleModel@{EnsembleModel}!oscMessageReceived@{oscMessageReceived}}
 \index{oscMessageReceived@{oscMessageReceived}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{oscMessageReceived()}{oscMessageReceived()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a92d696efea2517eb7ddd85dc93f4393b} 
 void Ensemble\+Model\+::osc\+Message\+Received (\begin{DoxyParamCaption}\item[{const juce\+::\+OSCMessage \&}]{message}{}\end{DoxyParamCaption})}
 
+
+
+Handles incoming OSC messages by processing them based on their address pattern. 
+
+The function checks the OSC address and performs specific actions\+:
+\begin{DoxyItemize}
+\item "{}/load\+Config"{}\+: Loads configuration from an XML file specified by the message.
+\item "{}/reset"{}\+: Resets the system state.
+\item "{}/set\+Logname"{}\+: Sets a new log filename for logging purposes.
+\item "{}/num\+Intro\+Tones"{}\+: Sets the number of introductory tones.
+\item "{}/plugin"{}\+: Processes a new user note from an external source, such as Max/\+MSP.
+\item "{}/playbackstart"{}\+: Intended to set a timer at the start of playback, though no longer used.
+\item "{}/oscstart"{}\+: Resets the system and sets the processor to manual playing mode.
+\end{DoxyItemize}
+
+After processing, sends an action message indicating an OSC message was received.
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & The OSC message received. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_a0e8763514c990fdad07f0e985541510e}\index{EnsembleModel@{EnsembleModel}!oscMessageSend@{oscMessageSend}}
 \index{oscMessageSend@{oscMessageSend}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{oscMessageSend()}{oscMessageSend()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a0e8763514c990fdad07f0e985541510e} 
 void Ensemble\+Model\+::osc\+Message\+Send (\begin{DoxyParamCaption}\item[{bool}]{test}{}\end{DoxyParamCaption})}
 
+
+
+Sends an OSC message either as a test or with onset data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em test} & If true, sends a test OSC message to the "{}/test"{} address. Otherwise, sends an OSC message to the "{}/onsets"{} address with four random float arguments. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_af766754f79c5218211b042b28733e694}\index{EnsembleModel@{EnsembleModel}!oscMessageSendNewInterval@{oscMessageSendNewInterval}}
 \index{oscMessageSendNewInterval@{oscMessageSendNewInterval}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{oscMessageSendNewInterval()}{oscMessageSendNewInterval()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_af766754f79c5218211b042b28733e694} 
 void Ensemble\+Model\+::osc\+Message\+Send\+New\+Interval (\begin{DoxyParamCaption}\item[{int}]{player\+Num}{, }\item[{int}]{note\+Num}{, }\item[{int}]{note\+Time\+In\+MS}{}\end{DoxyParamCaption})}
 
+Sends an OSC message to notify Max of a new interval. The message contains three integers\+: the player number, the note number, and the note time in milliseconds. 
+\begin{DoxyParams}{Parameters}
+{\em player\+Num} & The player number. \\
+\hline
+{\em note\+Num} & The note number. \\
+\hline
+{\em note\+Time\+In\+MS} & The note time in milliseconds. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_a0551d0845dc769b04aa92ff5d761c549}\index{EnsembleModel@{EnsembleModel}!oscMessageSendPlayMax@{oscMessageSendPlayMax}}
 \index{oscMessageSendPlayMax@{oscMessageSendPlayMax}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{oscMessageSendPlayMax()}{oscMessageSendPlayMax()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a0551d0845dc769b04aa92ff5d761c549} 
 void Ensemble\+Model\+::osc\+Message\+Send\+Play\+Max (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{class_ensemble_model_a4ea6cacb165106b15ce5524fbf0d0f26}\index{EnsembleModel@{EnsembleModel}!oscMessageSendReset@{oscMessageSendReset}}
+
+
+Send an OSC message to trigger Max to start playing. 
+
+The message is /play\+Max. This is used to trigger Max to start playing after the user has pressed play in the plugin editor. \Hypertarget{class_ensemble_model_a4ea6cacb165106b15ce5524fbf0d0f26}\index{EnsembleModel@{EnsembleModel}!oscMessageSendReset@{oscMessageSendReset}}
 \index{oscMessageSendReset@{oscMessageSendReset}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{oscMessageSendReset()}{oscMessageSendReset()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a4ea6cacb165106b15ce5524fbf0d0f26} 
 void Ensemble\+Model\+::osc\+Message\+Send\+Reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Sends an OSC message to trigger a reset in the Max/\+MSP patch. 
 
 \Hypertarget{class_ensemble_model_a47c749e4e0b905fec8a88d0761d28176}\index{EnsembleModel@{EnsembleModel}!parseXmlConfigFileToXmlElement@{parseXmlConfigFileToXmlElement}}
 \index{parseXmlConfigFileToXmlElement@{parseXmlConfigFileToXmlElement}!EnsembleModel@{EnsembleModel}}
@@ -263,35 +391,86 @@ std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$ Ensemble\+Model\+::parse\+X
 {\footnotesize\ttfamily \label{class_ensemble_model_a0bf43a9c5c50c3853ba5e01ebef909dc} 
 void Ensemble\+Model\+::prepare\+To\+Play (\begin{DoxyParamCaption}\item[{double}]{new\+Sample\+Rate}{}\end{DoxyParamCaption})}
 
+
+
+Sets the sample rate of the ensemble model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Sample\+Rate} & The new sample rate to set. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_af06ee8adbc8e34be8e3c81d69da78373}\index{EnsembleModel@{EnsembleModel}!processMidiBlock@{processMidiBlock}}
 \index{processMidiBlock@{processMidiBlock}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{processMidiBlock()}{processMidiBlock()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_af06ee8adbc8e34be8e3c81d69da78373} 
 void Ensemble\+Model\+::process\+Midi\+Block (\begin{DoxyParamCaption}\item[{const juce\+::\+Midi\+Buffer \&}]{in\+Midi}{, }\item[{juce\+::\+Midi\+Buffer \&}]{out\+Midi}{, }\item[{int}]{num\+Samples}{, }\item[{double}]{tempo}{}\end{DoxyParamCaption})}
 
+
+
+Processes a block of incoming MIDI data and generates corresponding output MIDI data. 
+
+This function updates the tempo based on the DAW playhead and processes each sample of the MIDI buffer. If the ensemble has been reset, it clears the output MIDI buffer. It handles the playback of introductory tones and user intros before proceeding to play the main score for each sample in the buffer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Midi} & The incoming MIDI data buffer. \\
+\hline
+{\em out\+Midi} & The output MIDI data buffer. \\
+\hline
+{\em num\+Samples} & The number of samples in the MIDI buffer. \\
+\hline
+{\em tempo} & The current tempo in beats per minute. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_ab19459d025312f1524ff7a2192c4ba2d}\index{EnsembleModel@{EnsembleModel}!releaseResources@{releaseResources}}
 \index{releaseResources@{releaseResources}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{releaseResources()}{releaseResources()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_ab19459d025312f1524ff7a2192c4ba2d} 
 void Ensemble\+Model\+::release\+Resources (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{class_ensemble_model_a8c5e69d3481a64524323aa84d98e6027}\index{EnsembleModel@{EnsembleModel}!reset@{reset}}
+
+
+Releases any resources used by the ensemble model. 
+
+This function is called when the ensemble model is no longer needed. This function is currently not implemented. \Hypertarget{class_ensemble_model_a8c5e69d3481a64524323aa84d98e6027}\index{EnsembleModel@{EnsembleModel}!reset@{reset}}
 \index{reset@{reset}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{reset()}{reset()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a8c5e69d3481a64524323aa84d98e6027} 
 bool Ensemble\+Model\+::reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
+
+
+Resets all players to the beginning of their scores, and resets the onset times of all players to 0.\+0. 
+
+\begin{DoxyReturn}{Returns}
+Returns false if the players are currently in use. 
+\end{DoxyReturn}
 \Hypertarget{class_ensemble_model_af6e7ae599b8c84c51a391298f3781657}\index{EnsembleModel@{EnsembleModel}!reset@{reset}}
 \index{reset@{reset}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{reset()}{reset()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily \label{class_ensemble_model_af6e7ae599b8c84c51a391298f3781657} 
 bool Ensemble\+Model\+::reset (\begin{DoxyParamCaption}\item[{bool}]{skip\+Intro\+Notes}{}\end{DoxyParamCaption})}
 
+Resets the model to its initial state, and setting the number of Intro Tones.
+
+
+\begin{DoxyParams}{Parameters}
+{\em skip\+Intro\+Notes} & UNUSED\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+false always. 
+\end{DoxyReturn}
 \Hypertarget{class_ensemble_model_a5da733fe74f486ab15c5c26a7d90be2e}\index{EnsembleModel@{EnsembleModel}!saveConfigToXmlFile@{saveConfigToXmlFile}}
 \index{saveConfigToXmlFile@{saveConfigToXmlFile}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{saveConfigToXmlFile()}{saveConfigToXmlFile()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a5da733fe74f486ab15c5c26a7d90be2e} 
 void Ensemble\+Model\+::save\+Config\+To\+Xml\+File (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Saves the current configuration of the ensemble model to an XML file. 
 
 \Hypertarget{class_ensemble_model_a4a2e36b8ff17e56bbfcb26e76c0ea7eb}\index{EnsembleModel@{EnsembleModel}!setAlphaBetaParams@{setAlphaBetaParams}}
 \index{setAlphaBetaParams@{setAlphaBetaParams}!EnsembleModel@{EnsembleModel}}
@@ -299,24 +478,70 @@ void Ensemble\+Model\+::save\+Config\+To\+Xml\+File (\begin{DoxyParamCaption}{}{
 {\footnotesize\ttfamily \label{class_ensemble_model_a4a2e36b8ff17e56bbfcb26e76c0ea7eb} 
 void Ensemble\+Model\+::set\+Alpha\+Beta\+Params (\begin{DoxyParamCaption}\item[{float}]{value\+In}{}\end{DoxyParamCaption})}
 
+
+
+Sets the alpha parameters for all player pairs in the processor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value\+In} & The value to set for the alpha parameters. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_afaad68729d6e76b099e3161bc4990d12}\index{EnsembleModel@{EnsembleModel}!setTempo@{setTempo}}
 \index{setTempo@{setTempo}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{setTempo()}{setTempo()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_afaad68729d6e76b099e3161bc4990d12} 
 void Ensemble\+Model\+::set\+Tempo (\begin{DoxyParamCaption}\item[{double}]{bpm}{}\end{DoxyParamCaption})}
 
+
+
+Sets the tempo of the ensemble to the given beats per minute (bpm). 
+
+If the tempo has not actually changed, the function returns without doing anything.
+
+Otherwise, it updates the samples\+Per\+Beat variable of the ensemble, and calls the set\+Initial\+Player\+Tempo() function to set the initial onset interval of each player to the new tempo.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bpm} & the tempo in beats per minute \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_a2ba5b6f5965a28024e15fbb950cf3bc5}\index{EnsembleModel@{EnsembleModel}!setUserOnsetFromOsc@{setUserOnsetFromOsc}}
 \index{setUserOnsetFromOsc@{setUserOnsetFromOsc}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{setUserOnsetFromOsc()}{setUserOnsetFromOsc()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a2ba5b6f5965a28024e15fbb950cf3bc5} 
 void Ensemble\+Model\+::set\+User\+Onset\+From\+Osc (\begin{DoxyParamCaption}\item[{float}]{osc\+Onset\+Time}{, }\item[{int}]{onset\+Note\+Number}{, }\item[{int}]{ms\+Max}{}\end{DoxyParamCaption})}
 
-\Hypertarget{class_ensemble_model_ac694a4f912cd095cf2d0058a19f2f57b}\index{EnsembleModel@{EnsembleModel}!soundOffAllChannels@{soundOffAllChannels}}
+
+
+This synchronises both Max MSP and the Adapative Metronone. 
+
+This method is called from the Plugin\+Processor when a note is played via OSC from Max osc\+Onset\+Time is in seconds, ms\+Max is the time of the onset in ms according to Max\textquotesingle{}s cpu clock.
+
+
+\begin{DoxyParams}{Parameters}
+{\em osc\+Onset\+Time} & The onset time from the OSC message, in seconds. \\
+\hline
+{\em onset\+Note\+Number} & The note number of the note that was played. \\
+\hline
+{\em ms\+Max} & The time of the onset in ms according to Max\textquotesingle{}s cpu clock. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_ensemble_model_aca0da6aff00966cb55da0bea171a9b1f}\index{EnsembleModel@{EnsembleModel}!soundOffAllChannels@{soundOffAllChannels}}
 \index{soundOffAllChannels@{soundOffAllChannels}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{soundOffAllChannels()}{soundOffAllChannels()}}
-{\footnotesize\ttfamily \label{class_ensemble_model_ac694a4f912cd095cf2d0058a19f2f57b} 
-static void Ensemble\+Model\+::sound\+Off\+All\+Channels (\begin{DoxyParamCaption}\item[{juce\+::\+Midi\+Buffer \&}]{midi}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \label{class_ensemble_model_aca0da6aff00966cb55da0bea171a9b1f} 
+void Ensemble\+Model\+::sound\+Off\+All\+Channels (\begin{DoxyParamCaption}\item[{juce\+::\+Midi\+Buffer \&}]{midi}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
+
+
+Sends messages to turn off all notes, sounds and controllers on all MIDI channels to the given Midi\+Buffer. This is useful for stopping all sound when the user closes the plugin or changes presets. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em midi} & The Midi\+Buffer to send messages to. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_ensemble_model_aa612b587d40d732c8f15bccb34ff090b}\index{EnsembleModel@{EnsembleModel}!triggerFirstNote@{triggerFirstNote}}
 \index{triggerFirstNote@{triggerFirstNote}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{triggerFirstNote()}{triggerFirstNote()}}
@@ -324,6 +549,10 @@ static void Ensemble\+Model\+::sound\+Off\+All\+Channels (\begin{DoxyParamCaptio
 void Ensemble\+Model\+::trigger\+First\+Note (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
 
+
+Trigger the first note to be played by the player. 
+
+Sets waiting\+For\+First\+Note to false. 
 
 \doxysubsection{Member Data Documentation}
 \Hypertarget{class_ensemble_model_a17e14567b78a694f722892d74d91591a}\index{EnsembleModel@{EnsembleModel}!configSubfolder@{configSubfolder}}

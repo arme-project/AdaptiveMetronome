@@ -13,6 +13,6 @@ var searchData=
   ['setstateinformation_10',['setStateInformation',['../class_adaptive_metronome_audio_processor.html#a24739829c0d3a14666fb6dc098914f33',1,'AdaptiveMetronomeAudioProcessor']]],
   ['settempo_11',['setTempo',['../class_ensemble_model.html#afaad68729d6e76b099e3161bc4990d12',1,'EnsembleModel']]],
   ['setuseronsetfromosc_12',['setUserOnsetFromOsc',['../class_ensemble_model.html#a2ba5b6f5965a28024e15fbb950cf3bc5',1,'EnsembleModel']]],
-  ['soundoffallchannels_13',['soundOffAllChannels',['../class_ensemble_model.html#ac694a4f912cd095cf2d0058a19f2f57b',1,'EnsembleModel']]],
+  ['soundoffallchannels_13',['soundOffAllChannels',['../class_ensemble_model.html#aca0da6aff00966cb55da0bea171a9b1f',1,'EnsembleModel']]],
   ['stoppreviousnote_14',['stopPreviousNote',['../class_player.html#a8c8d779155320954b13823131d6d3829',1,'Player']]]
 ];
