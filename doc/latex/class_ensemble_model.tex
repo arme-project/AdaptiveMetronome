@@ -84,7 +84,7 @@ void \mbox{\hyperlink{class_ensemble_model_a4a2e36b8ff17e56bbfcb26e76c0ea7eb}{se
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-static void \mbox{\hyperlink{class_ensemble_model_aca0da6aff00966cb55da0bea171a9b1f}{sound\+Off\+All\+Channels}} (juce\+::\+Midi\+Buffer \&midi)
+static void \mbox{\hyperlink{class_ensemble_model_ac694a4f912cd095cf2d0058a19f2f57b}{sound\+Off\+All\+Channels}} (juce\+::\+Midi\+Buffer \&midi)
 \begin{DoxyCompactList}\small\item\em Sends messages to turn off all notes, sounds and controllers on all MIDI channels to the given Midi\+Buffer. This is useful for stopping all sound when the user closes the plugin or changes presets. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -157,7 +157,7 @@ If the connection fails, sets current\+Receive\+Port to -\/1 and logs an error m
 \index{connectOSCSender@{connectOSCSender}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{connectOSCSender()}{connectOSCSender()}}
 {\footnotesize\ttfamily \label{class_ensemble_model_a5600a255d4e106d196b777a687dadaaa} 
-void Ensemble\+Model\+::connect\+OSCSender (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{, }\item[{juce\+::\+String}]{IPAddress}{ = {\ttfamily "{}127.0.0.1"{}}}\end{DoxyParamCaption})}
+void Ensemble\+Model\+::connect\+OSCSender (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{, }\item[{juce\+::\+String}]{IPAddress}{}\end{DoxyParamCaption})}
 
 Connect the OSC sender to a UDP port for sending messages to the Max/\+MSP system.
 
@@ -527,11 +527,11 @@ This method is called from the Plugin\+Processor when a note is played via OSC f
 {\em ms\+Max} & The time of the onset in ms according to Max\textquotesingle{}s cpu clock. \\
 \hline
 \end{DoxyParams}
-\Hypertarget{class_ensemble_model_aca0da6aff00966cb55da0bea171a9b1f}\index{EnsembleModel@{EnsembleModel}!soundOffAllChannels@{soundOffAllChannels}}
+\Hypertarget{class_ensemble_model_ac694a4f912cd095cf2d0058a19f2f57b}\index{EnsembleModel@{EnsembleModel}!soundOffAllChannels@{soundOffAllChannels}}
 \index{soundOffAllChannels@{soundOffAllChannels}!EnsembleModel@{EnsembleModel}}
 \doxysubsubsection{\texorpdfstring{soundOffAllChannels()}{soundOffAllChannels()}}
-{\footnotesize\ttfamily \label{class_ensemble_model_aca0da6aff00966cb55da0bea171a9b1f} 
-void Ensemble\+Model\+::sound\+Off\+All\+Channels (\begin{DoxyParamCaption}\item[{juce\+::\+Midi\+Buffer \&}]{midi}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \label{class_ensemble_model_ac694a4f912cd095cf2d0058a19f2f57b} 
+static void Ensemble\+Model\+::sound\+Off\+All\+Channels (\begin{DoxyParamCaption}\item[{juce\+::\+Midi\+Buffer \&}]{midi}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 

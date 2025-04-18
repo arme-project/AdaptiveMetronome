@@ -19,19 +19,19 @@ class \mbox{\hyperlink{class_adaptive_metronome_audio_processor_1_1_parameter_in
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_adaptive_metronome_audio_processor_af258428f20a17505e4fc1483fcc04bed}{Adaptive\+Metronome\+Audio\+Processor}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_adaptive_metronome_audio_processor_a3ca78c6d3a4547b4d04e1ff49d038f02}{\texorpdfstring{$\sim$}{\string~}\+Adaptive\+Metronome\+Audio\+Processor}} () override
-\item 
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_adaptive_metronome_audio_processor_a78977b6834f4bc47d03607e733fcc20e}{is\+Buses\+Layout\+Supported}} (const Buses\+Layout \&layouts) const override
 \item 
 void \mbox{\hyperlink{class_adaptive_metronome_audio_processor_ad3fb692bceeeceee015baa305d6ef859}{set\+Manual\+Playing}} (bool should\+Play)
-\item 
+\begin{DoxyCompactList}\small\item\em Sets the manual playing state of the adaptive metronome. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_adaptive_metronome_audio_processor_a7fbe1b74771cff5623a17e5cfd7e5bc8}{prepare\+To\+Play}} (double sample\+Rate, int samples\+Per\+Block) override
 \item 
 void \mbox{\hyperlink{class_adaptive_metronome_audio_processor_afd19eb619e3eca8d93dff8d162b3666a}{release\+Resources}} () override
 \item 
 void \mbox{\hyperlink{class_adaptive_metronome_audio_processor_acdb9a1d56f70967cf69eea8872a26f66}{process\+Block}} (juce\+::\+Audio\+Buffer$<$ float $>$ \&, juce\+::\+Midi\+Buffer \&) override
-\item 
+\begin{DoxyCompactList}\small\item\em Process a block of audio and MIDI data. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_adaptive_metronome_audio_processor_adc8466360c55c9be12cfcd8ee8a2b742}{has\+Editor}} () const override
 \item 
 juce\+::\+Audio\+Processor\+Editor \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_adaptive_metronome_audio_processor_a8bff9d700a813fa06b968ed9883a05c2}{create\+Editor}} () override
@@ -111,13 +111,21 @@ static const int \mbox{\hyperlink{class_adaptive_metronome_audio_processor_ac305
 {\footnotesize\ttfamily \label{class_adaptive_metronome_audio_processor_af258428f20a17505e4fc1483fcc04bed} 
 Adaptive\+Metronome\+Audio\+Processor\+::\+Adaptive\+Metronome\+Audio\+Processor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{class_adaptive_metronome_audio_processor_a3ca78c6d3a4547b4d04e1ff49d038f02}\index{AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}!````~AdaptiveMetronomeAudioProcessor@{\texorpdfstring{$\sim$}{\string~}AdaptiveMetronomeAudioProcessor}}
+
+
+Constructor for \doxylink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}. 
+
+Initialises the Audio\+Processor and the apvts, which contains pointers to the parameters and their associated Parameter\+Layout. The ensemble model is also initialised here with the correct number of players. \Hypertarget{class_adaptive_metronome_audio_processor_a3ca78c6d3a4547b4d04e1ff49d038f02}\index{AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}!````~AdaptiveMetronomeAudioProcessor@{\texorpdfstring{$\sim$}{\string~}AdaptiveMetronomeAudioProcessor}}
 \index{````~AdaptiveMetronomeAudioProcessor@{\texorpdfstring{$\sim$}{\string~}AdaptiveMetronomeAudioProcessor}!AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}}
 \doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}AdaptiveMetronomeAudioProcessor()}{\string~AdaptiveMetronomeAudioProcessor()}}
 {\footnotesize\ttfamily \label{class_adaptive_metronome_audio_processor_a3ca78c6d3a4547b4d04e1ff49d038f02} 
 Adaptive\+Metronome\+Audio\+Processor\+::\texorpdfstring{$\sim$}{\string~}\+Adaptive\+Metronome\+Audio\+Processor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
 
 
+
+Destructor for \doxylink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}. 
+
+Cleans up the resources used by the processor and the ensemble model. 
 
 \doxysubsection{Member Function Documentation}
 \Hypertarget{class_adaptive_metronome_audio_processor_a410d77c118fa53298f03e9bcf2e1f0c1}\index{AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}!acceptsMidi@{acceptsMidi}}
@@ -216,12 +224,36 @@ bool Adaptive\+Metronome\+Audio\+Processor\+::is\+Midi\+Effect (\begin{DoxyParam
 {\footnotesize\ttfamily \label{class_adaptive_metronome_audio_processor_a7fbe1b74771cff5623a17e5cfd7e5bc8} 
 void Adaptive\+Metronome\+Audio\+Processor\+::prepare\+To\+Play (\begin{DoxyParamCaption}\item[{double}]{sample\+Rate}{, }\item[{int}]{samples\+Per\+Block}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
 
+Prepares the audio processor to start playing audio.
+
+This function is called before starting playback or when the playback sample rate or block size changes. It initializes the ensemble model with the new sample rate, ensures the MIDI output buffer is appropriately sized, and resets playback state variables.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sample\+Rate} & The new sample rate to use for playback. \\
+\hline
+{\em samples\+Per\+Block} & The number of samples in each audio block. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_adaptive_metronome_audio_processor_acdb9a1d56f70967cf69eea8872a26f66}\index{AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}!processBlock@{processBlock}}
 \index{processBlock@{processBlock}!AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}}
 \doxysubsubsection{\texorpdfstring{processBlock()}{processBlock()}}
 {\footnotesize\ttfamily \label{class_adaptive_metronome_audio_processor_acdb9a1d56f70967cf69eea8872a26f66} 
 void Adaptive\+Metronome\+Audio\+Processor\+::process\+Block (\begin{DoxyParamCaption}\item[{juce\+::\+Audio\+Buffer$<$ float $>$ \&}]{buffer}{, }\item[{juce\+::\+Midi\+Buffer \&}]{midi\+Messages}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
 
+
+
+Process a block of audio and MIDI data. 
+
+This method is called by JUCE to process a block of audio and MIDI data. It is responsible for passing the MIDI data to the \doxylink{class_ensemble_model}{Ensemble\+Model} for processing and replacing the output MIDI buffer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & The audio buffer to be processed. \\
+\hline
+{\em midi\+Messages} & The MIDI buffer to be processed. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_adaptive_metronome_audio_processor_a15843324a38bbc9b18406a19de4f41b8}\index{AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}!producesMidi@{producesMidi}}
 \index{producesMidi@{producesMidi}!AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}}
 \doxysubsubsection{\texorpdfstring{producesMidi()}{producesMidi()}}
@@ -252,6 +284,15 @@ void Adaptive\+Metronome\+Audio\+Processor\+::set\+Current\+Program (\begin{Doxy
 {\footnotesize\ttfamily \label{class_adaptive_metronome_audio_processor_ad3fb692bceeeceee015baa305d6ef859} 
 void Adaptive\+Metronome\+Audio\+Processor\+::set\+Manual\+Playing (\begin{DoxyParamCaption}\item[{bool}]{should\+Play}{}\end{DoxyParamCaption})}
 
+
+
+Sets the manual playing state of the adaptive metronome. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em should\+Play} & A boolean indicating whether manual playing should be enabled. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{class_adaptive_metronome_audio_processor_a24739829c0d3a14666fb6dc098914f33}\index{AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}!setStateInformation@{setStateInformation}}
 \index{setStateInformation@{setStateInformation}!AdaptiveMetronomeAudioProcessor@{AdaptiveMetronomeAudioProcessor}}
 \doxysubsubsection{\texorpdfstring{setStateInformation()}{setStateInformation()}}

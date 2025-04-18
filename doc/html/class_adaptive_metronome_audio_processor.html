@@ -129,18 +129,22 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af258428f20a17505e4fc1483fcc04bed" id="r_af258428f20a17505e4fc1483fcc04bed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af258428f20a17505e4fc1483fcc04bed">AdaptiveMetronomeAudioProcessor</a> ()</td></tr>
+<tr class="memdesc:af258428f20a17505e4fc1483fcc04bed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>.  <br /></td></tr>
 <tr class="separator:af258428f20a17505e4fc1483fcc04bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ca78c6d3a4547b4d04e1ff49d038f02" id="r_a3ca78c6d3a4547b4d04e1ff49d038f02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ca78c6d3a4547b4d04e1ff49d038f02">~AdaptiveMetronomeAudioProcessor</a> () override</td></tr>
+<tr class="memdesc:a3ca78c6d3a4547b4d04e1ff49d038f02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>.  <br /></td></tr>
 <tr class="separator:a3ca78c6d3a4547b4d04e1ff49d038f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78977b6834f4bc47d03607e733fcc20e" id="r_a78977b6834f4bc47d03607e733fcc20e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78977b6834f4bc47d03607e733fcc20e">isBusesLayoutSupported</a> (const BusesLayout &amp;layouts) const override</td></tr>
 <tr class="separator:a78977b6834f4bc47d03607e733fcc20e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3fb692bceeeceee015baa305d6ef859" id="r_ad3fb692bceeeceee015baa305d6ef859"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3fb692bceeeceee015baa305d6ef859">setManualPlaying</a> (bool shouldPlay)</td></tr>
+<tr class="memdesc:ad3fb692bceeeceee015baa305d6ef859"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the manual playing state of the adaptive metronome.  <br /></td></tr>
 <tr class="separator:ad3fb692bceeeceee015baa305d6ef859"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fbe1b74771cff5623a17e5cfd7e5bc8" id="r_a7fbe1b74771cff5623a17e5cfd7e5bc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fbe1b74771cff5623a17e5cfd7e5bc8">prepareToPlay</a> (double sampleRate, int samplesPerBlock) override</td></tr>
 <tr class="separator:a7fbe1b74771cff5623a17e5cfd7e5bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd19eb619e3eca8d93dff8d162b3666a" id="r_afd19eb619e3eca8d93dff8d162b3666a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd19eb619e3eca8d93dff8d162b3666a">releaseResources</a> () override</td></tr>
 <tr class="separator:afd19eb619e3eca8d93dff8d162b3666a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdb9a1d56f70967cf69eea8872a26f66" id="r_acdb9a1d56f70967cf69eea8872a26f66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdb9a1d56f70967cf69eea8872a26f66">processBlock</a> (juce::AudioBuffer&lt; float &gt; &amp;, juce::MidiBuffer &amp;) override</td></tr>
+<tr class="memdesc:acdb9a1d56f70967cf69eea8872a26f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process a block of audio and MIDI data.  <br /></td></tr>
 <tr class="separator:acdb9a1d56f70967cf69eea8872a26f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc8466360c55c9be12cfcd8ee8a2b742" id="r_adc8466360c55c9be12cfcd8ee8a2b742"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc8466360c55c9be12cfcd8ee8a2b742">hasEditor</a> () const override</td></tr>
 <tr class="separator:adc8466360c55c9be12cfcd8ee8a2b742"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -229,6 +233,9 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor for <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>. </p>
+<p>Initialises the AudioProcessor and the apvts, which contains pointers to the parameters and their associated ParameterLayout. The ensemble model is also initialised here with the correct number of players. </p>
+
 </div>
 </div>
 <a id="a3ca78c6d3a4547b4d04e1ff49d038f02" name="a3ca78c6d3a4547b4d04e1ff49d038f02"></a>
@@ -253,6 +260,9 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Destructor for <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>. </p>
+<p>Cleans up the resources used by the processor and the ensemble model. </p>
 
 </div>
 </div>
@@ -650,6 +660,15 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Prepares the audio processor to start playing audio.</p>
+<p>This function is called before starting playback or when the playback sample rate or block size changes. It initializes the ensemble model with the new sample rate, ensures the MIDI output buffer is appropriately sized, and resets playback state variables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sampleRate</td><td>The new sample rate to use for playback. </td></tr>
+    <tr><td class="paramname">samplesPerBlock</td><td>The number of samples in each audio block. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -679,6 +698,16 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Process a block of audio and MIDI data. </p>
+<p>This method is called by JUCE to process a block of audio and MIDI data. It is responsible for passing the MIDI data to the <a class="el" href="class_ensemble_model.html">EnsembleModel</a> for processing and replacing the output MIDI buffer.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>The audio buffer to be processed. </td></tr>
+    <tr><td class="paramname">midiMessages</td><td>The MIDI buffer to be processed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -788,6 +817,14 @@ Static Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sets the manual playing state of the adaptive metronome. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shouldPlay</td><td>A boolean indicating whether manual playing should be enabled. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

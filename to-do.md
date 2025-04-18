@@ -1,5 +1,5 @@
 Comment each functions in the following header files:
-- [ ] EnsembleModel
+- [X] EnsembleModel
 - [X] Player
 - [X] UserPlayer
 - [ ] Parts of PluginEditor (relevant to the Metronome)

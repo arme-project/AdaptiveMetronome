@@ -1,3 +1,12 @@
+/**
+ * \file PluginProcessor.h
+ * \brief Header file for the PluginProcessor class.
+ *
+ * This file contains the definition of the PluginProcessor class, which is responsible for processing audio and MIDI data in the adaptive metronome.
+ * It handles the ensemble model, parameters, and the audio processing pipeline.
+ */
+
+
 #pragma once
 #include <JuceHeader.h>
 #include "EnsembleModel.h"
@@ -9,7 +18,21 @@ class AdaptiveMetronomeAudioProcessor : public juce::AudioProcessor
 {
 public:
     //==============================================================================
+    /**
+     * \brief Constructor for AdaptiveMetronomeAudioProcessor.
+     *
+     * Initialises the AudioProcessor and the apvts, which contains pointers to the
+     * parameters and their associated ParameterLayout. The ensemble model is also
+     * initialised here with the correct number of players.
+     *
+     */
     AdaptiveMetronomeAudioProcessor();
+
+    /**
+     * \brief Destructor for AdaptiveMetronomeAudioProcessor.
+     *
+     * Cleans up the resources used by the processor and the ensemble model.
+     */
     ~AdaptiveMetronomeAudioProcessor() override;
 
     EnsembleModel ensemble;
@@ -25,9 +48,39 @@ public:
     //==============================================================================
     bool isBusesLayoutSupported(const BusesLayout &layouts) const override;
     //==============================================================================
+    /**
+     * \brief Sets the manual playing state of the adaptive metronome.
+     *
+     * \param shouldPlay A boolean indicating whether manual playing should be enabled.       
+     */
     void setManualPlaying(bool shouldPlay); // used in standalone mode
+
+    /**
+     * Prepares the audio processor to start playing audio.
+     *
+     * This function is called before starting playback or when the playback
+     * sample rate or block size changes. It initializes the ensemble model
+     * with the new sample rate, ensures the MIDI output buffer is appropriately
+     * sized, and resets playback state variables.
+     *
+     * @param sampleRate The new sample rate to use for playback.
+     * @param samplesPerBlock The number of samples in each audio block.
+     */
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
+    
+
     void releaseResources() override;
+
+    /**
+     * \brief Process a block of audio and MIDI data.
+     *
+     * This method is called by JUCE to process a block of audio and MIDI data.
+     * It is responsible for passing the MIDI data to the EnsembleModel for processing
+     * and replacing the output MIDI buffer.
+     *
+     * \param buffer The audio buffer to be processed.
+     * \param midiMessages The MIDI buffer to be processed.
+     */
     void processBlock(juce::AudioBuffer<float> &, juce::MidiBuffer &) override;
 
     //==============================================================================
