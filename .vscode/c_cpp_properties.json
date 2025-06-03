@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "JUCE",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${vcpkgRoot}/x64-windows/include",
+                "${workspaceFolder}/JuceLibraryCode",
+                "${env:JUCE_DIR}/../modules"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "cl.exe",
+            "cStandard": "c17",
+            "intelliSenseMode": "windows-msvc-x64",
+            "mergeConfigurations": true
+        }
+    ],
+    "version": 4
+}

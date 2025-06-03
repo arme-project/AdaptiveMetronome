@@ -1,0 +1,30 @@
+\doxysection{D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\+Timing\+Model\+Parameter.h File Reference}
+\hypertarget{_timing_model_parameter_8h}{}\label{_timing_model_parameter_8h}\index{D:/Projects/ARME Demo/AdaptiveMetronome/Source/TimingModelParameter.h@{D:/Projects/ARME Demo/AdaptiveMetronome/Source/TimingModelParameter.h}}
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$atomic$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$random$>$}\newline
+{\ttfamily \#include $<$Juce\+Header.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ARMETiming\+Model\+::\+Model\+Parameter\+Float}}
+\begin{DoxyCompactList}\small\item\em Base class for float parameter. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float}{ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float}}
+\begin{DoxyCompactList}\small\item\em A read-\/only child class of \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} where the underlying value is the float value result of a stored std\+::function$<$float()$>$. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_a_r_m_e_timing_model}{ARMETiming\+Model}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::atomic$<$ float $>$ \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{ARMETiming\+Model\+::a\+\_\+float}}
+\item 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{ARMETiming\+Model\+::\+Model\+Float\+Ptr}} = \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*}
+\item 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{ARMETiming\+Model\+::\+Model\+Float\+Vector}} = std\+::vector$<$\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}}$>$
+\item 
+using \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{ARMETiming\+Model\+::\+Model\+Float\+Matrix}} = std\+::vector$<$\mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}}$>$
+\end{DoxyCompactItemize}

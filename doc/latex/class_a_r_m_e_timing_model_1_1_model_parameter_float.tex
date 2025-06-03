@@ -1,0 +1,194 @@
+\doxysection{ARMETiming\+Model\+::Model\+Parameter\+Float Class Reference}
+\hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float}{}\label{class_a_r_m_e_timing_model_1_1_model_parameter_float}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+
+
+Base class for float parameter.  
+
+
+
+
+{\ttfamily \#include $<$Timing\+Model\+Parameter.\+h$>$}
+
+Inheritance diagram for ARMETiming\+Model\+::Model\+Parameter\+Float\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_a_r_m_e_timing_model_1_1_model_parameter_float}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a3de938e41ebadb516a45ab33c633e0ea}{Model\+Parameter\+Float}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}init\+Reference)
+\begin{DoxyCompactList}\small\item\em Create new parameter using a pointer to a std\+::atomic$<$float$>$. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a80f5acf166ed391458cfdf36da1fe33a}{Model\+Parameter\+Float}} (float init\+Value)
+\begin{DoxyCompactList}\small\item\em Create new parameter from an initial value. The underlying pointer to std\+::atomic$<$float$>$ is auto generated. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_aa35f1b84cfeefa5e678afd8e0bd097e9}{Model\+Parameter\+Float}} (std\+::function$<$ float()$>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678}{get\+Value\+Fcn}})
+\begin{DoxyCompactList}\small\item\em Create new parameter from a function that returns a float value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ac92779413b5bfe3220d2f06c11096f3b}{\texorpdfstring{$\sim$}{\string~}\+Model\+Parameter\+Float}} ()
+\item 
+virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab552b3823c3712b1928e47a4d50d6579}{get\+Raw\+Value}} ()
+\begin{DoxyCompactList}\small\item\em Get the actual float value of this parameter. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_aacfa8d6c44e5acd452a8d27f2e46a4cb}{set\+New\+Value}} (float new\+Value)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_af5721f1cba1b2f3df28c1b6a4830b304}{set\+New\+Reference}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}new\+Ref)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ae6a042e1fc1e2bd1c56ba54be201b431}{set\+New\+Reference}} (std\+::function$<$ float()$>$ new\+Get\+Value\+Fcn)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a95f35e33f9b6d8146ff07be2b8000676}{Model\+Parameter\+Float}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::function$<$ float()$>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678}{get\+Value\+Fcn}}
+\item 
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a4e322f40f49e250bdb7e890fb6359f1f}{value}} = new std\+::atomic$<$float$>$(0.\+0f)
+\item 
+bool \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab3fbec3c14c2d676dd7f423f135c60a1}{is\+Ref\+Type}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class for float parameter. 
+
+Underlying value is a pointer to an std\+::atomic$<$float$>$ value. The underlying pointer can be aletered, as well as the value itself. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_a3de938e41ebadb516a45ab33c633e0ea}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!ModelParameterFloat@{ModelParameterFloat}}
+\index{ModelParameterFloat@{ModelParameterFloat}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterFloat()}{ModelParameterFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_a3de938e41ebadb516a45ab33c633e0ea} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::\+Model\+Parameter\+Float (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}}]{init\+Reference}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create new parameter using a pointer to a std\+::atomic$<$float$>$. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em init\+Reference} & This is a pointer to a std\+::atomic$<$float$>$ object that contains the parameter value. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_a80f5acf166ed391458cfdf36da1fe33a}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!ModelParameterFloat@{ModelParameterFloat}}
+\index{ModelParameterFloat@{ModelParameterFloat}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterFloat()}{ModelParameterFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_a80f5acf166ed391458cfdf36da1fe33a} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::\+Model\+Parameter\+Float (\begin{DoxyParamCaption}\item[{float}]{init\+Value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create new parameter from an initial value. The underlying pointer to std\+::atomic$<$float$>$ is auto generated. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em init\+Value} & The initialisation value of the underlying std\+::atomic$<$float$>$. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_aa35f1b84cfeefa5e678afd8e0bd097e9}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!ModelParameterFloat@{ModelParameterFloat}}
+\index{ModelParameterFloat@{ModelParameterFloat}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterFloat()}{ModelParameterFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_aa35f1b84cfeefa5e678afd8e0bd097e9} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::\+Model\+Parameter\+Float (\begin{DoxyParamCaption}\item[{std\+::function$<$ float()$>$}]{get\+Value\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create new parameter from a function that returns a float value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em get\+Value\+Fcn} & A function that returns a float value used as the return value of this parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_ac92779413b5bfe3220d2f06c11096f3b}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!````~ModelParameterFloat@{\texorpdfstring{$\sim$}{\string~}ModelParameterFloat}}
+\index{````~ModelParameterFloat@{\texorpdfstring{$\sim$}{\string~}ModelParameterFloat}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ModelParameterFloat()}{\string~ModelParameterFloat()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_ac92779413b5bfe3220d2f06c11096f3b} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::\texorpdfstring{$\sim$}{\string~}\+Model\+Parameter\+Float (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_a95f35e33f9b6d8146ff07be2b8000676}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!ModelParameterFloat@{ModelParameterFloat}}
+\index{ModelParameterFloat@{ModelParameterFloat}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterFloat()}{ModelParameterFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_a95f35e33f9b6d8146ff07be2b8000676} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::\+Model\+Parameter\+Float (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab552b3823c3712b1928e47a4d50d6579}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!getRawValue@{getRawValue}}
+\index{getRawValue@{getRawValue}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{getRawValue()}{getRawValue()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab552b3823c3712b1928e47a4d50d6579} 
+virtual float ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::get\+Raw\+Value (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Get the actual float value of this parameter. 
+
+\begin{DoxyReturn}{Returns}
+The actual value of the underlying std\+::atomic$<$float$>$. 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a90febe3175433804e053656f1ee2d43f}{ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float}}.
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_af5721f1cba1b2f3df28c1b6a4830b304}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!setNewReference@{setNewReference}}
+\index{setNewReference@{setNewReference}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{setNewReference()}{setNewReference()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_af5721f1cba1b2f3df28c1b6a4830b304} 
+virtual void ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::set\+New\+Reference (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}}]{new\+Ref}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Change which underlying std\+::atomic$<$float$>$ value is used by this parameter. 
+\begin{DoxyParams}{Parameters}
+{\em new\+Ref} & Pointer to the new std\+::atomic$<$float$>$ object to use as the underlying value of this parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_ae6a042e1fc1e2bd1c56ba54be201b431}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!setNewReference@{setNewReference}}
+\index{setNewReference@{setNewReference}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{setNewReference()}{setNewReference()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_ae6a042e1fc1e2bd1c56ba54be201b431} 
+virtual void ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::set\+New\+Reference (\begin{DoxyParamCaption}\item[{std\+::function$<$ float()$>$}]{new\+Get\+Value\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Change this parameter to use a std\+::function$<$float()$>$ as its return. 
+\begin{DoxyParams}{Parameters}
+{\em new\+Get\+Value\+Fcn} & A function that returns a float value used as the return value of this parameter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_aacfa8d6c44e5acd452a8d27f2e46a4cb}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!setNewValue@{setNewValue}}
+\index{setNewValue@{setNewValue}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{setNewValue()}{setNewValue()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_aacfa8d6c44e5acd452a8d27f2e46a4cb} 
+virtual void ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::set\+New\+Value (\begin{DoxyParamCaption}\item[{float}]{new\+Value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Set the value of the underlying std\+::atomic$<$float$>$ to the provided float. 
+\begin{DoxyParams}{Parameters}
+{\em new\+Value} & The new value to set for the parameter \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!getValueFcn@{getValueFcn}}
+\index{getValueFcn@{getValueFcn}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{getValueFcn}{getValueFcn}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678} 
+std\+::function$<$float()$>$ ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::get\+Value\+Fcn\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab3fbec3c14c2d676dd7f423f135c60a1}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!isRefType@{isRefType}}
+\index{isRefType@{isRefType}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{isRefType}{isRefType}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab3fbec3c14c2d676dd7f423f135c60a1} 
+bool ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::is\+Ref\+Type = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_float_a4e322f40f49e250bdb7e890fb6359f1f}\index{ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}!value@{value}}
+\index{value@{value}!ARMETimingModel::ModelParameterFloat@{ARMETimingModel::ModelParameterFloat}}
+\doxysubsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_float_a4e322f40f49e250bdb7e890fb6359f1f} 
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}\texorpdfstring{$\ast$}{*} ARMETiming\+Model\+::\+Model\+Parameter\+Float\+::value = new std\+::atomic$<$float$>$(0.\+0f)\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameter_8h}{Timing\+Model\+Parameter.\+h}}\end{DoxyCompactItemize}

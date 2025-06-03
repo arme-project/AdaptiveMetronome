@@ -1,0 +1,364 @@
+\doxysection{User\+Player Class Reference}
+\hypertarget{class_user_player}{}\label{class_user_player}\index{UserPlayer@{UserPlayer}}
+
+
+{\ttfamily \#include $<$User\+Player.\+h$>$}
+
+Inheritance diagram for User\+Player\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_user_player}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_user_player_a2a7fb3549b6f92accaa73213796520ef}{User\+Player}} (int index, const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}seq, int midi\+Channel, const double \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sample\+Rate}}, const int \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{score\+Counter}}, int initial\+Interval)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_user_player}{User\+Player} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_user_player_a0b4824fca511a069b126c0d50ada89c5}{User\+Player}} (int index, const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}seq, int midi\+Channel, const double \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sample\+Rate}}, const int \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{score\+Counter}}, int initial\+Interval, \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}} \texorpdfstring{$\ast$}{*}processor\+In)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{class_user_player}{User\+Player} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_user_player_a8b01dcdd90aec1dfb6f2d68acf92d0fa}{\texorpdfstring{$\sim$}{\string~}\+User\+Player}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_user_player}{User\+Player}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_user_player_aff03f7afdbbfadfdb970a2795baa2dca}{is\+User\+Operated}} () override
+\begin{DoxyCompactList}\small\item\em Reports this player is user-\/operated. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_user_player_afea89ab4a72d677f77cb860e3e88e0c7}{recalculate\+Onset\+Interval}} (int samples\+Per\+Beat, const std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_player}{Player}} $>$ $>$ \&players) override
+\begin{DoxyCompactList}\small\item\em Calculates the next onset time for this user player. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_user_player_a07bd2f3a604aa164d0713da4b190f245}{was\+Latest\+Onset\+User\+Input}} () override
+\begin{DoxyCompactList}\small\item\em Checks if the latest onset was triggered by user input. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_user_player_af78da569c3293f6823041ae14a3d12b9}{process\+Intro\+Sample}} (const juce\+::\+Midi\+Buffer \&in\+Midi, juce\+::\+Midi\+Buffer \&out\+Midi, int sample\+Index, int intro\+Note) override
+\begin{DoxyCompactList}\small\item\em Called from \doxylink{class_ensemble_model}{Ensemble\+Model} to play an intro tone when a user presses a key. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_player}{Player}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_player_a321dff0097d18da8e5277f5c9f15c104}{Player}} (int index, const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}seq, int midi\+Channel, const double \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sample\+Rate}}, const int \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{score\+Counter}}, int initial\+Interval)
+\item 
+\mbox{\hyperlink{class_player_a598f8193fc86d0302329759c978e6475}{Player}} (int index, const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}seq, int midi\+Channel, const double \&\mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sample\+Rate}}, const int \&\mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{score\+Counter}}, int initial\+Interval, \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}} \texorpdfstring{$\ast$}{*}processor\+Ptr)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_player}{Player}. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_player_a749d2c00e1fe0f5c2746f7505a58c062}{\texorpdfstring{$\sim$}{\string~}\+Player}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{class_player}{Player}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a1af5d39f7bac2aeaa1e30c7dda2332fa}{reset}} ()
+\begin{DoxyCompactList}\small\item\em Resets the player to the start of the score. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_aa5f2f93d78d94eaba6c79951e55dc5bf}{set\+Onset\+Interval}} (int interval)
+\begin{DoxyCompactList}\small\item\em Sets the onset interval for the player. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_player_a480dd629b3a39a31940d28dfe016ce11}{get\+Onset\+Interval}} ()
+\begin{DoxyCompactList}\small\item\em Returns the current onset interval for the player. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_player_a6d40bb8d0b541e0cb72edbb1d588b544}{get\+Played\+Onset\+Interval}} ()
+\begin{DoxyCompactList}\small\item\em Returns the onset interval for the last note played. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_aae9241bd39c686b30ce34a3ff02cdf22}{add\+Interval\+To\+Queue}} (double interval, double onset\+Time)
+\begin{DoxyCompactList}\small\item\em Add an onset interval to the queue. Make sure this is an IOI in seconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a6e7bad4694ba2e7ef276bae5e1176335}{empty\+Interval\+Queue}} ()
+\begin{DoxyCompactList}\small\item\em Empty the interval queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a00dc66c8d59f49d524132282cd6be28c}{set\+Osc\+Onset\+Time}} (float onset\+From\+Osc, int onset\+Note\+Number, int samples\+Since\+First\+Note)
+\begin{DoxyCompactList}\small\item\em This method is used by the \doxylink{class_user_player}{User\+Player} to set the onset time from an OSC message. It sets new\+OSCOnset\+Available to true, and sets the onset time in samples. new\+OSCOnset\+Available is checked in \doxylink{class_user_player_a63918fa2e6b3021a7f37771cc128ff18}{User\+Player\+::process\+Note\+On}. This should be called when a note is played from Max via OSC. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_player_a72b210913c78507dd26326e174c51d5f}{generate\+Motor\+Noise}} ()
+\item 
+double \mbox{\hyperlink{class_player_abf1679628859e9cb89f35be5d9f7dff8}{generate\+Time\+Keeper\+Noise}} ()
+\item 
+double \mbox{\hyperlink{class_player_a095caa10ad0f3614fdc4a66fb6cdc86d}{generate\+HNoise}} ()
+\item 
+double \mbox{\hyperlink{class_player_a1688ba66afaa829a0d62616fc6e72809}{get\+Motor\+Noise}} ()
+\item 
+double \mbox{\hyperlink{class_player_ae8b12698565e5c55a288720c3a72e6d5}{get\+Time\+Keeper\+Noise}} ()
+\item 
+double \mbox{\hyperlink{class_player_a9b4d437693b09401de8f8f71772ad78a}{get\+Motor\+Noise\+Std}} ()
+\item 
+double \mbox{\hyperlink{class_player_adac641f8d63afaf5d28c488b29c41e65}{get\+Time\+Keeper\+Noise\+Std}} ()
+\item 
+bool \mbox{\hyperlink{class_player_a41fbca2bdfc6dcbfada4a7aa6564efc6}{has\+Note\+Played}} ()
+\item 
+void \mbox{\hyperlink{class_player_a323514bed6f8718d1cecc6cc7d2dcd7a}{reset\+Note\+Played}} ()
+\item 
+int \mbox{\hyperlink{class_player_aaaee465a3e7e21ca6bd396530ca4d2c1}{get\+Latest\+Onset\+Time}} ()
+\item 
+int \mbox{\hyperlink{class_player_ae2f0ccd2b5a31868e553b0f355c029a4}{get\+Latest\+Onset\+Delay}} ()
+\item 
+double \mbox{\hyperlink{class_player_a748777cdf84d4da477f4b1d2a7260c39}{get\+Latest\+Volume}} ()
+\item 
+int \mbox{\hyperlink{class_player_aab5417a9dbd6bde1b2d52553ab071c87}{get\+Current\+Note\+Index}} ()
+\begin{DoxyCompactList}\small\item\em Returns the index of the note which is currently being played. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a7d8fec08ac1216430d39afc32651beef}{process\+Sample}} (const juce\+::\+Midi\+Buffer \&in\+Midi, juce\+::\+Midi\+Buffer \&out\+Midi, int sample\+Index)
+\begin{DoxyCompactList}\small\item\em This method is responsible for generating the audio output for one sample of the MIDI buffer. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{class_player_abb71d73b012c99ff1505a5124a53be4d}{get\+Num\+Notes}} ()
+\begin{DoxyCompactList}\small\item\em Returns the number of notes in the player\textquotesingle{}s score. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_user_player_aad1cac06520a7c1ac755295758dd90ea}{use\+OSCinput}} = false
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_player}{Player}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_player_a2cec5dcd26a35845867f5e9193cb05d4}{processor}}
+\item 
+std\+::deque$<$ double $>$ \mbox{\hyperlink{class_player_ade7585a93b6101024ecfb69c8a8400cb}{onset\+Intervals}}
+\item 
+std\+::deque$<$ double $>$ \mbox{\hyperlink{class_player_aa26c8c67e9a61fd1f844279535034016}{onset\+Times}}
+\item 
+int \mbox{\hyperlink{class_player_aa61ada6c0eb73def0c03a0fc71afa052}{num\+Of\+Intervals\+In\+Queue}} = 0
+\item 
+float \mbox{\hyperlink{class_player_a2c511df749594c15625ef67e6cdb9574}{osc\+Onset\+Time}}
+\item 
+int \mbox{\hyperlink{class_player_a3f93d9820a96f87ada1b4bda7abccf0f}{osc\+Onset\+Time\+In\+Samples}}
+\item 
+int \mbox{\hyperlink{class_player_a41a5432f07ef89ee22c111352c5bf462}{latest\+Osc\+Onset\+Note\+Number}}
+\item 
+bool \mbox{\hyperlink{class_player_afc97090665c3c51b6601dc9d0509bc8d}{new\+OSCOnset\+Available}} = false
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_user_player_a63918fa2e6b3021a7f37771cc128ff18}{process\+Note\+On}} (const juce\+::\+Midi\+Buffer \&in\+Midi, juce\+::\+Midi\+Buffer \&out\+Midi, int sample\+Index) override
+\begin{DoxyCompactList}\small\item\em Processes incoming MIDI buffer and outputs a note if the user has inputted a note, or if the user input has timed out. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_player}{Player}}}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_player_a7ed167e341e7c240c2fda9468379a6bb}{initialise\+Score}} (const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}seq)
+\begin{DoxyCompactList}\small\item\em Loads a MIDI sequence into the player. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a1e69f6d165a018e21e3963145ae294da}{play\+Next\+Note}} (juce\+::\+Midi\+Buffer \&midi, int sample\+Index, int samples\+Delay=0)
+\begin{DoxyCompactList}\small\item\em Plays the next note in the score. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a8c8d779155320954b13823131d6d3829}{stop\+Previous\+Note}} (juce\+::\+Midi\+Buffer \&midi, int sample\+Index)
+\begin{DoxyCompactList}\small\item\em Stops the previous note in the score being played. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_user_player_ab594ed8f7f55bf4c96da2c3bb4154241}{intro\+Tone\+Length}} = 100
+\item 
+int \mbox{\hyperlink{class_user_player_ae30c2556421c8dd45d154937785ad627}{samples\+To\+Intro\+Tone\+Off}} = -\/1
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_player}{Player}}}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_player_a56bc3219d722262d6810d4a91532e6f8}{player\+Index}} = 0
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_player_1_1_note}{Note}} $>$ \mbox{\hyperlink{class_player_aed27dc0e3704152cc3cf99e149fee01a}{notes}}
+\item 
+std\+::size\+\_\+t \mbox{\hyperlink{class_player_a3693c8464de5ea7d93edf0e2b7c67785}{current\+Note\+Index}} = 0
+\item 
+double \mbox{\hyperlink{class_player_ad6d71e62ce978ae7759db7483cae8de5}{latest\+Volume}} = 0.\+0
+\item 
+const double \& \mbox{\hyperlink{class_player_a742dba50a38eec2bf3d9bfc67e597d61}{sample\+Rate}}
+\item 
+const int \& \mbox{\hyperlink{class_player_a15be9209950cdadcd55f5f1267081f8d}{score\+Counter}}
+\item 
+int \mbox{\hyperlink{class_player_a1327331d43c341d25867224e53dcfed7}{onset\+Interval}} = 0
+\item 
+int \mbox{\hyperlink{class_player_aa0c5e11f62c232c9b5d024e2237c5ada}{samples\+Since\+Last\+Onset}} = 0
+\item 
+int \mbox{\hyperlink{class_player_abfe996c7a243d257b5841682092bbc2c}{samples\+To\+Next\+Offset}} = -\/1
+\item 
+int \mbox{\hyperlink{class_player_adbf0d8c38fa8d87e4f380679c27f0d2f}{current\+Onset\+Time}} = 0
+\item 
+int \mbox{\hyperlink{class_player_a79ec3d876ae7ef0f62f47d3bac7fca8e}{previous\+Onset\+Time}} = 0
+\item 
+int \mbox{\hyperlink{class_player_af3e622653bc1d072d3ea86d3eaf17d35}{next\+Note\+Time\+In\+MS}} = 0
+\item 
+int \mbox{\hyperlink{class_player_a0eb51e436573c0686cf24c7cf59ac336}{latest\+Delay}} = 0
+\item 
+bool \mbox{\hyperlink{class_player_aa09c6fe6d804c1e975a68277aa7a498d}{note\+Played}} = false
+\item 
+bool \mbox{\hyperlink{class_player_a9c5d77edc841bb72da499d94e3d18cf2}{note\+Triggered\+By\+User}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_user_player_a2a7fb3549b6f92accaa73213796520ef}\index{UserPlayer@{UserPlayer}!UserPlayer@{UserPlayer}}
+\index{UserPlayer@{UserPlayer}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{UserPlayer()}{UserPlayer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_user_player_a2a7fb3549b6f92accaa73213796520ef} 
+User\+Player\+::\+User\+Player (\begin{DoxyParamCaption}\item[{int}]{index}{, }\item[{const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}}]{seq}{, }\item[{int}]{midi\+Channel}{, }\item[{const double \&}]{sample\+Rate}{, }\item[{const int \&}]{score\+Counter}{, }\item[{int}]{initial\+Interval}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_user_player}{User\+Player} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index of the player. \\
+\hline
+{\em seq} & Pointer to a MIDI message sequence. \\
+\hline
+{\em midi\+Channel} & The MIDI channel the player should use. \\
+\hline
+{\em sample\+Rate} & The audio sample rate. \\
+\hline
+{\em score\+Counter} & The initial score counter value. \\
+\hline
+{\em initial\+Interval} & The initial onset interval for the player. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_user_player_a0b4824fca511a069b126c0d50ada89c5}\index{UserPlayer@{UserPlayer}!UserPlayer@{UserPlayer}}
+\index{UserPlayer@{UserPlayer}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{UserPlayer()}{UserPlayer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_user_player_a0b4824fca511a069b126c0d50ada89c5} 
+User\+Player\+::\+User\+Player (\begin{DoxyParamCaption}\item[{int}]{index}{, }\item[{const juce\+::\+Midi\+Message\+Sequence \texorpdfstring{$\ast$}{*}}]{seq}{, }\item[{int}]{midi\+Channel}{, }\item[{const double \&}]{sample\+Rate}{, }\item[{const int \&}]{score\+Counter}{, }\item[{int}]{initial\+Interval}{, }\item[{\mbox{\hyperlink{class_adaptive_metronome_audio_processor}{Adaptive\+Metronome\+Audio\+Processor}} \texorpdfstring{$\ast$}{*}}]{processor\+In}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{class_user_player}{User\+Player} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index of the player. \\
+\hline
+{\em seq} & Pointer to a MIDI message sequence. \\
+\hline
+{\em midi\+Channel} & The MIDI channel the player should use. \\
+\hline
+{\em sample\+Rate} & The audio sample rate. \\
+\hline
+{\em score\+Counter} & The initial score counter value. \\
+\hline
+{\em initial\+Interval} & The initial onset interval for the player. \\
+\hline
+{\em processor\+In} & The audio processor which owns this player. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_user_player_a8b01dcdd90aec1dfb6f2d68acf92d0fa}\index{UserPlayer@{UserPlayer}!````~UserPlayer@{\texorpdfstring{$\sim$}{\string~}UserPlayer}}
+\index{````~UserPlayer@{\texorpdfstring{$\sim$}{\string~}UserPlayer}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}UserPlayer()}{\string~UserPlayer()}}
+{\footnotesize\ttfamily \label{class_user_player_a8b01dcdd90aec1dfb6f2d68acf92d0fa} 
+User\+Player\+::\texorpdfstring{$\sim$}{\string~}\+User\+Player (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Destructor for \doxylink{class_user_player}{User\+Player}. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_user_player_aff03f7afdbbfadfdb970a2795baa2dca}\index{UserPlayer@{UserPlayer}!isUserOperated@{isUserOperated}}
+\index{isUserOperated@{isUserOperated}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{isUserOperated()}{isUserOperated()}}
+{\footnotesize\ttfamily \label{class_user_player_aff03f7afdbbfadfdb970a2795baa2dca} 
+bool User\+Player\+::is\+User\+Operated (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reports this player is user-\/operated. 
+
+\begin{DoxyReturn}{Returns}
+true 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_player_a5b106b0cb418125c9c5573fc4fab485e}{Player}}.
+
+\Hypertarget{class_user_player_af78da569c3293f6823041ae14a3d12b9}\index{UserPlayer@{UserPlayer}!processIntroSample@{processIntroSample}}
+\index{processIntroSample@{processIntroSample}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{processIntroSample()}{processIntroSample()}}
+{\footnotesize\ttfamily \label{class_user_player_af78da569c3293f6823041ae14a3d12b9} 
+void User\+Player\+::process\+Intro\+Sample (\begin{DoxyParamCaption}\item[{const juce\+::\+Midi\+Buffer \&}]{in\+Midi}{, }\item[{juce\+::\+Midi\+Buffer \&}]{out\+Midi}{, }\item[{int}]{sample\+Index}{, }\item[{int}]{intro\+Note}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Called from \doxylink{class_ensemble_model}{Ensemble\+Model} to play an intro tone when a user presses a key. 
+
+This will play a note at the given intro\+Note at the given sample index, and will stop this note after the given intro\+Tone\+Length samples. If any note is played by the user during this time, the intro tone will be cut off.
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Midi} & The input MIDI buffer. \\
+\hline
+{\em out\+Midi} & The output MIDI buffer. \\
+\hline
+{\em sample\+Index} & The current sample index. \\
+\hline
+{\em intro\+Note} & The note number to play for the intro tone. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_player_afcd2135da7e4741c4ac2511c4c76bcb2}{Player}}.
+
+\Hypertarget{class_user_player_a63918fa2e6b3021a7f37771cc128ff18}\index{UserPlayer@{UserPlayer}!processNoteOn@{processNoteOn}}
+\index{processNoteOn@{processNoteOn}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{processNoteOn()}{processNoteOn()}}
+{\footnotesize\ttfamily \label{class_user_player_a63918fa2e6b3021a7f37771cc128ff18} 
+void User\+Player\+::process\+Note\+On (\begin{DoxyParamCaption}\item[{const juce\+::\+Midi\+Buffer \&}]{in\+Midi}{, }\item[{juce\+::\+Midi\+Buffer \&}]{out\+Midi}{, }\item[{int}]{sample\+Index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Processes incoming MIDI buffer and outputs a note if the user has inputted a note, or if the user input has timed out. 
+
+If the user has not inputted a note for half an interval length, a note will be played automatically.
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Midi} & The input MIDI buffer. \\
+\hline
+{\em out\+Midi} & The output MIDI buffer. \\
+\hline
+{\em sample\+Index} & The current sample index. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_player_a55206986a35affac8b2df1003dfaa3e8}{Player}}.
+
+\Hypertarget{class_user_player_afea89ab4a72d677f77cb860e3e88e0c7}\index{UserPlayer@{UserPlayer}!recalculateOnsetInterval@{recalculateOnsetInterval}}
+\index{recalculateOnsetInterval@{recalculateOnsetInterval}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{recalculateOnsetInterval()}{recalculateOnsetInterval()}}
+{\footnotesize\ttfamily \label{class_user_player_afea89ab4a72d677f77cb860e3e88e0c7} 
+void User\+Player\+::recalculate\+Onset\+Interval (\begin{DoxyParamCaption}\item[{int}]{samples\+Per\+Beat}{, }\item[{const std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_player}{Player}} $>$ $>$ \&}]{players}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Calculates the next onset time for this user player. 
+
+This method works out when the next note should be played, based on the onsets of the other (non-\/user) players. If there are no other players, it simply uses the most recently played interval.
+
+
+\begin{DoxyParams}{Parameters}
+{\em samples\+Per\+Beat} & The number of samples in a beat. \\
+\hline
+{\em players} & A vector of all players. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_player_a949829bd938a99a40a7b2619a20f3367}{Player}}.
+
+\Hypertarget{class_user_player_a07bd2f3a604aa164d0713da4b190f245}\index{UserPlayer@{UserPlayer}!wasLatestOnsetUserInput@{wasLatestOnsetUserInput}}
+\index{wasLatestOnsetUserInput@{wasLatestOnsetUserInput}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{wasLatestOnsetUserInput()}{wasLatestOnsetUserInput()}}
+{\footnotesize\ttfamily \label{class_user_player_a07bd2f3a604aa164d0713da4b190f245} 
+bool User\+Player\+::was\+Latest\+Onset\+User\+Input (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Checks if the latest onset was triggered by user input. 
+
+\begin{DoxyReturn}{Returns}
+true if the latest note onset was triggered by the user, false otherwise. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_player_a69e290fdec2301fa7c02ede87d33542d}{Player}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_user_player_ab594ed8f7f55bf4c96da2c3bb4154241}\index{UserPlayer@{UserPlayer}!introToneLength@{introToneLength}}
+\index{introToneLength@{introToneLength}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{introToneLength}{introToneLength}}
+{\footnotesize\ttfamily \label{class_user_player_ab594ed8f7f55bf4c96da2c3bb4154241} 
+int User\+Player\+::intro\+Tone\+Length = 100\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_user_player_ae30c2556421c8dd45d154937785ad627}\index{UserPlayer@{UserPlayer}!samplesToIntroToneOff@{samplesToIntroToneOff}}
+\index{samplesToIntroToneOff@{samplesToIntroToneOff}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{samplesToIntroToneOff}{samplesToIntroToneOff}}
+{\footnotesize\ttfamily \label{class_user_player_ae30c2556421c8dd45d154937785ad627} 
+int User\+Player\+::samples\+To\+Intro\+Tone\+Off = -\/1\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{class_user_player_aad1cac06520a7c1ac755295758dd90ea}\index{UserPlayer@{UserPlayer}!useOSCinput@{useOSCinput}}
+\index{useOSCinput@{useOSCinput}!UserPlayer@{UserPlayer}}
+\doxysubsubsection{\texorpdfstring{useOSCinput}{useOSCinput}}
+{\footnotesize\ttfamily \label{class_user_player_aad1cac06520a7c1ac755295758dd90ea} 
+bool User\+Player\+::use\+OSCinput = false}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_user_player_8h}{User\+Player.\+h}}\item 
+D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_user_player_8cpp}{User\+Player.\+cpp}}\end{DoxyCompactItemize}

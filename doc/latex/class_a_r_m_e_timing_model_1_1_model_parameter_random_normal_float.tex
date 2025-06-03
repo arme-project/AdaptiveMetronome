@@ -1,0 +1,172 @@
+\doxysection{ARMETiming\+Model\+::Model\+Parameter\+Random\+Normal\+Float Class Reference}
+\hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float}{}\label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+
+
+A read-\/only child class of \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} where the underlying value is the float value result of a stored std\+::function$<$float()$>$.  
+
+
+
+
+{\ttfamily \#include $<$Timing\+Model\+Parameter.\+h$>$}
+
+Inheritance diagram for ARMETiming\+Model\+::Model\+Parameter\+Random\+Normal\+Float\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a2a173425207f85fc71cace1d352f7f61}{Model\+Parameter\+Random\+Normal\+Float}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}sigma\+Ptr=new \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}(1.\+0f))
+\begin{DoxyCompactList}\small\item\em Create new normal distribution parameter using a pointer to a std\+::atomic$<$float$>$ as the Sigma value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_aabdc564eb32fca00620792ed20c79fd5}{Model\+Parameter\+Random\+Normal\+Float}} (float init\+Sigma)
+\begin{DoxyCompactList}\small\item\em Create new normal distribution parameter using an initial value as the Sigma value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a531e5bc5d5b1432d2861a0fe6c6b207d}{Model\+Parameter\+Random\+Normal\+Float}} (std\+::function$<$ float()$>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678}{get\+Value\+Fcn}})
+\begin{DoxyCompactList}\small\item\em Create new normal distribution using a std\+::function$<$float()$>$ as the Sigma value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ab5841d2f0ba198e6a3ce655b7cb11553}{\texorpdfstring{$\sim$}{\string~}\+Model\+Parameter\+Random\+Normal\+Float}} ()
+\item 
+float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a90febe3175433804e053656f1ee2d43f}{get\+Raw\+Value}} ()
+\begin{DoxyCompactList}\small\item\em Get the most recently generated random float. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ade5c643ddb2917c3f3f7baaf00ce11be}{generate\+New\+Value}} ()
+\begin{DoxyCompactList}\small\item\em Generate and return a new float value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ARMETiming\+Model\+::\+Model\+Parameter\+Float}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a3de938e41ebadb516a45ab33c633e0ea}{Model\+Parameter\+Float}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}init\+Reference)
+\begin{DoxyCompactList}\small\item\em Create new parameter using a pointer to a std\+::atomic$<$float$>$. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a80f5acf166ed391458cfdf36da1fe33a}{Model\+Parameter\+Float}} (float init\+Value)
+\begin{DoxyCompactList}\small\item\em Create new parameter from an initial value. The underlying pointer to std\+::atomic$<$float$>$ is auto generated. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_aa35f1b84cfeefa5e678afd8e0bd097e9}{Model\+Parameter\+Float}} (std\+::function$<$ float()$>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678}{get\+Value\+Fcn}})
+\begin{DoxyCompactList}\small\item\em Create new parameter from a function that returns a float value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ac92779413b5bfe3220d2f06c11096f3b}{\texorpdfstring{$\sim$}{\string~}\+Model\+Parameter\+Float}} ()
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_aacfa8d6c44e5acd452a8d27f2e46a4cb}{set\+New\+Value}} (float new\+Value)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_af5721f1cba1b2f3df28c1b6a4830b304}{set\+New\+Reference}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}new\+Ref)
+\item 
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ae6a042e1fc1e2bd1c56ba54be201b431}{set\+New\+Reference}} (std\+::function$<$ float()$>$ new\+Get\+Value\+Fcn)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ARMETiming\+Model\+::\+Model\+Parameter\+Float}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a95f35e33f9b6d8146ff07be2b8000676}{Model\+Parameter\+Float}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{ARMETiming\+Model\+::\+Model\+Parameter\+Float}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::function$<$ float()$>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a7c2c4089c0133cef36c80351ac921678}{get\+Value\+Fcn}}
+\item 
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_a4e322f40f49e250bdb7e890fb6359f1f}{value}} = new std\+::atomic$<$float$>$(0.\+0f)
+\item 
+bool \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab3fbec3c14c2d676dd7f423f135c60a1}{is\+Ref\+Type}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A read-\/only child class of \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} where the underlying value is the float value result of a stored std\+::function$<$float()$>$. 
+
+This can be used when a float value has already been created elsewhere. The value cannot be changed through this parameter, and can only be used to return the value for use in the \doxylink{class_a_r_m_e_timing_model_1_1_timing_model}{Timing\+Model} calculation.
+
+Create new parameter using the provided std\+::function$<$float()$>$ as the returned value when accessed. 
+\begin{DoxyParams}{Parameters}
+{\em get\+Value\+Fcn} & This function must return a float value.\\
+\hline
+\end{DoxyParams}
+This returns the float valued result of calling the stored std\+::function$<$float()$>$. WARNING\+: THIS DOES NOTHING. THIS VERSION OF THE PARAMETER IS CURRENTLY READ ONLY WARNING\+: THIS DOES NOTHING. THIS VERSION OF THE PARAMETER IS CURRENTLY READ ONLY
+
+Child class of \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float} that uses a normal distribution as the underlying value.
+
+Setting the value of this parameter changes the Sigma (standard deviation) of the underlying Normal Distribution. Getting the raw value returns a random sample from Normal Distribution. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a2a173425207f85fc71cace1d352f7f61}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}!ModelParameterRandomNormalFloat@{ModelParameterRandomNormalFloat}}
+\index{ModelParameterRandomNormalFloat@{ModelParameterRandomNormalFloat}!ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterRandomNormalFloat()}{ModelParameterRandomNormalFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a2a173425207f85fc71cace1d352f7f61} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float\+::\+Model\+Parameter\+Random\+Normal\+Float (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}} \texorpdfstring{$\ast$}{*}}]{sigma\+Ptr}{ = {\ttfamily new~\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a7544c17315a07e71a10adfbe1df35b5b}{a\+\_\+float}}(1.0f)}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create new normal distribution parameter using a pointer to a std\+::atomic$<$float$>$ as the Sigma value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sigma\+Ptr} & This is a pointer to a std\+::atomic$<$float$>$ object that contains the parameter value, which corresponds to the Sigma of the underlying distribution.. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_aabdc564eb32fca00620792ed20c79fd5}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}!ModelParameterRandomNormalFloat@{ModelParameterRandomNormalFloat}}
+\index{ModelParameterRandomNormalFloat@{ModelParameterRandomNormalFloat}!ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterRandomNormalFloat()}{ModelParameterRandomNormalFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_aabdc564eb32fca00620792ed20c79fd5} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float\+::\+Model\+Parameter\+Random\+Normal\+Float (\begin{DoxyParamCaption}\item[{float}]{init\+Sigma}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create new normal distribution parameter using an initial value as the Sigma value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em init\+Sigma} & This is a float value that will be used to create a new std\+::atomic$<$float$>$, which corresponds to the Sigma of the underlying distribution.. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a531e5bc5d5b1432d2861a0fe6c6b207d}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}!ModelParameterRandomNormalFloat@{ModelParameterRandomNormalFloat}}
+\index{ModelParameterRandomNormalFloat@{ModelParameterRandomNormalFloat}!ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+\doxysubsubsection{\texorpdfstring{ModelParameterRandomNormalFloat()}{ModelParameterRandomNormalFloat()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a531e5bc5d5b1432d2861a0fe6c6b207d} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float\+::\+Model\+Parameter\+Random\+Normal\+Float (\begin{DoxyParamCaption}\item[{std\+::function$<$ float()$>$}]{get\+Value\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create new normal distribution using a std\+::function$<$float()$>$ as the Sigma value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em get\+Value\+Fcn} & This should be a std\+::function$<$float()$>$ that returns a float value, which will be used as the Sigma of the underlying distribution.. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ab5841d2f0ba198e6a3ce655b7cb11553}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}!````~ModelParameterRandomNormalFloat@{\texorpdfstring{$\sim$}{\string~}ModelParameterRandomNormalFloat}}
+\index{````~ModelParameterRandomNormalFloat@{\texorpdfstring{$\sim$}{\string~}ModelParameterRandomNormalFloat}!ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ModelParameterRandomNormalFloat()}{\string~ModelParameterRandomNormalFloat()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ab5841d2f0ba198e6a3ce655b7cb11553} 
+ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float\+::\texorpdfstring{$\sim$}{\string~}\+Model\+Parameter\+Random\+Normal\+Float (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ade5c643ddb2917c3f3f7baaf00ce11be}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}!generateNewValue@{generateNewValue}}
+\index{generateNewValue@{generateNewValue}!ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+\doxysubsubsection{\texorpdfstring{generateNewValue()}{generateNewValue()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ade5c643ddb2917c3f3f7baaf00ce11be} 
+float ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float\+::generate\+New\+Value (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Generate and return a new float value. 
+
+\begin{DoxyReturn}{Returns}
+A new float value generated from the underlying Normal Distribution 
+\end{DoxyReturn}
+\Hypertarget{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a90febe3175433804e053656f1ee2d43f}\index{ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}!getRawValue@{getRawValue}}
+\index{getRawValue@{getRawValue}!ARMETimingModel::ModelParameterRandomNormalFloat@{ARMETimingModel::ModelParameterRandomNormalFloat}}
+\doxysubsubsection{\texorpdfstring{getRawValue()}{getRawValue()}}
+{\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_a90febe3175433804e053656f1ee2d43f} 
+float ARMETiming\+Model\+::\+Model\+Parameter\+Random\+Normal\+Float\+::get\+Raw\+Value (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Get the most recently generated random float. 
+
+\begin{DoxyReturn}{Returns}
+The most recently generated float value from the underlying distribution. Use \doxylink{class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float_ade5c643ddb2917c3f3f7baaf00ce11be}{generate\+New\+Value()} to get a new value. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float_ab552b3823c3712b1928e47a4d50d6579}{ARMETiming\+Model\+::\+Model\+Parameter\+Float}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameter_8h}{Timing\+Model\+Parameter.\+h}}\end{DoxyCompactItemize}
