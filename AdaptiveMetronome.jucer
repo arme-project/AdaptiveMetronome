@@ -9,30 +9,48 @@
               pluginAUMainType="'aufx'" pluginVST3Category="Fx">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
-      <FILE id="JAJnPw" name="TimingModelParameter.cpp" compile="1" resource="0"
-            file="Source/TimingModelParameter.cpp"/>
-      <FILE id="QbBilG" name="TimingModelParameter.h" compile="0" resource="0"
-            file="Source/TimingModelParameter.h"/>
-      <FILE id="JfaDVF" name="TimingModelParametersGroup.cpp" compile="1"
-            resource="0" file="Source/TimingModelParametersGroup.cpp"/>
-      <FILE id="mGX35C" name="TimingModelParametersGroup.h" compile="0" resource="0"
-            file="Source/TimingModelParametersGroup.h"/>
-      <FILE id="GkCJrf" name="TimingModel.cpp" compile="1" resource="0" file="Source/TimingModel.cpp"/>
-      <FILE id="e44Df8" name="TimingModel.h" compile="0" resource="0" file="Source/TimingModel.h"/>
-      <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
-      <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
-      <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"
-            file="Source/EnsembleModel.cpp"/>
-      <FILE id="S9PNfy" name="EnsembleModel.h" compile="0" resource="0" file="Source/EnsembleModel.h"/>
-      <FILE id="q7q2PM" name="Player.cpp" compile="1" resource="0" file="Source/Player.cpp"/>
-      <FILE id="bwzuHz" name="Player.h" compile="0" resource="0" file="Source/Player.h"/>
-      <FILE id="KmJ3eM" name="PluginProcessor.cpp" compile="1" resource="0"
-            file="Source/PluginProcessor.cpp"/>
-      <FILE id="ZjjkPp" name="PluginProcessor.h" compile="0" resource="0"
-            file="Source/PluginProcessor.h"/>
-      <FILE id="TfAdgI" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="wHARtp" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <GROUP id="{F865D43C-B679-B310-D93D-36664EB3413E}" name="Models">
+        <GROUP id="{7A1C6646-A6AC-F458-7254-D74FDDF3B9F5}" name="EnsembleModel">
+          <FILE id="QZSlnU" name="EnsembleModel.cpp" compile="1" resource="0"
+                file="Source/EnsembleModel.cpp"/>
+          <FILE id="S9PNfy" name="EnsembleModel.h" compile="0" resource="0" file="Source/EnsembleModel.h"/>
+        </GROUP>
+        <GROUP id="{AFAC6243-E007-5E66-F841-B224E692E8A9}" name="TimingModel">
+          <FILE id="JAJnPw" name="TimingModelParameter.cpp" compile="1" resource="0"
+                file="Source/TimingModelParameter.cpp"/>
+          <FILE id="QbBilG" name="TimingModelParameter.h" compile="0" resource="0"
+                file="Source/TimingModelParameter.h"/>
+          <FILE id="JfaDVF" name="TimingModelParametersGroup.cpp" compile="1"
+                resource="0" file="Source/TimingModelParametersGroup.cpp"/>
+          <FILE id="mGX35C" name="TimingModelParametersGroup.h" compile="0" resource="0"
+                file="Source/TimingModelParametersGroup.h"/>
+          <FILE id="GkCJrf" name="TimingModel.cpp" compile="1" resource="0" file="Source/TimingModel.cpp"/>
+          <FILE id="e44Df8" name="TimingModel.h" compile="0" resource="0" file="Source/TimingModel.h"/>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{7C5C2ED1-FD6A-95B1-28C7-BA5055AB0AEE}" name="Classes">
+        <GROUP id="{152212B3-C430-72CF-712E-4A8159C06AFB}" name="Player">
+          <FILE id="q7q2PM" name="Player.cpp" compile="1" resource="0" file="Source/Player.cpp"/>
+          <FILE id="bwzuHz" name="Player.h" compile="0" resource="0" file="Source/Player.h"/>
+          <GROUP id="{BB3C327A-D536-924F-79A8-EE08340BD5ED}" name="UserPlayer">
+            <FILE id="vK7dKD" name="UserPlayer.cpp" compile="1" resource="0" file="Source/UserPlayer.cpp"/>
+            <FILE id="FmR7Vv" name="UserPlayer.h" compile="0" resource="0" file="Source/UserPlayer.h"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{710BEEC0-84CD-4262-A16D-013EA32CEFBB}" name="JUCE Plugin">
+        <GROUP id="{91A06E68-0009-F99C-A943-BC000E2BA0B1}" name="UserInterface">
+          <FILE id="TfAdgI" name="PluginEditor.cpp" compile="1" resource="0"
+                file="Source/PluginEditor.cpp"/>
+          <FILE id="wHARtp" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+        </GROUP>
+        <GROUP id="{5A1CF260-0EC3-5115-F2F8-DC87CB3017FD}" name="Processor">
+          <FILE id="KmJ3eM" name="PluginProcessor.cpp" compile="1" resource="0"
+                file="Source/PluginProcessor.cpp"/>
+          <FILE id="ZjjkPp" name="PluginProcessor.h" compile="0" resource="0"
+                file="Source/PluginProcessor.h"/>
+        </GROUP>
+      </GROUP>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
