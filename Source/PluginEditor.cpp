@@ -103,7 +103,7 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
         oscOn.setTooltip("OSC not connected");
     }
     
-    versionLabel.setTooltip(processor.ensemble.logFilenameOverride);
+    versionLabel.setTooltip(processor.ensemble.GetFileNameOverride());
     
 }
 
