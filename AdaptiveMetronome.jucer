@@ -29,6 +29,10 @@
         </GROUP>
       </GROUP>
       <GROUP id="{7C5C2ED1-FD6A-95B1-28C7-BA5055AB0AEE}" name="Classes">
+        <GROUP id="{339821E4-B4AE-41FF-FDA7-AE677F480F83}" name="Logger">
+          <FILE id="M9JrFn" name="Logger.cpp" compile="1" resource="0" file="Source/Logger.cpp"/>
+          <FILE id="u23WzP" name="Logger.h" compile="0" resource="0" file="Source/Logger.h"/>
+        </GROUP>
         <GROUP id="{152212B3-C430-72CF-712E-4A8159C06AFB}" name="Player">
           <FILE id="q7q2PM" name="Player.cpp" compile="1" resource="0" file="Source/Player.cpp"/>
           <FILE id="bwzuHz" name="Player.h" compile="0" resource="0" file="Source/Player.h"/>
