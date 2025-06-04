@@ -3,7 +3,6 @@
 #include "PluginProcessor.h"
 #include "EnsembleModel.h"
 #include "UserPlayer.h"
-#include <chrono>
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
@@ -13,7 +12,9 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 	: processor(processorPtr)
 {
 
+	// Creating Poller and Logger objects for tracking Player Paramaters throughout playback
 	logger = std::make_unique<Logger>(players.size(), sampleRate, isUserFlags);
+	poller = std::make_unique<Poller>(players.size());
 
 	playersInUse.clear();
 	resetFlag.clear();
@@ -42,7 +43,7 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 
 EnsembleModel::~EnsembleModel()
 {
-	stopPollingLoop();
+	poller->Stop();
 }
 
 void EnsembleModel::setAlphaBetaParams(float valueIn)
@@ -544,33 +545,33 @@ void EnsembleModel::clearOnsetsAvailable()
 	}
 }
 
-void EnsembleModel::getLatestAlphas()
-{
-	//    if (pollingFifo)
-	//    {
-	//        // Consume everything in the buffer, only using the most recent set of alphas.
-	//        auto reader = pollingFifo->read (pollingFifo->getNumReady());
-	//
-	//        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-	//        {
-	//            int player2 = 0;
-	//
-	//            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
-	//
-	//            for (int i = block1Start; i < reader.blockSize1; ++i)
-	//            {
-	//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
-	//            }
-	//
-	//            int block2Start = std::max (block1Start - reader.blockSize1, 0);
-	//
-	//            for (int i = block2Start; i < reader.blockSize2; ++i)
-	//            {
-	//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
-	//            }
-	//        }
-	//    }
-}
+//void EnsembleModel::getLatestAlphas()
+//{
+//	//    if (pollingFifo)
+//	//    {
+//	//        // Consume everything in the buffer, only using the most recent set of alphas.
+//	//        auto reader = pollingFifo->read (pollingFifo->getNumReady());
+//	//
+//	//        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
+//	//        {
+//	//            int player2 = 0;
+//	//
+//	//            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
+//	//
+//	//            for (int i = block1Start; i < reader.blockSize1; ++i)
+//	//            {
+//	//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
+//	//            }
+//	//
+//	//            int block2Start = std::max (block1Start - reader.blockSize1, 0);
+//	//
+//	//            for (int i = block2Start; i < reader.blockSize2; ++i)
+//	//            {
+//	//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
+//	//            }
+//	//        }
+//	//    }
+//}
 
 void EnsembleModel::storeOnsetDetailsForPlayer(int playerIndex, Logger::LogData& log)
 {
@@ -667,6 +668,13 @@ void EnsembleModel::createPlayers(const juce::MidiFile & file)
 		logger->Start();
 	}
 
+	// Initialises the Poller object used for the polling with the newly created players
+	if (!poller || getNumPlayers() != players.size()) {
+		if (poller) poller->Stop();
+		poller = std::make_unique<Poller>(players.size());
+		poller->Start();
+	}
+
 	//==========================================================================
 	createAlphaBetaParameters(); // create matrix of parameters for alphas
 }
@@ -734,7 +742,7 @@ void EnsembleModel::resetPlayers()
 	logger->Start();
 
 	// Start loop which polls for new alpha values
-	startPollingLoop();
+	poller->Start();
 
 	//==========================================================================
 	// reset all players
@@ -941,93 +949,6 @@ void EnsembleModel::saveConfigToXmlFile()
 	auto ensembleConfigFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("EnsembleModelConfig.xml");
 	xmlOutput->writeTo(ensembleConfigFile);
 #endif
-}
-
-//==============================================================================
-void EnsembleModel::initialisePollingBuffers()
-{
-	int bufferSize = static_cast <int> (10 * players.size());
-
-	pollingFifo = std::make_unique <juce::AbstractFifo>(bufferSize);
-
-	pollingBuffer.resize(players.size());
-
-	for (int i = 0; i < pollingBuffer.size(); ++i)
-	{
-		pollingBuffer[i].resize(bufferSize, 0.0);
-	}
-}
-
-void EnsembleModel::startPollingLoop()
-{
-	stopPollingLoop();
-	initialisePollingBuffers();
-
-	continuePolling = true;
-	alphasUpToDate.test_and_set();
-	pollingThread = std::thread([this]() {this->pollingLoop(); });
-}
-
-void EnsembleModel::stopPollingLoop()
-{
-	continuePolling = false;
-
-	if (pollingThread.joinable())
-	{
-		pollingThread.join();
-	}
-}
-
-void EnsembleModel::pollingLoop()
-{
-	while (continuePolling)
-	{
-		if (!alphasUpToDate.test_and_set())
-		{
-			getNewAlphas();
-		}
-
-		std::this_thread::sleep_for(50ms);
-	}
-}
-
-// NOT USED
-void EnsembleModel::getNewAlphas()
-{
-	//==========================================================================
-	// In here you should make a request to your server to ask for new alpha
-	// values. If you get some updated values set the following value to true.
-	// If not, set the value to false and the plug-in will poll again after
-	// short time.
-	bool newAlphas = false;
-
-	if (newAlphas)
-	{
-		auto writer = pollingFifo->write(static_cast <int> (players.size()));
-
-		for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-		{
-			int player2 = 0;
-
-			for (int i = 0; i < writer.blockSize1; ++i)
-			{
-				// Replace the 0.2 with the alpha parameter for player1_player2
-				pollingBuffer[player1][writer.startIndex1 + i] = 0.2;
-				++player2;
-			}
-
-			for (int i = 0; i < writer.blockSize2; ++i)
-			{
-				// Replace the 0.2 with the alpha parameter for player1_player2
-				pollingBuffer[player1][writer.startIndex2 + i] = 0.2;
-				++player2;
-			}
-		}
-	}
-	else
-	{
-		alphasUpToDate.clear();
-	}
 }
 
 //==============================================================================

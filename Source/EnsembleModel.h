@@ -13,6 +13,7 @@
 #include <thread>
 #include "Logger.h"
 #include "Player.h"
+#include "Poller.h"
 
 using std::function;
 
@@ -296,6 +297,8 @@ public:
 
 private:
     std::unique_ptr<Logger> logger;
+    std::unique_ptr<Poller> poller;
+
     //==============================================================================
     int numUserPlayers = 1;
     std::vector<bool> isUserFlags;
@@ -477,53 +480,6 @@ private:
      * @param delays 
      */
     void postLatestOnsets(const std::vector<int> &onsets, const std::vector<int> &delays);
-
-    //==============================================================================
-    // Functionality for polling for new alpha values from the server.
-    std::unique_ptr<juce::AbstractFifo> pollingFifo;
-    std::vector<std::vector<float>> pollingBuffer;
-
-    /**
-     * \brief Initialise the polling buffers for the players.
-     *
-     * Allocates memory for the polling buffers and initialises them to zero. The size of each buffer is 10 times
-     * the number of players in the ensemble.
-     */
-    void initialisePollingBuffers();
-
-    std::thread pollingThread;
-    std::atomic<bool> continuePolling;
-    std::atomic_flag alphasUpToDate;
-
-    /**
-     * \brief Starts the polling loop for the ensemble model.
-     *
-     * This function stops any existing polling loop, initialises the polling buffers,
-     * and starts a new thread to run the polling loop. The polling loop will continue
-     * to run until the stopPollingLoop function is called.
-     */
-    void startPollingLoop();
-
-    /**
-     * \brief Stops the polling loop by setting the continuePolling flag to false.
-     * 
-     * If the polling thread is joinable, it will join the thread to ensure proper cleanup.
-     */
-    void stopPollingLoop();
-
-    /**
-     * \brief Stops the polling loop by setting the continuePolling flag to false.
-     * 
-     * If the pollingThread is joinable, it will join the thread to ensure
-     * proper cleanup and prevent any dangling threads.
-     */
-    void pollingLoop();
-
-    /**
-     * \brief NOT USED
-     * 
-     */
-    void getNewAlphas();
 
     //==============================================================================
     
