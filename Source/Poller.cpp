@@ -1,51 +1,150 @@
-/*
-  ==============================================================================
-
-    Poller.cpp
-    Created: 3 Jun 2025 6:15:13pm
-    Author:  jhund
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "Poller.h"
 
 //==============================================================================
-Poller::Poller()
+/**
+ * \brief Constructor for the Poller Class.
+ *
+ * \input numPlayersIn Number of Players in the Ensemble
+ */
+Poller::Poller(int numPlayersIn) : numPlayers(numPlayers)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
 
 }
 
+/**
+ * \brief Deconstructor for the Poller Class.
+ */
 Poller::~Poller()
 {
+	Stop();
 }
 
-void Poller::paint (juce::Graphics& g)
+/**
+ * \brief Starts the polling loop for the ensemble model.
+ *
+ * This function stops any existing polling loop, initialises the polling buffers,
+ * and starts a new thread to run the polling loop. The polling loop will continue
+ * to run until the stopPollingLoop function is called.
+ */
+void Poller::Start()
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
+	Stop();
+	InitialiseBuffers();
 
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (14.0f));
-    g.drawText ("Poller", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+	continuePolling = true;
+	alphasUpToDate.test_and_set();
+	thread = std::thread([this]() {this->PollingLoop(); });
 }
 
-void Poller::resized()
+/**
+* \brief Stops the polling loop by setting the continuePolling flag to false.
+*
+* If the polling thread is joinable, it will join the thread to ensure proper cleanup.
+*/
+void Poller::Stop()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
+	continuePolling = false;
+	if (thread.joinable())
+	{
+		thread.join();
+	}
+}
 
+/**
+ * \brief Initialise the polling buffers for the players.
+ *
+ * Allocates memory for the polling buffers and initialises them to zero. The size of each buffer is 10 times
+ * the number of players in the ensemble.
+ */
+void Poller::InitialiseBuffers()
+{
+	auto bufferSize = 10 * numPlayers;
+	fifo = std::make_unique <juce::AbstractFifo>(bufferSize);
+	buffer.resize(numPlayers);
+
+	for (int i = 0; i < numPlayers; ++i)
+	{
+		buffer[i].resize(bufferSize, 0.0);
+	}
+}
+
+/**
+ * \brief Stops the polling loop by setting the continuePolling flag to false.
+ *
+ * If the pollingThread is joinable, it will join the thread to ensure
+ * proper cleanup and prevent any dangling threads.
+ */
+void Poller::PollingLoop()
+{
+	while (continuePolling) {
+		if (!alphasUpToDate.test_and_set()) {
+			getNewAlphas();
+		}
+	}
+}
+
+/**
+ * \brief NOT USED
+ */
+void Poller::getNewAlphas()
+{
+	//==========================================================================
+	// In here you should make a request to your server to ask for new alpha
+	// values. If you get some updated values set the following value to true.
+	// If not, set the value to false and the plug-in will poll again after
+	// short time.
+
+	if (bool newAlphas = false) {
+		auto writer = fifo->write(static_cast <int> (numPlayers));
+
+		for (int player1 = 0; player1 < buffer.size(); ++player1) {
+			int player2 = 0;
+
+			for (int i = 0; i < writer.blockSize1; ++i) {
+				// Replace the 0.2 with the alpha parameter for player1_player2
+				buffer[player1][writer.startIndex1 + i] = 0.2;
+				++player2;
+			}
+
+			for (int i = 0; i < writer.blockSize2; ++i)
+			{
+				// Replace the 0.2 with the alpha parameter for player1_player2
+				buffer[player1][writer.startIndex2 + i] = 0.2;
+				++player2;
+			}
+		}
+	}
+	else {
+		alphasUpToDate.clear();
+	}
+}
+
+// NOT IMPLEMENTED
+void Poller::getLatestAlphas()
+{
+//    if (pollingFifo)
+//    {
+//        // Consume everything in the buffer, only using the most recent set of alphas.
+//        auto reader = pollingFifo->read (pollingFifo->getNumReady());
+//
+//        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
+//        {
+//            int player2 = 0;
+//
+//            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
+//
+//            for (int i = block1Start; i < reader.blockSize1; ++i)
+//            {
+//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
+//            }
+//
+//            int block2Start = std::max (block1Start - reader.blockSize1, 0);
+//
+//            for (int i = block2Start; i < reader.blockSize2; ++i)
+//            {
+//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
+//            }
+//        }
+//    }
 }

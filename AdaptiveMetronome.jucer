@@ -29,6 +29,12 @@
         </GROUP>
       </GROUP>
       <GROUP id="{7C5C2ED1-FD6A-95B1-28C7-BA5055AB0AEE}" name="Classes">
+        <GROUP id="{5C2EE00D-3672-0361-00D5-6D24958BB5DE}" name="ConfigHandler"/>
+        <GROUP id="{7664B68A-B28B-0230-0FA4-426DF56CF0DA}" name="OSCHandler"/>
+        <GROUP id="{415F6B90-A49F-3A54-5EEA-49A484F10070}" name="Poller">
+          <FILE id="vOsaBQ" name="Poller.cpp" compile="1" resource="0" file="Source/Poller.cpp"/>
+          <FILE id="Oanmct" name="Poller.h" compile="0" resource="0" file="Source/Poller.h"/>
+        </GROUP>
         <GROUP id="{339821E4-B4AE-41FF-FDA7-AE677F480F83}" name="Logger">
           <FILE id="M9JrFn" name="Logger.cpp" compile="1" resource="0" file="Source/Logger.cpp"/>
           <FILE id="u23WzP" name="Logger.h" compile="0" resource="0" file="Source/Logger.h"/>
