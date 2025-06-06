@@ -11,9 +11,13 @@
 #include <vector>
 #include <atomic>
 #include <thread>
+#include <chrono>
+
+#include "UserPlayer.h"
 #include "Logger.h"
 #include "Player.h"
 #include "Poller.h"
+#include "ConfigHandler.h"
 
 using std::function;
 
@@ -217,27 +221,6 @@ public:
      */
     static void soundOffAllChannels(juce::MidiBuffer &midi);
 
-    // Functions for storing and loading ensemble config from XML file
-
-    /**
-    * \brief Saves the current configuration of the ensemble model to an XML file.
-    */
-    void saveConfigToXmlFile();
-    std::unique_ptr<juce::XmlElement> parseXmlConfigFileToXmlElement(juce::File configFile);
-
-    /**
-    * \brief Saves the current configuration of the ensemble model to an XML file.
-    */
-    void loadConfigFromXml(std::unique_ptr<juce::XmlElement> loadedConfig);
-    
-    /**
-     * Converts a given XML file into an XmlElement.
-     * 
-     * \param configFile The juce::File representing the XML file to be parsed.
-     * \return A unique_ptr to a juce::XmlElement that represents the root element of the parsed XML document.
-     */
-    void loadConfigFromXml(juce::File configFile);
-
     // OSC Messaging
     juce::OSCSender OSCSender;
 
@@ -294,10 +277,33 @@ public:
     void setAlphaBetaParams(float valueIn);
 
     juce::String GetFileNameOverride();
+    void SetConfigFileNameOverride(juce::String filename);
+    void SetLogSubFolder(juce::String newLogSubFolder);
+    void SetNumUserPlayers(int numPlayers);
+    void SetNumIntroTones(int numIntroTonesIn);
+
+    void SetTimekeeperNoiseSTD(int index, double value);
+    void SetMotorNoiseSTD(int index, double value);
+    void SetAlphaParam(int i, int j, double value);
+    void SetBetaParam(int i, int j, double value);
+
+    juce::MidiFile GetMidiFile();
+    void connectOSCReceiver(int newPort);
+
+    /**
+     * \brief Create a Player for each track in the file which has note on events.
+     *
+     * The first 'numUserPlayers' will be UserPlayers, and the rest will be
+     * Players.
+     *
+     * \param file The MidiFile from which to create the players
+     */
+    void createPlayers(const juce::MidiFile& file);
 
 private:
     std::unique_ptr<Logger> logger;
     std::unique_ptr<Poller> poller;
+    std::unique_ptr<ConfigHandler> config;
 
     //==============================================================================
     int numUserPlayers = 1;
@@ -426,15 +432,6 @@ private:
     std::vector<std::unique_ptr<Player>> players;
     std::atomic_flag playersInUse;
 
-    /**
-     * \brief Create a Player for each track in the file which has note on events.
-     * 
-     * The first 'numUserPlayers' will be UserPlayers, and the rest will be
-     * Players.
-     *
-     * \param file The MidiFile from which to create the players
-     */
-    void createPlayers(const juce::MidiFile &file);
 
     /**
      * @brief Initialises a matrix of alpha and beta parameters base on the total number of players there are
