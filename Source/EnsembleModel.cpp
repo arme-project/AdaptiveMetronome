@@ -2,8 +2,6 @@
 #include "PluginProcessor.h"
 #include "EnsembleModel.h"
 
-
-
 using namespace std::chrono;
 using namespace std::chrono_literals;
 
@@ -18,29 +16,18 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 
 	// Creating ConfigHanlder Object to be responsible for handling XML Loading or Saving
 	config = std::make_unique<ConfigHandler>(this);
+	osc = std::make_unique<OSCHandler>(this);
 
 	playersInUse.clear();
 	resetFlag.clear();
 	currentNoteIndex.set(99);
 
-	// OSC Listener addresses
-	addListener(this, "/loadConfig");
-	addListener(this, "/reset");
-	addListener(this, "/setLogname");
-	addListener(this, "/numIntroTones");
-
-	// OSC Listener addresses for standalone full-system
-	addListener(this, "/plugin");     // [4]
-	addListener(this, "/oscstart");     // [4]
-	addListener(this, "/playbackstart");
-	addListener(this, "/alphas");
-
 	OSCAutoConnect = true;
 
 	if (OSCAutoConnect)
 	{
-		connectOSCSender(8000, "127.0.0.1");
-		connectOSCReceiver(8001);
+		osc->ConnectSender();
+		osc->ConnectReceiver();
 	}
 }
 
@@ -109,14 +96,7 @@ void EnsembleModel::SetBetaParam(int i, int j, double value)
 
 //==============================================================================
 // OSC Messaging
-void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "127.0.0.1")
-{
-	if (!OSCSender.connect("127.0.0.1", 8000))
-		DBG("Error: could not connect to UDP port 8000.");
-	else {
-		DBG("OSC SENDER CONNECTED");
-	}
-}
+
 
 juce::MidiFile EnsembleModel::GetMidiFile()
 {
@@ -124,20 +104,7 @@ juce::MidiFile EnsembleModel::GetMidiFile()
 }
 
 // Connection can be established via config file parameter "OSCReceivePort"
-void EnsembleModel::connectOSCReceiver(int portNumber)
-{
-	if (!connect(portNumber))
-	{
-		currentReceivePort = -1;
-		DBG("Error: could not connect to UDP.");
-	}
-	else
-	{
-		sendActionMessage("OSC Received");
-		currentReceivePort = portNumber;
-		DBG("Connection succeeded");
-	}
-}
+
 
 bool EnsembleModel::isOscReceiverConnected()
 {

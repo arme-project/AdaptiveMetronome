@@ -14,10 +14,12 @@
 #include <chrono>
 
 #include "UserPlayer.h"
-#include "Logger.h"
 #include "Player.h"
 #include "Poller.h"
+
+#include "Logger.h"
 #include "ConfigHandler.h"
+#include "OSCHandler.h"
 
 using std::function;
 
@@ -25,9 +27,7 @@ class AdaptiveMetronomeAudioProcessor;
 
 using AudioParameterFloatToUse = juce::AudioParameterFloat;
 
-class EnsembleModel : private juce::OSCReceiver,
-                      private juce::OSCReceiver::ListenerWithOSCAddress<juce::OSCReceiver::MessageLoopCallback>,
-                      public juce::ActionBroadcaster
+class EnsembleModel 
 {
 public:
     //==============================================================================
@@ -221,8 +221,6 @@ public:
      */
     static void soundOffAllChannels(juce::MidiBuffer &midi);
 
-    // OSC Messaging
-    juce::OSCSender OSCSender;
 
     /**
      * Connect the OSC sender to a UDP port for sending messages to the Max/MSP system.
@@ -304,6 +302,9 @@ private:
     std::unique_ptr<Logger> logger;
     std::unique_ptr<Poller> poller;
     std::unique_ptr<ConfigHandler> config;
+    std::unique_ptr<OSCHandler> osc;
+
+    bool oscAutoConnect = true;
 
     //==============================================================================
     int numUserPlayers = 1;
