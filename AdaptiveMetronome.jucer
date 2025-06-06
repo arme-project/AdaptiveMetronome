@@ -34,7 +34,10 @@
                 file="Source/ConfigHandler.cpp"/>
           <FILE id="WLoyBp" name="ConfigHandler.h" compile="0" resource="0" file="Source/ConfigHandler.h"/>
         </GROUP>
-        <GROUP id="{7664B68A-B28B-0230-0FA4-426DF56CF0DA}" name="OSCHandler"/>
+        <GROUP id="{7664B68A-B28B-0230-0FA4-426DF56CF0DA}" name="OSCHandler">
+          <FILE id="UrJAaO" name="OSCHandler.cpp" compile="1" resource="0" file="Source/OSCHandler.cpp"/>
+          <FILE id="CB8rKi" name="OSCHandler.h" compile="0" resource="0" file="Source/OSCHandler.h"/>
+        </GROUP>
         <GROUP id="{415F6B90-A49F-3A54-5EEA-49A484F10070}" name="Poller">
           <FILE id="vOsaBQ" name="Poller.cpp" compile="1" resource="0" file="Source/Poller.cpp"/>
           <FILE id="Oanmct" name="Poller.h" compile="0" resource="0" file="Source/Poller.h"/>
