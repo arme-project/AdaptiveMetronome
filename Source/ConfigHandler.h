@@ -16,8 +16,9 @@ public:
     std::unique_ptr<juce::XmlElement> ParseConfigToElement(juce::File configFile);
 
     void LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig);
-    void loadConfig(juce::File configFile);
+    void LoadConfig(juce::File configFile);
 
+	juce::String GetConfigSubfolder();
 private:
     juce::String configSubfolder = "";
     EnsembleModel *model;

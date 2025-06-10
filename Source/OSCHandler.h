@@ -18,16 +18,23 @@ public:
     void ConnectSender(int portNumber = 8000, juce::String IPaddress = "127.0.0.1");
     void ConnectReceiver(int portNumber = 8001);
 
-    bool IsReceiverListening() const;
+    bool IsReceiverConnected() const;
+    bool IsSenderConnected() const;
 
+    // Testing Function
     void MessageSendTest(juce::String pattern = "test");
 
 private:
     
     void MessageReceived(const juce::OSCMessage &message);
     void InitialiseAddresses();
+
+    void MessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
+    void MessageSendReset();
+    void MessageSendPlayMax();
+
     juce::OSCSender sender;
-    juce::OSCReceiver reciever;
+    juce::OSCReceiver receiver;
 
     int currentSenderPort = -1;
     juce::String currentSenderIPAddress = "";

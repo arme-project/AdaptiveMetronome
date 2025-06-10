@@ -52,38 +52,6 @@ public:
     
     bool OSCAutoConnect = false;
 
-    /**
-     * \brief Sends an OSC message either as a test or with onset data.
-     * 
-     * \param test If true, sends a test OSC message to the "/test" address.
-     *             Otherwise, sends an OSC message to the "/onsets" address
-     *             with four random float arguments.
-     */
-    void oscMessageSend(bool test);
-
-    /**
-     * Sends an OSC message to notify Max of a new interval. The message contains three integers: the player number, the note number, and the note time in milliseconds.
-     * \param playerNum The player number.
-     * \param noteNum The note number.
-     * \param noteTimeInMS The note time in milliseconds.
-     */
-    void oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
-    
-    /**
-     * \brief Sends an OSC message to trigger a reset in the Max/MSP patch.
-     */
-    void oscMessageSendReset();
-
-    /**
-     * \brief Send an OSC message to trigger Max to start playing.
-     *
-     * The message is /playMax. This is used to trigger Max to start playing
-     * after the user has pressed play in the plugin editor.
-     */
-    void oscMessageSendPlayMax();
-
-
-
     //==============================================================================
     
     /**
@@ -221,52 +189,6 @@ public:
      */
     static void soundOffAllChannels(juce::MidiBuffer &midi);
 
-
-    /**
-     * Connect the OSC sender to a UDP port for sending messages to the Max/MSP system.
-     *
-     * @param portNumber the UDP port number to connect to
-     * @param IPAddress the IP address to connect to (default is "127.0.0.1")
-     */
-    void connectOSCSender(int portNumber, juce::String IPAddress);
-
-    /**
-     * \brief Attempts to connect an OSC receiver to the specified UDP port.
-     * 
-     * \param portNumber The port number to attempt the connection on.
-     * 
-     * If the connection fails, sets currentReceivePort to -1 and logs an error message.
-     * If the connection succeeds, sets currentReceivePort to the port number and logs a success message.
-     */
-    void connectOSCReceiver(int portNumber);
-
-    /**
-     * \brief Handles incoming OSC messages by processing them based on their address pattern.
-     * 
-     * The function checks the OSC address and performs specific actions:
-     * - "/loadConfig": Loads configuration from an XML file specified by the message.
-     * - "/reset": Resets the system state.
-     * - "/setLogname": Sets a new log filename for logging purposes.
-     * - "/numIntroTones": Sets the number of introductory tones.
-     * - "/plugin": Processes a new user note from an external source, such as Max/MSP.
-     * - "/playbackstart": Intended to set a timer at the start of playback, though no longer used.
-     * - "/oscstart": Resets the system and sets the processor to manual playing mode.
-     * 
-     * After processing, sends an action message indicating an OSC message was received.
-     * 
-     * \param message The OSC message received.
-     */
-    void oscMessageReceived(const juce::OSCMessage &message);
-
-    int currentReceivePort = -1;
-
-    /**
-     * \brief Checks if the OSC receiver is connected.
-     * 
-     * \return true if the OSC receiver is connected, false otherwise.
-     */
-    bool isOscReceiverConnected();
-
     /**
      * \brief Sets the alpha parameters for all player pairs in the processor.
      *
@@ -285,8 +207,10 @@ public:
     void SetAlphaParam(int i, int j, double value);
     void SetBetaParam(int i, int j, double value);
 
+    bool IsManuallyPlaying();
+	void SetManualPlaying(bool isPlaying);
+
     juce::MidiFile GetMidiFile();
-    void connectOSCReceiver(int newPort);
 
     /**
      * \brief Create a Player for each track in the file which has note on events.
@@ -297,6 +221,11 @@ public:
      * \param file The MidiFile from which to create the players
      */
     void createPlayers(const juce::MidiFile& file);
+
+    ConfigHandler* GetConfigHandler() const;
+	Logger* GetLogger() const;
+
+    void ConnectOSCReceiver(int portNumber);
 
 private:
     std::unique_ptr<Logger> logger;

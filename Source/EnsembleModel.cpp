@@ -94,6 +94,16 @@ void EnsembleModel::SetBetaParam(int i, int j, double value)
 
 }
 
+bool EnsembleModel::IsManuallyPlaying()
+{
+	return processor->manualPlaying;
+}
+
+void EnsembleModel::SetManualPlaying(bool isPlaying)
+{
+	processor->setManualPlaying(true);
+}
+
 //==============================================================================
 // OSC Messaging
 
@@ -103,108 +113,6 @@ juce::MidiFile EnsembleModel::GetMidiFile()
 	return midiFile;
 }
 
-// Connection can be established via config file parameter "OSCReceivePort"
-
-
-bool EnsembleModel::isOscReceiverConnected()
-{
-	return (currentReceivePort > -1);
-}
-
-void EnsembleModel::oscMessageSend(bool test)
-{
-	if (test) {
-		auto oscMessage = juce::OSCMessage("/test");
-		if (!OSCSender.send(oscMessage)) {
-			DBG("Error: could not send OSC message.");
-		}
-	}
-	else {
-		auto oscMessage = juce::OSCMessage("/onsets");
-		for (int i = 0; i < 4; i++) {
-			auto randomFloat = 5.0f; // randomizer.nextFloat() / (float)20.0 + (float)0.5;
-			oscMessage.addArgument(randomFloat);
-		}
-
-		if (!OSCSender.send(oscMessage)) {
-			DBG("Error: could not send OSC message.");
-		}
-	}
-}
-
-void EnsembleModel::oscMessageReceived(const juce::OSCMessage & message)
-{
-	juce::OSCAddressPattern oscPattern = message.getAddressPattern();
-	juce::String oscAddress = oscPattern.toString();
-
-	if (oscAddress == "/loadConfig") {
-		if (message[0].isString()) {
-			auto configFilename = message[0].getString();
-			auto configFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile(configSubfolder).getChildFile(configFilename);
-
-			if (!configFile.existsAsFile()) { return; }
-
-			config->loadConfig(configFile);
-		}
-	}
-	else if (oscAddress == "/reset")
-	{
-		reset();
-	}
-	else if (oscAddress == "/setLogname")
-	{
-		if (message[0].isString())
-		{
-			juce::String newFileName = message[0].getString();
-			if (!newFileName.endsWith(".csv")) {
-				newFileName << ".csv";
-			}
-			logger->SetFilenameOverride(newFileName);
-		}
-	}
-	else if (oscAddress == "/numIntroTones")
-	{
-		if (message[0].isInt32())
-		{
-			numIntroTones = message[0].getInt32();
-		}
-	}
-	else if (oscAddress == "/plugin") // New User Note from external (e.g. Max). The third argument is the time per the MaxMSP cpu clock, and is now redundant.
-	{
-		if (message[0].isFloat32() && message[1].isInt32()
-			&& message[2].isInt32() && message[3].isFloat32()) {
-			float oscOnsetTime = message[0].getFloat32();
-			int onsetNoteNumber = message[1].getInt32();
-			int msMax = message[2].getInt32();
-
-			if (processor->manualPlaying) {
-				if (waitingForFirstNote && onsetNoteNumber == 0) {
-					triggerFirstNote();
-					setUserOnsetFromOsc(oscOnsetTime, onsetNoteNumber, msMax);
-				}
-				else if (onsetNoteNumber > 0) {
-					setUserOnsetFromOsc(oscOnsetTime, onsetNoteNumber, msMax);
-				}
-			}
-		}
-	}
-	else if (oscAddress == "/playbackstart") // Only used to set timer at start of playback. No longer needed.
-	{
-		if (message[0].isInt32()) {                             // [5]
-			if (waitingForFirstNote && processor->manualPlaying) {
-				//clock.setStartOfPlayback(message[0].getInt32());
-				//DBG("Start playback - " << clock.tickToString(clock.tick()));
-			}
-		}
-	}
-	else if (oscAddress == "/oscstart")
-	{
-		reset(true);
-		processor->setManualPlaying(true);
-	}
-
-	sendActionMessage("OSC Received");
-}
 
 //==============================================================================
 bool EnsembleModel::loadMidiFile(const juce::File & file, int userPlayers)
@@ -513,7 +421,7 @@ void EnsembleModel::calculateNewIntervals()
 		int onsetTime = players[i]->getLatestOnsetTime();
 		int nextNoteTime = onsetTime + onsetInterval;
 		int nextNoteTimeInMS = nextNoteTime * 1000 / sampleRate;
-		oscMessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, nextNoteTimeInMS);
+		osc->MessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, nextNoteTimeInMS);
 	}
 
 	//==========================================================================
@@ -528,30 +436,6 @@ void EnsembleModel::calculateNewIntervals()
 		}
 	}
 
-}
-
-void EnsembleModel::oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS) {
-	auto oscMessage = juce::OSCMessage("/newInterval");
-	oscMessage.addInt32(playerNum);
-	oscMessage.addInt32(noteNum);
-	oscMessage.addInt32(noteTimeInMS);
-	if (!OSCSender.send(oscMessage)) {
-		DBG("Error: could not send OSC message.");
-	}
-}
-
-void EnsembleModel::oscMessageSendReset() {
-	auto oscMessage = juce::OSCMessage("/reset");
-	if (!OSCSender.send(oscMessage)) {
-		DBG("Error: could not send OSC message.");
-	}
-}
-
-void EnsembleModel::oscMessageSendPlayMax() {
-	auto oscMessage = juce::OSCMessage("/playMax");
-	if (!OSCSender.send(oscMessage)) {
-		DBG("Error: could not send OSC message.");
-	}
 }
 
 void EnsembleModel::clearOnsetsAvailable()
@@ -694,6 +578,32 @@ void EnsembleModel::createPlayers(const juce::MidiFile & file)
 
 	//==========================================================================
 	createAlphaBetaParameters(); // create matrix of parameters for alphas
+}
+
+/**
+* \brief Gets the ConfigHandler instance.
+*/
+ConfigHandler* EnsembleModel::GetConfigHandler() const
+{
+	return config.get();
+}
+
+/**
+* \brief Gets the Logger instance.
+*/
+Logger* EnsembleModel::GetLogger() const
+{
+	return logger.get();
+}
+
+void EnsembleModel::ConnectOSCReceiver(int portNumber)
+{
+	osc->ConnectReceiver(portNumber);
+}
+
+void EnsembleModel::SendActionMessage(juce::String message)
+{
+	osc->SendActionMessage(message);
 }
 
 // Initialise matrix of alpha and beta parameters
