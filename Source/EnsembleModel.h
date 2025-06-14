@@ -226,6 +226,7 @@ public:
 	Logger* GetLogger() const;
 
     void ConnectOSCReceiver(int portNumber);
+	void SendActionMessage(juce::String message);
 
 private:
     std::unique_ptr<Logger> logger;

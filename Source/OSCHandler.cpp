@@ -246,3 +246,16 @@ void OSCHandler::MessageSendPlayMax() {
 		DBG("Error: could not send OSC message.");
 	}
 }
+
+/**
+ * \brief Sends an action message to the OSC handler.
+ *
+ * This function broadcasts an action message to all listeners.
+ * It is used to notify other components of specific actions or events.
+ *
+ * \param message The action message to be sent.
+ */
+void OSCHandler::SendActionMessage(juce::String message)
+{
+	sendActionMessage(message);
+}

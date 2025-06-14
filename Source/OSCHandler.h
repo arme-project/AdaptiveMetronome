@@ -21,17 +21,21 @@ public:
     bool IsReceiverConnected() const;
     bool IsSenderConnected() const;
 
+    void MessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
+    void MessageSendReset();
+    void MessageSendPlayMax();
+    void SendActionMessage(juce::String message);
+
     // Testing Function
     void MessageSendTest(juce::String pattern = "test");
+
 
 private:
     
     void MessageReceived(const juce::OSCMessage &message);
     void InitialiseAddresses();
 
-    void MessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
-    void MessageSendReset();
-    void MessageSendPlayMax();
+
 
     juce::OSCSender sender;
     juce::OSCReceiver receiver;

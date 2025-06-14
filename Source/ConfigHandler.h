@@ -3,9 +3,6 @@
 #include <JuceHeader.h>
 #include "EnsembleModel.h"
 
-//==============================================================================
-/*
-*/
 class ConfigHandler  : public juce::Component
 {
 public:

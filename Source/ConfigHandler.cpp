@@ -1,12 +1,19 @@
 #include <JuceHeader.h>
 #include "ConfigHandler.h"
 
-//==============================================================================
+/**
+ * \brief Constructor for ConfigHandler.
+ *
+ * \param modelIn The Ensemble Model that owns this insstance.
+ */
 ConfigHandler::ConfigHandler(EnsembleModel* modelIn) :
 	model(modelIn)
 {
 }
 
+/**
+ * /brief Deconstructor for ConfigHandler 
+ */
 ConfigHandler::~ConfigHandler()
 {
 }
@@ -135,9 +142,9 @@ void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 		auto newOSCReceiverPort = loadedConfig->getIntAttribute("OSCReceivePort");
 		if (newOSCReceiverPort != 0)
 		{
-			model->connectOSCReceiver(newOSCReceiverPort);
+			model->ConnectOSCReceiver(newOSCReceiverPort);
 		}
-	
+	}
 
 	// "NumUserPlayers": Check if numUserPlayers has changed
 	if (loadedConfig->hasAttribute("NumUserPlayers"))
@@ -226,7 +233,7 @@ void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 		}
 	}
 
-	model->sendActionMessage("Ensemble Reset");
+	model->SendActionMessage("Ensemble Reset");
 
 	if (ensembleNeedsResetting) {
 		model->reset();
