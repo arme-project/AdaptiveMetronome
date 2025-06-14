@@ -29,6 +29,10 @@
         </GROUP>
       </GROUP>
       <GROUP id="{7C5C2ED1-FD6A-95B1-28C7-BA5055AB0AEE}" name="Classes">
+        <GROUP id="{56959CA9-9DA1-2BA8-8620-04FB9BB6937E}" name="Flaglock">
+          <FILE id="vFiIlK" name="FlagLock.cpp" compile="1" resource="0" file="Source/FlagLock.cpp"/>
+          <FILE id="PlluQG" name="FlagLock.h" compile="0" resource="0" file="Source/FlagLock.h"/>
+        </GROUP>
         <GROUP id="{5C2EE00D-3672-0361-00D5-6D24958BB5DE}" name="ConfigHandler">
           <FILE id="VZHGBn" name="ConfigHandler.cpp" compile="1" resource="0"
                 file="Source/ConfigHandler.cpp"/>

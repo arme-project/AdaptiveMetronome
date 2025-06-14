@@ -15,8 +15,9 @@
 
 #include "UserPlayer.h"
 #include "Player.h"
-#include "Poller.h"
+#include "FlagLock.h"
 
+#include "Poller.h"
 #include "Logger.h"
 #include "ConfigHandler.h"
 #include "OSCHandler.h"
@@ -336,28 +337,6 @@ private:
     //==============================================================================
     // Ensemble players and associated parameters.
 
-    /**
-    * \class FlagLock
-    * \brief A class to lock a given std::atomic_flag.
-    *
-    * This class is used to lock the playersInUse flag when we are modifying
-    * players. It takes a reference to the flag in its constructor, and
-    * atomically tests and sets the flag. If the flag was previously clear, it sets
-    * the locked member to true, and if the flag was previously set, it sets the
-    * locked member to false.
-    *
-    * When the object is destroyed, the flag is atomically cleared.
-    */
-    class FlagLock
-    {
-    public:
-        FlagLock(std::atomic_flag &f);
-        ~FlagLock();
-
-        std::atomic_flag &flag;
-        bool locked;
-    };
-
     // The following functions should only be called when the playersInUse
     // flag has been locked using the above FlagLock class.
     std::vector<std::unique_ptr<Player>> players;
@@ -420,5 +399,5 @@ private:
      *
      * \return true if the sequence contains any note on events, false otherwise.
      */
-        static bool checkMidiSequenceHasNotes(const juce::MidiMessageSequence *seq);
+    static bool checkMidiSequenceHasNotes(const juce::MidiMessageSequence *seq);
 };
