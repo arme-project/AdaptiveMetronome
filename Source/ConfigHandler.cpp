@@ -1,12 +1,19 @@
 #include <JuceHeader.h>
 #include "ConfigHandler.h"
 
-//==============================================================================
+/**
+ * \brief Constructor for ConfigHandler.
+ *
+ * \param modelIn The Ensemble Model that owns this insstance.
+ */
 ConfigHandler::ConfigHandler(EnsembleModel* modelIn) :
 	model(modelIn)
 {
 }
 
+/**
+ * /brief Deconstructor for ConfigHandler 
+ */
 ConfigHandler::~ConfigHandler()
 {
 }
@@ -63,9 +70,17 @@ std::unique_ptr<juce::XmlElement> ConfigHandler::ParseConfigToElement(juce::File
 * \param configFile The juce::File representing the XML file to be parsed.
 * \return A unique_ptr to a juce::XmlElement that represents the root element of the parsed XML document.
 */
-void ConfigHandler::loadConfig(juce::File configFile)
+void ConfigHandler::LoadConfig(juce::File configFile)
 {
 	LoadConfig(ParseConfigToElement(configFile));
+}
+
+/**
+* \brief Returns the configuration file name where the ensemble model's configuration is saved.
+*/
+juce::String ConfigHandler::GetConfigSubfolder()
+{
+	return configSubfolder;
 }
 
 
@@ -127,9 +142,9 @@ void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 		auto newOSCReceiverPort = loadedConfig->getIntAttribute("OSCReceivePort");
 		if (newOSCReceiverPort != 0)
 		{
-			model->connectOSCReceiver(newOSCReceiverPort);
+			model->ConnectOSCReceiver(newOSCReceiverPort);
 		}
-	
+	}
 
 	// "NumUserPlayers": Check if numUserPlayers has changed
 	if (loadedConfig->hasAttribute("NumUserPlayers"))
@@ -218,7 +233,7 @@ void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 		}
 	}
 
-	model->sendActionMessage("Ensemble Reset");
+	model->SendActionMessage("Ensemble Reset");
 
 	if (ensembleNeedsResetting) {
 		model->reset();
