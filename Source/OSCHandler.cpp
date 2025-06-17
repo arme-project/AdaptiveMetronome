@@ -42,7 +42,6 @@ void OSCHandler::ConnectSender(int portNumber = 8000, juce::String IPaddress = "
 	}
 }
 
-
 /**
  * \brief Attempts to connect an OSC receiver to the specified UDP port.
  *
@@ -80,7 +79,7 @@ bool OSCHandler::IsSenderConnected() const
  */
 bool OSCHandler::IsReceiverConnected() const
 {
-	return currentReceiverPort > - 1;
+	return currentReceiverPort > -1;
 }
 
 /**
@@ -107,7 +106,6 @@ void OSCHandler::MessageSendTest(juce::String addressPattern)
 		if (!sender.send(message)) {
 			DBG("Error: could not send OSC message.");
 		}
-
 	}
 }
 
@@ -116,7 +114,7 @@ void OSCHandler::MessageSendTest(juce::String addressPattern)
  *
  * \param message The OSC message that has been received.
  */
-void OSCHandler::MessageReceived(const juce::OSCMessage &message)
+void OSCHandler::MessageReceived(const juce::OSCMessage& message)
 {
 	juce::OSCAddressPattern oscPattern = message.getAddressPattern();
 	juce::String pattern = oscPattern.toString();
@@ -205,7 +203,6 @@ void OSCHandler::InitialiseAddresses()
 	addListener(this, "/playbackstart");
 	addListener(this, "/alphas");
 }
-
 
 /**
  * Sends an OSC message to notify Max of a new interval. The message contains three integers: the player number, the note number, and the note time in milliseconds.

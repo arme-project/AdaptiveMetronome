@@ -12,7 +12,7 @@ ConfigHandler::ConfigHandler(EnsembleModel* modelIn) :
 }
 
 /**
- * /brief Deconstructor for ConfigHandler 
+ * /brief Deconstructor for ConfigHandler
  */
 ConfigHandler::~ConfigHandler()
 {
@@ -82,7 +82,6 @@ juce::String ConfigHandler::GetConfigSubfolder()
 {
 	return configSubfolder;
 }
-
 
 // Main method to load an XML config file
 /**
@@ -223,7 +222,7 @@ void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 		// If corresponding entries are not found in xml, do not change value
 		if (xmlTkNoise != nullptr) {
 			if (xmlTkNoise->hasAttribute(xmlTkNoiseEntryName)) {
-				model->SetTimekeeperNoiseSTD(i,xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName));
+				model->SetTimekeeperNoiseSTD(i, xmlTkNoise->getDoubleAttribute(xmlTkNoiseEntryName));
 			}
 		}
 		if (xmlMNoise != nullptr) {

@@ -16,9 +16,9 @@
 class FlagLock
 {
 public:
-    FlagLock(std::atomic_flag& f);
-    ~FlagLock();
+	FlagLock(std::atomic_flag& f);
+	~FlagLock();
 
-    std::atomic_flag& flag;
-    bool locked;
+	std::atomic_flag& flag;
+	bool locked;
 };

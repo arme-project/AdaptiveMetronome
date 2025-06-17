@@ -1,15 +1,17 @@
 #include <JuceHeader.h>
-#include "PluginProcessor.h"
 #include "EnsembleModel.h"
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
 
-//==============================================================================
+/**
+* \brief Constructor for EnsembleModel.
+*
+* \param processorPtr The audio processor which owns this model.
+*/
 EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 	: processor(processorPtr)
 {
-
 	// Creating Poller and Logger objects for tracking Player Paramaters throughout playback
 	logger = std::make_unique<Logger>(players.size(), sampleRate, isUserFlags);
 	poller = std::make_unique<Poller>(players.size());
@@ -22,20 +24,28 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 	resetFlag.clear();
 	currentNoteIndex.set(99);
 
-	OSCAutoConnect = true;
-
-	if (OSCAutoConnect)
+	if (oscAutoConnect)
 	{
 		osc->ConnectSender();
 		osc->ConnectReceiver();
 	}
 }
 
+/**
+* \brief Destructor for the EnsembleModel class.
+* Stops the logger loop and polling loop to ensure proper cleanup of resources.
+*/
 EnsembleModel::~EnsembleModel()
 {
 	poller->Stop();
+	logger->Stop();
 }
 
+/**
+ * \brief Sets the alpha parameters for all player pairs in the processor.
+ *
+ * \param valueIn The value to set for the alpha parameters.
+ */
 void EnsembleModel::setAlphaBetaParams(float valueIn)
 {
 	for (int i = 0; i < processor->MAX_PLAYERS; i++)
@@ -85,13 +95,11 @@ void EnsembleModel::SetMotorNoiseSTD(int index, double value)
 void EnsembleModel::SetAlphaParam(int i, int j, double value)
 {
 	*processor->alphaParameter(i, j) = value;
-
 }
 
 void EnsembleModel::SetBetaParam(int i, int j, double value)
 {
 	*processor->betaParameter(i, j) = value;
-
 }
 
 bool EnsembleModel::IsManuallyPlaying()
@@ -107,15 +115,25 @@ void EnsembleModel::SetManualPlaying(bool isPlaying)
 //==============================================================================
 // OSC Messaging
 
-
 juce::MidiFile EnsembleModel::GetMidiFile()
 {
 	return midiFile;
 }
 
-
 //==============================================================================
-bool EnsembleModel::loadMidiFile(const juce::File & file, int userPlayers)
+/**
+*  \brief Loads a MIDI file into the ensemble model.
+*
+*  The file is read into a juce::MidiFile, and then the tracks are converted into
+*  Player objects. The userPlayers parameter determines how many of the tracks
+*  are set to be user-operated. The method returns false if the file cannot be
+*  read, or if the playersInUse flag is set.
+
+*   \param file The MIDI file to load.
+*   \param userPlayers The number of user players tracks in the file.
+*   \return Whether the file was loaded successfully.
+*/
+bool EnsembleModel::loadMidiFile(const juce::File& file, int userPlayers)
 {
 	FlagLock lock(playersInUse);
 
@@ -147,10 +165,19 @@ bool EnsembleModel::loadMidiFile(const juce::File & file, int userPlayers)
 	return true;
 }
 
+/**
+* \brief Trigger the first note to be played by the player.
+*
+* \details Sets waitingForFirstNote to false.
+*/
 void EnsembleModel::triggerFirstNote() {
 	waitingForFirstNote = false;
 }
 
+/**
+ * \brief Resets all players to the beginning of their scores, and resets the onset times of all players to 0.0.
+ * \return Returns false if the players are currently in use.
+ */
 bool EnsembleModel::reset()
 {
 	FlagLock lock(playersInUse);
@@ -165,6 +192,13 @@ bool EnsembleModel::reset()
 	return true;
 }
 
+/**
+ * Resets the model to its initial state, and setting the number of Intro Tones.
+ *
+ * @param skipIntroNotes UNUSED
+ *
+ * @returns false always.
+ */
 bool EnsembleModel::reset(bool skipIntroNotes)
 {
 	reset();
@@ -174,18 +208,40 @@ bool EnsembleModel::reset(bool skipIntroNotes)
 }
 
 //==============================================================================
+
+/**
+* \brief Sets the sample rate of the ensemble model.
+*
+* \param newSampleRate The new sample rate to set.
+*/
 void EnsembleModel::prepareToPlay(double newSampleRate)
 {
 	sampleRate = newSampleRate;
 }
 
-void EnsembleModel::releaseResources()
-{
-}
+/**
+ * \brief Releases any resources used by the ensemble model.
+ *
+ * This function is called when the ensemble model is no longer needed. This function is
+ * currently not implemented.
+ */
+void EnsembleModel::releaseResources() { return; }
 
 //==============================================================================
-// Main method for processing incoming midi stream
-void EnsembleModel::processMidiBlock(const juce::MidiBuffer & inMidi, juce::MidiBuffer & outMidi, int numSamples, double tempo)
+/**
+* \brief Processes a block of incoming MIDI data and generates corresponding output MIDI data.
+*
+* This function updates the tempo based on the DAW playhead and processes each sample
+* of the MIDI buffer. If the ensemble has been reset, it clears the output MIDI buffer.
+* It handles the playback of introductory tones and user intros before proceeding to
+* play the main score for each sample in the buffer.
+*
+* \param inMidi The incoming MIDI data buffer.
+* \param outMidi The output MIDI data buffer.
+* \param numSamples The number of samples in the MIDI buffer.
+* \param tempo The current tempo in beats per minute.
+*/
+void EnsembleModel::processMidiBlock(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int numSamples, double tempo)
 {
 	FlagLock lock(playersInUse);
 
@@ -221,8 +277,16 @@ void EnsembleModel::processMidiBlock(const juce::MidiBuffer & inMidi, juce::Midi
 }
 
 //==============================================================================
-// This method is called from the PluginProcessor when a note is played via OSC from Max
-// oscOnsetTime is in seconds, msMax is the time of the onset in ms according to Max's cpu clock
+/**
+* \brief This synchronises both Max MSP and the Adapative Metronone.
+*
+* This method is called from the PluginProcessor when a note is played via OSC from Max
+* oscOnsetTime is in seconds, msMax is the time of the onset in ms according to Max's cpu clock.
+*
+* \param oscOnsetTime The onset time from the OSC message, in seconds.
+* \param onsetNoteNumber The note number of the note that was played.
+* \param msMax The time of the onset in ms according to Max's cpu clock.
+*/
 void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber, int msMax)
 {
 	for (auto& player : players)
@@ -242,16 +306,26 @@ void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber,
 }
 
 //==============================================================================
+
+/**
+* \brief Gets the number of players in the ensemble.
+*/
 int EnsembleModel::getNumPlayers()
 {
 	return static_cast <int> (players.size());
 }
 
+/**
+ * \brief Gets the number of user players in the ensemble.
+ */
 int EnsembleModel::getNumUserPlayers()
 {
 	return static_cast <int> (numUserPlayers);
 }
 
+/**
+ * \brief Checks if a player is user operated or not.
+ */
 bool EnsembleModel::isPlayerUserOperated(int playerIndex)
 {
 	return players[playerIndex]->isUserOperated();
@@ -293,7 +367,15 @@ AudioParameterFloatToUse& EnsembleModel::getBetaParameter(int player1Index, int 
 }
 
 //==============================================================================
-void EnsembleModel::soundOffAllChannels(juce::MidiBuffer & midi)
+
+/**
+* \brief Sends messages to turn off all notes, sounds and controllers on all
+* MIDI channels to the given MidiBuffer. This is useful for stopping
+* all sound when the user closes the plugin or changes presets.
+*
+* \param midi The MidiBuffer to send messages to.
+*/
+void EnsembleModel::soundOffAllChannels(juce::MidiBuffer& midi)
 {
 	for (int channel = 1; channel <= 16; ++channel)
 	{
@@ -304,7 +386,7 @@ void EnsembleModel::soundOffAllChannels(juce::MidiBuffer & midi)
 }
 
 //==============================================================================
-void EnsembleModel::playIntroTones(juce::MidiBuffer & midi, int sampleIndex)
+void EnsembleModel::playIntroTones(juce::MidiBuffer& midi, int sampleIndex)
 {
 	if (introCounter == 0)
 	{
@@ -323,7 +405,7 @@ void EnsembleModel::playIntroTones(juce::MidiBuffer & midi, int sampleIndex)
 	++introCounter;
 }
 
-void EnsembleModel::introToneOn(juce::MidiBuffer & midi, int sampleIndex)
+void EnsembleModel::introToneOn(juce::MidiBuffer& midi, int sampleIndex)
 {
 	if (introTonesPlayed % 4 == 0)
 	{
@@ -335,7 +417,7 @@ void EnsembleModel::introToneOn(juce::MidiBuffer & midi, int sampleIndex)
 	}
 }
 
-void EnsembleModel::introToneOff(juce::MidiBuffer & midi, int sampleIndex)
+void EnsembleModel::introToneOff(juce::MidiBuffer& midi, int sampleIndex)
 {
 	if (introTonesPlayed % 4 == 0)
 	{
@@ -348,6 +430,17 @@ void EnsembleModel::introToneOff(juce::MidiBuffer & midi, int sampleIndex)
 }
 
 //==============================================================================
+/**
+* \brief Sets the tempo of the ensemble to the given beats per minute (bpm).
+*
+* If the tempo has not actually changed, the function returns without doing anything.
+*
+* Otherwise, it updates the samplesPerBeat variable of the ensemble, and calls the
+* setInitialPlayerTempo() function to set the initial onset interval of each player to
+* the new tempo.
+*
+* \param bpm the tempo in beats per minute
+*/
 void EnsembleModel::setTempo(double bpm)
 {
 	int newSamplesPerBeat = 60.0 * sampleRate / bpm;
@@ -364,6 +457,13 @@ void EnsembleModel::setTempo(double bpm)
 	setInitialPlayerTempo();
 }
 
+/**
+* \brief Sets the onset interval for each player in the ensemble to the current tempo.
+*
+* This is only done if the tempo has not yet been set. This is a one-time operation
+* that is used to set the initial tempo for the players. The tempo is set to the
+* current tempo of the processor, which is stored in the samplesPerBeat.
+*/
 void EnsembleModel::setInitialPlayerTempo()
 {
 	if (!initialTempoSet)
@@ -377,6 +477,13 @@ void EnsembleModel::setInitialPlayerTempo()
 	}
 }
 
+/**
+ * \brief Checks if all players have played a note and thus if
+ * there are new onset times available to be used for the next iteration of
+ * the ensemble model.
+ *
+ * \returns true if all players have played a note, false otherwise
+ */
 bool EnsembleModel::newOnsetsAvailable()
 {
 	bool available = true;
@@ -389,6 +496,15 @@ bool EnsembleModel::newOnsetsAvailable()
 	return available;
 }
 
+/**
+* \brief Calculates new onset intervals for each player based on the most recent onset times of the other players and the parameters of the ensemble model.
+*
+* The new onset intervals are calculated by calling recalculateOnsetInterval on each
+* player, and then the next note time is calculated by adding the new interval to
+* the most recent onset time for each player. This information is then sent to the
+* Max/MSP patch through OSC messages. If logging is enabled, the details of the most
+* recent onsets are stored in buffers to be logged.
+*/
 void EnsembleModel::calculateNewIntervals()
 {
 	//==========================================================================
@@ -435,9 +551,18 @@ void EnsembleModel::calculateNewIntervals()
 			logger->AddEntry(log);
 		}
 	}
-
 }
 
+/**
+ * \brief Calculates new onset intervals for each player based on the most recent onset times of the other players and the parameters of the ensemble model.
+ *
+ * The new onset intervals are calculated by calling recalculateOnsetInterval on each
+ * player, and then the next note time is calculated by adding the new interval to
+ * the most recent onset time for the player. The next note time is then converted
+ * to milliseconds and sent to the Max/MSP patch to be displayed.
+ *
+ * The details of the most recent onsets are then stored in buffers to be logged.
+ */
 void EnsembleModel::clearOnsetsAvailable()
 {
 	for (auto& player : players)
@@ -474,9 +599,15 @@ void EnsembleModel::clearOnsetsAvailable()
 //	//    }
 //}
 
+/**
+* \brief Store the log information about the latest onset from the given player in the
+* logging buffers.
+*
+* \param bufferIndex The index of the logging buffer to store the data in.
+* \param playerIndex The index of the player whose onset details are to be stored.
+*/
 void EnsembleModel::storeOnsetDetailsForPlayer(int playerIndex, Logger::LogData& log)
 {
-
 	auto* player = players[playerIndex].get();
 
 	log.onsetTime = player->getLatestOnsetTime();
@@ -501,20 +632,23 @@ void EnsembleModel::storeOnsetDetailsForPlayer(int playerIndex, Logger::LogData&
 	}
 }
 
-//==============================================================================
-EnsembleModel::FlagLock::FlagLock(std::atomic_flag & f)
-	: flag(f),
-	locked(!flag.test_and_set())
+/**
+* @brief Get the Latest Alphas object (NOT IMPLEMENTED)
+*/
+void EnsembleModel::getLatestAlphas()
 {
 }
 
-EnsembleModel::FlagLock::~FlagLock()
-{
-	flag.clear();
-}
-
 //==============================================================================
-void EnsembleModel::createPlayers(const juce::MidiFile & file)
+/**
+* \brief Create a Player for each track in the file which has note on events.
+*
+* The first 'numUserPlayers' will be UserPlayers, and the rest will be
+* Players.
+*
+* \param file The MidiFile from which to create the players
+*/
+void EnsembleModel::createPlayers(const juce::MidiFile& file)
 {
 	//==========================================================================
 	// Delete Old Players
@@ -606,7 +740,9 @@ void EnsembleModel::SendActionMessage(juce::String message)
 	osc->SendActionMessage(message);
 }
 
-// Initialise matrix of alpha and beta parameters
+/**
+ * @brief Initialises a matrix of alpha and beta parameters base on the total number of players there are
+ */
 void EnsembleModel::createAlphaBetaParameters()
 {
 	for (int i = 0; i < players.size(); ++i)
@@ -622,7 +758,17 @@ void EnsembleModel::createAlphaBetaParameters()
 	}
 }
 
-void EnsembleModel::playUserIntro(const juce::MidiBuffer & inMidi, juce::MidiBuffer & outMidi, int sampleIndex)
+/**
+ * \brief Play an intro tone for each user-operated player.
+ *
+ * The intro tone is played at the given
+ * sampleIndex, and the note number is given by introToneNoteOther.
+ *
+ * \param inMidi The input MIDI buffer.
+ * \param outMidi The output MIDI buffer.
+ * \param sampleIndex The sample index at which to play the intro tone.
+ */
+void EnsembleModel::playUserIntro(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
 {
 	for (auto& player : players)
 	{
@@ -633,8 +779,14 @@ void EnsembleModel::playUserIntro(const juce::MidiBuffer & inMidi, juce::MidiBuf
 	}
 }
 
-// Called from EnsembleModel::processMidiBlock
-void EnsembleModel::playScore(const juce::MidiBuffer & inMidi, juce::MidiBuffer & outMidi, int sampleIndex)
+/**
+ * \brief Processes a block of MIDI data and updates the state of the EnsembleModel.
+ *
+ * \param inMidi The input MIDI buffer.
+ * \param outMidi The output MIDI buffer.
+ * \param sampleIndex The sample index at which the block of MIDI data should be processed.
+ */
+void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
 {
 	for (auto& player : players)
 	{
@@ -651,6 +803,12 @@ void EnsembleModel::playScore(const juce::MidiBuffer & inMidi, juce::MidiBuffer 
 	++scoreCounter;
 }
 
+/**
+ * \brief Resets all players in the ensemble model
+ *
+ * Initialising intro countdown, score counter and tempo. Also starts loops for logging onset times and polling for
+ * new alpha values.
+ */
 void EnsembleModel::resetPlayers()
 {
 	//==========================================================================
@@ -681,9 +839,27 @@ void EnsembleModel::resetPlayers()
 	resetFlag.clear();
 }
 
+/**
+ * @brief NOT IMPLEMENTED
+ *
+ * @param onsets
+ * @param delays
+ */
+void EnsembleModel::postLatestOnsets(const std::vector<int>& onsets, const std::vector<int>& delays)
+{
+}
 
 //==============================================================================
-bool EnsembleModel::checkMidiSequenceHasNotes(const juce::MidiMessageSequence * seq)
+/**
+* \brief Checks if a MIDI sequence contains any note on events.
+*
+* This method can be used to check if a \ref juce::MidiMessageSequence contains any note on events. If it does, the method returns true, otherwise it returns false.
+*
+* \param seq The MIDI sequence to check.
+*
+* \return true if the sequence contains any note on events, false otherwise.
+*/
+bool EnsembleModel::checkMidiSequenceHasNotes(const juce::MidiMessageSequence* seq)
 {
 	for (auto event : *seq)
 	{

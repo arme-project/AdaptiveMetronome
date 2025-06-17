@@ -3,8 +3,8 @@
 
 using namespace std::chrono_literals;
 
-Logger::Logger(int numPlayersIn, float sampleRateIn, const std::vector<bool>& isUserFlags) : 
-    numPlayers(numPlayersIn), isUserOperated(isUserFlags), sampleRate(sampleRateIn)
+Logger::Logger(int numPlayersIn, float sampleRateIn, const std::vector<bool>& isUserFlags) :
+	numPlayers(numPlayersIn), isUserOperated(isUserFlags), sampleRate(sampleRateIn)
 {
 	InitialiseBuffer();
 }
@@ -40,14 +40,13 @@ void Logger::Stop() {
 		thread.join();
 }
 
-
 /**
- * \brief Overrides the filename of the logging file 
+ * \brief Overrides the filename of the logging file
  * \param filename Name of the file to store it in
  */
 void Logger::SetFilenameOverride(juce::String filename)
 {
-    logFilenameOverride = filename;
+	logFilenameOverride = filename;
 }
 
 /**
@@ -56,7 +55,7 @@ void Logger::SetFilenameOverride(juce::String filename)
  */
 void Logger::SetSubFolder(juce::String folderName)
 {
-    logSubfolder = folderName;
+	logSubfolder = folderName;
 }
 
 /**
@@ -65,17 +64,17 @@ void Logger::SetSubFolder(juce::String folderName)
  */
 void Logger::AddEntry(const LogData& entry)
 {
-    auto write = fifo->write(1);
-    if (write.blockSize1 > 0)
-    {
-        loggingBuffer[write.startIndex1] = entry;
-        fifo->finishedWrite(write.blockSize1);
-    }
+	auto write = fifo->write(1);
+	if (write.blockSize1 > 0)
+	{
+		loggingBuffer[write.startIndex1] = entry;
+		fifo->finishedWrite(write.blockSize1);
+	}
 }
 
 juce::String Logger::GetFileNameOverride()
 {
-    return logFilenameOverride;
+	return logFilenameOverride;
 }
 
 /**
@@ -89,55 +88,54 @@ juce::String Logger::GetFileNameOverride()
  */
 void Logger::WriteHeaders(juce::FileOutputStream& logStream)
 {
-    juce::String logLine("N");
-    juce::String onsetLog, intervalLog, userInputLog, delayLog,
-        mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
-        tkNoiseStdLog, mNoiseStdLog, velocityLog;
+	juce::String logLine("N");
+	juce::String onsetLog, intervalLog, userInputLog, delayLog,
+		mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
+		tkNoiseStdLog, mNoiseStdLog, velocityLog;
 
-    for (int i = 0; i < numPlayers; ++i)
-    {
-        int playerId = i + 1;
+	for (int i = 0; i < numPlayers; ++i)
+	{
+		int playerId = i + 1;
 
-        onsetLog += ", P" + juce::String(playerId) + (isUserOperated[i] ? " (input)" : "");
-        intervalLog += ", P" + juce::String(playerId) + " Int";
-        userInputLog += ", P" + juce::String(playerId) + " User Input";
-        delayLog += ", P" + juce::String(playerId) + " Delay";
-        mNoiseLog += ", P" + juce::String(playerId) + " MVar";
-        tkNoiseLog += ", P" + juce::String(playerId) + " TKVar";
+		onsetLog += ", P" + juce::String(playerId) + (isUserOperated[i] ? " (input)" : "");
+		intervalLog += ", P" + juce::String(playerId) + " Int";
+		userInputLog += ", P" + juce::String(playerId) + " User Input";
+		delayLog += ", P" + juce::String(playerId) + " Delay";
+		mNoiseLog += ", P" + juce::String(playerId) + " MVar";
+		tkNoiseLog += ", P" + juce::String(playerId) + " TKVar";
 
-        for (int j = 0; j < numPlayers; ++j)
-        {
-            int otherPlayerId = j + 1;
+		for (int j = 0; j < numPlayers; ++j)
+		{
+			int otherPlayerId = j + 1;
 
-            asyncLog += ", Async " + juce::String(playerId) + juce::String(otherPlayerId);
-            alphaLog += ", Alpha " + juce::String(playerId) + juce::String(otherPlayerId);
-            betaLog += ", Beta " + juce::String(playerId) + juce::String(otherPlayerId);
-        }
+			asyncLog += ", Async " + juce::String(playerId) + juce::String(otherPlayerId);
+			alphaLog += ", Alpha " + juce::String(playerId) + juce::String(otherPlayerId);
+			betaLog += ", Beta " + juce::String(playerId) + juce::String(otherPlayerId);
+		}
 
-        tkNoiseStdLog += ", P" + juce::String(playerId) + " TKStd";
-        mNoiseStdLog += ", P" + juce::String(playerId) + " MStd";
-        velocityLog += ", P" + juce::String(playerId) + " Vol";
-    }
+		tkNoiseStdLog += ", P" + juce::String(playerId) + " TKStd";
+		mNoiseStdLog += ", P" + juce::String(playerId) + " MStd";
+		velocityLog += ", P" + juce::String(playerId) + " Vol";
+	}
 
-    logLine += onsetLog + ", " +
-        intervalLog + ", " +
-        userInputLog + ", " +
-        delayLog + ", " +
-        mNoiseLog + ", " +
-        tkNoiseLog + ", " +
-        asyncLog + ", " +
-        alphaLog + ", " +
-        betaLog + ", " +
-        tkNoiseStdLog + ", " +
-        mNoiseStdLog + ", " +
-        velocityLog + "\n";
+	logLine += onsetLog + ", " +
+		intervalLog + ", " +
+		userInputLog + ", " +
+		delayLog + ", " +
+		mNoiseLog + ", " +
+		tkNoiseLog + ", " +
+		asyncLog + ", " +
+		alphaLog + ", " +
+		betaLog + ", " +
+		tkNoiseStdLog + ", " +
+		mNoiseStdLog + ", " +
+		velocityLog + "\n";
 
-    logStream.writeText(logLine, false, false, nullptr);
+	logStream.writeText(logLine, false, false, nullptr);
 }
 
 // A bunch of stuff for safely logging onset times and sending them out to the
 // server. Functions defined in here are only safe to call from the logging thread.
-
 
 /**
 * \brief Initialises the logging buffer.
@@ -174,24 +172,24 @@ void Logger::InitialiseBuffer()
  */
 void Logger::loggerLoop()
 {
-    // Expose this option to UI at some point.
-    auto time = juce::Time::getCurrentTime();
+	// Expose this option to UI at some point.
+	auto time = juce::Time::getCurrentTime();
 
-    // Start with default documents folder
-    juce::File logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+	// Start with default documents folder
+	juce::File logFile = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
 
-    // Add subfolder, if this is specified
-    if (logSubfolder != "")
-    {
-        logFile = logFile.getChildFile (logSubfolder);
-        if (!logFile.exists()) {
-            logFile.createDirectory();
-        }
-    }
+	// Add subfolder, if this is specified
+	if (logSubfolder != "")
+	{
+		logFile = logFile.getChildFile(logSubfolder);
+		if (!logFile.exists()) {
+			logFile.createDirectory();
+		}
+	}
 
-	// Check if the log filename has also been overriden via config. 
+	// Check if the log filename has also been overriden via config.
 	if (logFilenameOverride != "") {
-		// TODO What happens if overriden log file already exists? Override? Create a new one with slightly different name? 
+		// TODO What happens if overriden log file already exists? Override? Create a new one with slightly different name?
 		logFile = logFile.getChildFile(logFilenameOverride).getNonexistentSibling();
 	}
 	else {
@@ -224,88 +222,88 @@ void Logger::loggerLoop()
 */
 void Logger::logOnsetDetails(juce::FileOutputStream& stream)
 {
-    while (fifo->getNumReady() > 0)
-    {
-        std::vector <int> latestOnsets(numPlayers), latestDelays(numPlayers);
-        juce::String logLine(lineCounter++);
-        juce::String onsetLog, intervalLog, userInputLog, delayLog,
-            mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
-            tkNoiseStdLog, mNoiseStdLog, velocityLog;
+	while (fifo->getNumReady() > 0)
+	{
+		std::vector <int> latestOnsets(numPlayers), latestDelays(numPlayers);
+		juce::String logLine(lineCounter++);
+		juce::String onsetLog, intervalLog, userInputLog, delayLog,
+			mNoiseLog, tkNoiseLog, asyncLog, alphaLog, betaLog,
+			tkNoiseStdLog, mNoiseStdLog, velocityLog;
 
-        int p = 0;
+		int p = 0;
 
-        auto reader = fifo->read(static_cast <int> (numPlayers));
+		auto reader = fifo->read(static_cast <int> (numPlayers));
 
-        for (int i = 0; i < reader.blockSize1; ++i)
-        {
-            // Append to array to send to server.
-            int bufferIndex = reader.startIndex1 + i;
+		for (int i = 0; i < reader.blockSize1; ++i)
+		{
+			// Append to array to send to server.
+			int bufferIndex = reader.startIndex1 + i;
 
-            auto& data = loggingBuffer[bufferIndex];
-            latestOnsets[p] = data.onsetTime;
-            latestDelays[p] = data.delay;
-            ++p;
+			auto& data = loggingBuffer[bufferIndex];
+			latestOnsets[p] = data.onsetTime;
+			latestDelays[p] = data.delay;
+			++p;
 
-            // Log to log file
-            logOnsetDetailsForPlayer(bufferIndex,
-                onsetLog,
-                intervalLog,
-                userInputLog,
-                delayLog,
-                mNoiseLog,
-                tkNoiseLog,
-                asyncLog,
-                alphaLog,
-                betaLog,
-                tkNoiseStdLog,
-                mNoiseStdLog,
-                velocityLog);
-        }
+			// Log to log file
+			logOnsetDetailsForPlayer(bufferIndex,
+				onsetLog,
+				intervalLog,
+				userInputLog,
+				delayLog,
+				mNoiseLog,
+				tkNoiseLog,
+				asyncLog,
+				alphaLog,
+				betaLog,
+				tkNoiseStdLog,
+				mNoiseStdLog,
+				velocityLog);
+		}
 
-        for (int i = 0; i < reader.blockSize2; ++i)
-        {
-            // Append to array to send to server.
-            int bufferIndex = reader.startIndex2 + i;
+		for (int i = 0; i < reader.blockSize2; ++i)
+		{
+			// Append to array to send to server.
+			int bufferIndex = reader.startIndex2 + i;
 
-            auto& data = loggingBuffer[bufferIndex];
-            latestOnsets[p] = data.onsetTime;
-            latestDelays[p] = data.delay;
-            ++p;
+			auto& data = loggingBuffer[bufferIndex];
+			latestOnsets[p] = data.onsetTime;
+			latestDelays[p] = data.delay;
+			++p;
 
-            // Log to log file
-            logOnsetDetailsForPlayer(bufferIndex,
-                onsetLog,
-                intervalLog,
-                userInputLog,
-                delayLog,
-                mNoiseLog,
-                tkNoiseLog,
-                asyncLog,
-                alphaLog,
-                betaLog,
-                tkNoiseStdLog,
-                mNoiseStdLog,
-                velocityLog);
-        }
+			// Log to log file
+			logOnsetDetailsForPlayer(bufferIndex,
+				onsetLog,
+				intervalLog,
+				userInputLog,
+				delayLog,
+				mNoiseLog,
+				tkNoiseLog,
+				asyncLog,
+				alphaLog,
+				betaLog,
+				tkNoiseStdLog,
+				mNoiseStdLog,
+				velocityLog);
+		}
 
-        logLine += onsetLog + ", " +
-            intervalLog + ", " +
-            userInputLog + ", " +
-            delayLog + ", " +
-            mNoiseLog + ", " +
-            tkNoiseLog + ", " +
-            asyncLog + ", " +
-            alphaLog + ", " +
-            betaLog + ", " +
-            tkNoiseStdLog + ", " +
-            mNoiseStdLog + ", " +
-            velocityLog + "\n";
+		logLine += onsetLog + ", " +
+			intervalLog + ", " +
+			userInputLog + ", " +
+			delayLog + ", " +
+			mNoiseLog + ", " +
+			tkNoiseLog + ", " +
+			asyncLog + ", " +
+			alphaLog + ", " +
+			betaLog + ", " +
+			tkNoiseStdLog + ", " +
+			mNoiseStdLog + ", " +
+			velocityLog + "\n";
 
-        stream.writeText(logLine, false, false, nullptr);
+		stream.writeText(logLine, false, false, nullptr);
 
-        // Send onset detail to wherever they need to go.
-        //postLatestOnsets(latestOnsets, latestDelays);
-    }
+		// Send onset detail to wherever they need to go.
+		//postLatestOnsets(latestOnsets, latestDelays);
+	}
 }
 
 /**
@@ -325,39 +323,37 @@ void Logger::logOnsetDetails(juce::FileOutputStream& stream)
 * \param mNoiseStdLog The string to which the motor noise standard deviation will be appended.
 * \param velocityLog The string to which the velocity will be appended.
 */
-void Logger::logOnsetDetailsForPlayer(int bufferIndex, 
-                                        juce::String& onsetLog, 
-                                        juce::String& intervalLog, 
-                                        juce::String& userInputLog, 
-                                        juce::String& delayLog, 
-                                        juce::String& mNoiseLog, 
-                                        juce::String& tkNoiseLog, 
-                                        juce::String& asyncLog, 
-                                        juce::String& alphaLog, 
-                                        juce::String& betaLog, 
-                                        juce::String& tkNoiseStdLog, 
-                                        juce::String& mNoiseStdLog, 
-                                        juce::String& velocityLog)
+void Logger::logOnsetDetailsForPlayer(int bufferIndex,
+	juce::String& onsetLog,
+	juce::String& intervalLog,
+	juce::String& userInputLog,
+	juce::String& delayLog,
+	juce::String& mNoiseLog,
+	juce::String& tkNoiseLog,
+	juce::String& asyncLog,
+	juce::String& alphaLog,
+	juce::String& betaLog,
+	juce::String& tkNoiseStdLog,
+	juce::String& mNoiseStdLog,
+	juce::String& velocityLog)
 {
-    auto& data = loggingBuffer[bufferIndex];
+	auto& data = loggingBuffer[bufferIndex];
 
-    onsetLog += ", " + juce::String(data.onsetTime / sampleRate);
-    intervalLog += ", " + juce::String(data.onsetInterval / sampleRate);
-    userInputLog += ", " + juce::String(data.userInput ? "true" : "false");
-    delayLog += ", " + juce::String(data.delay / sampleRate);
-    mNoiseLog += ", " + juce::String(data.motorNoise);
-    tkNoiseLog += ", " + juce::String(data.timeKeeperNoise);
+	onsetLog += ", " + juce::String(data.onsetTime / sampleRate);
+	intervalLog += ", " + juce::String(data.onsetInterval / sampleRate);
+	userInputLog += ", " + juce::String(data.userInput ? "true" : "false");
+	delayLog += ", " + juce::String(data.delay / sampleRate);
+	mNoiseLog += ", " + juce::String(data.motorNoise);
+	tkNoiseLog += ", " + juce::String(data.timeKeeperNoise);
 
-    for (int i = 0; i < data.asyncs.size(); ++i)
-    {
-        asyncLog += "," + juce::String(data.asyncs[i] / sampleRate);
-        alphaLog += "," + juce::String(data.alphas[i]);
-        betaLog += "," + juce::String(data.betas[i]);
-    }
+	for (int i = 0; i < data.asyncs.size(); ++i)
+	{
+		asyncLog += "," + juce::String(data.asyncs[i] / sampleRate);
+		alphaLog += "," + juce::String(data.alphas[i]);
+		betaLog += "," + juce::String(data.betas[i]);
+	}
 
-    tkNoiseStdLog += ", " + juce::String(data.tkNoiseStd);
-    mNoiseStdLog += ", " + juce::String(data.mNoiseStd);
-    velocityLog += ", " + juce::String(data.volume);
+	tkNoiseStdLog += ", " + juce::String(data.tkNoiseStd);
+	mNoiseStdLog += ", " + juce::String(data.mNoiseStd);
+	velocityLog += ", " + juce::String(data.volume);
 }
-
-
