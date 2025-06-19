@@ -1,19 +1,13 @@
 #include <JuceHeader.h>
 #include "ConfigHandler.h"
 
-/**
- * \brief Constructor for ConfigHandler.
- *
- * \param modelIn The Ensemble Model that owns this insstance.
- */
+// Constructor for ConfigHandler
 ConfigHandler::ConfigHandler(EnsembleModel* modelIn) :
 	model(modelIn)
 {
 }
 
-/**
- * /brief Deconstructor for ConfigHandler
- */
+// Deconstructor for ConfigHandler
 ConfigHandler::~ConfigHandler()
 {
 }
@@ -21,9 +15,7 @@ ConfigHandler::~ConfigHandler()
 // Formats the current ensemble state to xml, and saves it to a file (currently a default file in user folder)
 // Note: This currently only saves alpha and beta parameters.
 
-/**
-* \brief Saves the current configuration of the ensemble model to an XML file.
-*/
+// Saves the current configuration of the ensemble model to an XML file
 void ConfigHandler::SaveConfig()
 {
 #ifdef JUCE_WINDOWS
@@ -55,38 +47,27 @@ void ConfigHandler::SaveConfig()
 #endif
 }
 
-/*
-* \brief Converts a.xml file to xmlElement(to be used in loadConfigFromXml)
-*/
+//Converts a.xml file to xmlElement(to be used in loadConfigFromXml)
 std::unique_ptr<juce::XmlElement> ConfigHandler::ParseConfigToElement(juce::File configFile)
 {
 	return juce::XmlDocument(configFile).getDocumentElement();
 }
 
-// loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
-/**
-* Converts a given XML file into an XmlElement.
-*
-* \param configFile The juce::File representing the XML file to be parsed.
-* \return A unique_ptr to a juce::XmlElement that represents the root element of the parsed XML document.
-*/
-void ConfigHandler::LoadConfig(juce::File configFile)
-{
-	LoadConfig(ParseConfigToElement(configFile));
-}
-
-/**
-* \brief Returns the configuration file name where the ensemble model's configuration is saved.
-*/
+// Returns the configuration file name where the ensemble model's configuration is saved.
 juce::String ConfigHandler::GetConfigSubfolder()
 {
 	return configSubfolder;
 }
 
+// loadConfigFromXml can be called directly with XmlElement ... or from a File via parseXmlConfigFileToXmlElement
+// Converts a given XML file into an XmlElement.
+void ConfigHandler::LoadConfig(juce::File configFile)
+{
+	LoadConfig(ParseConfigToElement(configFile));
+}
+
 // Main method to load an XML config file
-/**
-* \brief Saves the current configuration of the ensemble model to an XML file.
-*/
+// Saves the current configuration of the ensemble model to an XML file.
 void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 {
 	if (loadedConfig == nullptr) { return; }
