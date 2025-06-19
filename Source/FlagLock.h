@@ -16,9 +16,17 @@
 class FlagLock
 {
 public:
-	FlagLock(std::atomic_flag& f);
-	~FlagLock();
 
 	std::atomic_flag& flag;
 	bool locked;
+
+	/*
+	* \brief Constructor that takes a reference to an atomic_flag.
+	*/
+	FlagLock(std::atomic_flag& f);
+
+	/*
+	* \brief Destructor that clears the atomic_flag.
+	*/
+	~FlagLock();
 };

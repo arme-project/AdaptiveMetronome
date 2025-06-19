@@ -29,6 +29,13 @@ class AdaptiveMetronomeAudioProcessor;
 
 using AudioParameterFloatToUse = juce::AudioParameterFloat;
 
+/**
+ * \class EnsembleModel
+ * \brief The EnsembleModel class manages the ensemble of players, their states, and communication with the Max/MSP patch.
+ *
+ * This class is responsible for loading MIDI files, processing MIDI data, and sending OSC messages to Max/MSP.
+ * It also handles the playback of introductory tones and the management of player parameters.
+ */
 class EnsembleModel
 {
 public:
