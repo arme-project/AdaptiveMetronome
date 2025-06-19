@@ -10,7 +10,4 @@ A set-up documentation website has been created to help understand how you are a
   
 `evaluation_deocupling` branch:
 
-This branch contains descriptions for functions found in the `EnsembleModel.h` which corresponds to functions and replaces `new_comments` branch. The aim of this branch is decouple the logics from the `EnsembleModel.css` into smaller maintainable classes (OSC, Logs, Polling, and Configs). 
-
-As well as doing some documentations to help with how the Linear Phase Correction Model is used in the plugin.
-
+This branch contains descriptions for functions found in the `EnsembleModel.h` which corresponds to functions and replaces `new_comments` branch. The aim of this branch is decouple the logics from the `EnsembleModel.cpp` into smaller maintainable classes (OSC, Logs, Polling, and Configs). 
