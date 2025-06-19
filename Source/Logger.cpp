@@ -1,27 +1,30 @@
+/**
+* \file Logger.cpp
+* \brief Implementation of the Logger class for logging ensemble model data.
+* 
+* This file contains the implementation of the Logger class, which is responsible for logging
+* the details of the ensemble model, including player onsets, intervals, user inputs,
+*/
+
 #include <chrono>
 #include "Logger.h"
 
 using namespace std::chrono_literals;
 
+// Constructor for Logger class
 Logger::Logger(int numPlayersIn, float sampleRateIn, const std::vector<bool>& isUserFlags) :
 	numPlayers(numPlayersIn), isUserOperated(isUserFlags), sampleRate(sampleRateIn)
 {
 	InitialiseBuffer();
 }
 
+// Destructor for Logger class
 Logger::~Logger()
 {
 	Stop();
 }
 
-/**
-* \brief Starts the logging loop for the ensemble model.
-*
-* This function starts a logging loop for the ensemble model. It first stops any
-* existing logging loop, then initialises the logging buffer and starts a new
-* thread to run the logging loop. The logging loop will continue to run until
-* the stopLoggerLoop function is called.
-*/
+// Starts the logger loop by stopping any existing logging thread, initialising the buffer, and starting a new thread.
 void Logger::Start()
 {
 	Stop(); //Stops any occuring Logging Threads before starting a new one
@@ -29,39 +32,26 @@ void Logger::Start()
 	thread = std::thread([this]() {this->loggerLoop(); });
 }
 
-/**
- * \brief Stops the logger loop by setting the continueLogging flag to false.
- *
- * If the logger thread is joinable, it will join the thread to ensure proper cleanup.
- */
+// Stops the logger loop by setting the continueLogging flag to false and joining the thread if it is joinable.
 void Logger::Stop() {
 	continueLogging = false;
 	if (thread.joinable())
 		thread.join();
 }
 
-/**
- * \brief Overrides the filename of the logging file
- * \param filename Name of the file to store it in
- */
+// Overrides the filename of the logging file
 void Logger::SetFilenameOverride(juce::String filename)
 {
 	logFilenameOverride = filename;
 }
 
-/**
- * \brief Changes the subfolder where the logging results are stored in
- * \param folderName Name of the directory to store it in
- */
+// Sets the subfolder where the logging results will be stored.
 void Logger::SetSubFolder(juce::String folderName)
 {
 	logSubfolder = folderName;
 }
 
-/**
- * \brief Adds an entry for a player to store in the logging file
- * \param entry Data corresponding to a player using the LogData structure
- */
+// AddEntry function adds a new log entry to the logging buffer.
 void Logger::AddEntry(const LogData& entry)
 {
 	auto write = fifo->write(1);
@@ -72,20 +62,13 @@ void Logger::AddEntry(const LogData& entry)
 	}
 }
 
+// Returns the filename override for the logging file.
 juce::String Logger::GetFileNameOverride()
 {
 	return logFilenameOverride;
 }
 
-/**
- * \brief Write header line to log file.
- *
- * This includes columns for each player's note onsets, intervals,
- * user input, delay, and noise parameters. It also includes columns for each pair of players'
- * asynchronous and alpha/beta parameters. Finally, it includes columns for each player's velocity.
- *
- * \param logStream The file stream to write the log to.
- */
+ // WriteHeaders function writes the header line to the log file
 void Logger::WriteHeaders(juce::FileOutputStream& logStream)
 {
 	juce::String logLine("N");
@@ -137,14 +120,7 @@ void Logger::WriteHeaders(juce::FileOutputStream& logStream)
 // A bunch of stuff for safely logging onset times and sending them out to the
 // server. Functions defined in here are only safe to call from the logging thread.
 
-/**
-* \brief Initialises the logging buffer.
-*
-* This is done by creating a AbstractFifo of size 4 * the number of players (or 4 if there are no players),
-* and then resizing the logging buffer to the same size. The buffer is then filled with LogEntry objects,
-* each with asyncs, alphas and betas of size equal to the number of players (or 0 if there are no players),
-* and all elements are set to 0.0.
-*/
+// Initialises the logging buffer with a size based on the number of players.
 void Logger::InitialiseBuffer()
 {
 	// Define the buffer size to be either 4 (if number of players is 0) or 4 x number of players
@@ -161,15 +137,7 @@ void Logger::InitialiseBuffer()
 	}
 }
 
-/**
- * \brief Starts a logging loop, which writes details of each tap to a file in the user's documents folder.
- *
- * This function is run in a separate thread, and continues until the user stops the logger.
- * TODO: Add checks to ensure that the file is not already open.
- *
- * The logging loop is started by calling EnsembleModel::startLoggerLoop().
- * It can be stopped by calling EnsembleModel::stopLoggerLoop().
- */
+// Called by the thread to start the logging loop to write details of each tap to a file in the user's documents folder.
 void Logger::loggerLoop()
 {
 	// Expose this option to UI at some point.
@@ -213,13 +181,7 @@ void Logger::loggerLoop()
 	}
 }
 
-/**
-* Logs the onset details of the ensemble to a file.
-*
-* This function is called on a separate thread, so as not to block the audio thread.
-*
-* \param logStream The file stream to write the log to.
-*/
+// Logs the onset details of the ensemble to a file.
 void Logger::logOnsetDetails(juce::FileOutputStream& stream)
 {
 	while (fifo->getNumReady() > 0)
