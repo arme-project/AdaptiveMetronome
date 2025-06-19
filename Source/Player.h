@@ -16,6 +16,14 @@
   */
 class AdaptiveMetronomeAudioProcessor;
 
+/**
+* \brief The Player class is responsible for playing back a sequence of MIDI notes.
+ *
+ * The Player class handles the playback of MIDI notes, including the timing of the notes,
+ * the onset intervals, and the playback of MIDI messages. It also handles the generation
+ * of motor and timekeeper noises, and can be used to play back MIDI sequences in a user-operated
+ * or automated manner.
+ */
 class Player
 {
 public:

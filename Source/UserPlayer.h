@@ -9,6 +9,13 @@
 #pragma once
 #include "Player.h"
 
+ /**
+  * \class UserPlayer
+  * \brief A player that is operated by user input.
+  *
+  * The UserPlayer class extends the Player class and is designed to handle user input for MIDI playback.
+  * It can process MIDI messages, calculate onset intervals, and manage user-triggered notes.
+  */
 class UserPlayer : public Player
 {
 public:

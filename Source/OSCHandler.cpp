@@ -1,33 +1,22 @@
 #include <JuceHeader.h>
 #include "OSCHandler.h"
 
-/**
- * \brief Constructor for OSCHandler.
- *
- * \param ensembleModel The Ensemble Model that owns this insstance.
- */
+
+// Constructor for OSCHandler
 OSCHandler::OSCHandler(EnsembleModel* ensembleModel) :
 	model(ensembleModel)
 {
 	InitialiseAddresses();
 }
 
-/**
- * \brief Destructor for the OSCHandler class.
- * Disconnects both sender and receiver objects.
- */
+// Destructor for the OSCHandler class.
 OSCHandler::~OSCHandler()
 {
 	sender.disconnect();
 	receiver.disconnect();
 }
 
-/**
-* Connect the OSC sender to a UDP port for sending messages to the Max/MSP system.
-*
-* @param portNumber the UDP port number to connect to
-* @param IPAddress the IP address to connect to (default is "127.0.0.1")
-*/
+// Connect the OSC sender to a UDP port for sending messages to the Max/MSP system.
 void OSCHandler::ConnectSender(int portNumber = 8000, juce::String IPaddress = "127.0.0.1")
 {
 	if (sender.connect(IPaddress, portNumber)) {
@@ -42,14 +31,7 @@ void OSCHandler::ConnectSender(int portNumber = 8000, juce::String IPaddress = "
 	}
 }
 
-/**
- * \brief Attempts to connect an OSC receiver to the specified UDP port.
- *
- * \param portNumber The port number to attempt the connection on.
- *
- * If the connection fails, sets currentReceivePort to -1 and logs an error message.
- * If the connection succeeds, sets currentReceivePort to the port number and logs a success message.
- */
+// Attempts to connect an OSC receiver to the specified UDP port.
 void OSCHandler::ConnectReceiver(int portNumber = 8000)
 {
 	if (receiver.connect(portNumber)) {
@@ -62,33 +44,19 @@ void OSCHandler::ConnectReceiver(int portNumber = 8000)
 	}
 }
 
-/**
- * \brief Checks if the OSC receiver is connected.
- *
- * \return true if the OSC receiver is connected, false otherwise.
- */
+// Checks if the OSC receiver is connected.
 bool OSCHandler::IsSenderConnected() const
 {
 	return currentSenderPort > -1 && !currentSenderIPAddress.isEmpty();
 }
 
-/**
- * \brief Checks if the OSC Sender is connected.
- *
- * \return true if the OSC Sender is connected, false otherwise.
- */
+// Checks if the OSC Sender is connected.
 bool OSCHandler::IsReceiverConnected() const
 {
 	return currentReceiverPort > -1;
 }
 
-/**
- * \brief Sends an OSC message either as a test or with onset data.
- *
- * \param test If true, sends a test OSC message to the "/test" address.
- *             Otherwise, sends an OSC message to the "/onsets" address
- *             with four random float arguments.
- */
+// Sends an OSC message either as a test or with onset data.
 void OSCHandler::MessageSendTest(juce::String addressPattern)
 {
 	if (addressPattern == "test") {
@@ -109,11 +77,41 @@ void OSCHandler::MessageSendTest(juce::String addressPattern)
 	}
 }
 
-/**
- * \brief Responsible for when an OSC message is received by the Reciever and performs corresponding actions base on the pattern
- *
- * \param message The OSC message that has been received.
- */
+// Sends an OSC message to notify Max of a new interval. The message contains three integers: the player number, the note number, and the note time in milliseconds.
+void OSCHandler::MessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS)
+{
+	auto oscMessage = juce::OSCMessage("/newInterval");
+	oscMessage.addInt32(playerNum);
+	oscMessage.addInt32(noteNum);
+	oscMessage.addInt32(noteTimeInMS);
+	if (!sender.send(oscMessage)) {
+		DBG("Error: could not send OSC message.");
+	}
+}
+
+// Sends an OSC message to trigger a reset in the Max/MSP patch.
+void OSCHandler::MessageSendReset() {
+	auto oscMessage = juce::OSCMessage("/reset");
+	if (!sender.send(oscMessage)) {
+		DBG("Error: could not send OSC message.");
+	}
+}
+
+// Sends an OSC message to trigger Max to start playing.
+void OSCHandler::MessageSendPlayMax() {
+	auto oscMessage = juce::OSCMessage("/playMax");
+	if (!sender.send(oscMessage)) {
+		DBG("Error: could not send OSC message.");
+	}
+}
+
+// Sends an action message to the OSC handler.
+void OSCHandler::SendActionMessage(juce::String message)
+{
+	sendActionMessage(message);
+}
+
+// Responsible for when an OSC message is received by the Reciever and performs corresponding actions base on the pattern
 void OSCHandler::MessageReceived(const juce::OSCMessage& message)
 {
 	juce::OSCAddressPattern oscPattern = message.getAddressPattern();
@@ -183,12 +181,7 @@ void OSCHandler::MessageReceived(const juce::OSCMessage& message)
 	sendActionMessage("OSC Received");
 }
 
-/**
- * \brief Initialises the OSC addresses that this handler will listen to.
- *
- * This function sets up the OSC addresses that the handler will listen to for incoming messages.
- * It adds listeners for various addresses related to configuration loading, resetting, and playback control.
- */
+// Initialises the OSC addresses that this handler will listen to.
 void OSCHandler::InitialiseAddresses()
 {
 	// OSC Listener addresses
@@ -202,57 +195,4 @@ void OSCHandler::InitialiseAddresses()
 	addListener(this, "/oscstart");     // [4]
 	addListener(this, "/playbackstart");
 	addListener(this, "/alphas");
-}
-
-/**
- * Sends an OSC message to notify Max of a new interval. The message contains three integers: the player number, the note number, and the note time in milliseconds.
- * \param playerNum The player number.
- * \param noteNum The note number.
- * \param noteTimeInMS The note time in milliseconds.
- */
-void OSCHandler::MessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS)
-{
-	auto oscMessage = juce::OSCMessage("/newInterval");
-	oscMessage.addInt32(playerNum);
-	oscMessage.addInt32(noteNum);
-	oscMessage.addInt32(noteTimeInMS);
-	if (!sender.send(oscMessage)) {
-		DBG("Error: could not send OSC message.");
-	}
-}
-
-/**
- * \brief Sends an OSC message to trigger a reset in the Max/MSP patch.
- */
-void OSCHandler::MessageSendReset() {
-	auto oscMessage = juce::OSCMessage("/reset");
-	if (!sender.send(oscMessage)) {
-		DBG("Error: could not send OSC message.");
-	}
-}
-
-/**
- * \brief Send an OSC message to trigger Max to start playing.
- *
- * The message is /playMax. This is used to trigger Max to start playing
- * after the user has pressed play in the plugin editor.
- */
-void OSCHandler::MessageSendPlayMax() {
-	auto oscMessage = juce::OSCMessage("/playMax");
-	if (!sender.send(oscMessage)) {
-		DBG("Error: could not send OSC message.");
-	}
-}
-
-/**
- * \brief Sends an action message to the OSC handler.
- *
- * This function broadcasts an action message to all listeners.
- * It is used to notify other components of specific actions or events.
- *
- * \param message The action message to be sent.
- */
-void OSCHandler::SendActionMessage(juce::String message)
-{
-	sendActionMessage(message);
 }

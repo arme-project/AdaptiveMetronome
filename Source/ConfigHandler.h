@@ -1,8 +1,14 @@
 #pragma once
-
 #include <JuceHeader.h>
 #include "EnsembleModel.h"
 
+/**
+ * \class ConfigHandler
+ * \brief Handles the configuration of the Ensemble Model.
+ *
+ * This class is responsible for saving and loading the configuration of the ensemble model to and from XML files.
+ * It provides methods to save the current state of the model and load a previously saved configuration.
+ */
 class ConfigHandler : public juce::Component
 {
 public:

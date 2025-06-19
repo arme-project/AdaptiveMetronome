@@ -5,14 +5,14 @@
 #include <atomic>
 #include "Player.h"
 
-// Write a doxygen
-/**
- * \file Logger.h
- * \brief This file contains the Logger class, which is responsible for logging the details of the ensemble model.
+
+/*
+* \class Logger
+ * \brief Handles logging of ensemble model data.
  *
- * The Logger class provides functionality to log the onset details of each player in the ensemble,
- * including their note onsets, intervals, user input flags, delays, motor noise, timekeeper noise,
- * and asynchronous parameters. It also allows for custom filenames and subfolders for storing logs.
+ * This class is responsible for logging the onset details of the ensemble model to a file.
+ * It runs in a separate thread to avoid blocking the audio thread, and uses an AbstractFifo
+ * to manage the logging buffer.
  */
 class Logger
 {

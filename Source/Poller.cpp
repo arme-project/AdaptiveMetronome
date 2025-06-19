@@ -1,31 +1,18 @@
 #include <JuceHeader.h>
 #include "Poller.h"
 
-//==============================================================================
-/**
- * \brief Constructor for the Poller Class.
- *
- * \input numPlayersIn Number of Players in the Ensemble
- */
+// Constructor for the Poller Class.
 Poller::Poller(int numPlayersIn) : numPlayers(numPlayers)
 {
 }
 
-/**
- * \brief Deconstructor for the Poller Class.
- */
+// Deconstructor for the Poller Class.
 Poller::~Poller()
 {
 	Stop();
 }
 
-/**
- * \brief Starts the polling loop for the ensemble model.
- *
- * This function stops any existing polling loop, initialises the polling buffers,
- * and starts a new thread to run the polling loop. The polling loop will continue
- * to run until the stopPollingLoop function is called.
- */
+// Starts the polling loop for the ensemble model.
 void Poller::Start()
 {
 	Stop();
@@ -36,11 +23,7 @@ void Poller::Start()
 	thread = std::thread([this]() {this->PollingLoop(); });
 }
 
-/**
-* \brief Stops the polling loop by setting the continuePolling flag to false.
-*
-* If the polling thread is joinable, it will join the thread to ensure proper cleanup.
-*/
+// Stops the polling loop by setting the continuePolling flag to false.
 void Poller::Stop()
 {
 	continuePolling = false;
@@ -50,12 +33,7 @@ void Poller::Stop()
 	}
 }
 
-/**
- * \brief Initialise the polling buffers for the players.
- *
- * Allocates memory for the polling buffers and initialises them to zero. The size of each buffer is 10 times
- * the number of players in the ensemble.
- */
+// Initialise the polling buffers for the players.
 void Poller::InitialiseBuffers()
 {
 	auto bufferSize = 10 * numPlayers;
@@ -68,12 +46,7 @@ void Poller::InitialiseBuffers()
 	}
 }
 
-/**
- * \brief Stops the polling loop by setting the continuePolling flag to false.
- *
- * If the pollingThread is joinable, it will join the thread to ensure
- * proper cleanup and prevent any dangling threads.
- */
+// The polling loop that runs in a separate thread which continuously checks if the alphas are up to date.
 void Poller::PollingLoop()
 {
 	while (continuePolling) {
@@ -83,9 +56,7 @@ void Poller::PollingLoop()
 	}
 }
 
-/**
- * \brief NOT USED
- */
+// Fetches new alpha values from the server (NOT USED).
 void Poller::getNewAlphas()
 {
 	//==========================================================================
