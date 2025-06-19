@@ -10,7 +10,12 @@ var annotated_dup =
     ] ],
     [ "AdaptiveMetronomeAudioProcessor", "class_adaptive_metronome_audio_processor.html", "class_adaptive_metronome_audio_processor" ],
     [ "AdaptiveMetronomeAudioProcessorEditor", "class_adaptive_metronome_audio_processor_editor.html", "class_adaptive_metronome_audio_processor_editor" ],
+    [ "ConfigHandler", "class_config_handler.html", "class_config_handler" ],
     [ "EnsembleModel", "class_ensemble_model.html", "class_ensemble_model" ],
+    [ "FlagLock", "class_flag_lock.html", "class_flag_lock" ],
+    [ "Logger", "class_logger.html", "class_logger" ],
+    [ "OSCHandler", "class_o_s_c_handler.html", "class_o_s_c_handler" ],
     [ "Player", "class_player.html", "class_player" ],
+    [ "Poller", "class_poller.html", "class_poller" ],
     [ "UserPlayer", "class_user_player.html", "class_user_player" ]
 ];

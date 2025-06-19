@@ -1,0 +1,142 @@
+\doxysection{Logger Class Reference}
+\hypertarget{class_logger}{}\label{class_logger}\index{Logger@{Logger}}
+
+
+Handles logging of ensemble model data.  
+
+
+
+
+{\ttfamily \#include $<$Logger.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_logger_1_1_log_data}{Log\+Data}}
+\begin{DoxyCompactList}\small\item\em A structure to hold the data for each log entry. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_logger_ab721c52e8be7f94c29958c7f505f09a2}{Logger}} (int num\+Players\+In, float sample\+Rate, const std\+::vector$<$ bool $>$ \&is\+User\+Flags)
+\item 
+\mbox{\hyperlink{class_logger_acb668a9e186a25fbaad2e4af6d1ed00a}{\texorpdfstring{$\sim$}{\string~}\+Logger}} ()
+\item 
+void \mbox{\hyperlink{class_logger_a427892a216db2d80c385bb9b7157ae0d}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the logging loop for the ensemble model. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_logger_a583e1610948d947b8ba2a49a2ff25ab0}{Stop}} ()
+\begin{DoxyCompactList}\small\item\em Stops the logger loop by setting the continue\+Logging flag to false. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_logger_aab875f9fcb67a5a229276f4eb604e55c}{Set\+Filename\+Override}} (juce\+::\+String filename)
+\begin{DoxyCompactList}\small\item\em Overrides the filename of the logging file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_logger_afca72df82808573ef30994c441f7169a}{Set\+Sub\+Folder}} (juce\+::\+String filename)
+\begin{DoxyCompactList}\small\item\em Changes the subfolder where the logging results are stored in. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_logger_a16877a647993edc64c99f170bd7d8e19}{Add\+Entry}} (const \mbox{\hyperlink{struct_logger_1_1_log_data}{Log\+Data}} \&entry)
+\begin{DoxyCompactList}\small\item\em Adds an entry for a player to store in the logging file. \end{DoxyCompactList}\item 
+juce\+::\+String \mbox{\hyperlink{class_logger_ad9947826e98965969dea2bb7546f2e5b}{Get\+File\+Name\+Override}} ()
+\begin{DoxyCompactList}\small\item\em Returns the filename override of the file where the logging results are stored in. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles logging of ensemble model data. 
+
+This class is responsible for logging the onset details of the ensemble model to a file. It runs in a separate thread to avoid blocking the audio thread, and uses an Abstract\+Fifo to manage the logging buffer. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_logger_ab721c52e8be7f94c29958c7f505f09a2}\index{Logger@{Logger}!Logger@{Logger}}
+\index{Logger@{Logger}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{Logger()}{Logger()}}
+{\footnotesize\ttfamily \label{class_logger_ab721c52e8be7f94c29958c7f505f09a2} 
+Logger\+::\+Logger (\begin{DoxyParamCaption}\item[{int}]{num\+Players\+In}{, }\item[{float}]{sample\+Rate}{, }\item[{const std\+::vector$<$ bool $>$ \&}]{is\+User\+Flags}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_logger_acb668a9e186a25fbaad2e4af6d1ed00a}\index{Logger@{Logger}!````~Logger@{\texorpdfstring{$\sim$}{\string~}Logger}}
+\index{````~Logger@{\texorpdfstring{$\sim$}{\string~}Logger}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Logger()}{\string~Logger()}}
+{\footnotesize\ttfamily \label{class_logger_acb668a9e186a25fbaad2e4af6d1ed00a} 
+Logger\+::\texorpdfstring{$\sim$}{\string~}\+Logger (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_logger_a16877a647993edc64c99f170bd7d8e19}\index{Logger@{Logger}!AddEntry@{AddEntry}}
+\index{AddEntry@{AddEntry}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{AddEntry()}{AddEntry()}}
+{\footnotesize\ttfamily \label{class_logger_a16877a647993edc64c99f170bd7d8e19} 
+void Logger\+::\+Add\+Entry (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_logger_1_1_log_data}{Log\+Data}} \&}]{entry}{}\end{DoxyParamCaption})}
+
+
+
+Adds an entry for a player to store in the logging file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entry} & Data corresponding to a player using the \doxylink{struct_logger_1_1_log_data}{Log\+Data} structure \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_logger_ad9947826e98965969dea2bb7546f2e5b}\index{Logger@{Logger}!GetFileNameOverride@{GetFileNameOverride}}
+\index{GetFileNameOverride@{GetFileNameOverride}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{GetFileNameOverride()}{GetFileNameOverride()}}
+{\footnotesize\ttfamily \label{class_logger_ad9947826e98965969dea2bb7546f2e5b} 
+juce\+::\+String Logger\+::\+Get\+File\+Name\+Override (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the filename override of the file where the logging results are stored in. 
+
+\begin{DoxyReturn}{Returns}
+Name of the file 
+\end{DoxyReturn}
+\Hypertarget{class_logger_aab875f9fcb67a5a229276f4eb604e55c}\index{Logger@{Logger}!SetFilenameOverride@{SetFilenameOverride}}
+\index{SetFilenameOverride@{SetFilenameOverride}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{SetFilenameOverride()}{SetFilenameOverride()}}
+{\footnotesize\ttfamily \label{class_logger_aab875f9fcb67a5a229276f4eb604e55c} 
+void Logger\+::\+Set\+Filename\+Override (\begin{DoxyParamCaption}\item[{juce\+::\+String}]{filename}{}\end{DoxyParamCaption})}
+
+
+
+Overrides the filename of the logging file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Name of the file to store it in \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_logger_afca72df82808573ef30994c441f7169a}\index{Logger@{Logger}!SetSubFolder@{SetSubFolder}}
+\index{SetSubFolder@{SetSubFolder}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{SetSubFolder()}{SetSubFolder()}}
+{\footnotesize\ttfamily \label{class_logger_afca72df82808573ef30994c441f7169a} 
+void Logger\+::\+Set\+Sub\+Folder (\begin{DoxyParamCaption}\item[{juce\+::\+String}]{filename}{}\end{DoxyParamCaption})}
+
+
+
+Changes the subfolder where the logging results are stored in. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em folder\+Name} & Name of the directory to store it in \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_logger_a427892a216db2d80c385bb9b7157ae0d}\index{Logger@{Logger}!Start@{Start}}
+\index{Start@{Start}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily \label{class_logger_a427892a216db2d80c385bb9b7157ae0d} 
+void Logger\+::\+Start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts the logging loop for the ensemble model. 
+
+This function starts a logging loop for the ensemble model. It first stops any existing logging loop, then initialises the logging buffer and starts a new thread to run the logging loop. The logging loop will continue to run until the stop\+Logger\+Loop function is called. \Hypertarget{class_logger_a583e1610948d947b8ba2a49a2ff25ab0}\index{Logger@{Logger}!Stop@{Stop}}
+\index{Stop@{Stop}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{Stop()}{Stop()}}
+{\footnotesize\ttfamily \label{class_logger_a583e1610948d947b8ba2a49a2ff25ab0} 
+void Logger\+::\+Stop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stops the logger loop by setting the continue\+Logging flag to false. 
+
+If the logger thread is joinable, it will join the thread to ensure proper cleanup. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_logger_8h}{Logger.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_logger_8cpp}{Logger.\+cpp}}\end{DoxyCompactItemize}

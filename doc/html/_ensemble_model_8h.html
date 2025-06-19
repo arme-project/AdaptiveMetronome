@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Adaptive Metronome: D:/Projects/ARME Demo/AdaptiveMetronome/Source/EnsembleModel.h File Reference</title>
+<title>Adaptive Metronome: C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/EnsembleModel.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -32,9 +32,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Adaptive Metronome<span id="projectnumber">&#160;V.2</span>
+   <div id="projectname">Adaptive Metronome
    </div>
-   <div id="projectbrief">The ARME Project&#39;s Plugin</div>
+   <div id="projectbrief">The ARME Project</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -110,19 +110,28 @@ $(function(){initNavTree('_ensemble_model_8h.html',''); initResizable(true); });
 </div><!--header-->
 <div class="contents">
 
-<p>Header file for the <a class="el" href="class_ensemble_model.html">EnsembleModel</a> class.  
+<p>Header file for the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;JuceHeader.h&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;atomic&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
+<code>#include &quot;<a class="el" href="_user_player_8h_source.html">UserPlayer.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_player_8h_source.html">Player.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_flag_lock_8h_source.html">FlagLock.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_plugin_processor_8h_source.html">PluginProcessor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_poller_8h_source.html">Poller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_logger_8h_source.html">Logger.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_config_handler_8h_source.html">ConfigHandler.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_o_s_c_handler_8h_source.html">OSCHandler.h</a>&quot;</code><br />
 </div>
 <p><a href="_ensemble_model_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ensemble_model.html">EnsembleModel</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class manages the ensemble of players, their states, and communication with the Max/MSP patch.  <a href="class_ensemble_model.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -131,8 +140,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:a11613cf950fb026f0bed472b5d797dcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Header file for the <a class="el" href="class_ensemble_model.html">EnsembleModel</a> class. </p>
-<p>This file contains the definition of the <a class="el" href="class_ensemble_model.html">EnsembleModel</a> class, which is responsible for managing the ensemble of players, their states, and communication with the Max/MSP patch. It handles loading MIDI files, processing MIDI data, and sending OSC messages to Max/MSP. </p>
+<div class="textblock"><p>Header file for the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class. </p>
+<p>This file contains the definition of the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class, which is responsible for managing the ensemble of players, their states, and communication with the Max/MSP patch. It handles loading MIDI files, processing MIDI data, and sending OSC messages to Max/MSP. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a11613cf950fb026f0bed472b5d797dcf" name="a11613cf950fb026f0bed472b5d797dcf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a11613cf950fb026f0bed472b5d797dcf">&#9670;&#160;</a></span>AudioParameterFloatToUse</h2>

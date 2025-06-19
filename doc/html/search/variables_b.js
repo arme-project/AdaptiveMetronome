@@ -1,10 +1,15 @@
 var searchData=
 [
-  ['onsetinterval_0',['onsetInterval',['../class_player.html#a1327331d43c341d25867224e53dcfed7',1,'Player']]],
-  ['onsetintervals_1',['onsetIntervals',['../class_player.html#ade7585a93b6101024ecfb69c8a8400cb',1,'Player']]],
-  ['onsettimes_2',['onsetTimes',['../class_player.html#aa26c8c67e9a61fd1f844279535034016',1,'Player::onsetTimes'],['../class_a_r_m_e_timing_model_1_1_timing_model.html#a42f7bcb7acea7e0701e62e242feb2881',1,'ARMETimingModel::TimingModel::onsetTimes']]],
-  ['oscautoconnect_3',['OSCAutoConnect',['../class_ensemble_model.html#a4dc6bf01e4937ab62154a07c36c27aca',1,'EnsembleModel']]],
-  ['osconsettime_4',['oscOnsetTime',['../class_player.html#a2c511df749594c15625ef67e6cdb9574',1,'Player']]],
-  ['osconsettimeinsamples_5',['oscOnsetTimeInSamples',['../class_player.html#a3f93d9820a96f87ada1b4bda7abccf0f',1,'Player']]],
-  ['oscsender_6',['OSCSender',['../class_ensemble_model.html#a2cc693efd20bc92631421fa707378b18',1,'EnsembleModel']]]
+  ['newosconsetavailable_0',['newOSCOnsetAvailable',['../class_player.html#afc97090665c3c51b6601dc9d0509bc8d',1,'Player']]],
+  ['nextnotetimeinms_1',['nextNoteTimeInMS',['../class_player.html#af3e622653bc1d072d3ea86d3eaf17d35',1,'Player']]],
+  ['nextonsettimes_2',['nextOnsetTimes',['../class_a_r_m_e_timing_model_1_1_timing_model.html#ad995b8c5350d8e4dbf0537ced594feac',1,'ARMETimingModel::TimingModel']]],
+  ['notenumber_3',['noteNumber',['../struct_player_1_1_note.html#ae3752a205b55ba5ec7333ad1ffdc72f6',1,'Player::Note']]],
+  ['noteplayed_4',['notePlayed',['../class_player.html#aa09c6fe6d804c1e975a68277aa7a498d',1,'Player']]],
+  ['notes_5',['notes',['../class_player.html#aed27dc0e3704152cc3cf99e149fee01a',1,'Player']]],
+  ['notetriggeredbyuser_6',['noteTriggeredByUser',['../class_player.html#a9c5d77edc841bb72da499d94e3d18cf2',1,'Player']]],
+  ['numberofnextonsetscalculated_7',['numberOfNextOnsetsCalculated',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a29f6b0df386315b8a2db1ff94755694e',1,'ARMETimingModel::TimingModel']]],
+  ['numberofnotesregisteredbyallplayers_8',['numberOfNotesRegisteredByAllPlayers',['../class_a_r_m_e_timing_model_1_1_timing_model.html#ab6e11ca143335bf0df19a943f63f38f1',1,'ARMETimingModel::TimingModel']]],
+  ['numberofplayers_9',['numberOfPlayers',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a7de0590d88928b5db14615e53c9f1ae3',1,'ARMETimingModel::TimingModel::numberOfPlayers'],['../class_a_r_m_e_timing_model_1_1_model_parameters.html#a27ad23c20c466c6bfaa6b7220caffc6d',1,'ARMETimingModel::ModelParameters::numberOfPlayers']]],
+  ['numberofuserplayers_10',['numberOfUserPlayers',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a1a19c01ff32ad34d0ea52dd65a0cf35b',1,'ARMETimingModel::TimingModel']]],
+  ['numofintervalsinqueue_11',['numOfIntervalsInQueue',['../class_player.html#aa61ada6c0eb73def0c03a0fc71afa052',1,'Player']]]
 ];

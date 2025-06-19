@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ensemblemodel_2ecpp_0',['EnsembleModel.cpp',['../_ensemble_model_8cpp.html',1,'']]],
-  ['ensemblemodel_2eh_1',['EnsembleModel.h',['../_ensemble_model_8h.html',1,'']]]
+  ['confighandler_2ecpp_0',['ConfigHandler.cpp',['../_config_handler_8cpp.html',1,'']]],
+  ['confighandler_2eh_1',['ConfigHandler.h',['../_config_handler_8h.html',1,'']]]
 ];

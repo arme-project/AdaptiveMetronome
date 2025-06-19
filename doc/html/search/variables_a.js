@@ -1,15 +1,9 @@
 var searchData=
 [
-  ['newosconsetavailable_0',['newOSCOnsetAvailable',['../class_player.html#afc97090665c3c51b6601dc9d0509bc8d',1,'Player']]],
-  ['nextnotetimeinms_1',['nextNoteTimeInMS',['../class_player.html#af3e622653bc1d072d3ea86d3eaf17d35',1,'Player']]],
-  ['nextonsettimes_2',['nextOnsetTimes',['../class_a_r_m_e_timing_model_1_1_timing_model.html#ad995b8c5350d8e4dbf0537ced594feac',1,'ARMETimingModel::TimingModel']]],
-  ['notenumber_3',['noteNumber',['../struct_player_1_1_note.html#ae3752a205b55ba5ec7333ad1ffdc72f6',1,'Player::Note']]],
-  ['noteplayed_4',['notePlayed',['../class_player.html#aa09c6fe6d804c1e975a68277aa7a498d',1,'Player']]],
-  ['notes_5',['notes',['../class_player.html#aed27dc0e3704152cc3cf99e149fee01a',1,'Player']]],
-  ['notetriggeredbyuser_6',['noteTriggeredByUser',['../class_player.html#a9c5d77edc841bb72da499d94e3d18cf2',1,'Player']]],
-  ['numberofnextonsetscalculated_7',['numberOfNextOnsetsCalculated',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a29f6b0df386315b8a2db1ff94755694e',1,'ARMETimingModel::TimingModel']]],
-  ['numberofnotesregisteredbyallplayers_8',['numberOfNotesRegisteredByAllPlayers',['../class_a_r_m_e_timing_model_1_1_timing_model.html#ab6e11ca143335bf0df19a943f63f38f1',1,'ARMETimingModel::TimingModel']]],
-  ['numberofplayers_9',['numberOfPlayers',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a7de0590d88928b5db14615e53c9f1ae3',1,'ARMETimingModel::TimingModel::numberOfPlayers'],['../class_a_r_m_e_timing_model_1_1_model_parameters.html#a27ad23c20c466c6bfaa6b7220caffc6d',1,'ARMETimingModel::ModelParameters::numberOfPlayers']]],
-  ['numberofuserplayers_10',['numberOfUserPlayers',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a1a19c01ff32ad34d0ea52dd65a0cf35b',1,'ARMETimingModel::TimingModel']]],
-  ['numofintervalsinqueue_11',['numOfIntervalsInQueue',['../class_player.html#aa61ada6c0eb73def0c03a0fc71afa052',1,'Player']]]
+  ['manualplaying_0',['manualPlaying',['../class_adaptive_metronome_audio_processor.html#abf11784ead4853aa08fa11be30bc60ff',1,'AdaptiveMetronomeAudioProcessor']]],
+  ['max_5fplayers_1',['MAX_PLAYERS',['../class_adaptive_metronome_audio_processor.html#ac30594ec867b0fa6fd955171cff09f0d',1,'AdaptiveMetronomeAudioProcessor']]],
+  ['mnoisestd_2',['mNoiseStd',['../struct_logger_1_1_log_data.html#a236e6fff297673d4adf3cced9144a568',1,'Logger::LogData']]],
+  ['mnoisestdparameter_3',['mNoiseStdParameter',['../class_adaptive_metronome_audio_processor.html#a8cd9aa2ee09ac3eda1e93d74b92a82b1',1,'AdaptiveMetronomeAudioProcessor::mNoiseStdParameter'],['../class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters.html#a29c0d9096d8672bbee92d34e7a89c449',1,'ARMETimingModel::PhaseCorrectionModelParameters::mNoiseStdParameter']]],
+  ['modelparams_4',['modelParams',['../class_a_r_m_e_timing_model_1_1_timing_model.html#acb8b10afaaae153a366bf2513d2fcccc',1,'ARMETimingModel::TimingModel']]],
+  ['motornoise_5',['motorNoise',['../struct_logger_1_1_log_data.html#abb7261a5a06f5a376182dba01dee702f',1,'Logger::LogData']]]
 ];

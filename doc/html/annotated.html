@@ -32,9 +32,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Adaptive Metronome<span id="projectnumber">&#160;V.2</span>
+   <div id="projectname">Adaptive Metronome
    </div>
-   <div id="projectbrief">The ARME Project&#39;s Plugin</div>
+   <div id="projectbrief">The ARME Project</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -120,10 +120,16 @@ $(function(){initNavTree('annotated.html',''); initResizable(true); });
 <tr id="row_1_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_1_" class="arrow" onclick="dynsection.toggleFolder('1_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_adaptive_metronome_audio_processor.html" target="_self">AdaptiveMetronomeAudioProcessor</a></td><td class="desc"></td></tr>
 <tr id="row_1_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_adaptive_metronome_audio_processor_1_1_parameter_index_getter.html" target="_self">ParameterIndexGetter</a></td><td class="desc"></td></tr>
 <tr id="row_2_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_adaptive_metronome_audio_processor_editor.html" target="_self">AdaptiveMetronomeAudioProcessorEditor</a></td><td class="desc"></td></tr>
-<tr id="row_3_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_ensemble_model.html" target="_self">EnsembleModel</a></td><td class="desc"></td></tr>
-<tr id="row_4_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_4_" class="arrow" onclick="dynsection.toggleFolder('4_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_player.html" target="_self">Player</a></td><td class="desc"></td></tr>
-<tr id="row_4_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_player_1_1_note.html" target="_self">Note</a></td><td class="desc"></td></tr>
-<tr id="row_5_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_user_player.html" target="_self">UserPlayer</a></td><td class="desc"></td></tr>
+<tr id="row_3_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_config_handler.html" target="_self">ConfigHandler</a></td><td class="desc">Handles the configuration of the Ensemble Model </td></tr>
+<tr id="row_4_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_ensemble_model.html" target="_self">EnsembleModel</a></td><td class="desc">Manages the ensemble of players, their states, and communication with the Max/MSP patch </td></tr>
+<tr id="row_5_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_flag_lock.html" target="_self">FlagLock</a></td><td class="desc">A class to lock a given std::atomic_flag </td></tr>
+<tr id="row_6_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_6_" class="arrow" onclick="dynsection.toggleFolder('6_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_logger.html" target="_self">Logger</a></td><td class="desc">Handles logging of ensemble model data </td></tr>
+<tr id="row_6_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_logger_1_1_log_data.html" target="_self">LogData</a></td><td class="desc">A structure to hold the data for each log entry </td></tr>
+<tr id="row_7_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_o_s_c_handler.html" target="_self">OSCHandler</a></td><td class="desc">Handles OSC communication for the Ensemble Model </td></tr>
+<tr id="row_8_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_8_" class="arrow" onclick="dynsection.toggleFolder('8_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_player.html" target="_self">Player</a></td><td class="desc">Responsible for playing back a sequence of MIDI notes </td></tr>
+<tr id="row_8_0_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="struct_player_1_1_note.html" target="_self">Note</a></td><td class="desc"></td></tr>
+<tr id="row_9_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_poller.html" target="_self">Poller</a></td><td class="desc">Handles Polling of ensemble model data </td></tr>
+<tr id="row_10_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="class_user_player.html" target="_self">UserPlayer</a></td><td class="desc">A player that is operated by user input </td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->

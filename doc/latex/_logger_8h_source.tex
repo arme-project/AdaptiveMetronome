@@ -1,0 +1,93 @@
+\doxysection{Logger.\+h}
+\hypertarget{_logger_8h_source}{}\label{_logger_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/Logger.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/Logger.h}}
+\mbox{\hyperlink{_logger_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <JuceHeader.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_player_8h}{Player.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_logger_ab721c52e8be7f94c29958c7f505f09a2}{Logger}}}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_logger_1_1_log_data}{LogData}}}
+\DoxyCodeLine{00025\ \ \ \ \ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_logger_1_1_log_data_af43c35b506eefb9b05c9f1ea09ee33e4}{onsetTime}}\ =\ 0;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_logger_1_1_log_data_a329f6a7640d376d65af3c58a1c09692e}{onsetInterval}}\ =\ 0;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_logger_1_1_log_data_af673b7e19328bec2f4126eafbe0006ff}{userInput}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_logger_1_1_log_data_a33c558c26402a0c918603d5dbf16510c}{delay}}\ =\ 0.0;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_logger_1_1_log_data_abb7261a5a06f5a376182dba01dee702f}{motorNoise}}\ =\ 0.0;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_logger_1_1_log_data_ad152a892a857e9bed881b5af78191350}{timeKeeperNoise}}\ =\ 0.0;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{struct_logger_1_1_log_data_a085fad8a8920f37641e06711caa8049c}{asyncs}};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::vector<float>\ \mbox{\hyperlink{struct_logger_1_1_log_data_a34481e327169eb69b3aa2181c24081aa}{alphas}};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::vector<float>\ \mbox{\hyperlink{struct_logger_1_1_log_data_ae32e9a52b40d9d98d03d60a73be6a470}{betas}};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_logger_1_1_log_data_a387c50715884700da607b1925d078c5e}{tkNoiseStd}}\ =\ 0.0;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_logger_1_1_log_data_a236e6fff297673d4adf3cced9144a568}{mNoiseStd}}\ =\ 0.0;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_logger_1_1_log_data_a3a598dc77eeb0be8d7d9d6634fb9f422}{volume}}\ =\ 0.0;}
+\DoxyCodeLine{00038\ \ \ \ \ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Constructor\ and\ Deconstructor}}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{class_logger_ab721c52e8be7f94c29958c7f505f09a2}{Logger}}(\textcolor{keywordtype}{int}\ numPlayersIn,\ \textcolor{keywordtype}{float}\ sampleRate,\ \textcolor{keyword}{const}\ std::vector<bool>\&\ isUserFlags);}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{class_logger_acb668a9e186a25fbaad2e4af6d1ed00a}{\string~Logger}}();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_logger_a427892a216db2d80c385bb9b7157ae0d}{Start}}();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_logger_a583e1610948d947b8ba2a49a2ff25ab0}{Stop}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_logger_aab875f9fcb67a5a229276f4eb604e55c}{SetFilenameOverride}}(juce::String\ filename);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_logger_afca72df82808573ef30994c441f7169a}{SetSubFolder}}(juce::String\ filename);}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_logger_a16877a647993edc64c99f170bd7d8e19}{AddEntry}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_logger_1_1_log_data}{LogData}}\&\ entry);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00083\ \ \ \ \ juce::String\ \mbox{\hyperlink{class_logger_ad9947826e98965969dea2bb7546f2e5b}{GetFileNameOverride}}();}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ std::thread\ thread;}
+\DoxyCodeLine{00088\ \ \ \ \ }
+\DoxyCodeLine{00089\ \ \ \ \ std::atomic<bool>\ continueLogging\{\ \textcolor{keyword}{false}\ \};}
+\DoxyCodeLine{00090\ \ \ \ \ std::vector<bool>\ isUserOperated;}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ juce::String\ logSubfolder\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00093\ \ \ \ \ juce::String\ logFilenameOverride\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{float}\ sampleRate;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{int}\ lineCounter\ =\ 0;}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{int}\ numPlayers\ =\ 0;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ std::vector<LogData>\ loggingBuffer;}
+\DoxyCodeLine{00100\ \ \ \ \ std::unique\_ptr<juce::AbstractFifo>\ fifo;}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ WriteHeaders(juce::FileOutputStream\&\ logStream);}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{void}\ InitialiseBuffer();}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ loggerLoop();}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{void}\ logOnsetDetails(juce::FileOutputStream\&\ stream);}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ logOnsetDetailsForPlayer(\textcolor{keywordtype}{int}\ bufferIndex,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ juce::String\&\ onsetLog,}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ juce::String\&\ intervalLog,}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ juce::String\&\ userInputLog,}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ juce::String\&\ delayLog,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ juce::String\&\ mNoiseLog,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ juce::String\&\ tkNoiseLog,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ juce::String\&\ asyncLog,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ juce::String\&\ alphaLog,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ juce::String\&\ betaLog,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ juce::String\&\ tkNoiseStdLog,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ juce::String\&\ mNoiseStdLog,}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ juce::String\&\ velocityLog);}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ }
+\DoxyCodeLine{00176\ \ \ \ \ JUCE\_DECLARE\_NON\_COPYABLE\_WITH\_LEAK\_DETECTOR(\mbox{\hyperlink{class_logger}{Logger}})}
+\DoxyCodeLine{00177\ \};}
+
+\end{DoxyCode}

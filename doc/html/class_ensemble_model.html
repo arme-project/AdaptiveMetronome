@@ -32,9 +32,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Adaptive Metronome<span id="projectnumber">&#160;V.2</span>
+   <div id="projectname">Adaptive Metronome
    </div>
-   <div id="projectbrief">The ARME Project&#39;s Plugin</div>
+   <div id="projectbrief">The ARME Project</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -112,68 +112,22 @@ $(function(){initNavTree('class_ensemble_model.html',''); initResizable(true); }
 </div><!--header-->
 <div class="contents">
 
+<p>The <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class manages the ensemble of players, their states, and communication with the Max/MSP patch.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_ensemble_model_8h_source.html">EnsembleModel.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for EnsembleModel:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="class_ensemble_model.png" alt=""/>
- </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d561a3e3f1b84781fcf504ba7d3860a" id="r_a9d561a3e3f1b84781fcf504ba7d3860a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d561a3e3f1b84781fcf504ba7d3860a">EnsembleModel</a> (<a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> *processorPtr)</td></tr>
-<tr class="memdesc:a9d561a3e3f1b84781fcf504ba7d3860a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="class_ensemble_model.html">EnsembleModel</a>.  <br /></td></tr>
+<tr class="memdesc:a9d561a3e3f1b84781fcf504ba7d3860a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class. Initialises the ensemble model with a pointer to the processor and sets up the logger, poller, config handler, and OSC handler.  <br /></td></tr>
 <tr class="separator:a9d561a3e3f1b84781fcf504ba7d3860a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ceb0658e35ae43a2a92d6a12afed985" id="r_a9ceb0658e35ae43a2a92d6a12afed985"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ceb0658e35ae43a2a92d6a12afed985">~EnsembleModel</a> ()</td></tr>
-<tr class="memdesc:a9ceb0658e35ae43a2a92d6a12afed985"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for the <a class="el" href="class_ensemble_model.html">EnsembleModel</a> class. Stops the logger loop and polling loop to ensure proper cleanup of resources.  <br /></td></tr>
+<tr class="memdesc:a9ceb0658e35ae43a2a92d6a12afed985"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class. Stops the poller and logger threads to ensure clean shutdown.  <br /></td></tr>
 <tr class="separator:a9ceb0658e35ae43a2a92d6a12afed985"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e8763514c990fdad07f0e985541510e" id="r_a0e8763514c990fdad07f0e985541510e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e8763514c990fdad07f0e985541510e">oscMessageSend</a> (bool test)</td></tr>
-<tr class="memdesc:a0e8763514c990fdad07f0e985541510e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends an OSC message either as a test or with onset data.  <br /></td></tr>
-<tr class="separator:a0e8763514c990fdad07f0e985541510e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af766754f79c5218211b042b28733e694" id="r_af766754f79c5218211b042b28733e694"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af766754f79c5218211b042b28733e694">oscMessageSendNewInterval</a> (int playerNum, int noteNum, int noteTimeInMS)</td></tr>
-<tr class="separator:af766754f79c5218211b042b28733e694"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ea6cacb165106b15ce5524fbf0d0f26" id="r_a4ea6cacb165106b15ce5524fbf0d0f26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ea6cacb165106b15ce5524fbf0d0f26">oscMessageSendReset</a> ()</td></tr>
-<tr class="memdesc:a4ea6cacb165106b15ce5524fbf0d0f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends an OSC message to trigger a reset in the Max/MSP patch.  <br /></td></tr>
-<tr class="separator:a4ea6cacb165106b15ce5524fbf0d0f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0551d0845dc769b04aa92ff5d761c549" id="r_a0551d0845dc769b04aa92ff5d761c549"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0551d0845dc769b04aa92ff5d761c549">oscMessageSendPlayMax</a> ()</td></tr>
-<tr class="memdesc:a0551d0845dc769b04aa92ff5d761c549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an OSC message to trigger Max to start playing.  <br /></td></tr>
-<tr class="separator:a0551d0845dc769b04aa92ff5d761c549"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9c846c94a467886c1d2a7c648c362a1" id="r_aa9c846c94a467886c1d2a7c648c362a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9c846c94a467886c1d2a7c648c362a1">loadMidiFile</a> (const juce::File &amp;file, int userPlayers)</td></tr>
-<tr class="memdesc:aa9c846c94a467886c1d2a7c648c362a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a MIDI file into the ensemble model.  <br /></td></tr>
-<tr class="separator:aa9c846c94a467886c1d2a7c648c362a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c5e69d3481a64524323aa84d98e6027" id="r_a8c5e69d3481a64524323aa84d98e6027"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c5e69d3481a64524323aa84d98e6027">reset</a> ()</td></tr>
-<tr class="memdesc:a8c5e69d3481a64524323aa84d98e6027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets all players to the beginning of their scores, and resets the onset times of all players to 0.0.  <br /></td></tr>
-<tr class="separator:a8c5e69d3481a64524323aa84d98e6027"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6e7ae599b8c84c51a391298f3781657" id="r_af6e7ae599b8c84c51a391298f3781657"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6e7ae599b8c84c51a391298f3781657">reset</a> (bool skipIntroNotes)</td></tr>
-<tr class="separator:af6e7ae599b8c84c51a391298f3781657"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaad68729d6e76b099e3161bc4990d12" id="r_afaad68729d6e76b099e3161bc4990d12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afaad68729d6e76b099e3161bc4990d12">setTempo</a> (double bpm)</td></tr>
-<tr class="memdesc:afaad68729d6e76b099e3161bc4990d12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the tempo of the ensemble to the given beats per minute (bpm).  <br /></td></tr>
-<tr class="separator:afaad68729d6e76b099e3161bc4990d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bf43a9c5c50c3853ba5e01ebef909dc" id="r_a0bf43a9c5c50c3853ba5e01ebef909dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0bf43a9c5c50c3853ba5e01ebef909dc">prepareToPlay</a> (double newSampleRate)</td></tr>
-<tr class="memdesc:a0bf43a9c5c50c3853ba5e01ebef909dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the sample rate of the ensemble model.  <br /></td></tr>
-<tr class="separator:a0bf43a9c5c50c3853ba5e01ebef909dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab19459d025312f1524ff7a2192c4ba2d" id="r_ab19459d025312f1524ff7a2192c4ba2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab19459d025312f1524ff7a2192c4ba2d">releaseResources</a> ()</td></tr>
 <tr class="memdesc:ab19459d025312f1524ff7a2192c4ba2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases any resources used by the ensemble model.  <br /></td></tr>
 <tr class="separator:ab19459d025312f1524ff7a2192c4ba2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af06ee8adbc8e34be8e3c81d69da78373" id="r_af06ee8adbc8e34be8e3c81d69da78373"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af06ee8adbc8e34be8e3c81d69da78373">processMidiBlock</a> (const juce::MidiBuffer &amp;inMidi, juce::MidiBuffer &amp;outMidi, int numSamples, double tempo)</td></tr>
-<tr class="memdesc:af06ee8adbc8e34be8e3c81d69da78373"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a block of incoming MIDI data and generates corresponding output MIDI data.  <br /></td></tr>
-<tr class="separator:af06ee8adbc8e34be8e3c81d69da78373"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ba5b6f5965a28024e15fbb950cf3bc5" id="r_a2ba5b6f5965a28024e15fbb950cf3bc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ba5b6f5965a28024e15fbb950cf3bc5">setUserOnsetFromOsc</a> (float oscOnsetTime, int onsetNoteNumber, int msMax)</td></tr>
-<tr class="memdesc:a2ba5b6f5965a28024e15fbb950cf3bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This synchronises both Max MSP and the Adapative Metronone.  <br /></td></tr>
-<tr class="separator:a2ba5b6f5965a28024e15fbb950cf3bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa612b587d40d732c8f15bccb34ff090b" id="r_aa612b587d40d732c8f15bccb34ff090b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa612b587d40d732c8f15bccb34ff090b">triggerFirstNote</a> ()</td></tr>
-<tr class="memdesc:aa612b587d40d732c8f15bccb34ff090b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trigger the first note to be played by the player.  <br /></td></tr>
-<tr class="separator:aa612b587d40d732c8f15bccb34ff090b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab582aa9121cf83c2218f0eed64e580a5" id="r_ab582aa9121cf83c2218f0eed64e580a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab582aa9121cf83c2218f0eed64e580a5">getNumPlayers</a> ()</td></tr>
-<tr class="memdesc:ab582aa9121cf83c2218f0eed64e580a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of players in the ensemble.  <br /></td></tr>
-<tr class="separator:ab582aa9121cf83c2218f0eed64e580a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b192d0906fd4456709b3067196de68f" id="r_a1b192d0906fd4456709b3067196de68f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b192d0906fd4456709b3067196de68f">getNumUserPlayers</a> ()</td></tr>
-<tr class="memdesc:a1b192d0906fd4456709b3067196de68f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of user players in the ensemble.  <br /></td></tr>
-<tr class="separator:a1b192d0906fd4456709b3067196de68f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a399a635c8b17e8fa2cfd20f86bb509cd" id="r_a399a635c8b17e8fa2cfd20f86bb509cd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a399a635c8b17e8fa2cfd20f86bb509cd">isPlayerUserOperated</a> (int playerIndex)</td></tr>
-<tr class="memdesc:a399a635c8b17e8fa2cfd20f86bb509cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a player is user operated or not.  <br /></td></tr>
-<tr class="separator:a399a635c8b17e8fa2cfd20f86bb509cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8037d9b35af2415e8b0aa0ba94960d67" id="r_a8037d9b35af2415e8b0aa0ba94960d67"><td class="memItemLeft" align="right" valign="top">juce::AudioParameterInt &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8037d9b35af2415e8b0aa0ba94960d67">getPlayerChannelParameter</a> (int playerIndex)</td></tr>
 <tr class="separator:a8037d9b35af2415e8b0aa0ba94960d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae43331502278806047909e65ecfdee49" id="r_ae43331502278806047909e65ecfdee49"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ensemble_model_8h.html#a11613cf950fb026f0bed472b5d797dcf">AudioParameterFloatToUse</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae43331502278806047909e65ecfdee49">getPlayerDelayParameter</a> (int playerIndex)</td></tr>
@@ -188,59 +142,103 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a35f2ded5641d8879248279ac77aefdc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a457d7da10bd5bef84c7e4e862296de7c" id="r_a457d7da10bd5bef84c7e4e862296de7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ensemble_model_8h.html#a11613cf950fb026f0bed472b5d797dcf">AudioParameterFloatToUse</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a457d7da10bd5bef84c7e4e862296de7c">getBetaParameter</a> (int player1Index, int player2Index)</td></tr>
 <tr class="separator:a457d7da10bd5bef84c7e4e862296de7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5da733fe74f486ab15c5c26a7d90be2e" id="r_a5da733fe74f486ab15c5c26a7d90be2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5da733fe74f486ab15c5c26a7d90be2e">saveConfigToXmlFile</a> ()</td></tr>
-<tr class="memdesc:a5da733fe74f486ab15c5c26a7d90be2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current configuration of the ensemble model to an XML file.  <br /></td></tr>
-<tr class="separator:a5da733fe74f486ab15c5c26a7d90be2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47c749e4e0b905fec8a88d0761d28176" id="r_a47c749e4e0b905fec8a88d0761d28176"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; juce::XmlElement &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47c749e4e0b905fec8a88d0761d28176">parseXmlConfigFileToXmlElement</a> (juce::File configFile)</td></tr>
-<tr class="separator:a47c749e4e0b905fec8a88d0761d28176"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afde6a97f8d242fcca15c5af37e9b5e57" id="r_afde6a97f8d242fcca15c5af37e9b5e57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afde6a97f8d242fcca15c5af37e9b5e57">loadConfigFromXml</a> (std::unique_ptr&lt; juce::XmlElement &gt; loadedConfig)</td></tr>
-<tr class="memdesc:afde6a97f8d242fcca15c5af37e9b5e57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current configuration of the ensemble model to an XML file.  <br /></td></tr>
-<tr class="separator:afde6a97f8d242fcca15c5af37e9b5e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bae6d708716fe8d2c27e98d38fe6e5e" id="r_a2bae6d708716fe8d2c27e98d38fe6e5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bae6d708716fe8d2c27e98d38fe6e5e">loadConfigFromXml</a> (juce::File configFile)</td></tr>
-<tr class="separator:a2bae6d708716fe8d2c27e98d38fe6e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5600a255d4e106d196b777a687dadaaa" id="r_a5600a255d4e106d196b777a687dadaaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5600a255d4e106d196b777a687dadaaa">connectOSCSender</a> (int portNumber, juce::String IPAddress)</td></tr>
-<tr class="separator:a5600a255d4e106d196b777a687dadaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49d70f101c56ee7a23b6167d0beb4a5d" id="r_a49d70f101c56ee7a23b6167d0beb4a5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49d70f101c56ee7a23b6167d0beb4a5d">connectOSCReceiver</a> (int portNumber)</td></tr>
-<tr class="memdesc:a49d70f101c56ee7a23b6167d0beb4a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to connect an OSC receiver to the specified UDP port.  <br /></td></tr>
-<tr class="separator:a49d70f101c56ee7a23b6167d0beb4a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92d696efea2517eb7ddd85dc93f4393b" id="r_a92d696efea2517eb7ddd85dc93f4393b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92d696efea2517eb7ddd85dc93f4393b">oscMessageReceived</a> (const juce::OSCMessage &amp;message)</td></tr>
-<tr class="memdesc:a92d696efea2517eb7ddd85dc93f4393b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles incoming OSC messages by processing them based on their address pattern.  <br /></td></tr>
-<tr class="separator:a92d696efea2517eb7ddd85dc93f4393b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6f0f8594780ec4f7e9b6e955bc6465e" id="r_ad6f0f8594780ec4f7e9b6e955bc6465e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6f0f8594780ec4f7e9b6e955bc6465e">isOscReceiverConnected</a> ()</td></tr>
-<tr class="memdesc:ad6f0f8594780ec4f7e9b6e955bc6465e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the OSC receiver is connected.  <br /></td></tr>
-<tr class="separator:ad6f0f8594780ec4f7e9b6e955bc6465e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab582aa9121cf83c2218f0eed64e580a5" id="r_ab582aa9121cf83c2218f0eed64e580a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab582aa9121cf83c2218f0eed64e580a5">getNumPlayers</a> ()</td></tr>
+<tr class="memdesc:ab582aa9121cf83c2218f0eed64e580a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of players in the ensemble.  <br /></td></tr>
+<tr class="separator:ab582aa9121cf83c2218f0eed64e580a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b192d0906fd4456709b3067196de68f" id="r_a1b192d0906fd4456709b3067196de68f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b192d0906fd4456709b3067196de68f">getNumUserPlayers</a> ()</td></tr>
+<tr class="memdesc:a1b192d0906fd4456709b3067196de68f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of user players in the ensemble.  <br /></td></tr>
+<tr class="separator:a1b192d0906fd4456709b3067196de68f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a399a635c8b17e8fa2cfd20f86bb509cd" id="r_a399a635c8b17e8fa2cfd20f86bb509cd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a399a635c8b17e8fa2cfd20f86bb509cd">isPlayerUserOperated</a> (int playerIndex)</td></tr>
+<tr class="memdesc:a399a635c8b17e8fa2cfd20f86bb509cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a player is user operated or not.  <br /></td></tr>
+<tr class="separator:a399a635c8b17e8fa2cfd20f86bb509cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5830f63dae0832bc92247398a577e4c" id="r_aa5830f63dae0832bc92247398a577e4c"><td class="memItemLeft" align="right" valign="top">juce::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5830f63dae0832bc92247398a577e4c">GetFileNameOverride</a> ()</td></tr>
+<tr class="separator:aa5830f63dae0832bc92247398a577e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6d6048356457fbb4ed734a4434b6c61" id="r_aa6d6048356457fbb4ed734a4434b6c61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6d6048356457fbb4ed734a4434b6c61">IsManuallyPlaying</a> ()</td></tr>
+<tr class="separator:aa6d6048356457fbb4ed734a4434b6c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1f0a592f3dae1417e215254b59baa6c" id="r_af1f0a592f3dae1417e215254b59baa6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1f0a592f3dae1417e215254b59baa6c">SetManualPlaying</a> (bool isPlaying)</td></tr>
+<tr class="separator:af1f0a592f3dae1417e215254b59baa6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed815b21ac8006a6224be07291234487" id="r_aed815b21ac8006a6224be07291234487"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_config_handler.html">ConfigHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed815b21ac8006a6224be07291234487">GetConfigHandler</a> () const</td></tr>
+<tr class="memdesc:aed815b21ac8006a6224be07291234487"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="class_config_handler.html" title="Handles the configuration of the Ensemble Model.">ConfigHandler</a> instance.  <br /></td></tr>
+<tr class="separator:aed815b21ac8006a6224be07291234487"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82e3a1df85d4d298a05c79c3ffd63e97" id="r_a82e3a1df85d4d298a05c79c3ffd63e97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_logger.html">Logger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82e3a1df85d4d298a05c79c3ffd63e97">GetLogger</a> () const</td></tr>
+<tr class="memdesc:a82e3a1df85d4d298a05c79c3ffd63e97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="class_logger.html" title="Handles logging of ensemble model data.">Logger</a> instance.  <br /></td></tr>
+<tr class="separator:a82e3a1df85d4d298a05c79c3ffd63e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d3a0a76304e47c161e9543808f0f3d1" id="r_a6d3a0a76304e47c161e9543808f0f3d1"><td class="memItemLeft" align="right" valign="top">juce::MidiFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d3a0a76304e47c161e9543808f0f3d1">GetMidiFile</a> ()</td></tr>
+<tr class="separator:a6d3a0a76304e47c161e9543808f0f3d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a2e36b8ff17e56bbfcb26e76c0ea7eb" id="r_a4a2e36b8ff17e56bbfcb26e76c0ea7eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a2e36b8ff17e56bbfcb26e76c0ea7eb">setAlphaBetaParams</a> (float valueIn)</td></tr>
 <tr class="memdesc:a4a2e36b8ff17e56bbfcb26e76c0ea7eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha parameters for all player pairs in the processor.  <br /></td></tr>
 <tr class="separator:a4a2e36b8ff17e56bbfcb26e76c0ea7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8517f7d72ce7a1cef8f28fa488e76770" id="r_a8517f7d72ce7a1cef8f28fa488e76770"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8517f7d72ce7a1cef8f28fa488e76770">SetConfigFileNameOverride</a> (juce::String filename)</td></tr>
+<tr class="separator:a8517f7d72ce7a1cef8f28fa488e76770"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6ef6a0f319a13b84f65a9b445a3e602" id="r_ac6ef6a0f319a13b84f65a9b445a3e602"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6ef6a0f319a13b84f65a9b445a3e602">SetLogSubFolder</a> (juce::String newLogSubFolder)</td></tr>
+<tr class="separator:ac6ef6a0f319a13b84f65a9b445a3e602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ede8d981975052ba20de0a8eb619754" id="r_a5ede8d981975052ba20de0a8eb619754"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ede8d981975052ba20de0a8eb619754">SetNumUserPlayers</a> (int numPlayers)</td></tr>
+<tr class="separator:a5ede8d981975052ba20de0a8eb619754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab425f8dc53e23d42e4a711b6208a3443" id="r_ab425f8dc53e23d42e4a711b6208a3443"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab425f8dc53e23d42e4a711b6208a3443">SetNumIntroTones</a> (int numIntroTonesIn)</td></tr>
+<tr class="separator:ab425f8dc53e23d42e4a711b6208a3443"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34bb369fbf1b64964e603287f1ca9853" id="r_a34bb369fbf1b64964e603287f1ca9853"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34bb369fbf1b64964e603287f1ca9853">SetTimekeeperNoiseSTD</a> (int index, double value)</td></tr>
+<tr class="separator:a34bb369fbf1b64964e603287f1ca9853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6573ad6af1669682fe81f3e898c1982" id="r_aa6573ad6af1669682fe81f3e898c1982"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6573ad6af1669682fe81f3e898c1982">SetMotorNoiseSTD</a> (int index, double value)</td></tr>
+<tr class="separator:aa6573ad6af1669682fe81f3e898c1982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cd4ec57357cc73d41f868b9e8104a83" id="r_a4cd4ec57357cc73d41f868b9e8104a83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4cd4ec57357cc73d41f868b9e8104a83">SetAlphaParam</a> (int i, int j, double value)</td></tr>
+<tr class="separator:a4cd4ec57357cc73d41f868b9e8104a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1d5e4aef846de35bc21b2f818c28553" id="r_ad1d5e4aef846de35bc21b2f818c28553"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1d5e4aef846de35bc21b2f818c28553">SetBetaParam</a> (int i, int j, double value)</td></tr>
+<tr class="separator:ad1d5e4aef846de35bc21b2f818c28553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ba5b6f5965a28024e15fbb950cf3bc5" id="r_a2ba5b6f5965a28024e15fbb950cf3bc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ba5b6f5965a28024e15fbb950cf3bc5">setUserOnsetFromOsc</a> (float oscOnsetTime, int onsetNoteNumber, int msMax)</td></tr>
+<tr class="memdesc:a2ba5b6f5965a28024e15fbb950cf3bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This synchronises both Max MSP and the Adapative Metronone.  <br /></td></tr>
+<tr class="separator:a2ba5b6f5965a28024e15fbb950cf3bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04d972efa1f57a5ecad3eff9b82451fb" id="r_a04d972efa1f57a5ecad3eff9b82451fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04d972efa1f57a5ecad3eff9b82451fb">ConnectOSCReceiver</a> (int portNumber)</td></tr>
+<tr class="separator:a04d972efa1f57a5ecad3eff9b82451fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00695e3f185c0a7a925a4abff1f3672a" id="r_a00695e3f185c0a7a925a4abff1f3672a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00695e3f185c0a7a925a4abff1f3672a">SendActionMessage</a> (juce::String message)</td></tr>
+<tr class="separator:a00695e3f185c0a7a925a4abff1f3672a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c846c94a467886c1d2a7c648c362a1" id="r_aa9c846c94a467886c1d2a7c648c362a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9c846c94a467886c1d2a7c648c362a1">loadMidiFile</a> (const juce::File &amp;file, int userPlayers)</td></tr>
+<tr class="memdesc:aa9c846c94a467886c1d2a7c648c362a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a MIDI file into the ensemble model.  <br /></td></tr>
+<tr class="separator:aa9c846c94a467886c1d2a7c648c362a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d5d0035fe2a5f64a0e92a2573f9daab" id="r_a5d5d0035fe2a5f64a0e92a2573f9daab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d5d0035fe2a5f64a0e92a2573f9daab">createPlayers</a> (const juce::MidiFile &amp;file)</td></tr>
+<tr class="memdesc:a5d5d0035fe2a5f64a0e92a2573f9daab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes.">Player</a> for each track in the file which has note on events.  <br /></td></tr>
+<tr class="separator:a5d5d0035fe2a5f64a0e92a2573f9daab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bf43a9c5c50c3853ba5e01ebef909dc" id="r_a0bf43a9c5c50c3853ba5e01ebef909dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0bf43a9c5c50c3853ba5e01ebef909dc">prepareToPlay</a> (double newSampleRate)</td></tr>
+<tr class="memdesc:a0bf43a9c5c50c3853ba5e01ebef909dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the sample rate of the ensemble model.  <br /></td></tr>
+<tr class="separator:a0bf43a9c5c50c3853ba5e01ebef909dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c5e69d3481a64524323aa84d98e6027" id="r_a8c5e69d3481a64524323aa84d98e6027"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c5e69d3481a64524323aa84d98e6027">reset</a> ()</td></tr>
+<tr class="memdesc:a8c5e69d3481a64524323aa84d98e6027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets all players to the beginning of their scores, and resets the onset times of all players to 0.0.  <br /></td></tr>
+<tr class="separator:a8c5e69d3481a64524323aa84d98e6027"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6e7ae599b8c84c51a391298f3781657" id="r_af6e7ae599b8c84c51a391298f3781657"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6e7ae599b8c84c51a391298f3781657">reset</a> (bool skipIntroNotes)</td></tr>
+<tr class="separator:af6e7ae599b8c84c51a391298f3781657"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaad68729d6e76b099e3161bc4990d12" id="r_afaad68729d6e76b099e3161bc4990d12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afaad68729d6e76b099e3161bc4990d12">setTempo</a> (double bpm)</td></tr>
+<tr class="memdesc:afaad68729d6e76b099e3161bc4990d12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the tempo of the ensemble to the given beats per minute (bpm).  <br /></td></tr>
+<tr class="separator:afaad68729d6e76b099e3161bc4990d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa612b587d40d732c8f15bccb34ff090b" id="r_aa612b587d40d732c8f15bccb34ff090b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa612b587d40d732c8f15bccb34ff090b">triggerFirstNote</a> ()</td></tr>
+<tr class="memdesc:aa612b587d40d732c8f15bccb34ff090b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trigger the first note to be played by the player.  <br /></td></tr>
+<tr class="separator:aa612b587d40d732c8f15bccb34ff090b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af06ee8adbc8e34be8e3c81d69da78373" id="r_af06ee8adbc8e34be8e3c81d69da78373"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af06ee8adbc8e34be8e3c81d69da78373">processMidiBlock</a> (const juce::MidiBuffer &amp;inMidi, juce::MidiBuffer &amp;outMidi, int numSamples, double tempo)</td></tr>
+<tr class="memdesc:af06ee8adbc8e34be8e3c81d69da78373"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a block of incoming MIDI data and generates corresponding output MIDI data.  <br /></td></tr>
+<tr class="separator:af06ee8adbc8e34be8e3c81d69da78373"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ac694a4f912cd095cf2d0058a19f2f57b" id="r_ac694a4f912cd095cf2d0058a19f2f57b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac694a4f912cd095cf2d0058a19f2f57b">soundOffAllChannels</a> (juce::MidiBuffer &amp;midi)</td></tr>
-<tr class="memdesc:ac694a4f912cd095cf2d0058a19f2f57b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends messages to turn off all notes, sounds and controllers on all MIDI channels to the given MidiBuffer. This is useful for stopping all sound when the user closes the plugin or changes presets.  <br /></td></tr>
-<tr class="separator:ac694a4f912cd095cf2d0058a19f2f57b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca0da6aff00966cb55da0bea171a9b1f" id="r_aca0da6aff00966cb55da0bea171a9b1f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca0da6aff00966cb55da0bea171a9b1f">soundOffAllChannels</a> (juce::MidiBuffer &amp;midi)</td></tr>
+<tr class="memdesc:aca0da6aff00966cb55da0bea171a9b1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends messages to turn off all notes, sounds and controllers on all MIDI channels to the given MidiBuffer. This is useful for stopping all sound when the user closes the plugin or changes presets.  <br /></td></tr>
+<tr class="separator:aca0da6aff00966cb55da0bea171a9b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe34215378c78b5135edb42d950b0aa8" id="r_abe34215378c78b5135edb42d950b0aa8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe34215378c78b5135edb42d950b0aa8">checkMidiSequenceHasNotes</a> (const juce::MidiMessageSequence *seq)</td></tr>
+<tr class="memdesc:abe34215378c78b5135edb42d950b0aa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a MIDI sequence contains any note on events.  <br /></td></tr>
+<tr class="separator:abe34215378c78b5135edb42d950b0aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a10d7615b33ef4b62c3bcbd09743fec1a" id="r_a10d7615b33ef4b62c3bcbd09743fec1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10d7615b33ef4b62c3bcbd09743fec1a">processor</a> = nullptr</td></tr>
 <tr class="separator:a10d7615b33ef4b62c3bcbd09743fec1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4dc6bf01e4937ab62154a07c36c27aca" id="r_a4dc6bf01e4937ab62154a07c36c27aca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4dc6bf01e4937ab62154a07c36c27aca">OSCAutoConnect</a> = false</td></tr>
+<tr class="memitem:a4dc6bf01e4937ab62154a07c36c27aca" id="r_a4dc6bf01e4937ab62154a07c36c27aca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4dc6bf01e4937ab62154a07c36c27aca">OSCAutoConnect</a> = true</td></tr>
 <tr class="separator:a4dc6bf01e4937ab62154a07c36c27aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a579fdd2b6d4858196ec23450fa0458ba" id="r_a579fdd2b6d4858196ec23450fa0458ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a579fdd2b6d4858196ec23450fa0458ba">waitingForFirstNote</a> = true</td></tr>
 <tr class="separator:a579fdd2b6d4858196ec23450fa0458ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fdca16d26808b67391aefaab4a18fe9" id="r_a7fdca16d26808b67391aefaab4a18fe9"><td class="memItemLeft" align="right" valign="top">juce::Atomic&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fdca16d26808b67391aefaab4a18fe9">currentNoteIndex</a></td></tr>
 <tr class="separator:a7fdca16d26808b67391aefaab4a18fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e5e3e32bbaa2632668f11a6141b7a55" id="r_a0e5e3e32bbaa2632668f11a6141b7a55"><td class="memItemLeft" align="right" valign="top">juce::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e5e3e32bbaa2632668f11a6141b7a55">logSubfolder</a> = &quot;&quot;</td></tr>
-<tr class="separator:a0e5e3e32bbaa2632668f11a6141b7a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17e14567b78a694f722892d74d91591a" id="r_a17e14567b78a694f722892d74d91591a"><td class="memItemLeft" align="right" valign="top">juce::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17e14567b78a694f722892d74d91591a">configSubfolder</a> = &quot;&quot;</td></tr>
-<tr class="separator:a17e14567b78a694f722892d74d91591a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4eabb1e67e4e0c343e08eeb016f2934" id="r_af4eabb1e67e4e0c343e08eeb016f2934"><td class="memItemLeft" align="right" valign="top">juce::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4eabb1e67e4e0c343e08eeb016f2934">logFilenameOverride</a> = &quot;&quot;</td></tr>
-<tr class="separator:af4eabb1e67e4e0c343e08eeb016f2934"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cc693efd20bc92631421fa707378b18" id="r_a2cc693efd20bc92631421fa707378b18"><td class="memItemLeft" align="right" valign="top">juce::OSCSender&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2cc693efd20bc92631421fa707378b18">OSCSender</a></td></tr>
-<tr class="separator:a2cc693efd20bc92631421fa707378b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa394d06e7e24a023c8183f3129371cbf" id="r_aa394d06e7e24a023c8183f3129371cbf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa394d06e7e24a023c8183f3129371cbf">currentReceivePort</a> = -1</td></tr>
-<tr class="separator:aa394d06e7e24a023c8183f3129371cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class manages the ensemble of players, their states, and communication with the Max/MSP patch. </p>
+<p>This class is responsible for loading MIDI files, processing MIDI data, and sending OSC messages to Max/MSP. It also handles the playback of introductory tones and the management of player parameters. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9d561a3e3f1b84781fcf504ba7d3860a" name="a9d561a3e3f1b84781fcf504ba7d3860a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9d561a3e3f1b84781fcf504ba7d3860a">&#9670;&#160;</a></span>EnsembleModel()</h2>
 
@@ -256,10 +254,10 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor for <a class="el" href="class_ensemble_model.html">EnsembleModel</a>. </p>
+<p>Constructor for the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class. Initialises the ensemble model with a pointer to the processor and sets up the logger, poller, config handler, and OSC handler. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">processorPtr</td><td>The audio processor which owns this model. </td></tr>
+    <tr><td class="paramname">processorPtr</td><td>Pointer to the <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> instance. </td></tr>
   </table>
   </dd>
 </dl>
@@ -281,19 +279,54 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destructor for the <a class="el" href="class_ensemble_model.html">EnsembleModel</a> class. Stops the logger loop and polling loop to ensure proper cleanup of resources. </p>
+<p>Destructor for the <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> class. Stops the poller and logger threads to ensure clean shutdown. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a49d70f101c56ee7a23b6167d0beb4a5d" name="a49d70f101c56ee7a23b6167d0beb4a5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49d70f101c56ee7a23b6167d0beb4a5d">&#9670;&#160;</a></span>connectOSCReceiver()</h2>
+<a id="abe34215378c78b5135edb42d950b0aa8" name="abe34215378c78b5135edb42d950b0aa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe34215378c78b5135edb42d950b0aa8">&#9670;&#160;</a></span>checkMidiSequenceHasNotes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool EnsembleModel::checkMidiSequenceHasNotes </td>
+          <td>(</td>
+          <td class="paramtype">const juce::MidiMessageSequence *</td>          <td class="paramname"><span class="paramname"><em>seq</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if a MIDI sequence contains any note on events. </p>
+<p>This method can be used to check if a juce::MidiMessageSequence contains any note on events. If it does, the method returns true, otherwise it returns false.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">seq</td><td>The MIDI sequence to check.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the sequence contains any note on events, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a04d972efa1f57a5ecad3eff9b82451fb" name="a04d972efa1f57a5ecad3eff9b82451fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04d972efa1f57a5ecad3eff9b82451fb">&#9670;&#160;</a></span>ConnectOSCReceiver()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void EnsembleModel::connectOSCReceiver </td>
+          <td class="memname">void EnsembleModel::ConnectOSCReceiver </td>
           <td>(</td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>portNumber</em></span></td><td>)</td>
           <td></td>
@@ -301,40 +334,28 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Attempts to connect an OSC receiver to the specified UDP port. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">portNumber</td><td>The port number to attempt the connection on.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>If the connection fails, sets currentReceivePort to -1 and logs an error message. If the connection succeeds, sets currentReceivePort to the port number and logs a success message. </p>
-
 </div>
 </div>
-<a id="a5600a255d4e106d196b777a687dadaaa" name="a5600a255d4e106d196b777a687dadaaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5600a255d4e106d196b777a687dadaaa">&#9670;&#160;</a></span>connectOSCSender()</h2>
+<a id="a5d5d0035fe2a5f64a0e92a2573f9daab" name="a5d5d0035fe2a5f64a0e92a2573f9daab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d5d0035fe2a5f64a0e92a2573f9daab">&#9670;&#160;</a></span>createPlayers()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void EnsembleModel::connectOSCSender </td>
+          <td class="memname">void EnsembleModel::createPlayers </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>portNumber</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const juce::MidiFile &amp;</td>          <td class="paramname"><span class="paramname"><em>file</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">juce::String</td>          <td class="paramname"><span class="paramname"><em>IPAddress</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Connect the OSC sender to a UDP port for sending messages to the Max/MSP system.</p>
+
+<p>Create a <a class="el" href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes.">Player</a> for each track in the file which has note on events. </p>
+<p>The first 'numUserPlayers' will be UserPlayers, and the rest will be Players.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">portNumber</td><td>the UDP port number to connect to </td></tr>
-    <tr><td class="paramname">IPAddress</td><td>the IP address to connect to (default is "127.0.0.1") </td></tr>
+    <tr><td class="paramname">file</td><td>The MidiFile from which to create the players </td></tr>
   </table>
   </dd>
 </dl>
@@ -377,6 +398,78 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>player2Index</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed815b21ac8006a6224be07291234487" name="aed815b21ac8006a6224be07291234487"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed815b21ac8006a6224be07291234487">&#9670;&#160;</a></span>GetConfigHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_config_handler.html">ConfigHandler</a> * EnsembleModel::GetConfigHandler </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the <a class="el" href="class_config_handler.html" title="Handles the configuration of the Ensemble Model.">ConfigHandler</a> instance. </p>
+
+</div>
+</div>
+<a id="aa5830f63dae0832bc92247398a577e4c" name="aa5830f63dae0832bc92247398a577e4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5830f63dae0832bc92247398a577e4c">&#9670;&#160;</a></span>GetFileNameOverride()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">juce::String EnsembleModel::GetFileNameOverride </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82e3a1df85d4d298a05c79c3ffd63e97" name="a82e3a1df85d4d298a05c79c3ffd63e97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82e3a1df85d4d298a05c79c3ffd63e97">&#9670;&#160;</a></span>GetLogger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_logger.html">Logger</a> * EnsembleModel::GetLogger </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the <a class="el" href="class_logger.html" title="Handles logging of ensemble model data.">Logger</a> instance. </p>
+
+</div>
+</div>
+<a id="a6d3a0a76304e47c161e9543808f0f3d1" name="a6d3a0a76304e47c161e9543808f0f3d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d3a0a76304e47c161e9543808f0f3d1">&#9670;&#160;</a></span>GetMidiFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">juce::MidiFile EnsembleModel::GetMidiFile </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -506,23 +599,20 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad6f0f8594780ec4f7e9b6e955bc6465e" name="ad6f0f8594780ec4f7e9b6e955bc6465e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6f0f8594780ec4f7e9b6e955bc6465e">&#9670;&#160;</a></span>isOscReceiverConnected()</h2>
+<a id="aa6d6048356457fbb4ed734a4434b6c61" name="aa6d6048356457fbb4ed734a4434b6c61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6d6048356457fbb4ed734a4434b6c61">&#9670;&#160;</a></span>IsManuallyPlaying()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool EnsembleModel::isOscReceiverConnected </td>
+          <td class="memname">bool EnsembleModel::IsManuallyPlaying </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Checks if the OSC receiver is connected. </p>
-<dl class="section return"><dt>Returns</dt><dd>true if the OSC receiver is connected, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -542,50 +632,6 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Checks if a player is user operated or not. </p>
-
-</div>
-</div>
-<a id="a2bae6d708716fe8d2c27e98d38fe6e5e" name="a2bae6d708716fe8d2c27e98d38fe6e5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2bae6d708716fe8d2c27e98d38fe6e5e">&#9670;&#160;</a></span>loadConfigFromXml() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::loadConfigFromXml </td>
-          <td>(</td>
-          <td class="paramtype">juce::File</td>          <td class="paramname"><span class="paramname"><em>configFile</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Converts a given XML file into an XmlElement.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">configFile</td><td>The juce::File representing the XML file to be parsed. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A unique_ptr to a juce::XmlElement that represents the root element of the parsed XML document. </dd></dl>
-
-</div>
-</div>
-<a id="afde6a97f8d242fcca15c5af37e9b5e57" name="afde6a97f8d242fcca15c5af37e9b5e57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afde6a97f8d242fcca15c5af37e9b5e57">&#9670;&#160;</a></span>loadConfigFromXml() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::loadConfigFromXml </td>
-          <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; juce::XmlElement &gt;</td>          <td class="paramname"><span class="paramname"><em>loadedConfig</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Saves the current configuration of the ensemble model to an XML file. </p>
 
 </div>
 </div>
@@ -609,7 +655,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Loads a MIDI file into the ensemble model. </p>
-<p>The file is read into a juce::MidiFile, and then the tracks are converted into <a class="el" href="class_player.html">Player</a> objects. The userPlayers parameter determines how many of the tracks are set to be user-operated. The method returns false if the file cannot be read, or if the playersInUse flag is set.</p>
+<p>The file is read into a juce::MidiFile, and then the tracks are converted into <a class="el" href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes.">Player</a> objects. The userPlayers parameter determines how many of the tracks are set to be user-operated. The method returns false if the file cannot be read, or if the playersInUse flag is set.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">file</td><td>The MIDI file to load. </td></tr>
@@ -618,156 +664,6 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Whether the file was loaded successfully. </dd></dl>
-
-</div>
-</div>
-<a id="a92d696efea2517eb7ddd85dc93f4393b" name="a92d696efea2517eb7ddd85dc93f4393b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92d696efea2517eb7ddd85dc93f4393b">&#9670;&#160;</a></span>oscMessageReceived()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::oscMessageReceived </td>
-          <td>(</td>
-          <td class="paramtype">const juce::OSCMessage &amp;</td>          <td class="paramname"><span class="paramname"><em>message</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Handles incoming OSC messages by processing them based on their address pattern. </p>
-<p>The function checks the OSC address and performs specific actions:</p><ul>
-<li>"/loadConfig": Loads configuration from an XML file specified by the message.</li>
-<li>"/reset": Resets the system state.</li>
-<li>"/setLogname": Sets a new log filename for logging purposes.</li>
-<li>"/numIntroTones": Sets the number of introductory tones.</li>
-<li>"/plugin": Processes a new user note from an external source, such as Max/MSP.</li>
-<li>"/playbackstart": Intended to set a timer at the start of playback, though no longer used.</li>
-<li>"/oscstart": Resets the system and sets the processor to manual playing mode.</li>
-</ul>
-<p>After processing, sends an action message indicating an OSC message was received.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">message</td><td>The OSC message received. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a0e8763514c990fdad07f0e985541510e" name="a0e8763514c990fdad07f0e985541510e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e8763514c990fdad07f0e985541510e">&#9670;&#160;</a></span>oscMessageSend()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::oscMessageSend </td>
-          <td>(</td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>test</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sends an OSC message either as a test or with onset data. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">test</td><td>If true, sends a test OSC message to the "/test" address. Otherwise, sends an OSC message to the "/onsets" address with four random float arguments. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="af766754f79c5218211b042b28733e694" name="af766754f79c5218211b042b28733e694"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af766754f79c5218211b042b28733e694">&#9670;&#160;</a></span>oscMessageSendNewInterval()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::oscMessageSendNewInterval </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>playerNum</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>noteNum</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>noteTimeInMS</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Sends an OSC message to notify Max of a new interval. The message contains three integers: the player number, the note number, and the note time in milliseconds. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">playerNum</td><td>The player number. </td></tr>
-    <tr><td class="paramname">noteNum</td><td>The note number. </td></tr>
-    <tr><td class="paramname">noteTimeInMS</td><td>The note time in milliseconds. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a0551d0845dc769b04aa92ff5d761c549" name="a0551d0845dc769b04aa92ff5d761c549"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0551d0845dc769b04aa92ff5d761c549">&#9670;&#160;</a></span>oscMessageSendPlayMax()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::oscMessageSendPlayMax </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send an OSC message to trigger Max to start playing. </p>
-<p>The message is /playMax. This is used to trigger Max to start playing after the user has pressed play in the plugin editor. </p>
-
-</div>
-</div>
-<a id="a4ea6cacb165106b15ce5524fbf0d0f26" name="a4ea6cacb165106b15ce5524fbf0d0f26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ea6cacb165106b15ce5524fbf0d0f26">&#9670;&#160;</a></span>oscMessageSendReset()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EnsembleModel::oscMessageSendReset </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sends an OSC message to trigger a reset in the Max/MSP patch. </p>
-
-</div>
-</div>
-<a id="a47c749e4e0b905fec8a88d0761d28176" name="a47c749e4e0b905fec8a88d0761d28176"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a47c749e4e0b905fec8a88d0761d28176">&#9670;&#160;</a></span>parseXmlConfigFileToXmlElement()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unique_ptr&lt; juce::XmlElement &gt; EnsembleModel::parseXmlConfigFileToXmlElement </td>
-          <td>(</td>
-          <td class="paramtype">juce::File</td>          <td class="paramname"><span class="paramname"><em>configFile</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -904,22 +800,20 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5da733fe74f486ab15c5c26a7d90be2e" name="a5da733fe74f486ab15c5c26a7d90be2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5da733fe74f486ab15c5c26a7d90be2e">&#9670;&#160;</a></span>saveConfigToXmlFile()</h2>
+<a id="a00695e3f185c0a7a925a4abff1f3672a" name="a00695e3f185c0a7a925a4abff1f3672a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00695e3f185c0a7a925a4abff1f3672a">&#9670;&#160;</a></span>SendActionMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void EnsembleModel::saveConfigToXmlFile </td>
+          <td class="memname">void EnsembleModel::SendActionMessage </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">juce::String</td>          <td class="paramname"><span class="paramname"><em>message</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Saves the current configuration of the ensemble model to an XML file. </p>
 
 </div>
 </div>
@@ -948,6 +842,164 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4cd4ec57357cc73d41f868b9e8104a83" name="a4cd4ec57357cc73d41f868b9e8104a83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cd4ec57357cc73d41f868b9e8104a83">&#9670;&#160;</a></span>SetAlphaParam()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetAlphaParam </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>i</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad1d5e4aef846de35bc21b2f818c28553" name="ad1d5e4aef846de35bc21b2f818c28553"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1d5e4aef846de35bc21b2f818c28553">&#9670;&#160;</a></span>SetBetaParam()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetBetaParam </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>i</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8517f7d72ce7a1cef8f28fa488e76770" name="a8517f7d72ce7a1cef8f28fa488e76770"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8517f7d72ce7a1cef8f28fa488e76770">&#9670;&#160;</a></span>SetConfigFileNameOverride()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetConfigFileNameOverride </td>
+          <td>(</td>
+          <td class="paramtype">juce::String</td>          <td class="paramname"><span class="paramname"><em>filename</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac6ef6a0f319a13b84f65a9b445a3e602" name="ac6ef6a0f319a13b84f65a9b445a3e602"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6ef6a0f319a13b84f65a9b445a3e602">&#9670;&#160;</a></span>SetLogSubFolder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetLogSubFolder </td>
+          <td>(</td>
+          <td class="paramtype">juce::String</td>          <td class="paramname"><span class="paramname"><em>newLogSubFolder</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af1f0a592f3dae1417e215254b59baa6c" name="af1f0a592f3dae1417e215254b59baa6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1f0a592f3dae1417e215254b59baa6c">&#9670;&#160;</a></span>SetManualPlaying()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetManualPlaying </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isPlaying</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa6573ad6af1669682fe81f3e898c1982" name="aa6573ad6af1669682fe81f3e898c1982"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6573ad6af1669682fe81f3e898c1982">&#9670;&#160;</a></span>SetMotorNoiseSTD()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetMotorNoiseSTD </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab425f8dc53e23d42e4a711b6208a3443" name="ab425f8dc53e23d42e4a711b6208a3443"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab425f8dc53e23d42e4a711b6208a3443">&#9670;&#160;</a></span>SetNumIntroTones()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetNumIntroTones </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>numIntroTonesIn</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ede8d981975052ba20de0a8eb619754" name="a5ede8d981975052ba20de0a8eb619754"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ede8d981975052ba20de0a8eb619754">&#9670;&#160;</a></span>SetNumUserPlayers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetNumUserPlayers </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>numPlayers</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afaad68729d6e76b099e3161bc4990d12" name="afaad68729d6e76b099e3161bc4990d12"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afaad68729d6e76b099e3161bc4990d12">&#9670;&#160;</a></span>setTempo()</h2>
 
@@ -972,6 +1024,27 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a34bb369fbf1b64964e603287f1ca9853" name="a34bb369fbf1b64964e603287f1ca9853"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34bb369fbf1b64964e603287f1ca9853">&#9670;&#160;</a></span>SetTimekeeperNoiseSTD()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnsembleModel::SetTimekeeperNoiseSTD </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1012,8 +1085,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac694a4f912cd095cf2d0058a19f2f57b" name="ac694a4f912cd095cf2d0058a19f2f57b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac694a4f912cd095cf2d0058a19f2f57b">&#9670;&#160;</a></span>soundOffAllChannels()</h2>
+<a id="aca0da6aff00966cb55da0bea171a9b1f" name="aca0da6aff00966cb55da0bea171a9b1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca0da6aff00966cb55da0bea171a9b1f">&#9670;&#160;</a></span>soundOffAllChannels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1022,7 +1095,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void EnsembleModel::soundOffAllChannels </td>
+          <td class="memname">void EnsembleModel::soundOffAllChannels </td>
           <td>(</td>
           <td class="paramtype">juce::MidiBuffer &amp;</td>          <td class="paramname"><span class="paramname"><em>midi</em></span></td><td>)</td>
           <td></td>
@@ -1066,20 +1139,6 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a17e14567b78a694f722892d74d91591a" name="a17e14567b78a694f722892d74d91591a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17e14567b78a694f722892d74d91591a">&#9670;&#160;</a></span>configSubfolder</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">juce::String EnsembleModel::configSubfolder = &quot;&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7fdca16d26808b67391aefaab4a18fe9" name="a7fdca16d26808b67391aefaab4a18fe9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7fdca16d26808b67391aefaab4a18fe9">&#9670;&#160;</a></span>currentNoteIndex</h2>
 
@@ -1094,48 +1153,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa394d06e7e24a023c8183f3129371cbf" name="aa394d06e7e24a023c8183f3129371cbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa394d06e7e24a023c8183f3129371cbf">&#9670;&#160;</a></span>currentReceivePort</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int EnsembleModel::currentReceivePort = -1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af4eabb1e67e4e0c343e08eeb016f2934" name="af4eabb1e67e4e0c343e08eeb016f2934"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4eabb1e67e4e0c343e08eeb016f2934">&#9670;&#160;</a></span>logFilenameOverride</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">juce::String EnsembleModel::logFilenameOverride = &quot;&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0e5e3e32bbaa2632668f11a6141b7a55" name="a0e5e3e32bbaa2632668f11a6141b7a55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e5e3e32bbaa2632668f11a6141b7a55">&#9670;&#160;</a></span>logSubfolder</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">juce::String EnsembleModel::logSubfolder = &quot;&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a4dc6bf01e4937ab62154a07c36c27aca" name="a4dc6bf01e4937ab62154a07c36c27aca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4dc6bf01e4937ab62154a07c36c27aca">&#9670;&#160;</a></span>OSCAutoConnect</h2>
 
@@ -1143,21 +1160,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool EnsembleModel::OSCAutoConnect = false</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2cc693efd20bc92631421fa707378b18" name="a2cc693efd20bc92631421fa707378b18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2cc693efd20bc92631421fa707378b18">&#9670;&#160;</a></span>OSCSender</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">juce::OSCSender EnsembleModel::OSCSender</td>
+          <td class="memname">bool EnsembleModel::OSCAutoConnect = true</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1193,8 +1196,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>D:/Projects/ARME Demo/AdaptiveMetronome/Source/<a class="el" href="_ensemble_model_8h_source.html">EnsembleModel.h</a></li>
-<li>D:/Projects/ARME Demo/AdaptiveMetronome/Source/<a class="el" href="_ensemble_model_8cpp.html">EnsembleModel.cpp</a></li>
+<li>C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/<a class="el" href="_ensemble_model_8h_source.html">EnsembleModel.h</a></li>
+<li>C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/<a class="el" href="_ensemble_model_8cpp.html">EnsembleModel.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

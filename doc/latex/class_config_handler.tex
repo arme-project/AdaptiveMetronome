@@ -1,0 +1,126 @@
+\doxysection{Config\+Handler Class Reference}
+\hypertarget{class_config_handler}{}\label{class_config_handler}\index{ConfigHandler@{ConfigHandler}}
+
+
+Handles the configuration of the Ensemble Model.  
+
+
+
+
+{\ttfamily \#include $<$Config\+Handler.\+h$>$}
+
+Inheritance diagram for Config\+Handler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_config_handler}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_config_handler_a4c3ed8dfd1197bc727da851298f88503}{Config\+Handler}} (\mbox{\hyperlink{class_ensemble_model}{Ensemble\+Model}} \texorpdfstring{$\ast$}{*}model\+In)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_config_handler}{Config\+Handler}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_config_handler_a9b03beacc63e90076592ee7efc02a907}{\texorpdfstring{$\sim$}{\string~}\+Config\+Handler}} () override
+\item 
+void \mbox{\hyperlink{class_config_handler_aa8a861fea0c53bbe3f1a66dac0524d28}{Save\+Config}} ()
+\begin{DoxyCompactList}\small\item\em Saves the current configuration of the ensemble model to an XML file. \end{DoxyCompactList}\item 
+std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$ \mbox{\hyperlink{class_config_handler_ac22d8c49419ec43634ec25bc07ca61c8}{Parse\+Config\+To\+Element}} (juce\+::\+File config\+File)
+\item 
+void \mbox{\hyperlink{class_config_handler_a71d70df04f83394575bea4c3214df888}{Load\+Config}} (std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$ loaded\+Config)
+\begin{DoxyCompactList}\small\item\em Saves the current configuration of the ensemble model to an XML file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_config_handler_a9eff9b828fc6205a4692a75cd36c1c77}{Load\+Config}} (juce\+::\+File config\+File)
+\begin{DoxyCompactList}\small\item\em Converts a given XML file into an Xml\+Element. \end{DoxyCompactList}\item 
+juce\+::\+String \mbox{\hyperlink{class_config_handler_a8f372dc797a127f8dbc56cb8a372b7c6}{Get\+Config\+Subfolder}} ()
+\begin{DoxyCompactList}\small\item\em Returns the configuration file name where the ensemble model\textquotesingle{}s configuration is saved. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles the configuration of the Ensemble Model. 
+
+This class is responsible for saving and loading the configuration of the ensemble model to and from XML files. It provides methods to save the current state of the model and load a previously saved configuration. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_config_handler_a4c3ed8dfd1197bc727da851298f88503}\index{ConfigHandler@{ConfigHandler}!ConfigHandler@{ConfigHandler}}
+\index{ConfigHandler@{ConfigHandler}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{ConfigHandler()}{ConfigHandler()}}
+{\footnotesize\ttfamily \label{class_config_handler_a4c3ed8dfd1197bc727da851298f88503} 
+Config\+Handler\+::\+Config\+Handler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_ensemble_model}{Ensemble\+Model}} \texorpdfstring{$\ast$}{*}}]{model\+In}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_config_handler}{Config\+Handler}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model\+In} & The Ensemble Model that owns this insstance. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_config_handler_a9b03beacc63e90076592ee7efc02a907}\index{ConfigHandler@{ConfigHandler}!````~ConfigHandler@{\texorpdfstring{$\sim$}{\string~}ConfigHandler}}
+\index{````~ConfigHandler@{\texorpdfstring{$\sim$}{\string~}ConfigHandler}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ConfigHandler()}{\string~ConfigHandler()}}
+{\footnotesize\ttfamily \label{class_config_handler_a9b03beacc63e90076592ee7efc02a907} 
+Config\+Handler\+::\texorpdfstring{$\sim$}{\string~}\+Config\+Handler (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+/brief Deconstructor for \doxylink{class_config_handler}{Config\+Handler} 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_config_handler_a8f372dc797a127f8dbc56cb8a372b7c6}\index{ConfigHandler@{ConfigHandler}!GetConfigSubfolder@{GetConfigSubfolder}}
+\index{GetConfigSubfolder@{GetConfigSubfolder}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{GetConfigSubfolder()}{GetConfigSubfolder()}}
+{\footnotesize\ttfamily \label{class_config_handler_a8f372dc797a127f8dbc56cb8a372b7c6} 
+juce\+::\+String Config\+Handler\+::\+Get\+Config\+Subfolder (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the configuration file name where the ensemble model\textquotesingle{}s configuration is saved. 
+
+\Hypertarget{class_config_handler_a9eff9b828fc6205a4692a75cd36c1c77}\index{ConfigHandler@{ConfigHandler}!LoadConfig@{LoadConfig}}
+\index{LoadConfig@{LoadConfig}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{LoadConfig()}{LoadConfig()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_config_handler_a9eff9b828fc6205a4692a75cd36c1c77} 
+void Config\+Handler\+::\+Load\+Config (\begin{DoxyParamCaption}\item[{juce\+::\+File}]{config\+File}{}\end{DoxyParamCaption})}
+
+
+
+Converts a given XML file into an Xml\+Element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em config\+File} & The juce\+::\+File representing the XML file to be parsed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A unique\+\_\+ptr to a juce\+::\+Xml\+Element that represents the root element of the parsed XML document. 
+\end{DoxyReturn}
+\Hypertarget{class_config_handler_a71d70df04f83394575bea4c3214df888}\index{ConfigHandler@{ConfigHandler}!LoadConfig@{LoadConfig}}
+\index{LoadConfig@{LoadConfig}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{LoadConfig()}{LoadConfig()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_config_handler_a71d70df04f83394575bea4c3214df888} 
+void Config\+Handler\+::\+Load\+Config (\begin{DoxyParamCaption}\item[{std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$}]{loaded\+Config}{}\end{DoxyParamCaption})}
+
+
+
+Saves the current configuration of the ensemble model to an XML file. 
+
+\Hypertarget{class_config_handler_ac22d8c49419ec43634ec25bc07ca61c8}\index{ConfigHandler@{ConfigHandler}!ParseConfigToElement@{ParseConfigToElement}}
+\index{ParseConfigToElement@{ParseConfigToElement}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{ParseConfigToElement()}{ParseConfigToElement()}}
+{\footnotesize\ttfamily \label{class_config_handler_ac22d8c49419ec43634ec25bc07ca61c8} 
+std\+::unique\+\_\+ptr$<$ juce\+::\+Xml\+Element $>$ Config\+Handler\+::\+Parse\+Config\+To\+Element (\begin{DoxyParamCaption}\item[{juce\+::\+File}]{config\+File}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_config_handler_aa8a861fea0c53bbe3f1a66dac0524d28}\index{ConfigHandler@{ConfigHandler}!SaveConfig@{SaveConfig}}
+\index{SaveConfig@{SaveConfig}!ConfigHandler@{ConfigHandler}}
+\doxysubsubsection{\texorpdfstring{SaveConfig()}{SaveConfig()}}
+{\footnotesize\ttfamily \label{class_config_handler_aa8a861fea0c53bbe3f1a66dac0524d28} 
+void Config\+Handler\+::\+Save\+Config (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Saves the current configuration of the ensemble model to an XML file. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_config_handler_8h}{Config\+Handler.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_config_handler_8cpp}{Config\+Handler.\+cpp}}\end{DoxyCompactItemize}

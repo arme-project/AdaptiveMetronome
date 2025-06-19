@@ -6,8 +6,8 @@
 #include "Player.h"
 
 
-/*
-* \class Logger
+/**
+ * \class Logger
  * \brief Handles logging of ensemble model data.
  *
  * This class is responsible for logging the onset details of the ensemble model to a file.
@@ -19,7 +19,7 @@ class Logger
 public:
 
 	/**
-	 * @brief A structure to hold the data for each log entry.
+	 * \brief A structure to hold the data for each log entry.
 	 */
 	struct LogData
 	{

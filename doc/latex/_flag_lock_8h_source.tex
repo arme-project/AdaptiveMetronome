@@ -1,0 +1,26 @@
+\doxysection{Flag\+Lock.\+h}
+\hypertarget{_flag_lock_8h_source}{}\label{_flag_lock_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/FlagLock.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/FlagLock.h}}
+\mbox{\hyperlink{_flag_lock_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_flag_lock_ac95e5c9a3b395c6eb930f312b1dda68a}{FlagLock}}}
+\DoxyCodeLine{00017\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ std::atomic\_flag\&\ \mbox{\hyperlink{class_flag_lock_a649e6a35028b00a494d4c99184d0791c}{flag}};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_flag_lock_a44a07d33df8b74af52c3d0c664bb4cd8}{locked}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ *\ \(\backslash\)brief\ Constructor\ that\ takes\ a\ reference\ to\ an\ atomic\_flag.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_flag_lock_ac95e5c9a3b395c6eb930f312b1dda68a}{FlagLock}}(std::atomic\_flag\&\ f);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ *\ \(\backslash\)brief\ Destructor\ that\ clears\ the\ atomic\_flag.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{class_flag_lock_a85219a3fd8c7bbc5ad3a80874783c98a}{\string~FlagLock}}();}
+\DoxyCodeLine{00032\ \};}
+
+\end{DoxyCode}

@@ -1,5 +1,5 @@
 \doxysection{Plugin\+Editor.\+h}
-\hypertarget{_plugin_editor_8h_source}{}\label{_plugin_editor_8h_source}\index{D:/Projects/ARME Demo/AdaptiveMetronome/Source/PluginEditor.h@{D:/Projects/ARME Demo/AdaptiveMetronome/Source/PluginEditor.h}}
+\hypertarget{_plugin_editor_8h_source}{}\label{_plugin_editor_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/PluginEditor.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/PluginEditor.h}}
 \mbox{\hyperlink{_plugin_editor_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
@@ -7,30 +7,30 @@
 \DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_plugin_processor_8h}{PluginProcessor.h}}"{}}}
 \DoxyCodeLine{00004\ }
 \DoxyCodeLine{00005\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a60580cb0dd10e5a854c51b595a5a7582}{AdaptiveMetronomeAudioProcessorEditor}}\ :\ \textcolor{keyword}{public}\ juce::AudioProcessorEditor,}
-\DoxyCodeLine{00006\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ juce::Button::Listener,}
-\DoxyCodeLine{00007\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ juce::ActionListener,}
-\DoxyCodeLine{00008\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ juce::Timer}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{public}\ juce::Button::Listener,}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{public}\ juce::ActionListener,}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{public}\ juce::Timer}
 \DoxyCodeLine{00009\ }
 \DoxyCodeLine{00010\ \{}
 \DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a60580cb0dd10e5a854c51b595a5a7582}{AdaptiveMetronomeAudioProcessorEditor}}(\mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\ \&,}
-\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}\ \&ensemble);}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a60580cb0dd10e5a854c51b595a5a7582}{AdaptiveMetronomeAudioProcessorEditor}}(\mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\&,}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}\&\ ensemble);}
 \DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a19d9109c56bf7e4060f42920569d5a90}{\string~AdaptiveMetronomeAudioProcessorEditor}}()\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00015\ }
 \DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_adfc9b89884afb35b0ef11094f31d1c62}{timerCallback}}()\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_aa151b6df4c22c89c8ee169ad6a083f22}{reduceAlpha}}();}
 \DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a0465ba0183ac157385d138d787647096}{paint}}(juce::Graphics\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a0465ba0183ac157385d138d787647096}{paint}}(juce::Graphics\&)\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_afa15eee8c5402df91bb48ab23100b8f1}{resized}}()\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a4cfce690e72c1cc7ab0533f4a98e493e}{actionListenerCallback}}(\textcolor{keyword}{const}\ juce::String\ \&message)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a4cfce690e72c1cc7ab0533f4a98e493e}{actionListenerCallback}}(\textcolor{keyword}{const}\ juce::String\&\ message)\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00023\ }
 \DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a303fa2d6210dbc02acc0ac8c8192a9d0}{buttonClicked}}(juce::Button\ *button)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a303fa2d6210dbc02acc0ac8c8192a9d0}{buttonClicked}}(juce::Button*\ button)\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00026\ }
 \DoxyCodeLine{00027\ \textcolor{keyword}{private}:}
 \DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
-\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\ \&processor;}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\&\ processor;}
 \DoxyCodeLine{00030\ }
 \DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{int}\ timerInterval\ =\ 50;}
 \DoxyCodeLine{00032\ }
@@ -43,7 +43,7 @@
 \DoxyCodeLine{00039\ \ \ \ \ juce::ToggleButton\ oscOn;}
 \DoxyCodeLine{00040\ \ \ \ \ std::unique\_ptr<juce::FileChooser>\ fileChooser;}
 \DoxyCodeLine{00041\ }
-\DoxyCodeLine{00042\ \ \ \ \ juce::TooltipWindow\ tooltipWindow\{\textcolor{keyword}{this}\};}
+\DoxyCodeLine{00042\ \ \ \ \ juce::TooltipWindow\ tooltipWindow\{\ \textcolor{keyword}{this}\ \};}
 \DoxyCodeLine{00043\ }
 \DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
 \DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ resetButtonCallback();}
@@ -54,13 +54,13 @@
 \DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{class\ }EnsembleParametersComponent\ :\ \textcolor{keyword}{public}\ juce::Component}
 \DoxyCodeLine{00051\ \ \ \ \ \{}
 \DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ EnsembleParametersComponent(\mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}\ \&ensemble,\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\ \&processor);}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ EnsembleParametersComponent(\mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}\&\ ensemble,\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor}{AdaptiveMetronomeAudioProcessor}}\&\ processor);}
 \DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \string~EnsembleParametersComponent();}
 \DoxyCodeLine{00055\ }
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a0465ba0183ac157385d138d787647096}{paint}}(juce::Graphics\ \&g)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a0465ba0183ac157385d138d787647096}{paint}}(juce::Graphics\&\ g)\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_afa15eee8c5402df91bb48ab23100b8f1}{resized}}()\ \textcolor{keyword}{override};}
 \DoxyCodeLine{00058\ }
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ calculateWidthAndHeight(\textcolor{keywordtype}{int}\ nPlayers,\ \textcolor{keywordtype}{int}\ \&width,\ \textcolor{keywordtype}{int}\ \&height);}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ calculateWidthAndHeight(\textcolor{keywordtype}{int}\ nPlayers,\ \textcolor{keywordtype}{int}\&\ width,\ \textcolor{keywordtype}{int}\&\ height);}
 \DoxyCodeLine{00060\ }
 \DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{private}:}
 \DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{comment}{//==========================================================================}}
@@ -109,7 +109,7 @@
 \DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ optionsStripHeight\ =\ 50;}
 \DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ padding\ =\ 5;}
 \DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ initialiseEnsembleParameters(\mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}\ \&ensemble);}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ initialiseEnsembleParameters(\mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}\&\ ensemble);}
 \DoxyCodeLine{00109\ }
 \DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
 \DoxyCodeLine{00111\ \ \ \ \ JUCE\_DECLARE\_NON\_COPYABLE\_WITH\_LEAK\_DETECTOR(\mbox{\hyperlink{class_adaptive_metronome_audio_processor_editor_a60580cb0dd10e5a854c51b595a5a7582}{AdaptiveMetronomeAudioProcessorEditor}})}

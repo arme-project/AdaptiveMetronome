@@ -32,9 +32,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Adaptive Metronome<span id="projectnumber">&#160;V.2</span>
+   <div id="projectname">Adaptive Metronome
    </div>
-   <div id="projectbrief">The ARME Project&#39;s Plugin</div>
+   <div id="projectbrief">The ARME Project</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -113,6 +113,9 @@ $(function(){initNavTree('class_user_player.html',''); initResizable(true); });
 </div><!--header-->
 <div class="contents">
 
+<p>A player that is operated by user input.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_user_player_8h_source.html">UserPlayer.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for UserPlayer:</div>
@@ -120,20 +123,20 @@ Inheritance diagram for UserPlayer:</div>
  <div class="center">
   <img src="class_user_player.png" usemap="#UserPlayer_map" alt=""/>
   <map id="UserPlayer_map" name="UserPlayer_map">
-<area href="class_player.html" alt="Player" shape="rect" coords="0,0,75,24"/>
+<area href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes." alt="Player" shape="rect" coords="0,0,75,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2a7fb3549b6f92accaa73213796520ef" id="r_a2a7fb3549b6f92accaa73213796520ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a7fb3549b6f92accaa73213796520ef">UserPlayer</a> (int index, const juce::MidiMessageSequence *seq, int midiChannel, const double &amp;<a class="el" href="class_player.html#a742dba50a38eec2bf3d9bfc67e597d61">sampleRate</a>, const int &amp;<a class="el" href="class_player.html#a15be9209950cdadcd55f5f1267081f8d">scoreCounter</a>, int initialInterval)</td></tr>
-<tr class="memdesc:a2a7fb3549b6f92accaa73213796520ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_user_player.html">UserPlayer</a> object.  <br /></td></tr>
+<tr class="memdesc:a2a7fb3549b6f92accaa73213796520ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a> object.  <br /></td></tr>
 <tr class="separator:a2a7fb3549b6f92accaa73213796520ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b4824fca511a069b126c0d50ada89c5" id="r_a0b4824fca511a069b126c0d50ada89c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b4824fca511a069b126c0d50ada89c5">UserPlayer</a> (int index, const juce::MidiMessageSequence *seq, int midiChannel, const double &amp;<a class="el" href="class_player.html#a742dba50a38eec2bf3d9bfc67e597d61">sampleRate</a>, const int &amp;<a class="el" href="class_player.html#a15be9209950cdadcd55f5f1267081f8d">scoreCounter</a>, int initialInterval, <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> *processorIn)</td></tr>
-<tr class="memdesc:a0b4824fca511a069b126c0d50ada89c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_user_player.html">UserPlayer</a> object.  <br /></td></tr>
+<tr class="memdesc:a0b4824fca511a069b126c0d50ada89c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a> object.  <br /></td></tr>
 <tr class="separator:a0b4824fca511a069b126c0d50ada89c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b01dcdd90aec1dfb6f2d68acf92d0fa" id="r_a8b01dcdd90aec1dfb6f2d68acf92d0fa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b01dcdd90aec1dfb6f2d68acf92d0fa">~UserPlayer</a> ()</td></tr>
-<tr class="memdesc:a8b01dcdd90aec1dfb6f2d68acf92d0fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="class_user_player.html">UserPlayer</a>.  <br /></td></tr>
+<tr class="memdesc:a8b01dcdd90aec1dfb6f2d68acf92d0fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a>.  <br /></td></tr>
 <tr class="separator:a8b01dcdd90aec1dfb6f2d68acf92d0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff03f7afdbbfadfdb970a2795baa2dca" id="r_aff03f7afdbbfadfdb970a2795baa2dca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff03f7afdbbfadfdb970a2795baa2dca">isUserOperated</a> () override</td></tr>
 <tr class="memdesc:aff03f7afdbbfadfdb970a2795baa2dca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports this player is user-operated.  <br /></td></tr>
@@ -145,16 +148,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a07bd2f3a604aa164d0713da4b190f245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the latest onset was triggered by user input.  <br /></td></tr>
 <tr class="separator:a07bd2f3a604aa164d0713da4b190f245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af78da569c3293f6823041ae14a3d12b9" id="r_af78da569c3293f6823041ae14a3d12b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af78da569c3293f6823041ae14a3d12b9">processIntroSample</a> (const juce::MidiBuffer &amp;inMidi, juce::MidiBuffer &amp;outMidi, int sampleIndex, int introNote) override</td></tr>
-<tr class="memdesc:af78da569c3293f6823041ae14a3d12b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from <a class="el" href="class_ensemble_model.html">EnsembleModel</a> to play an intro tone when a user presses a key.  <br /></td></tr>
+<tr class="memdesc:af78da569c3293f6823041ae14a3d12b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called from <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> to play an intro tone when a user presses a key.  <br /></td></tr>
 <tr class="separator:af78da569c3293f6823041ae14a3d12b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_player"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_player')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_player.html">Player</a></td></tr>
 <tr class="memitem:a321dff0097d18da8e5277f5c9f15c104 inherit pub_methods_class_player" id="r_a321dff0097d18da8e5277f5c9f15c104"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a321dff0097d18da8e5277f5c9f15c104">Player</a> (int index, const juce::MidiMessageSequence *seq, int midiChannel, const double &amp;<a class="el" href="class_player.html#a742dba50a38eec2bf3d9bfc67e597d61">sampleRate</a>, const int &amp;<a class="el" href="class_player.html#a15be9209950cdadcd55f5f1267081f8d">scoreCounter</a>, int initialInterval)</td></tr>
 <tr class="separator:a321dff0097d18da8e5277f5c9f15c104 inherit pub_methods_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a598f8193fc86d0302329759c978e6475 inherit pub_methods_class_player" id="r_a598f8193fc86d0302329759c978e6475"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a598f8193fc86d0302329759c978e6475">Player</a> (int index, const juce::MidiMessageSequence *seq, int midiChannel, const double &amp;<a class="el" href="class_player.html#a742dba50a38eec2bf3d9bfc67e597d61">sampleRate</a>, const int &amp;<a class="el" href="class_player.html#a15be9209950cdadcd55f5f1267081f8d">scoreCounter</a>, int initialInterval, <a class="el" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> *processorPtr)</td></tr>
-<tr class="memdesc:a598f8193fc86d0302329759c978e6475 inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="class_player.html">Player</a>.  <br /></td></tr>
+<tr class="memdesc:a598f8193fc86d0302329759c978e6475 inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes.">Player</a>.  <br /></td></tr>
 <tr class="separator:a598f8193fc86d0302329759c978e6475 inherit pub_methods_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a749d2c00e1fe0f5c2746f7505a58c062 inherit pub_methods_class_player" id="r_a749d2c00e1fe0f5c2746f7505a58c062"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a749d2c00e1fe0f5c2746f7505a58c062">~Player</a> ()</td></tr>
-<tr class="memdesc:a749d2c00e1fe0f5c2746f7505a58c062 inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="class_player.html">Player</a>.  <br /></td></tr>
+<tr class="memdesc:a749d2c00e1fe0f5c2746f7505a58c062 inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes.">Player</a>.  <br /></td></tr>
 <tr class="separator:a749d2c00e1fe0f5c2746f7505a58c062 inherit pub_methods_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1af5d39f7bac2aeaa1e30c7dda2332fa inherit pub_methods_class_player" id="r_a1af5d39f7bac2aeaa1e30c7dda2332fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a1af5d39f7bac2aeaa1e30c7dda2332fa">reset</a> ()</td></tr>
 <tr class="memdesc:a1af5d39f7bac2aeaa1e30c7dda2332fa inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the player to the start of the score.  <br /></td></tr>
@@ -175,7 +178,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a6e7bad4694ba2e7ef276bae5e1176335 inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty the interval queue.  <br /></td></tr>
 <tr class="separator:a6e7bad4694ba2e7ef276bae5e1176335 inherit pub_methods_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00dc66c8d59f49d524132282cd6be28c inherit pub_methods_class_player" id="r_a00dc66c8d59f49d524132282cd6be28c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a00dc66c8d59f49d524132282cd6be28c">setOscOnsetTime</a> (float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote)</td></tr>
-<tr class="memdesc:a00dc66c8d59f49d524132282cd6be28c inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used by the <a class="el" href="class_user_player.html">UserPlayer</a> to set the onset time from an OSC message. It sets newOSCOnsetAvailable to true, and sets the onset time in samples. newOSCOnsetAvailable is checked in <a class="el" href="#a63918fa2e6b3021a7f37771cc128ff18" title="Processes incoming MIDI buffer and outputs a note if the user has inputted a note,...">UserPlayer::processNoteOn</a>. This should be called when a note is played from Max via OSC.  <br /></td></tr>
+<tr class="memdesc:a00dc66c8d59f49d524132282cd6be28c inherit pub_methods_class_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used by the <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a> to set the onset time from an OSC message. It sets newOSCOnsetAvailable to true, and sets the onset time in samples. newOSCOnsetAvailable is checked in <a class="el" href="#a63918fa2e6b3021a7f37771cc128ff18" title="Processes incoming MIDI buffer and outputs a note if the user has inputted a note,...">UserPlayer::processNoteOn</a>. This should be called when a note is played from Max via OSC.  <br /></td></tr>
 <tr class="separator:a00dc66c8d59f49d524132282cd6be28c inherit pub_methods_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72b210913c78507dd26326e174c51d5f inherit pub_methods_class_player" id="r_a72b210913c78507dd26326e174c51d5f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a72b210913c78507dd26326e174c51d5f">generateMotorNoise</a> ()</td></tr>
 <tr class="separator:a72b210913c78507dd26326e174c51d5f inherit pub_methods_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -287,7 +290,10 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a9c5d77edc841bb72da499d94e3d18cf2 inherit pro_attribs_class_player" id="r_a9c5d77edc841bb72da499d94e3d18cf2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_player.html#a9c5d77edc841bb72da499d94e3d18cf2">noteTriggeredByUser</a> = false</td></tr>
 <tr class="separator:a9c5d77edc841bb72da499d94e3d18cf2 inherit pro_attribs_class_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A player that is operated by user input. </p>
+<p>The <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a> class extends the <a class="el" href="class_player.html" title="The Player class is responsible for playing back a sequence of MIDI notes.">Player</a> class and is designed to handle user input for MIDI playback. It can process MIDI messages, calculate onset intervals, and manage user-triggered notes. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2a7fb3549b6f92accaa73213796520ef" name="a2a7fb3549b6f92accaa73213796520ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2a7fb3549b6f92accaa73213796520ef">&#9670;&#160;</a></span>UserPlayer() <span class="overload">[1/2]</span></h2>
 
@@ -327,7 +333,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructs a <a class="el" href="class_user_player.html">UserPlayer</a> object. </p>
+<p>Constructs a <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a> object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>The index of the player. </td></tr>
@@ -386,7 +392,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructs a <a class="el" href="class_user_player.html">UserPlayer</a> object. </p>
+<p>Constructs a <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a> object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>The index of the player. </td></tr>
@@ -417,7 +423,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destructor for <a class="el" href="class_user_player.html">UserPlayer</a>. </p>
+<p>Destructor for <a class="el" href="class_user_player.html" title="A player that is operated by user input.">UserPlayer</a>. </p>
 
 </div>
 </div>
@@ -489,7 +495,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called from <a class="el" href="class_ensemble_model.html">EnsembleModel</a> to play an intro tone when a user presses a key. </p>
+<p>Called from <a class="el" href="class_ensemble_model.html" title="The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...">EnsembleModel</a> to play an intro tone when a user presses a key. </p>
 <p>This will play a note at the given introNote at the given sample index, and will stop this note after the given introToneLength samples. If any note is played by the user during this time, the intro tone will be cut off.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -683,8 +689,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>D:/Projects/ARME Demo/AdaptiveMetronome/Source/<a class="el" href="_user_player_8h_source.html">UserPlayer.h</a></li>
-<li>D:/Projects/ARME Demo/AdaptiveMetronome/Source/<a class="el" href="_user_player_8cpp.html">UserPlayer.cpp</a></li>
+<li>C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/<a class="el" href="_user_player_8h_source.html">UserPlayer.h</a></li>
+<li>C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/<a class="el" href="_user_player_8cpp.html">UserPlayer.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

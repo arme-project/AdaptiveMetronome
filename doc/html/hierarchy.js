@@ -1,7 +1,7 @@
 var hierarchy =
 [
     [ "juce::ActionBroadcaster", null, [
-      [ "EnsembleModel", "class_ensemble_model.html", null ]
+      [ "OSCHandler", "class_o_s_c_handler.html", null ]
     ] ],
     [ "juce::ActionListener", null, [
       [ "AdaptiveMetronomeAudioProcessorEditor", "class_adaptive_metronome_audio_processor_editor.html", null ]
@@ -12,12 +12,19 @@ var hierarchy =
     [ "juce::AudioProcessorEditor", null, [
       [ "AdaptiveMetronomeAudioProcessorEditor", "class_adaptive_metronome_audio_processor_editor.html", null ]
     ] ],
+    [ "juce::Component", null, [
+      [ "ConfigHandler", "class_config_handler.html", null ]
+    ] ],
+    [ "EnsembleModel", "class_ensemble_model.html", null ],
+    [ "FlagLock", "class_flag_lock.html", null ],
     [ "juce::Button::Listener", null, [
       [ "AdaptiveMetronomeAudioProcessorEditor", "class_adaptive_metronome_audio_processor_editor.html", null ]
     ] ],
     [ "juce::OSCReceiver::ListenerWithOSCAddress", null, [
-      [ "EnsembleModel", "class_ensemble_model.html", null ]
+      [ "OSCHandler", "class_o_s_c_handler.html", null ]
     ] ],
+    [ "Logger::LogData", "struct_logger_1_1_log_data.html", null ],
+    [ "Logger", "class_logger.html", null ],
     [ "ARMETimingModel::ModelParameterFloat", "class_a_r_m_e_timing_model_1_1_model_parameter_float.html", [
       [ "ARMETimingModel::ModelParameterRandomNormalFloat", "class_a_r_m_e_timing_model_1_1_model_parameter_random_normal_float.html", null ]
     ] ],
@@ -29,12 +36,13 @@ var hierarchy =
     ] ],
     [ "Player::Note", "struct_player_1_1_note.html", null ],
     [ "juce::OSCReceiver", null, [
-      [ "EnsembleModel", "class_ensemble_model.html", null ]
+      [ "OSCHandler", "class_o_s_c_handler.html", null ]
     ] ],
     [ "AdaptiveMetronomeAudioProcessor::ParameterIndexGetter< paramType >", "class_adaptive_metronome_audio_processor_1_1_parameter_index_getter.html", null ],
     [ "Player", "class_player.html", [
       [ "UserPlayer", "class_user_player.html", null ]
     ] ],
+    [ "Poller", "class_poller.html", null ],
     [ "juce::Timer", null, [
       [ "AdaptiveMetronomeAudioProcessorEditor", "class_adaptive_metronome_audio_processor_editor.html", null ]
     ] ],

@@ -46,7 +46,7 @@ virtual float \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_m
 \item 
 virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a19f378fda8d8f5d07558b10d0e8d0afb}{set\+Float\+Parameter\+By\+Name}} (std\+::string param\+Name, float new\+Float\+Value)
 \begin{DoxyCompactList}\small\item\em Sets the raw float value of a parameter by name. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07}{override\+Model\+Parameter\+Float}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*}ptr\+To\+Model\+Float\+Ptr, std\+::function$<$ float()$>$ new\+Get\+Float\+Fcn)
+virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07}{override\+Model\+Parameter\+Float}} (\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a4ab2a0c993d74f2d2d76166df0778b8d}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*}ptr\+To\+Model\+Float\+Ptr, std\+::function$<$ float()$>$ new\+Get\+Float\+Fcn)
 \begin{DoxyCompactList}\small\item\em Changes the pointer to the underlying std\+::atomic$<$float$>$ value of this parameter. \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a8858195b3849484b155266af5c921127}{override\+Float\+Parameter\+By\+Name}} (std\+::string param\+Name, std\+::function$<$ float()$>$ new\+Get\+Float\+Fcn)
 \item 
@@ -79,11 +79,11 @@ int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a9830121f8f
 \item 
 int \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a27ad23c20c466c6bfaa6b7220caffc6d}{number\+Of\+Players}}
 \item 
-std\+::map$<$ std\+::string, \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_ab2c3b3f3319525bebabe889a3fd34335}{dict\+Of\+Float\+Params}}
+std\+::map$<$ std\+::string, \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameter_float}{Model\+Parameter\+Float}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_aa783ef90721f6f10a07f3dd6609e7ab4}{dict\+Of\+Float\+Params}}
 \item 
-std\+::map$<$ std\+::string, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a6f63fa1d6b453e99fb392cac6677adba}{dict\+Of\+Vector\+Params}}
+std\+::map$<$ std\+::string, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_aafdffaee5a878431fe2466459aa5b41e}{Model\+Float\+Vector}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a61cb6c960f19d979b25a51198af9c583}{dict\+Of\+Vector\+Params}}
 \item 
-std\+::map$<$ std\+::string, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{Model\+Float\+Matrix}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a11bbb7a0aca121a02f2b76d46bca135c}{dict\+Of\+Matrix\+Params}}
+std\+::map$<$ std\+::string, \mbox{\hyperlink{namespace_a_r_m_e_timing_model_a9e8eab028ea958bcad4eb11480eb3af4}{Model\+Float\+Matrix}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{class_a_r_m_e_timing_model_1_1_model_parameters_a3bb6ead9e18176c36cbc42fcd1cec36d}{dict\+Of\+Matrix\+Params}}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
@@ -210,7 +210,7 @@ Param\+Type ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::find\
 \index{getFloatRefByName@{getFloatRefByName}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
 \doxysubsubsection{\texorpdfstring{getFloatRefByName()}{getFloatRefByName()}}
 {\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a3c3eb757b06ab7e7a872e6471e2c89da} 
-\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Float\+Ref\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a4ab2a0c993d74f2d2d76166df0778b8d}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*} ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::get\+Float\+Ref\+By\+Name (\begin{DoxyParamCaption}\item[{std\+::string}]{param\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -294,7 +294,7 @@ void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::override\+Fl
 \index{overrideModelParameterFloat@{overrideModelParameterFloat}!ARMETimingModel::PhaseCorrectionModelParameters@{ARMETimingModel::PhaseCorrectionModelParameters}}
 \doxysubsubsection{\texorpdfstring{overrideModelParameterFloat()}{overrideModelParameterFloat()}}
 {\footnotesize\ttfamily \label{class_a_r_m_e_timing_model_1_1_phase_correction_model_parameters_a9928b44292d7b3a80a36fb1efa072f07} 
-void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::override\+Model\+Parameter\+Float (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a50f2e34ca1d31940a285331f32ab473b}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*}}]{ptr\+To\+Model\+Float\+Ptr}{, }\item[{std\+::function$<$ float()$>$}]{new\+Get\+Float\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void ARMETiming\+Model\+::\+Phase\+Correction\+Model\+Parameters\+::override\+Model\+Parameter\+Float (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_a_r_m_e_timing_model_a4ab2a0c993d74f2d2d76166df0778b8d}{Model\+Float\+Ptr}} \texorpdfstring{$\ast$}{*}}]{ptr\+To\+Model\+Float\+Ptr}{, }\item[{std\+::function$<$ float()$>$}]{new\+Get\+Float\+Fcn}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -349,5 +349,5 @@ Sets the raw float value of a parameter by name.
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameters_group_8h}{Timing\+Model\+Parameters\+Group.\+h}}\item 
-D\+:/\+Projects/\+ARME Demo/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameters_group_8cpp}{Timing\+Model\+Parameters\+Group.\+cpp}}\end{DoxyCompactItemize}
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameters_group_8h}{Timing\+Model\+Parameters\+Group.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_timing_model_parameters_group_8cpp}{Timing\+Model\+Parameters\+Group.\+cpp}}\end{DoxyCompactItemize}

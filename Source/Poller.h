@@ -2,6 +2,14 @@
 
 #include <JuceHeader.h>
 
+/**
+ * \class Poller
+ * \brief Handles Polling of ensemble model data.
+ *
+ * This class is responsible for polling the ensemble model data at regular intervals.
+ * It runs in a separate thread to avoid blocking the audio thread, and uses an AbstractFifo
+ * to manage the polling buffer.
+ */
 class Poller
 {
 public:
@@ -27,14 +35,13 @@ public:
 	void Start();
 
 	/**
-	* \brief Stops the polling loop by setting the continuePolling flag to false.
-	*
-	* If the polling thread is joinable, it will join the thread to ensure proper cleanup.
-	*/
+	 * \brief Stops the polling loop by setting the continuePolling flag to false.
+	 *
+	 * If the polling thread is joinable, it will join the thread to ensure proper cleanup.
+	 */
 	void Stop();
 
 private:
-
 	int numPlayers = 0;
 	std::unique_ptr<juce::AbstractFifo> fifo;
 	std::vector<std::vector<float>> buffer;
@@ -59,7 +66,6 @@ private:
 	 */
 	void PollingLoop();
 
-
 	/**
 	 * \brief Fetches new alpha values from the server (NOT USED).
 	 *
@@ -71,11 +77,9 @@ private:
 
 	/**
 	 * \brief NOT IMPLEMENTED.
-	 * 
+	 *
 	 */
 	void getLatestAlphas();
-
-	
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Poller)
 };

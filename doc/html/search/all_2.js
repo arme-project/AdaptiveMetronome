@@ -2,14 +2,18 @@ var searchData=
 [
   ['changeprogramname_0',['changeProgramName',['../class_adaptive_metronome_audio_processor.html#af013e0a2df292c8d68e0d2227528571b',1,'AdaptiveMetronomeAudioProcessor']]],
   ['channelparameter_1',['channelParameter',['../class_adaptive_metronome_audio_processor.html#adaa3b9b89a2ed5a49a2c9e2f1fdf8e64',1,'AdaptiveMetronomeAudioProcessor']]],
-  ['configsubfolder_2',['configSubfolder',['../class_ensemble_model.html#a17e14567b78a694f722892d74d91591a',1,'EnsembleModel']]],
-  ['connectoscreceiver_3',['connectOSCReceiver',['../class_ensemble_model.html#a49d70f101c56ee7a23b6167d0beb4a5d',1,'EnsembleModel']]],
-  ['connectoscsender_4',['connectOSCSender',['../class_ensemble_model.html#a5600a255d4e106d196b777a687dadaaa',1,'EnsembleModel']]],
-  ['createeditor_5',['createEditor',['../class_adaptive_metronome_audio_processor.html#a8bff9d700a813fa06b968ed9883a05c2',1,'AdaptiveMetronomeAudioProcessor']]],
-  ['createnewparameters_6',['createNewParameters',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a175bb4186371a4ca4d841d2f9036c007',1,'ARMETimingModel::TimingModel::createNewParameters()'],['../class_a_r_m_e_timing_model_1_1_phase_correction_timing_model.html#ae0380967f5c2d0b9b171e6aa3e822ca6',1,'ARMETimingModel::PhaseCorrectionTimingModel::createNewParameters()']]],
-  ['createparameterlayout_7',['createParameterLayout',['../class_adaptive_metronome_audio_processor.html#a6b2b4195e7298fcde70b20049afaf435',1,'AdaptiveMetronomeAudioProcessor']]],
-  ['createpluginfilter_8',['createPluginFilter',['../_plugin_processor_8cpp.html#a62f69a86baff96d3ee5c287e100adc66',1,'PluginProcessor.cpp']]],
-  ['currentnoteindex_9',['currentNoteIndex',['../class_ensemble_model.html#a7fdca16d26808b67391aefaab4a18fe9',1,'EnsembleModel::currentNoteIndex'],['../class_player.html#a3693c8464de5ea7d93edf0e2b7c67785',1,'Player::currentNoteIndex']]],
-  ['currentonsettime_10',['currentOnsetTime',['../class_player.html#adbf0d8c38fa8d87e4f380679c27f0d2f',1,'Player']]],
-  ['currentreceiveport_11',['currentReceivePort',['../class_ensemble_model.html#aa394d06e7e24a023c8183f3129371cbf',1,'EnsembleModel']]]
+  ['checkmidisequencehasnotes_2',['checkMidiSequenceHasNotes',['../class_ensemble_model.html#abe34215378c78b5135edb42d950b0aa8',1,'EnsembleModel']]],
+  ['confighandler_3',['ConfigHandler',['../class_config_handler.html',1,'ConfigHandler'],['../class_config_handler.html#a4c3ed8dfd1197bc727da851298f88503',1,'ConfigHandler::ConfigHandler()']]],
+  ['confighandler_2ecpp_4',['ConfigHandler.cpp',['../_config_handler_8cpp.html',1,'']]],
+  ['confighandler_2eh_5',['ConfigHandler.h',['../_config_handler_8h.html',1,'']]],
+  ['connectoscreceiver_6',['ConnectOSCReceiver',['../class_ensemble_model.html#a04d972efa1f57a5ecad3eff9b82451fb',1,'EnsembleModel']]],
+  ['connectreceiver_7',['ConnectReceiver',['../class_o_s_c_handler.html#a2f5b644637e6da78311aa6fd32b28eae',1,'OSCHandler']]],
+  ['connectsender_8',['ConnectSender',['../class_o_s_c_handler.html#af1268729ef98b8c1825b321cc95eac24',1,'OSCHandler']]],
+  ['createeditor_9',['createEditor',['../class_adaptive_metronome_audio_processor.html#a8bff9d700a813fa06b968ed9883a05c2',1,'AdaptiveMetronomeAudioProcessor']]],
+  ['createnewparameters_10',['createNewParameters',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a175bb4186371a4ca4d841d2f9036c007',1,'ARMETimingModel::TimingModel::createNewParameters()'],['../class_a_r_m_e_timing_model_1_1_phase_correction_timing_model.html#ae0380967f5c2d0b9b171e6aa3e822ca6',1,'ARMETimingModel::PhaseCorrectionTimingModel::createNewParameters()']]],
+  ['createparameterlayout_11',['createParameterLayout',['../class_adaptive_metronome_audio_processor.html#a6b2b4195e7298fcde70b20049afaf435',1,'AdaptiveMetronomeAudioProcessor']]],
+  ['createplayers_12',['createPlayers',['../class_ensemble_model.html#a5d5d0035fe2a5f64a0e92a2573f9daab',1,'EnsembleModel']]],
+  ['createpluginfilter_13',['createPluginFilter',['../_plugin_processor_8cpp.html#a62f69a86baff96d3ee5c287e100adc66',1,'PluginProcessor.cpp']]],
+  ['currentnoteindex_14',['currentNoteIndex',['../class_ensemble_model.html#a7fdca16d26808b67391aefaab4a18fe9',1,'EnsembleModel::currentNoteIndex'],['../class_player.html#a3693c8464de5ea7d93edf0e2b7c67785',1,'Player::currentNoteIndex']]],
+  ['currentonsettime_15',['currentOnsetTime',['../class_player.html#adbf0d8c38fa8d87e4f380679c27f0d2f',1,'Player']]]
 ];

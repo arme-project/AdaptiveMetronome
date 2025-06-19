@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Adaptive Metronome: D:/Projects/ARME Demo/AdaptiveMetronome/Source/PluginEditor.h Source File</title>
+<title>Adaptive Metronome: C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/PluginEditor.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -32,9 +32,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Adaptive Metronome<span id="projectnumber">&#160;V.2</span>
+   <div id="projectname">Adaptive Metronome
    </div>
-   <div id="projectbrief">The ARME Project&#39;s Plugin</div>
+   <div id="projectbrief">The ARME Project</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -112,30 +112,30 @@ $(function(){initNavTree('_plugin_editor_8h_source.html',''); initResizable(true
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
 <div class="foldopen" id="foldopen00005" data-start="{" data-end="};">
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="class_adaptive_metronome_audio_processor_editor.html">    5</a></span><span class="keyword">class </span><a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a60580cb0dd10e5a854c51b595a5a7582">AdaptiveMetronomeAudioProcessorEditor</a> : <span class="keyword">public</span> juce::AudioProcessorEditor,</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>                                              <span class="keyword">public</span> juce::Button::Listener,</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>                                              <span class="keyword">public</span> juce::ActionListener,</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>                                              <span class="keyword">public</span> juce::Timer</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>    <span class="keyword">public</span> juce::Button::Listener,</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>    <span class="keyword">public</span> juce::ActionListener,</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    <span class="keyword">public</span> juce::Timer</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a60580cb0dd10e5a854c51b595a5a7582">AdaptiveMetronomeAudioProcessorEditor</a>(<a class="code hl_class" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> &amp;,</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>                                          <a class="code hl_class" href="class_ensemble_model.html">EnsembleModel</a> &amp;ensemble);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a60580cb0dd10e5a854c51b595a5a7582">AdaptiveMetronomeAudioProcessorEditor</a>(<a class="code hl_class" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>&amp;,</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <a class="code hl_class" href="class_ensemble_model.html">EnsembleModel</a>&amp; ensemble);</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a19d9109c56bf7e4060f42920569d5a90">~AdaptiveMetronomeAudioProcessorEditor</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#adfc9b89884afb35b0ef11094f31d1c62">timerCallback</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#aa151b6df4c22c89c8ee169ad6a083f22">reduceAlpha</a>();</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">//==============================================================================</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a0465ba0183ac157385d138d787647096">paint</a>(juce::Graphics &amp;) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a0465ba0183ac157385d138d787647096">paint</a>(juce::Graphics&amp;) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#afa15eee8c5402df91bb48ab23100b8f1">resized</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a4cfce690e72c1cc7ab0533f4a98e493e">actionListenerCallback</a>(<span class="keyword">const</span> juce::String &amp;message) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a4cfce690e72c1cc7ab0533f4a98e493e">actionListenerCallback</a>(<span class="keyword">const</span> juce::String&amp; message) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">//==============================================================================</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a303fa2d6210dbc02acc0ac8c8192a9d0">buttonClicked</a>(juce::Button *button) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a303fa2d6210dbc02acc0ac8c8192a9d0">buttonClicked</a>(juce::Button* button) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="comment">//==============================================================================</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <a class="code hl_class" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> &amp;processor;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <a class="code hl_class" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>&amp; processor;</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">int</span> timerInterval = 50;</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
@@ -148,7 +148,7 @@ $(function(){initNavTree('_plugin_editor_8h_source.html',''); initResizable(true
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    juce::ToggleButton oscOn;</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::unique_ptr&lt;juce::FileChooser&gt; fileChooser;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    juce::TooltipWindow tooltipWindow{<span class="keyword">this</span>};</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    juce::TooltipWindow tooltipWindow{ <span class="keyword">this</span> };</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="comment">//==============================================================================</span></div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">void</span> resetButtonCallback();</div>
@@ -159,13 +159,13 @@ $(function(){initNavTree('_plugin_editor_8h_source.html',''); initResizable(true
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">class </span>EnsembleParametersComponent : <span class="keyword">public</span> juce::Component</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    {</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        EnsembleParametersComponent(<a class="code hl_class" href="class_ensemble_model.html">EnsembleModel</a> &amp;ensemble, <a class="code hl_class" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a> &amp;processor);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        EnsembleParametersComponent(<a class="code hl_class" href="class_ensemble_model.html">EnsembleModel</a>&amp; ensemble, <a class="code hl_class" href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a>&amp; processor);</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        ~EnsembleParametersComponent();</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a0465ba0183ac157385d138d787647096">paint</a>(juce::Graphics &amp;g) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a0465ba0183ac157385d138d787647096">paint</a>(juce::Graphics&amp; g) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#afa15eee8c5402df91bb48ab23100b8f1">resized</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> calculateWidthAndHeight(<span class="keywordtype">int</span> nPlayers, <span class="keywordtype">int</span> &amp;width, <span class="keywordtype">int</span> &amp;height);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> calculateWidthAndHeight(<span class="keywordtype">int</span> nPlayers, <span class="keywordtype">int</span>&amp; width, <span class="keywordtype">int</span>&amp; height);</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="comment">//==========================================================================</span></div>
@@ -214,23 +214,23 @@ $(function(){initNavTree('_plugin_editor_8h_source.html',''); initResizable(true
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> optionsStripHeight = 50;</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> padding = 5;</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">void</span> initialiseEnsembleParameters(<a class="code hl_class" href="class_ensemble_model.html">EnsembleModel</a> &amp;ensemble);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">void</span> initialiseEnsembleParameters(<a class="code hl_class" href="class_ensemble_model.html">EnsembleModel</a>&amp; ensemble);</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="comment">//==============================================================================</span></div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_function" href="class_adaptive_metronome_audio_processor_editor.html#a60580cb0dd10e5a854c51b595a5a7582">AdaptiveMetronomeAudioProcessorEditor</a>)</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>};</div>
 </div>
 <div class="ttc" id="a_plugin_processor_8h_html"><div class="ttname"><a href="_plugin_processor_8h.html">PluginProcessor.h</a></div><div class="ttdoc">Header file for the PluginProcessor class.</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a0465ba0183ac157385d138d787647096"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a0465ba0183ac157385d138d787647096">AdaptiveMetronomeAudioProcessorEditor::paint</a></div><div class="ttdeci">void paint(juce::Graphics &amp;) override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:126</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a19d9109c56bf7e4060f42920569d5a90"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a19d9109c56bf7e4060f42920569d5a90">AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor</a></div><div class="ttdeci">~AdaptiveMetronomeAudioProcessorEditor() override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:73</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a303fa2d6210dbc02acc0ac8c8192a9d0"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a303fa2d6210dbc02acc0ac8c8192a9d0">AdaptiveMetronomeAudioProcessorEditor::buttonClicked</a></div><div class="ttdeci">void buttonClicked(juce::Button *button) override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:178</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a4cfce690e72c1cc7ab0533f4a98e493e"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a4cfce690e72c1cc7ab0533f4a98e493e">AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback</a></div><div class="ttdeci">void actionListenerCallback(const juce::String &amp;message) override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:163</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a0465ba0183ac157385d138d787647096"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a0465ba0183ac157385d138d787647096">AdaptiveMetronomeAudioProcessorEditor::paint</a></div><div class="ttdeci">void paint(juce::Graphics &amp;) override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:124</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a19d9109c56bf7e4060f42920569d5a90"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a19d9109c56bf7e4060f42920569d5a90">AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor</a></div><div class="ttdeci">~AdaptiveMetronomeAudioProcessorEditor() override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:71</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a303fa2d6210dbc02acc0ac8c8192a9d0"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a303fa2d6210dbc02acc0ac8c8192a9d0">AdaptiveMetronomeAudioProcessorEditor::buttonClicked</a></div><div class="ttdeci">void buttonClicked(juce::Button *button) override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:176</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a4cfce690e72c1cc7ab0533f4a98e493e"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a4cfce690e72c1cc7ab0533f4a98e493e">AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback</a></div><div class="ttdeci">void actionListenerCallback(const juce::String &amp;message) override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:161</div></div>
 <div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_a60580cb0dd10e5a854c51b595a5a7582"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#a60580cb0dd10e5a854c51b595a5a7582">AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor</a></div><div class="ttdeci">AdaptiveMetronomeAudioProcessorEditor(AdaptiveMetronomeAudioProcessor &amp;, EnsembleModel &amp;ensemble)</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:5</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_aa151b6df4c22c89c8ee169ad6a083f22"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#aa151b6df4c22c89c8ee169ad6a083f22">AdaptiveMetronomeAudioProcessorEditor::reduceAlpha</a></div><div class="ttdeci">void reduceAlpha()</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:79</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_adfc9b89884afb35b0ef11094f31d1c62"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#adfc9b89884afb35b0ef11094f31d1c62">AdaptiveMetronomeAudioProcessorEditor::timerCallback</a></div><div class="ttdeci">void timerCallback() override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:91</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_afa15eee8c5402df91bb48ab23100b8f1"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#afa15eee8c5402df91bb48ab23100b8f1">AdaptiveMetronomeAudioProcessorEditor::resized</a></div><div class="ttdeci">void resized() override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:131</div></div>
-<div class="ttc" id="aclass_adaptive_metronome_audio_processor_html"><div class="ttname"><a href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a></div><div class="ttdef"><b>Definition</b> PluginProcessor.h:18</div></div>
-<div class="ttc" id="aclass_ensemble_model_html"><div class="ttname"><a href="class_ensemble_model.html">EnsembleModel</a></div><div class="ttdef"><b>Definition</b> EnsembleModel.h:25</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_aa151b6df4c22c89c8ee169ad6a083f22"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#aa151b6df4c22c89c8ee169ad6a083f22">AdaptiveMetronomeAudioProcessorEditor::reduceAlpha</a></div><div class="ttdeci">void reduceAlpha()</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:77</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_adfc9b89884afb35b0ef11094f31d1c62"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#adfc9b89884afb35b0ef11094f31d1c62">AdaptiveMetronomeAudioProcessorEditor::timerCallback</a></div><div class="ttdeci">void timerCallback() override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:89</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_editor_html_afa15eee8c5402df91bb48ab23100b8f1"><div class="ttname"><a href="class_adaptive_metronome_audio_processor_editor.html#afa15eee8c5402df91bb48ab23100b8f1">AdaptiveMetronomeAudioProcessorEditor::resized</a></div><div class="ttdeci">void resized() override</div><div class="ttdef"><b>Definition</b> PluginEditor.cpp:129</div></div>
+<div class="ttc" id="aclass_adaptive_metronome_audio_processor_html"><div class="ttname"><a href="class_adaptive_metronome_audio_processor.html">AdaptiveMetronomeAudioProcessor</a></div><div class="ttdef"><b>Definition</b> PluginProcessor.h:17</div></div>
+<div class="ttc" id="aclass_ensemble_model_html"><div class="ttname"><a href="class_ensemble_model.html">EnsembleModel</a></div><div class="ttdoc">The EnsembleModel class manages the ensemble of players, their states, and communication with the Max...</div><div class="ttdef"><b>Definition</b> EnsembleModel.h:40</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

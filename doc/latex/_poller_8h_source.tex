@@ -1,0 +1,39 @@
+\doxysection{Poller.\+h}
+\hypertarget{_poller_8h_source}{}\label{_poller_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/Poller.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/Poller.h}}
+\mbox{\hyperlink{_poller_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <JuceHeader.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_poller_a5f8962df9f188016975afce57b5696ca}{Poller}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{class_poller_a5f8962df9f188016975afce57b5696ca}{Poller}}(\textcolor{keywordtype}{int}\ numPlayersIn);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_poller_a558eed5a0c012c2ed4a4f6df07a02f66}{\string~Poller}}();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_poller_a1c51390b125f4e2aae1f952e5a73dac8}{Start}}();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_poller_aba0184aeb6489d597aa46ae71833aea1}{Stop}}();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{int}\ numPlayers\ =\ 0;}
+\DoxyCodeLine{00046\ \ \ \ \ std::unique\_ptr<juce::AbstractFifo>\ fifo;}
+\DoxyCodeLine{00047\ \ \ \ \ std::vector<std::vector<float>>\ buffer;}
+\DoxyCodeLine{00048\ \ \ \ \ std::thread\ thread;}
+\DoxyCodeLine{00049\ \ \ \ \ std::atomic<bool>\ continuePolling;}
+\DoxyCodeLine{00050\ \ \ \ \ std::atomic\_flag\ alphasUpToDate;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ InitialiseBuffers();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ PollingLoop();}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ getNewAlphas();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ getLatestAlphas();}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ JUCE\_DECLARE\_NON\_COPYABLE\_WITH\_LEAK\_DETECTOR(\mbox{\hyperlink{class_poller_a5f8962df9f188016975afce57b5696ca}{Poller}})}
+\DoxyCodeLine{00085\ \};}
+
+\end{DoxyCode}

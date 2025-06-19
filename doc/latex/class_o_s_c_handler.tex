@@ -1,0 +1,213 @@
+\doxysection{OSCHandler Class Reference}
+\hypertarget{class_o_s_c_handler}{}\label{class_o_s_c_handler}\index{OSCHandler@{OSCHandler}}
+
+
+Handles OSC communication for the Ensemble Model.  
+
+
+
+
+{\ttfamily \#include $<$OSCHandler.\+h$>$}
+
+Inheritance diagram for OSCHandler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=0.687538cm]{class_o_s_c_handler}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_o_s_c_handler_aa0ff8332f60ef1d9e92d805c94003f13}{OSCHandler}} (\mbox{\hyperlink{class_ensemble_model}{Ensemble\+Model}} \texorpdfstring{$\ast$}{*}ensemble\+Model)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{class_o_s_c_handler}{OSCHandler}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_o_s_c_handler_afa4356850fc1ceaa052485e64401d5c5}{\texorpdfstring{$\sim$}{\string~}\+OSCHandler}} () override
+\begin{DoxyCompactList}\small\item\em Destructor for the \doxylink{class_o_s_c_handler}{OSCHandler} class. Disconnects both sender and receiver objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_af1268729ef98b8c1825b321cc95eac24}{Connect\+Sender}} (int port\+Number=8000, juce\+::\+String IPaddress="{}127.\+0.\+0.\+1"{})
+\begin{DoxyCompactList}\small\item\em Connect the OSC sender to a UDP port for sending messages to the Max/\+MSP system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_a2f5b644637e6da78311aa6fd32b28eae}{Connect\+Receiver}} (int port\+Number=8001)
+\begin{DoxyCompactList}\small\item\em Attempts to connect an OSC receiver to the specified UDP port. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_o_s_c_handler_a632ecac426e1958edfa9e993ce92c4d8}{Is\+Receiver\+Connected}} () const
+\begin{DoxyCompactList}\small\item\em Checks if the OSC receiver is connected. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_o_s_c_handler_a2f1552008fc38810de14ae966df3db86}{Is\+Sender\+Connected}} () const
+\begin{DoxyCompactList}\small\item\em Checks if the OSC Sender is connected. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_ad6514d95b7098e0c04eff2a065823d34}{Message\+Send\+New\+Interval}} (int player\+Num, int note\+Num, int note\+Time\+In\+MS)
+\begin{DoxyCompactList}\small\item\em Sends an OSC message to notify Max of a new interval. The message contains three integers\+: the player number, the note number, and the note time in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_ad71d99070accd512f910b8dac2f29918}{Message\+Send\+Reset}} ()
+\begin{DoxyCompactList}\small\item\em Sends an OSC message to trigger a reset in the Max/\+MSP patch. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_ac30e99581fd10e94d573ef80724a99fa}{Message\+Send\+Play\+Max}} ()
+\begin{DoxyCompactList}\small\item\em Send an OSC message to trigger Max to start playing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_aa4a6bd66f9c44eb81d45cab904c8686a}{Send\+Action\+Message}} (juce\+::\+String message)
+\begin{DoxyCompactList}\small\item\em Sends an action message to the OSC handler. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_s_c_handler_a4b79423847dcf69a72ff93acb9ac8beb}{Message\+Send\+Test}} (juce\+::\+String pattern="{}test"{})
+\begin{DoxyCompactList}\small\item\em Sends an OSC message either as a test or with onset data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles OSC communication for the Ensemble Model. 
+
+This class is responsible for sending and receiving OSC messages to and from a Max/\+MSP system. It manages the connection to the OSC sender and receiver, and provides methods to send specific messages. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_o_s_c_handler_aa0ff8332f60ef1d9e92d805c94003f13}\index{OSCHandler@{OSCHandler}!OSCHandler@{OSCHandler}}
+\index{OSCHandler@{OSCHandler}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{OSCHandler()}{OSCHandler()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_aa0ff8332f60ef1d9e92d805c94003f13} 
+OSCHandler\+::\+OSCHandler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_ensemble_model}{Ensemble\+Model}} \texorpdfstring{$\ast$}{*}}]{ensemble\+Model}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for \doxylink{class_o_s_c_handler}{OSCHandler}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ensemble\+Model} & The Ensemble Model that owns this insstance. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_o_s_c_handler_afa4356850fc1ceaa052485e64401d5c5}\index{OSCHandler@{OSCHandler}!````~OSCHandler@{\texorpdfstring{$\sim$}{\string~}OSCHandler}}
+\index{````~OSCHandler@{\texorpdfstring{$\sim$}{\string~}OSCHandler}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}OSCHandler()}{\string~OSCHandler()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_afa4356850fc1ceaa052485e64401d5c5} 
+OSCHandler\+::\texorpdfstring{$\sim$}{\string~}\+OSCHandler (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Destructor for the \doxylink{class_o_s_c_handler}{OSCHandler} class. Disconnects both sender and receiver objects. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_o_s_c_handler_a2f5b644637e6da78311aa6fd32b28eae}\index{OSCHandler@{OSCHandler}!ConnectReceiver@{ConnectReceiver}}
+\index{ConnectReceiver@{ConnectReceiver}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{ConnectReceiver()}{ConnectReceiver()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_a2f5b644637e6da78311aa6fd32b28eae} 
+void OSCHandler\+::\+Connect\+Receiver (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{ = {\ttfamily 8001}}\end{DoxyParamCaption})}
+
+
+
+Attempts to connect an OSC receiver to the specified UDP port. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port\+Number} & The port number to attempt the connection on.\\
+\hline
+\end{DoxyParams}
+If the connection fails, sets current\+Receive\+Port to -\/1 and logs an error message. If the connection succeeds, sets current\+Receive\+Port to the port number and logs a success message. \Hypertarget{class_o_s_c_handler_af1268729ef98b8c1825b321cc95eac24}\index{OSCHandler@{OSCHandler}!ConnectSender@{ConnectSender}}
+\index{ConnectSender@{ConnectSender}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{ConnectSender()}{ConnectSender()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_af1268729ef98b8c1825b321cc95eac24} 
+void OSCHandler\+::\+Connect\+Sender (\begin{DoxyParamCaption}\item[{int}]{port\+Number}{ = {\ttfamily 8000}, }\item[{juce\+::\+String}]{IPaddress}{ = {\ttfamily "{}127.0.0.1"{}}}\end{DoxyParamCaption})}
+
+
+
+Connect the OSC sender to a UDP port for sending messages to the Max/\+MSP system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port\+Number} & the UDP port number to connect to \\
+\hline
+{\em IPAddress} & the IP address to connect to (default is "{}127.\+0.\+0.\+1"{}) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_o_s_c_handler_a632ecac426e1958edfa9e993ce92c4d8}\index{OSCHandler@{OSCHandler}!IsReceiverConnected@{IsReceiverConnected}}
+\index{IsReceiverConnected@{IsReceiverConnected}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{IsReceiverConnected()}{IsReceiverConnected()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_a632ecac426e1958edfa9e993ce92c4d8} 
+bool OSCHandler\+::\+Is\+Receiver\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Checks if the OSC receiver is connected. 
+
+\begin{DoxyReturn}{Returns}
+true if the OSC receiver is connected, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_o_s_c_handler_a2f1552008fc38810de14ae966df3db86}\index{OSCHandler@{OSCHandler}!IsSenderConnected@{IsSenderConnected}}
+\index{IsSenderConnected@{IsSenderConnected}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{IsSenderConnected()}{IsSenderConnected()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_a2f1552008fc38810de14ae966df3db86} 
+bool OSCHandler\+::\+Is\+Sender\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Checks if the OSC Sender is connected. 
+
+\begin{DoxyReturn}{Returns}
+true if the OSC Sender is connected, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_o_s_c_handler_ad6514d95b7098e0c04eff2a065823d34}\index{OSCHandler@{OSCHandler}!MessageSendNewInterval@{MessageSendNewInterval}}
+\index{MessageSendNewInterval@{MessageSendNewInterval}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{MessageSendNewInterval()}{MessageSendNewInterval()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_ad6514d95b7098e0c04eff2a065823d34} 
+void OSCHandler\+::\+Message\+Send\+New\+Interval (\begin{DoxyParamCaption}\item[{int}]{player\+Num}{, }\item[{int}]{note\+Num}{, }\item[{int}]{note\+Time\+In\+MS}{}\end{DoxyParamCaption})}
+
+
+
+Sends an OSC message to notify Max of a new interval. The message contains three integers\+: the player number, the note number, and the note time in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player\+Num} & The player number. \\
+\hline
+{\em note\+Num} & The note number. \\
+\hline
+{\em note\+Time\+In\+MS} & The note time in milliseconds. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_o_s_c_handler_ac30e99581fd10e94d573ef80724a99fa}\index{OSCHandler@{OSCHandler}!MessageSendPlayMax@{MessageSendPlayMax}}
+\index{MessageSendPlayMax@{MessageSendPlayMax}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{MessageSendPlayMax()}{MessageSendPlayMax()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_ac30e99581fd10e94d573ef80724a99fa} 
+void OSCHandler\+::\+Message\+Send\+Play\+Max (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Send an OSC message to trigger Max to start playing. 
+
+The message is /play\+Max. This is used to trigger Max to start playing after the user has pressed play in the plugin editor. \Hypertarget{class_o_s_c_handler_ad71d99070accd512f910b8dac2f29918}\index{OSCHandler@{OSCHandler}!MessageSendReset@{MessageSendReset}}
+\index{MessageSendReset@{MessageSendReset}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{MessageSendReset()}{MessageSendReset()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_ad71d99070accd512f910b8dac2f29918} 
+void OSCHandler\+::\+Message\+Send\+Reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Sends an OSC message to trigger a reset in the Max/\+MSP patch. 
+
+\Hypertarget{class_o_s_c_handler_a4b79423847dcf69a72ff93acb9ac8beb}\index{OSCHandler@{OSCHandler}!MessageSendTest@{MessageSendTest}}
+\index{MessageSendTest@{MessageSendTest}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{MessageSendTest()}{MessageSendTest()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_a4b79423847dcf69a72ff93acb9ac8beb} 
+void OSCHandler\+::\+Message\+Send\+Test (\begin{DoxyParamCaption}\item[{juce\+::\+String}]{pattern}{ = {\ttfamily "{}test"{}}}\end{DoxyParamCaption})}
+
+
+
+Sends an OSC message either as a test or with onset data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em test} & If true, sends a test OSC message to the "{}/test"{} address. Otherwise, sends an OSC message to the "{}/onsets"{} address with four random float arguments. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_o_s_c_handler_aa4a6bd66f9c44eb81d45cab904c8686a}\index{OSCHandler@{OSCHandler}!SendActionMessage@{SendActionMessage}}
+\index{SendActionMessage@{SendActionMessage}!OSCHandler@{OSCHandler}}
+\doxysubsubsection{\texorpdfstring{SendActionMessage()}{SendActionMessage()}}
+{\footnotesize\ttfamily \label{class_o_s_c_handler_aa4a6bd66f9c44eb81d45cab904c8686a} 
+void OSCHandler\+::\+Send\+Action\+Message (\begin{DoxyParamCaption}\item[{juce\+::\+String}]{message}{}\end{DoxyParamCaption})}
+
+
+
+Sends an action message to the OSC handler. 
+
+This function broadcasts an action message to all listeners. It is used to notify other components of specific actions or events.
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & The action message to be sent. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_o_s_c_handler_8h}{OSCHandler.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_o_s_c_handler_8cpp}{OSCHandler.\+cpp}}\end{DoxyCompactItemize}

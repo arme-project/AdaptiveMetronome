@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ensemblemodel_0',['EnsembleModel',['../class_ensemble_model.html',1,'']]]
+  ['confighandler_0',['ConfigHandler',['../class_config_handler.html',1,'']]]
 ];

@@ -32,9 +32,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Adaptive Metronome<span id="projectnumber">&#160;V.2</span>
+   <div id="projectname">Adaptive Metronome
    </div>
-   <div id="projectbrief">The ARME Project&#39;s Plugin</div>
+   <div id="projectbrief">The ARME Project</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -162,7 +162,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a19f378fda8d8f5d07558b10d0e8d0afb" id="r_a19f378fda8d8f5d07558b10d0e8d0afb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19f378fda8d8f5d07558b10d0e8d0afb">setFloatParameterByName</a> (std::string paramName, float newFloatValue)</td></tr>
 <tr class="memdesc:a19f378fda8d8f5d07558b10d0e8d0afb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the raw float value of a parameter by name.  <br /></td></tr>
 <tr class="separator:a19f378fda8d8f5d07558b10d0e8d0afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9928b44292d7b3a80a36fb1efa072f07" id="r_a9928b44292d7b3a80a36fb1efa072f07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9928b44292d7b3a80a36fb1efa072f07">overrideModelParameterFloat</a> (<a class="el" href="namespace_a_r_m_e_timing_model.html#a50f2e34ca1d31940a285331f32ab473b">ModelFloatPtr</a> *ptrToModelFloatPtr, std::function&lt; float()&gt; newGetFloatFcn)</td></tr>
+<tr class="memitem:a9928b44292d7b3a80a36fb1efa072f07" id="r_a9928b44292d7b3a80a36fb1efa072f07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9928b44292d7b3a80a36fb1efa072f07">overrideModelParameterFloat</a> (<a class="el" href="namespace_a_r_m_e_timing_model.html#a4ab2a0c993d74f2d2d76166df0778b8d">ModelFloatPtr</a> *ptrToModelFloatPtr, std::function&lt; float()&gt; newGetFloatFcn)</td></tr>
 <tr class="memdesc:a9928b44292d7b3a80a36fb1efa072f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the pointer to the underlying std::atomic&lt;float&gt; value of this parameter.  <br /></td></tr>
 <tr class="separator:a9928b44292d7b3a80a36fb1efa072f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8858195b3849484b155266af5c921127" id="r_a8858195b3849484b155266af5c921127"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8858195b3849484b155266af5c921127">overrideFloatParameterByName</a> (std::string paramName, std::function&lt; float()&gt; newGetFloatFcn)</td></tr>
@@ -192,12 +192,12 @@ Public Attributes</h2></td></tr>
 <tr class="inherit_header pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html">ARMETimingModel::ModelParameters</a></td></tr>
 <tr class="memitem:a27ad23c20c466c6bfaa6b7220caffc6d inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_a27ad23c20c466c6bfaa6b7220caffc6d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#a27ad23c20c466c6bfaa6b7220caffc6d">numberOfPlayers</a></td></tr>
 <tr class="separator:a27ad23c20c466c6bfaa6b7220caffc6d inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2c3b3f3319525bebabe889a3fd34335 inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_ab2c3b3f3319525bebabe889a3fd34335"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameter_float.html">ModelParameterFloat</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#ab2c3b3f3319525bebabe889a3fd34335">dictOfFloatParams</a></td></tr>
-<tr class="separator:ab2c3b3f3319525bebabe889a3fd34335 inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f63fa1d6b453e99fb392cac6677adba inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_a6f63fa1d6b453e99fb392cac6677adba"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="namespace_a_r_m_e_timing_model.html#aafdffaee5a878431fe2466459aa5b41e">ModelFloatVector</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#a6f63fa1d6b453e99fb392cac6677adba">dictOfVectorParams</a></td></tr>
-<tr class="separator:a6f63fa1d6b453e99fb392cac6677adba inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11bbb7a0aca121a02f2b76d46bca135c inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_a11bbb7a0aca121a02f2b76d46bca135c"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="namespace_a_r_m_e_timing_model.html#a9e8eab028ea958bcad4eb11480eb3af4">ModelFloatMatrix</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#a11bbb7a0aca121a02f2b76d46bca135c">dictOfMatrixParams</a></td></tr>
-<tr class="separator:a11bbb7a0aca121a02f2b76d46bca135c inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa783ef90721f6f10a07f3dd6609e7ab4 inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_aa783ef90721f6f10a07f3dd6609e7ab4"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameter_float.html">ModelParameterFloat</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#aa783ef90721f6f10a07f3dd6609e7ab4">dictOfFloatParams</a></td></tr>
+<tr class="separator:aa783ef90721f6f10a07f3dd6609e7ab4 inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61cb6c960f19d979b25a51198af9c583 inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_a61cb6c960f19d979b25a51198af9c583"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="namespace_a_r_m_e_timing_model.html#aafdffaee5a878431fe2466459aa5b41e">ModelFloatVector</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#a61cb6c960f19d979b25a51198af9c583">dictOfVectorParams</a></td></tr>
+<tr class="separator:a61cb6c960f19d979b25a51198af9c583 inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bb6ead9e18176c36cbc42fcd1cec36d inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters" id="r_a3bb6ead9e18176c36cbc42fcd1cec36d"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="namespace_a_r_m_e_timing_model.html#a9e8eab028ea958bcad4eb11480eb3af4">ModelFloatMatrix</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_r_m_e_timing_model_1_1_model_parameters.html#a3bb6ead9e18176c36cbc42fcd1cec36d">dictOfMatrixParams</a></td></tr>
+<tr class="separator:a3bb6ead9e18176c36cbc42fcd1cec36d inherit pub_attribs_class_a_r_m_e_timing_model_1_1_model_parameters"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -500,7 +500,7 @@ template&lt;typename ParamType&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespace_a_r_m_e_timing_model.html#a50f2e34ca1d31940a285331f32ab473b">ModelFloatPtr</a> * ARMETimingModel::PhaseCorrectionModelParameters::getFloatRefByName </td>
+          <td class="memname"><a class="el" href="namespace_a_r_m_e_timing_model.html#a4ab2a0c993d74f2d2d76166df0778b8d">ModelFloatPtr</a> * ARMETimingModel::PhaseCorrectionModelParameters::getFloatRefByName </td>
           <td>(</td>
           <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>paramName</em></span></td><td>)</td>
           <td></td>
@@ -749,7 +749,7 @@ template&lt;typename ParamType&gt; </div>
         <tr>
           <td class="memname">void ARMETimingModel::PhaseCorrectionModelParameters::overrideModelParameterFloat </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_a_r_m_e_timing_model.html#a50f2e34ca1d31940a285331f32ab473b">ModelFloatPtr</a> *</td>          <td class="paramname"><span class="paramname"><em>ptrToModelFloatPtr</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_a_r_m_e_timing_model.html#a4ab2a0c993d74f2d2d76166df0778b8d">ModelFloatPtr</a> *</td>          <td class="paramname"><span class="paramname"><em>ptrToModelFloatPtr</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -857,8 +857,8 @@ template&lt;typename ParamType&gt; </div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>D:/Projects/ARME Demo/AdaptiveMetronome/Source/<a class="el" href="_timing_model_parameters_group_8h_source.html">TimingModelParametersGroup.h</a></li>
-<li>D:/Projects/ARME Demo/AdaptiveMetronome/Source/<a class="el" href="_timing_model_parameters_group_8cpp.html">TimingModelParametersGroup.cpp</a></li>
+<li>C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/<a class="el" href="_timing_model_parameters_group_8h_source.html">TimingModelParametersGroup.h</a></li>
+<li>C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/<a class="el" href="_timing_model_parameters_group_8cpp.html">TimingModelParametersGroup.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

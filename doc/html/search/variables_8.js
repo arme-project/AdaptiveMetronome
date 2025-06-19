@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['latestdelay_0',['latestDelay',['../class_player.html#a0eb51e436573c0686cf24c7cf59ac336',1,'Player']]],
-  ['latestosconsetnotenumber_1',['latestOscOnsetNoteNumber',['../class_player.html#a41a5432f07ef89ee22c111352c5bf462',1,'Player']]],
-  ['latestvolume_2',['latestVolume',['../class_player.html#ad6d71e62ce978ae7759db7483cae8de5',1,'Player']]],
-  ['logfilenameoverride_3',['logFilenameOverride',['../class_ensemble_model.html#af4eabb1e67e4e0c343e08eeb016f2934',1,'EnsembleModel']]],
-  ['logsubfolder_4',['logSubfolder',['../class_ensemble_model.html#a0e5e3e32bbaa2632668f11a6141b7a55',1,'EnsembleModel']]]
+  ['initialonsetinterval_0',['initialOnsetInterval',['../class_a_r_m_e_timing_model_1_1_timing_model.html#a329bcb7cac63870d090bd54eb92e6df8',1,'ARMETimingModel::TimingModel']]],
+  ['introtonelength_1',['introToneLength',['../class_user_player.html#ab594ed8f7f55bf4c96da2c3bb4154241',1,'UserPlayer']]],
+  ['isreftype_2',['isRefType',['../class_a_r_m_e_timing_model_1_1_model_parameter_float.html#ab3fbec3c14c2d676dd7f423f135c60a1',1,'ARMETimingModel::ModelParameterFloat']]]
 ];

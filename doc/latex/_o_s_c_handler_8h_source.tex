@@ -1,0 +1,58 @@
+\doxysection{OSCHandler.\+h}
+\hypertarget{_o_s_c_handler_8h_source}{}\label{_o_s_c_handler_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/OSCHandler.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/OSCHandler.h}}
+\mbox{\hyperlink{_o_s_c_handler_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <JuceHeader.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_ensemble_model_8h}{EnsembleModel.h}}"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_o_s_c_handler_aa0ff8332f60ef1d9e92d805c94003f13}{OSCHandler}}\ :}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{private}\ juce::OSCReceiver,}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{private}\ juce::OSCReceiver::ListenerWithOSCAddress<juce::OSCReceiver::MessageLoopCallback>,}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{public}\ juce::ActionBroadcaster}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{class_o_s_c_handler_aa0ff8332f60ef1d9e92d805c94003f13}{OSCHandler}}(\mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}*\ ensembleModel);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_o_s_c_handler_afa4356850fc1ceaa052485e64401d5c5}{\string~OSCHandler}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_af1268729ef98b8c1825b321cc95eac24}{ConnectSender}}(\textcolor{keywordtype}{int}\ portNumber\ =\ 8000,\ juce::String\ IPaddress\ =\ \textcolor{stringliteral}{"{}127.0.0.1"{}});}
+\DoxyCodeLine{00038\ \ \ \ \ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_a2f5b644637e6da78311aa6fd32b28eae}{ConnectReceiver}}(\textcolor{keywordtype}{int}\ portNumber\ =\ 8001);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_o_s_c_handler_a632ecac426e1958edfa9e993ce92c4d8}{IsReceiverConnected}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_o_s_c_handler_a2f1552008fc38810de14ae966df3db86}{IsSenderConnected}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_ad6514d95b7098e0c04eff2a065823d34}{MessageSendNewInterval}}(\textcolor{keywordtype}{int}\ playerNum,\ \textcolor{keywordtype}{int}\ noteNum,\ \textcolor{keywordtype}{int}\ noteTimeInMS);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_ad71d99070accd512f910b8dac2f29918}{MessageSendReset}}();}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_ac30e99581fd10e94d573ef80724a99fa}{MessageSendPlayMax}}();}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_aa4a6bd66f9c44eb81d45cab904c8686a}{SendActionMessage}}(juce::String\ message);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//\ Testing\ Function}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_o_s_c_handler_a4b79423847dcf69a72ff93acb9ac8beb}{MessageSendTest}}(juce::String\ pattern\ =\ \textcolor{stringliteral}{"{}test"{}});}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}*\ model;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ juce::OSCSender\ sender;}
+\DoxyCodeLine{00110\ \ \ \ \ juce::OSCReceiver\ receiver;}
+\DoxyCodeLine{00111\ \ \ \ \ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{int}\ currentSenderPort\ =\ -\/1;}
+\DoxyCodeLine{00113\ \ \ \ \ juce::String\ currentSenderIPAddress\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{int}\ currentReceiverPort\ =\ -\/1;}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ MessageReceived(\textcolor{keyword}{const}\ juce::OSCMessage\&\ message);}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ InitialiseAddresses();}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ }
+\DoxyCodeLine{00133\ \ \ \ \ JUCE\_DECLARE\_NON\_COPYABLE\_WITH\_LEAK\_DETECTOR(\mbox{\hyperlink{class_o_s_c_handler_aa0ff8332f60ef1d9e92d805c94003f13}{OSCHandler}})}
+\DoxyCodeLine{00134\ \};}
+
+\end{DoxyCode}

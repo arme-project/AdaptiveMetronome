@@ -1,0 +1,37 @@
+\doxysection{Config\+Handler.\+h}
+\hypertarget{_config_handler_8h_source}{}\label{_config_handler_8h_source}\index{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/ConfigHandler.h@{C:/Users/jhund/Important Folders/Desktop/AdaptiveMetronome/Source/ConfigHandler.h}}
+\mbox{\hyperlink{_config_handler_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <JuceHeader.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_ensemble_model_8h}{EnsembleModel.h}}"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_config_handler_a4c3ed8dfd1197bc727da851298f88503}{ConfigHandler}}\ :\ \textcolor{keyword}{public}\ juce::Component}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_config_handler_a4c3ed8dfd1197bc727da851298f88503}{ConfigHandler}}(\mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}*\ modelIn);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{class_config_handler_a9b03beacc63e90076592ee7efc02a907}{\string~ConfigHandler}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_config_handler_aa8a861fea0c53bbe3f1a66dac0524d28}{SaveConfig}}();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ *\ \(\backslash\)brief\ Converts\ a.xml\ file\ to\ xmlElement(to\ be\ used\ in\ loadConfigFromXml)}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00035\ \ \ \ \ std::unique\_ptr<juce::XmlElement>\ \mbox{\hyperlink{class_config_handler_ac22d8c49419ec43634ec25bc07ca61c8}{ParseConfigToElement}}(juce::File\ configFile);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_config_handler_a71d70df04f83394575bea4c3214df888}{LoadConfig}}(std::unique\_ptr<juce::XmlElement>\ loadedConfig);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_config_handler_a71d70df04f83394575bea4c3214df888}{LoadConfig}}(juce::File\ configFile);}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00054\ \ \ \ \ juce::String\ \mbox{\hyperlink{class_config_handler_a8f372dc797a127f8dbc56cb8a372b7c6}{GetConfigSubfolder}}();}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00060\ \ \ \ \ juce::String\ configSubfolder\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{class_ensemble_model}{EnsembleModel}}*\ model;}
+\DoxyCodeLine{00066\ \ \ \ \ JUCE\_DECLARE\_NON\_COPYABLE\_WITH\_LEAK\_DETECTOR(\mbox{\hyperlink{class_config_handler_a4c3ed8dfd1197bc727da851298f88503}{ConfigHandler}})}
+\DoxyCodeLine{00067\ \};}
+
+\end{DoxyCode}

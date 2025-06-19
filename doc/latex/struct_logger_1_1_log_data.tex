@@ -1,0 +1,121 @@
+\doxysection{Logger\+::Log\+Data Struct Reference}
+\hypertarget{struct_logger_1_1_log_data}{}\label{struct_logger_1_1_log_data}\index{Logger::LogData@{Logger::LogData}}
+
+
+A structure to hold the data for each log entry.  
+
+
+
+
+{\ttfamily \#include $<$Logger.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{struct_logger_1_1_log_data_af43c35b506eefb9b05c9f1ea09ee33e4}{onset\+Time}} = 0
+\item 
+int \mbox{\hyperlink{struct_logger_1_1_log_data_a329f6a7640d376d65af3c58a1c09692e}{onset\+Interval}} = 0
+\item 
+bool \mbox{\hyperlink{struct_logger_1_1_log_data_af673b7e19328bec2f4126eafbe0006ff}{user\+Input}} = false
+\item 
+double \mbox{\hyperlink{struct_logger_1_1_log_data_a33c558c26402a0c918603d5dbf16510c}{delay}} = 0.\+0
+\item 
+double \mbox{\hyperlink{struct_logger_1_1_log_data_abb7261a5a06f5a376182dba01dee702f}{motor\+Noise}} = 0.\+0
+\item 
+double \mbox{\hyperlink{struct_logger_1_1_log_data_ad152a892a857e9bed881b5af78191350}{time\+Keeper\+Noise}} = 0.\+0
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{struct_logger_1_1_log_data_a085fad8a8920f37641e06711caa8049c}{asyncs}}
+\item 
+std\+::vector$<$ float $>$ \mbox{\hyperlink{struct_logger_1_1_log_data_a34481e327169eb69b3aa2181c24081aa}{alphas}}
+\item 
+std\+::vector$<$ float $>$ \mbox{\hyperlink{struct_logger_1_1_log_data_ae32e9a52b40d9d98d03d60a73be6a470}{betas}}
+\item 
+double \mbox{\hyperlink{struct_logger_1_1_log_data_a387c50715884700da607b1925d078c5e}{tk\+Noise\+Std}} = 0.\+0
+\item 
+double \mbox{\hyperlink{struct_logger_1_1_log_data_a236e6fff297673d4adf3cced9144a568}{m\+Noise\+Std}} = 0.\+0
+\item 
+double \mbox{\hyperlink{struct_logger_1_1_log_data_a3a598dc77eeb0be8d7d9d6634fb9f422}{volume}} = 0.\+0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A structure to hold the data for each log entry. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_logger_1_1_log_data_a34481e327169eb69b3aa2181c24081aa}\index{Logger::LogData@{Logger::LogData}!alphas@{alphas}}
+\index{alphas@{alphas}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{alphas}{alphas}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a34481e327169eb69b3aa2181c24081aa} 
+std\+::vector$<$float$>$ Logger\+::\+Log\+Data\+::alphas}
+
+\Hypertarget{struct_logger_1_1_log_data_a085fad8a8920f37641e06711caa8049c}\index{Logger::LogData@{Logger::LogData}!asyncs@{asyncs}}
+\index{asyncs@{asyncs}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{asyncs}{asyncs}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a085fad8a8920f37641e06711caa8049c} 
+std\+::vector$<$int$>$ Logger\+::\+Log\+Data\+::asyncs}
+
+\Hypertarget{struct_logger_1_1_log_data_ae32e9a52b40d9d98d03d60a73be6a470}\index{Logger::LogData@{Logger::LogData}!betas@{betas}}
+\index{betas@{betas}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{betas}{betas}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_ae32e9a52b40d9d98d03d60a73be6a470} 
+std\+::vector$<$float$>$ Logger\+::\+Log\+Data\+::betas}
+
+\Hypertarget{struct_logger_1_1_log_data_a33c558c26402a0c918603d5dbf16510c}\index{Logger::LogData@{Logger::LogData}!delay@{delay}}
+\index{delay@{delay}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{delay}{delay}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a33c558c26402a0c918603d5dbf16510c} 
+double Logger\+::\+Log\+Data\+::delay = 0.\+0}
+
+\Hypertarget{struct_logger_1_1_log_data_a236e6fff297673d4adf3cced9144a568}\index{Logger::LogData@{Logger::LogData}!mNoiseStd@{mNoiseStd}}
+\index{mNoiseStd@{mNoiseStd}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{mNoiseStd}{mNoiseStd}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a236e6fff297673d4adf3cced9144a568} 
+double Logger\+::\+Log\+Data\+::m\+Noise\+Std = 0.\+0}
+
+\Hypertarget{struct_logger_1_1_log_data_abb7261a5a06f5a376182dba01dee702f}\index{Logger::LogData@{Logger::LogData}!motorNoise@{motorNoise}}
+\index{motorNoise@{motorNoise}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{motorNoise}{motorNoise}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_abb7261a5a06f5a376182dba01dee702f} 
+double Logger\+::\+Log\+Data\+::motor\+Noise = 0.\+0}
+
+\Hypertarget{struct_logger_1_1_log_data_a329f6a7640d376d65af3c58a1c09692e}\index{Logger::LogData@{Logger::LogData}!onsetInterval@{onsetInterval}}
+\index{onsetInterval@{onsetInterval}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{onsetInterval}{onsetInterval}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a329f6a7640d376d65af3c58a1c09692e} 
+int Logger\+::\+Log\+Data\+::onset\+Interval = 0}
+
+\Hypertarget{struct_logger_1_1_log_data_af43c35b506eefb9b05c9f1ea09ee33e4}\index{Logger::LogData@{Logger::LogData}!onsetTime@{onsetTime}}
+\index{onsetTime@{onsetTime}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{onsetTime}{onsetTime}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_af43c35b506eefb9b05c9f1ea09ee33e4} 
+int Logger\+::\+Log\+Data\+::onset\+Time = 0}
+
+\Hypertarget{struct_logger_1_1_log_data_ad152a892a857e9bed881b5af78191350}\index{Logger::LogData@{Logger::LogData}!timeKeeperNoise@{timeKeeperNoise}}
+\index{timeKeeperNoise@{timeKeeperNoise}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{timeKeeperNoise}{timeKeeperNoise}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_ad152a892a857e9bed881b5af78191350} 
+double Logger\+::\+Log\+Data\+::time\+Keeper\+Noise = 0.\+0}
+
+\Hypertarget{struct_logger_1_1_log_data_a387c50715884700da607b1925d078c5e}\index{Logger::LogData@{Logger::LogData}!tkNoiseStd@{tkNoiseStd}}
+\index{tkNoiseStd@{tkNoiseStd}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{tkNoiseStd}{tkNoiseStd}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a387c50715884700da607b1925d078c5e} 
+double Logger\+::\+Log\+Data\+::tk\+Noise\+Std = 0.\+0}
+
+\Hypertarget{struct_logger_1_1_log_data_af673b7e19328bec2f4126eafbe0006ff}\index{Logger::LogData@{Logger::LogData}!userInput@{userInput}}
+\index{userInput@{userInput}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{userInput}{userInput}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_af673b7e19328bec2f4126eafbe0006ff} 
+bool Logger\+::\+Log\+Data\+::user\+Input = false}
+
+\Hypertarget{struct_logger_1_1_log_data_a3a598dc77eeb0be8d7d9d6634fb9f422}\index{Logger::LogData@{Logger::LogData}!volume@{volume}}
+\index{volume@{volume}!Logger::LogData@{Logger::LogData}}
+\doxysubsubsection{\texorpdfstring{volume}{volume}}
+{\footnotesize\ttfamily \label{struct_logger_1_1_log_data_a3a598dc77eeb0be8d7d9d6634fb9f422} 
+double Logger\+::\+Log\+Data\+::volume = 0.\+0}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_logger_8h}{Logger.\+h}}\end{DoxyCompactItemize}

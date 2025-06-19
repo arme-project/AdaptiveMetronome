@@ -1,0 +1,68 @@
+\doxysection{Flag\+Lock Class Reference}
+\hypertarget{class_flag_lock}{}\label{class_flag_lock}\index{FlagLock@{FlagLock}}
+
+
+A class to lock a given std\+::atomic\+\_\+flag.  
+
+
+
+
+{\ttfamily \#include $<$Flag\+Lock.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_flag_lock_ac95e5c9a3b395c6eb930f312b1dda68a}{Flag\+Lock}} (std\+::atomic\+\_\+flag \&f)
+\item 
+\mbox{\hyperlink{class_flag_lock_a85219a3fd8c7bbc5ad3a80874783c98a}{\texorpdfstring{$\sim$}{\string~}\+Flag\+Lock}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic\+\_\+flag \& \mbox{\hyperlink{class_flag_lock_a649e6a35028b00a494d4c99184d0791c}{flag}}
+\item 
+bool \mbox{\hyperlink{class_flag_lock_a44a07d33df8b74af52c3d0c664bb4cd8}{locked}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class to lock a given std\+::atomic\+\_\+flag. 
+
+This class is used to lock the players\+In\+Use flag when we are modifying players. It takes a reference to the flag in its constructor, and atomically tests and sets the flag. If the flag was previously clear, it sets the locked member to true, and if the flag was previously set, it sets the locked member to false.
+
+When the object is destroyed, the flag is atomically cleared. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_flag_lock_ac95e5c9a3b395c6eb930f312b1dda68a}\index{FlagLock@{FlagLock}!FlagLock@{FlagLock}}
+\index{FlagLock@{FlagLock}!FlagLock@{FlagLock}}
+\doxysubsubsection{\texorpdfstring{FlagLock()}{FlagLock()}}
+{\footnotesize\ttfamily \label{class_flag_lock_ac95e5c9a3b395c6eb930f312b1dda68a} 
+Flag\+Lock\+::\+Flag\+Lock (\begin{DoxyParamCaption}\item[{std\+::atomic\+\_\+flag \&}]{f}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_flag_lock_a85219a3fd8c7bbc5ad3a80874783c98a}\index{FlagLock@{FlagLock}!````~FlagLock@{\texorpdfstring{$\sim$}{\string~}FlagLock}}
+\index{````~FlagLock@{\texorpdfstring{$\sim$}{\string~}FlagLock}!FlagLock@{FlagLock}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}FlagLock()}{\string~FlagLock()}}
+{\footnotesize\ttfamily \label{class_flag_lock_a85219a3fd8c7bbc5ad3a80874783c98a} 
+Flag\+Lock\+::\texorpdfstring{$\sim$}{\string~}\+Flag\+Lock (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_flag_lock_a649e6a35028b00a494d4c99184d0791c}\index{FlagLock@{FlagLock}!flag@{flag}}
+\index{flag@{flag}!FlagLock@{FlagLock}}
+\doxysubsubsection{\texorpdfstring{flag}{flag}}
+{\footnotesize\ttfamily \label{class_flag_lock_a649e6a35028b00a494d4c99184d0791c} 
+std\+::atomic\+\_\+flag\& Flag\+Lock\+::flag}
+
+\Hypertarget{class_flag_lock_a44a07d33df8b74af52c3d0c664bb4cd8}\index{FlagLock@{FlagLock}!locked@{locked}}
+\index{locked@{locked}!FlagLock@{FlagLock}}
+\doxysubsubsection{\texorpdfstring{locked}{locked}}
+{\footnotesize\ttfamily \label{class_flag_lock_a44a07d33df8b74af52c3d0c664bb4cd8} 
+bool Flag\+Lock\+::locked}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_flag_lock_8h}{Flag\+Lock.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_flag_lock_8cpp}{Flag\+Lock.\+cpp}}\end{DoxyCompactItemize}

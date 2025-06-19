@@ -16,8 +16,8 @@ var class_a_r_m_e_timing_model_1_1_model_parameters =
     [ "getNumberOfPlayers", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a9830121f8fc24e304b55808c9c66b01d", null ],
     [ "getVectorRefByName", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a0712e3c1305a1e7fe0a06ba64a191461", null ],
     [ "ModelParameters::ModelParameters", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a4a448fb661c6ba53adc6cbf86f055805", null ],
-    [ "dictOfFloatParams", "class_a_r_m_e_timing_model_1_1_model_parameters.html#ab2c3b3f3319525bebabe889a3fd34335", null ],
-    [ "dictOfMatrixParams", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a11bbb7a0aca121a02f2b76d46bca135c", null ],
-    [ "dictOfVectorParams", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a6f63fa1d6b453e99fb392cac6677adba", null ],
+    [ "dictOfFloatParams", "class_a_r_m_e_timing_model_1_1_model_parameters.html#aa783ef90721f6f10a07f3dd6609e7ab4", null ],
+    [ "dictOfMatrixParams", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a3bb6ead9e18176c36cbc42fcd1cec36d", null ],
+    [ "dictOfVectorParams", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a61cb6c960f19d979b25a51198af9c583", null ],
     [ "numberOfPlayers", "class_a_r_m_e_timing_model_1_1_model_parameters.html#a27ad23c20c466c6bfaa6b7220caffc6d", null ]
 ];

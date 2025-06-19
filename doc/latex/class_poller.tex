@@ -1,0 +1,79 @@
+\doxysection{Poller Class Reference}
+\hypertarget{class_poller}{}\label{class_poller}\index{Poller@{Poller}}
+
+
+Handles Polling of ensemble model data.  
+
+
+
+
+{\ttfamily \#include $<$Poller.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_poller_a5f8962df9f188016975afce57b5696ca}{Poller}} (int num\+Players\+In)
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_poller}{Poller} Class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_poller_a558eed5a0c012c2ed4a4f6df07a02f66}{\texorpdfstring{$\sim$}{\string~}\+Poller}} ()
+\begin{DoxyCompactList}\small\item\em Deconstructor for the \doxylink{class_poller}{Poller} Class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_poller_a1c51390b125f4e2aae1f952e5a73dac8}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the polling loop for the ensemble model. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_poller_aba0184aeb6489d597aa46ae71833aea1}{Stop}} ()
+\begin{DoxyCompactList}\small\item\em Stops the polling loop by setting the continue\+Polling flag to false. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles Polling of ensemble model data. 
+
+This class is responsible for polling the ensemble model data at regular intervals. It runs in a separate thread to avoid blocking the audio thread, and uses an Abstract\+Fifo to manage the polling buffer. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_poller_a5f8962df9f188016975afce57b5696ca}\index{Poller@{Poller}!Poller@{Poller}}
+\index{Poller@{Poller}!Poller@{Poller}}
+\doxysubsubsection{\texorpdfstring{Poller()}{Poller()}}
+{\footnotesize\ttfamily \label{class_poller_a5f8962df9f188016975afce57b5696ca} 
+Poller\+::\+Poller (\begin{DoxyParamCaption}\item[{int}]{num\+Players\+In}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for the \doxylink{class_poller}{Poller} Class. 
+
+\textbackslash{}input num\+Players\+In Number of Players in the Ensemble \Hypertarget{class_poller_a558eed5a0c012c2ed4a4f6df07a02f66}\index{Poller@{Poller}!````~Poller@{\texorpdfstring{$\sim$}{\string~}Poller}}
+\index{````~Poller@{\texorpdfstring{$\sim$}{\string~}Poller}!Poller@{Poller}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Poller()}{\string~Poller()}}
+{\footnotesize\ttfamily \label{class_poller_a558eed5a0c012c2ed4a4f6df07a02f66} 
+Poller\+::\texorpdfstring{$\sim$}{\string~}\+Poller (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Deconstructor for the \doxylink{class_poller}{Poller} Class. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_poller_a1c51390b125f4e2aae1f952e5a73dac8}\index{Poller@{Poller}!Start@{Start}}
+\index{Start@{Start}!Poller@{Poller}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily \label{class_poller_a1c51390b125f4e2aae1f952e5a73dac8} 
+void Poller\+::\+Start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts the polling loop for the ensemble model. 
+
+This function stops any existing polling loop, initialises the polling buffers, and starts a new thread to run the polling loop. The polling loop will continue to run until the stop\+Polling\+Loop function is called. \Hypertarget{class_poller_aba0184aeb6489d597aa46ae71833aea1}\index{Poller@{Poller}!Stop@{Stop}}
+\index{Stop@{Stop}!Poller@{Poller}}
+\doxysubsubsection{\texorpdfstring{Stop()}{Stop()}}
+{\footnotesize\ttfamily \label{class_poller_aba0184aeb6489d597aa46ae71833aea1} 
+void Poller\+::\+Stop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stops the polling loop by setting the continue\+Polling flag to false. 
+
+If the polling thread is joinable, it will join the thread to ensure proper cleanup. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_poller_8h}{Poller.\+h}}\item 
+C\+:/\+Users/jhund/\+Important Folders/\+Desktop/\+Adaptive\+Metronome/\+Source/\mbox{\hyperlink{_poller_8cpp}{Poller.\+cpp}}\end{DoxyCompactItemize}
