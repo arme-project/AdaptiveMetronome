@@ -31,7 +31,7 @@ public:
     
     //==============================================================================
     void setOnsetInterval (int interval);
-    int getOnsetInterval();
+    int getNextOnsetIntervalSamples();
     int getPlayedOnsetInterval();
 
     std::deque<double> onsetIntervals;
@@ -46,8 +46,8 @@ public:
     int numOfIntervalsInQueue = 0;
     //==============================================================================
         // OSC RELATED
-    float oscOnsetTime;
-    int oscOnsetTimeInSamples;
+    float latestOscOnsetTimeInSeconds;
+    int latestOscOnsetTimeSamples;
     int latestOscOnsetNoteNumber;
     void setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote);
     //void setOscOnsetTimeInSamples(float oscOnsetTime);
@@ -69,7 +69,7 @@ public:
     bool hasNotePlayed();
     void resetNotePlayed();
     
-    int getLatestOnsetTime();
+    int getLatestOnsetTimeSamples();
     int getLatestOnsetDelay();
     double getLatestVolume();
     virtual bool wasLatestOnsetUserInput();
@@ -100,8 +100,9 @@ protected:
         double duration; // Note duration in seconds
     };
     
-    std::vector <Note> notes;
+    // Index in score of the latest played note. Index 1 is First note, played at time = 0
     std::size_t currentNoteIndex = 0;
+    std::vector <Note> notes;
     double latestVolume = 0.0;
     
     void initialiseScore (const juce::MidiMessageSequence *seq);
@@ -109,15 +110,21 @@ protected:
     void stopPreviousNote (juce::MidiBuffer &midi, int sampleIndex);
     
     virtual void processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer &outMidi, int sampleIndex);
+    virtual void updateNoteHasBeenPlayed (int samplesDelay = 0);
+
+    //==============================================================================
+    // Ensure the velocity is within the 0-127 range
+    float convertVelocityForStandalone (int velocity) { return juce::jlimit(0.0f, 1.0f, velocity / 127.0f); }
+
     //==============================================================================
     // Timing information
     const double &sampleRate;
     const int &scoreCounter;
-    int onsetInterval = 0; // time between previous and next onset in samples
+    int nextScheduledOnsetIntervalSamples = 0; // time between previous and next onset in samples
     
     int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
     
-    int currentOnsetTime = 0, previousOnsetTime = 0;
+    int currentOnsetTimeSamples = 0, previousOnsetTimeSamples = 0;
     int nextNoteTimeInMS = 0;
 
     int latestDelay = 0;

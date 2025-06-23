@@ -50,7 +50,7 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay (double sampleRate, int samp
     wasPlaying = false;
 
     // Used in standalone
-    manualPlaying = false;
+    setManualPlaying(false);
     reaperPlaying = false;
 }
 
@@ -206,7 +206,14 @@ EnsembleModel& AdaptiveMetronomeAudioProcessor::loadXmlFile(const juce::File& fi
 
 void AdaptiveMetronomeAudioProcessor::resetEnsemble()
 {
-    ensemble.reset();
+    if (juce::JUCEApplicationBase::isStandaloneApp())
+    {
+        ensemble.reset(true);
+    }
+    else
+    {
+        ensemble.reset();
+    }
 }
 
 //==============================================================================

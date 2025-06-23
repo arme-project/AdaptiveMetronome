@@ -5,11 +5,8 @@
 #include <thread>
 #include "Player.h"
 
-
-using std::function;
-
 class AdaptiveMetronomeAudioProcessor;
-
+using std::function;
 using AudioParameterFloatToUse = juce::AudioParameterFloat;
 
 class EnsembleModel :
@@ -21,13 +18,13 @@ public:
     //==============================================================================
     //EnsembleModel();
     EnsembleModel(AdaptiveMetronomeAudioProcessor *processorPtr);
-
     ~EnsembleModel();
-    
+
     AdaptiveMetronomeAudioProcessor *processor = nullptr;
     //==============================================================================
-// Communication
+    // Communication
 	bool OSCAutoConnect = false;
+    void ConnectDefaultOSC();
     void oscMessageSend(bool test);
     void oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS);
     void oscMessageSendReset();
@@ -59,12 +56,10 @@ public:
     AudioParameterFloatToUse& getPlayerVolumeParameter (int playerIndex);
     AudioParameterFloatToUse& getAlphaParameter (int player1Index, int player2Index);
     AudioParameterFloatToUse& getBetaParameter (int player1Index, int player2Index);
-
-        // TODO: Change to a JUCE parameter
-        juce::Atomic<int> currentNoteIndex;
+    
+    juce::Atomic<int> currentNoteIndex; // TODO: Change to a JUCE parameter
     //==============================================================================
     static void soundOffAllChannels (juce::MidiBuffer &midi);
-
 
     // Functions for storing and loading ensemble config from XML file
     void saveConfigToXmlFile();
@@ -88,6 +83,7 @@ public:
     bool isOscReceiverConnected();
 
     void setAlphaBetaParams(float valueIn);
+    std::vector <std::unique_ptr <Player> > players;
     
 private:
     //==============================================================================
@@ -148,7 +144,6 @@ private:
     
     // The following functions should only be called when the playersInUse
     // flag has been locked using the above FlagLock class.
-    std::vector <std::unique_ptr <Player> > players;
     std::atomic_flag playersInUse;
 
     void createPlayers (const juce::MidiFile &file);
@@ -166,7 +161,7 @@ private:
     
     struct LogData
     {
-        int onsetTime, onsetInterval;
+        int onsetTime, nextScheduledOnsetIntervalSamples;
         bool userInput;
         double delay;
         double motorNoise, timeKeeperNoise;

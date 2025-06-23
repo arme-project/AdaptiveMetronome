@@ -6,9 +6,15 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
                                                                               EnsembleModel &ensemble)
     : AudioProcessorEditor (&p),
       processor (p),
-      instructionLabel (juce::String(), "Waiting for message from MAX/MSP"),
+      instructionLabel (juce::String(), "Adaptive Metronome"),
+// #if JUCE_STANDALONE_APPLICATION
+      versionLabel(juce::String(), "(v1.0.3 ARME)"),
+      midiNoteReceivedLabel(juce::String(), "No"),
+      playButton ("Play"),
+// #else
+    //   versionLabel(juce::String(), "(v1.0.3 ARME)"),
+// #endif
       userPlayersLabel (juce::String(), "No. User Players:"),
-      versionLabel(juce::String(), "(v1.0.3(SA))"),
       resetButton ("Reset"),
       loadMidiButton ("Load File"), // TODO: Rename this to reflect additional .xml config functionality?
       oscOn("")
@@ -47,7 +53,11 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor (Ad
     
     addAndMakeVisible (loadMidiButton);    
     loadMidiButton.addListener (this);
-
+// #if JUCE_STANDALONE_APPLICATION
+    addAndMakeVisible (playButton);
+    playButton.addListener (this);
+    addAndMakeVisible(midiNoteReceivedLabel);
+// #endif
     addAndMakeVisible (ensembleParametersViewport);
     
     // Register this editor as a change listener - to receive change broadcasts from the Ensemble
@@ -105,6 +115,22 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
     
     versionLabel.setTooltip(processor.ensemble.logFilenameOverride);
     
+// #if JUCE_STANDALONE_APPLICATION
+    if (processor.ensemble.isOscReceiverConnected()) {
+        //DBG("CHECKING NOTE INDEX");
+        juce::String noteIndexString= juce::String("Player notes: ");
+        for (int i = 0; i < 4; i++) {
+            if (i < processor.ensemble.players.size()) {
+                noteIndexString += juce::String(i);
+                noteIndexString += juce::String(":");
+                noteIndexString += juce::String(processor.ensemble.players[i]->getCurrentNoteIndex());
+                noteIndexString += juce::String(", ");
+            }
+        }
+        auto currentEnsembleNote = processor.ensemble.currentNoteIndex.get();
+        midiNoteReceivedLabel.setText(noteIndexString, juce::NotificationType::dontSendNotification);
+    }
+// #endif
 }
 
 //==============================================================================
@@ -149,11 +175,16 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
     
     auto resetButtonBounds = optionsStripBounds.removeFromRight (resetButton.getBestWidthForHeight (optionsStripHeight));
     resetButton.setBounds (resetButtonBounds.reduced (padding));
+
+    auto playButtonBounds = optionsStripBounds.removeFromRight (resetButton.getBestWidthForHeight (optionsStripHeight));
+    playButton.setBounds (playButtonBounds.reduced (padding));
     
     auto userPlayersBounds = optionsStripBounds.removeFromRight (100);
     userPlayersSelector.setBounds (userPlayersBounds.reduced (padding));
     
-    userPlayersLabel.setBounds (optionsStripBounds);
+    // Commented out temporarily to test midinotereceived for standalone 
+    // userPlayersLabel.setBounds (optionsStripBounds);
+    midiNoteReceivedLabel.setBounds (optionsStripBounds);
     
     //==========================================================================
     // Ensemble Parameters Area
@@ -181,17 +212,27 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked (juce::Button *button)
     {
         resetButtonCallback();
     }
-    else
+    else if (button == &playButton)
+    {
+        playButtonCallback();
+    }
+    else if (button == &loadMidiButton)
     {
         loadMidiButtonCallback();
     }
 }
 
+
 void AdaptiveMetronomeAudioProcessorEditor::resetButtonCallback()
 {
-    processor.resetEnsemble();
+    processor.ensemble.reset(juce::JUCEApplicationBase::isStandaloneApp());
+    processor.ensemble.oscMessageSendReset();
 }
 
+void AdaptiveMetronomeAudioProcessorEditor::playButtonCallback()
+{
+    processor.ensemble.oscMessageSendPlayMax();
+}
 
 void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()
 {
@@ -199,9 +240,9 @@ void AdaptiveMetronomeAudioProcessorEditor::loadMidiButtonCallback()
                                                         juce::File(),
                                                         "*.mid;*.xml");
                                                          
-    auto flags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+    auto fileBrowserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
     
-    fileChooser->launchAsync (flags,
+    fileChooser->launchAsync (fileBrowserFlags,
                               [this] (const juce::FileChooser& chooser)
                               {
                                   loadMidiFile (chooser.getResult());

@@ -16,15 +16,15 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
     resetFlag.clear();
     currentNoteIndex.set(99);
 
-    // OSC Listener addresses
+    // OSC Listener addresses for plugin
     addListener(this, "/loadConfig");
     addListener(this, "/reset");
     addListener(this, "/setLogname");
     addListener(this, "/numIntroTones");
 
-	// OSC Listener addresses for standalone full-system
-    addListener(this, "/plugin");     // [4]
-    addListener(this, "/oscstart");     // [4]
+	// OSC Listener additional addresses for standalone full-system MAX/MSP integration
+    addListener(this, "/plugin");
+    addListener(this, "/oscstart");
     addListener(this, "/playbackstart");
     addListener(this, "/alphas");
 
@@ -32,8 +32,8 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 
 	if (OSCAutoConnect)
 	{
-        connectOSCSender(8000);
-		connectOSCReceiver(8001);
+        ConnectDefaultOSC();
+    }
 }
 
 EnsembleModel::~EnsembleModel()
@@ -55,10 +55,17 @@ void EnsembleModel::setAlphaBetaParams(float valueIn)
 
 //==============================================================================
 // OSC Messaging
+
+void EnsembleModel::ConnectDefaultOSC()
+{
+    connectOSCSender(8000, "127.0.0.1");
+    connectOSCReceiver(8080);
+}
+
 void EnsembleModel::connectOSCSender(int portNumber, juce::String IPAddress = "127.0.0.1")
 {
-    if (!OSCSender.connect("127.0.0.1", 8000))
-        DBG("Error: could not connect to UDP port 8000.");
+    if (!OSCSender.connect("127.0.0.1", portNumber))
+        DBG("Error: could not connect to UDP.");
     else {
         DBG("OSC SENDER CONNECTED");
     }
@@ -76,7 +83,7 @@ void EnsembleModel::connectOSCReceiver(int portNumber)
     {
         sendActionMessage("OSC Received");
         currentReceivePort = portNumber;
-        DBG("Connection succeeded");
+        DBG("OSC RECEIVER CONNECTED");
     }
 }
 
@@ -167,15 +174,12 @@ void EnsembleModel::oscMessageReceived(const juce::OSCMessage& message)
     {
         if (message[0].isInt32()) {                             // [5]
             if (waitingForFirstNote && processor->manualPlaying) {
-                //clock.setStartOfPlayback(message[0].getInt32());
-                //DBG("Start playback - " << clock.tickToString(clock.tick()));
-
+                
             }
         }
     }
     else if (oscAddress == "/oscstart") 
     {
-        reset(true);
         processor->setManualPlaying(true);
     }
 
@@ -231,13 +235,21 @@ bool EnsembleModel::reset()
     
     resetPlayers();
     
+    if (juce::JUCEApplicationBase::isStandaloneApp()) introTonesPlayed = numIntroTones;
+
     return true;
 }
 
 bool EnsembleModel::reset(bool skipIntroNotes)
 {
+    processor->setManualPlaying(false);
     reset();
-    introTonesPlayed = numIntroTones;
+    if (skipIntroNotes) {
+        introTonesPlayed = numIntroTones;
+    }
+    else {
+        introTonesPlayed = 0;
+    }
 
     return false;
 }
@@ -258,7 +270,7 @@ void EnsembleModel::processMidiBlock (const juce::MidiBuffer &inMidi, juce::Midi
 {
     FlagLock lock (playersInUse);
     
-    if (!lock.locked)
+    if (!lock.locked || waitingForFirstNote)
     {
         return;
     }
@@ -305,6 +317,7 @@ void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber,
             int onsetInSamples = scoreCounter;
 			int onsetInSamplesFromOnsetTime = oscOnsetTime * sampleRate;
 			float errorInOnset = (onsetInSamples - onsetInSamplesFromOnsetTime)/(float)sampleRate;
+			//DBG("Setting user onset from OSC: " << oscOnsetTime << "s, note number: " << onsetNoteNumber);
             player->setOscOnsetTime(oscOnsetTime, onsetNoteNumber, onsetInSamples);
         }
     }
@@ -399,7 +412,6 @@ void EnsembleModel::playIntroTones (juce::MidiBuffer &midi, int sampleIndex)
     ++introCounter;
 }
 
-
 void EnsembleModel::introToneOn (juce::MidiBuffer &midi, int sampleIndex)
 {
     if (introTonesPlayed % 4 == 0)
@@ -453,6 +465,7 @@ void EnsembleModel::setInitialPlayerTempo()
     }
 }
 
+// Check if all players have a new note played. 
 bool EnsembleModel::newOnsetsAvailable()
 {
     bool available = true;
@@ -494,11 +507,18 @@ void EnsembleModel::calculateNewIntervals()
           
     for (int i = 0; i < players.size(); ++i)
     {
-        int onsetInterval = players[i]->getOnsetInterval();
-		int onsetTime = players[i]->getLatestOnsetTime();
-		int nextNoteTime = onsetTime + onsetInterval;
-		int nextNoteTimeInMS = nextNoteTime * 1000 / sampleRate;
-        oscMessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, nextNoteTimeInMS);
+        // Player Index
+        int playerIndex = i;
+
+        // Calculate Next Onset Time in Ms fot MAX MSP
+        int nextScheduledOnsetIntervalSamples = players[i]->getNextOnsetIntervalSamples();
+		int lastOnsetTimeSamples = players[i]->getLatestOnsetTimeSamples();
+		int nextNoteTimeSamples = lastOnsetTimeSamples + nextScheduledOnsetIntervalSamples;
+		int nextNoteTimeMS = (nextNoteTimeSamples / sampleRate) * 1000;
+
+        //TODO: Check note index and make consistent between this, MAX and Unity. Current note index = 1 after first note has played. 
+        int nextNoteIndex = players[i]->getCurrentNoteIndex() + 1;
+        oscMessageSendNewInterval(playerIndex, nextNoteIndex, nextNoteTimeMS);
     }
 
     //==========================================================================
@@ -521,23 +541,24 @@ void EnsembleModel::calculateNewIntervals()
     } 
 }
 
-void EnsembleModel::oscMessageSendNewInterval(int playerNum, int noteNum, int noteTimeInMS) {
+// This sends out an OSC message with the note time, in ms, for the next note to be played for a given player. 
+void EnsembleModel::oscMessageSendNewInterval(int playerIndex, int noteNum, int noteTimeInMS) {
 
     auto oscMessage = juce::OSCMessage("/newInterval");
-    oscMessage.addInt32(playerNum);
+    oscMessage.addInt32(playerIndex);
     oscMessage.addInt32(noteNum);
     oscMessage.addInt32(noteTimeInMS);
-    if (!OSCSender.send(oscMessage)) {
-        DBG("Error: could not send OSC message.");
-    }
 
+    if (!OSCSender.send(oscMessage)) {
+        DBG("Error: could not send OSC new interval message.");
+    }
 }
 
 void EnsembleModel::oscMessageSendReset() {
 
     auto oscMessage = juce::OSCMessage("/reset");
     if (!OSCSender.send(oscMessage)) {
-        DBG("Error: could not send OSC message.");
+        DBG("Error: could not send OSC reset message.");
     }
 }
 
@@ -548,6 +569,7 @@ void EnsembleModel::oscMessageSendPlayMax() {
     }
 }
 
+// After recalculating next note intervals, this resets the notePlayed flag for each player.
 void EnsembleModel::clearOnsetsAvailable()
 {
    for (auto &player : players)
@@ -556,6 +578,7 @@ void EnsembleModel::clearOnsetsAvailable()
     } 
 }
 
+// NOT USED - This method is currently empty as we are not recalculating Alphas and Betas during playback.
 void EnsembleModel::getLatestAlphas()
 {
 //    if (pollingFifo)
@@ -590,8 +613,8 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     // in the logging buffers.
     auto &data = loggingBuffer [bufferIndex];
     
-    data.onsetTime = players [playerIndex]->getLatestOnsetTime();
-    data.onsetInterval = players [playerIndex]->getPlayedOnsetInterval();
+    data.onsetTime = players [playerIndex]->getLatestOnsetTimeSamples();
+    data.nextScheduledOnsetIntervalSamples = players [playerIndex]->getPlayedOnsetInterval();
     data.userInput = players [playerIndex]->wasLatestOnsetUserInput();
     data.delay = players [playerIndex]->getLatestOnsetDelay();
     data.motorNoise = players [playerIndex]->getMotorNoise();
@@ -599,7 +622,7 @@ void EnsembleModel::storeOnsetDetailsForPlayer (int bufferIndex, int playerIndex
     
     for (int i = 0; i < players.size(); ++i)
     {
-        data.asyncs [i] = players [playerIndex]->getLatestOnsetTime() - players [i]->getLatestOnsetTime();
+        data.asyncs [i] = players [playerIndex]->getLatestOnsetTimeSamples() - players [i]->getLatestOnsetTimeSamples();
 //        data.alphas [i] = *(*alphaParams) [playerIndex][i];
         data.alphas [i] = processor->alphaParameter(playerIndex , i)->get();
 
@@ -707,7 +730,8 @@ void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& 
         player->processSample(inMidi, outMidi, sampleIndex);
     }
 
-    // If all players have played a note, update timings.
+    // If all players have played a note, update timings. 
+    // TODO: This should be done in a separate thread to avoid blocking the Audio thread.
     if (newOnsetsAvailable())
     {
         calculateNewIntervals();
@@ -1192,7 +1216,7 @@ void EnsembleModel::logOnsetDetailsForPlayer (int bufferIndex,
     auto &data = loggingBuffer [bufferIndex];
     
     onsetLog += ", " + juce::String (data.onsetTime / sampleRate);
-    intervalLog += ", " + juce::String (data.onsetInterval / sampleRate);
+    intervalLog += ", " + juce::String (data.nextScheduledOnsetIntervalSamples / sampleRate);
     userInputLog += ", " + juce::String (data.userInput ? "true" : "false");
     delayLog += ", " + juce::String (data.delay / sampleRate);
     mNoiseLog += ", " + juce::String (data.motorNoise);

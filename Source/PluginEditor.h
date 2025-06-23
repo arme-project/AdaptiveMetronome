@@ -19,11 +19,10 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void actionListenerCallback(const juce::String& message) override;
+    void actionListenerCallback (const juce::String& message) override;
 
     //==============================================================================
-    void buttonClicked (juce::Button *button) override;
-
+    void buttonClicked(juce::Button *button) override;
 private:
     //==============================================================================
     AdaptiveMetronomeAudioProcessor &processor;
@@ -38,12 +37,16 @@ private:
     juce::TextButton resetButton, loadMidiButton;
     juce::ToggleButton oscOn;
     std::unique_ptr <juce::FileChooser> fileChooser;
-
     juce::TooltipWindow tooltipWindow{ this };
-
+    
     //==============================================================================
     void resetButtonCallback();
     void loadMidiButtonCallback();
+    void playButtonCallback();
+    // #if JUCE_STANDALONE_APPLICATION
+            juce::TextButton playButton;
+            juce::Label midiNoteReceivedLabel;
+    // #endif
     void loadMidiFile (juce::File file);
     
     //==============================================================================
@@ -78,14 +81,15 @@ private:
         std::vector <std::vector <std::unique_ptr <juce::Slider> > > alphaSliders;
         std::vector <std::vector <std::unique_ptr <juce::Slider> > > betaSliders;
     
-        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > volumeAttachments;
         std::vector <std::unique_ptr <juce::ComboBoxParameterAttachment> > channelAttachments;
+        std::vector <std::unique_ptr <juce::SliderParameterAttachment> > volumeAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > delayAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > mNoiseStdAttachments;
         std::vector <std::unique_ptr <juce::SliderParameterAttachment> > tkNoiseStdAttachments;
         std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > alphaAttachments;
         std::vector <std::vector <std::unique_ptr <juce::SliderParameterAttachment> > > betaAttachments;
 
+        // TODO Check if these are used, and remove if not needed
         std::vector <std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> > volumeAttachmentsApvts;
         
         //==========================================================================
