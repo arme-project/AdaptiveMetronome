@@ -1,5 +1,6 @@
 #include <JuceHeader.h>
 #include "ConfigHandler.h"
+#include "EnsembleModel.h"
 
 // Constructor for ConfigHandler
 ConfigHandler::ConfigHandler(EnsembleModel* modelIn) :

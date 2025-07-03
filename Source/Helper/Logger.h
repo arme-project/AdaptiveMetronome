@@ -3,8 +3,6 @@
 #include <JuceHeader.h>
 #include <thread>
 #include <atomic>
-#include "Player.h"
-
 
 /**
  * \class Logger

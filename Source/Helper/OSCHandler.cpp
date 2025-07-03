@@ -1,5 +1,6 @@
 #include <JuceHeader.h>
 #include "OSCHandler.h"
+#include "EnsembleModel.h"
 
 
 // Constructor for OSCHandler
