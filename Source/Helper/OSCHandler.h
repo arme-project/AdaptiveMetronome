@@ -1,6 +1,8 @@
 #pragma once
 #include <JuceHeader.h>
-#include "EnsembleModel.h"
+
+// Forward declare EnsembleModel to avoid circular includes.
+class EnsembleModel;
 
 /**
  * \class OSCHandler

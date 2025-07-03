@@ -42,7 +42,7 @@ public:
 	void Stop();
 
 private:
-	int numPlayers = 0;
+	int numPlayers;
 	std::unique_ptr<juce::AbstractFifo> fifo;
 	std::vector<std::vector<float>> buffer;
 	std::thread thread;

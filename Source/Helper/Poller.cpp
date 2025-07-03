@@ -2,7 +2,7 @@
 #include "Poller.h"
 
 // Constructor for the Poller Class.
-Poller::Poller(int numPlayersIn) : numPlayers(numPlayers)
+Poller::Poller(int numPlayersIn) : numPlayers(numPlayersIn)
 {
 }
 
