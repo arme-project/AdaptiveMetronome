@@ -50,7 +50,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(Ada
 	addAndMakeVisible(ensembleParametersViewport);
 
 	// Register this editor as a change listener - to receive change broadcasts from the Ensemble
-	processor.ensemble.addActionListener(this);
+	processor.ensemble.GetOSCHandler()->addActionListener(this);
 
 	//==========================================================================
 	initialiseEnsembleParameters(processor.ensemble);
@@ -71,7 +71,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(Ada
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
 {
 	stopTimer();
-	processor.ensemble.removeActionListener(this);
+	processor.ensemble.GetOSCHandler()->removeActionListener(this);
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::reduceAlpha()
@@ -88,7 +88,8 @@ void AdaptiveMetronomeAudioProcessorEditor::reduceAlpha()
 
 void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
 {
-	auto oscConnected = processor.ensemble.isOscReceiverConnected();
+	// TODO: Fix display of OSC connection status
+	/*auto oscConnected = processor.ensemble.GetOSCHandler()->isOscReceiverConnected();
 	if (oscConnected)
 	{
 		oscOn.setToggleState(true, juce::dontSendNotification);
@@ -100,7 +101,7 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
 	{
 		oscOn.setToggleState(false, juce::dontSendNotification);
 		oscOn.setTooltip("OSC not connected");
-	}
+	}*/
 
 	versionLabel.setTooltip(processor.ensemble.GetFileNameOverride());
 }

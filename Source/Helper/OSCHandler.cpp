@@ -18,7 +18,7 @@ OSCHandler::~OSCHandler()
 }
 
 // Connect the OSC sender to a UDP port for sending messages to the Max/MSP system.
-void OSCHandler::ConnectSender(int portNumber = 8000, juce::String IPaddress = "127.0.0.1")
+void OSCHandler::ConnectSender(int portNumber, juce::String IPaddress)
 {
 	if (sender.connect(IPaddress, portNumber)) {
 		currentSenderPort = portNumber;
@@ -33,7 +33,7 @@ void OSCHandler::ConnectSender(int portNumber = 8000, juce::String IPaddress = "
 }
 
 // Attempts to connect an OSC receiver to the specified UDP port.
-void OSCHandler::ConnectReceiver(int portNumber = 8000)
+void OSCHandler::ConnectReceiver(int portNumber)
 {
 	if (receiver.connect(portNumber)) {
 		currentReceiverPort = portNumber;
@@ -113,7 +113,7 @@ void OSCHandler::SendActionMessage(juce::String message)
 }
 
 // Responsible for when an OSC message is received by the Reciever and performs corresponding actions base on the pattern
-void OSCHandler::MessageReceived(const juce::OSCMessage& message)
+void OSCHandler::oscMessageReceived(const juce::OSCMessage& message)
 {
 	juce::OSCAddressPattern oscPattern = message.getAddressPattern();
 	juce::String pattern = oscPattern.toString();

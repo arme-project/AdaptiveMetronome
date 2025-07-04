@@ -46,7 +46,7 @@ public:
 	* If the connection fails, sets currentReceivePort to -1 and logs an error message.
 	* If the connection succeeds, sets currentReceivePort to the port number and logs a success message.
 	*/
-	void ConnectReceiver(int portNumber = 8001);
+	void ConnectReceiver(int portNumber = 8070);
 
 	/**
 	 * \brief Checks if the OSC receiver is connected.
@@ -85,7 +85,7 @@ public:
 	void MessageSendPlayMax();
 
 	/**
-	 * \brief Sends an action message to the OSC handler.
+	 * \brief Sends an action message from the OSC handler.
 	 *
 	 * This function broadcasts an action message to all listeners.
 	 * It is used to notify other components of specific actions or events.
@@ -120,8 +120,8 @@ private:
 	 *
 	 * \param message The OSC message that has been received.
 	 */
-	void MessageReceived(const juce::OSCMessage& message);
-
+	//void MessageReceived(const juce::OSCMessage& message);
+	void oscMessageReceived(const juce::OSCMessage& message) override;
 
 	/**
 	 * \brief Initialises the OSC addresses that this handler will listen to.
