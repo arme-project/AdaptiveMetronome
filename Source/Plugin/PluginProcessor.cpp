@@ -198,7 +198,7 @@ EnsembleModel& AdaptiveMetronomeAudioProcessor::loadMidiFile(const juce::File& f
 //==============================================================================
 EnsembleModel& AdaptiveMetronomeAudioProcessor::loadXmlFile(const juce::File& file)
 {
-	ensemble.loadConfigFromXml(file);
+	ensemble.GetConfigHandler()->LoadConfig(file);
 
 	return ensemble;
 }

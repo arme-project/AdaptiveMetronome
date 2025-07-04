@@ -28,8 +28,8 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 	poller = std::make_unique<Poller>(players.size());
 
 	// Creating ConfigHanlder Object to be responsible for handling XML Loading or Saving
-	config = std::make_unique<ConfigHandler>(this);
-	osc = std::make_unique<OSCHandler>(this);
+	configHandler = std::make_unique<ConfigHandler>(this);
+	oscHandler = std::make_unique<OSCHandler>(this);
 
 	playersInUse.clear();
 	resetFlag.clear();
@@ -37,8 +37,8 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 
 	if (oscAutoConnect)
 	{
-		osc->ConnectSender();
-		osc->ConnectReceiver();
+		oscHandler->ConnectSender();
+		oscHandler->ConnectReceiver();
 	}
 }
 
@@ -158,7 +158,7 @@ AudioParameterFloatToUse& EnsembleModel::getBetaParameter(int player1Index, int 
 */
 ConfigHandler* EnsembleModel::GetConfigHandler() const
 {
-	return config.get();
+	return configHandler.get();
 }
 
 /**
@@ -167,6 +167,14 @@ ConfigHandler* EnsembleModel::GetConfigHandler() const
 Logger* EnsembleModel::GetLogger() const
 {
 	return logger.get();
+}
+
+/**
+* \brief Gets the OSC handler instance.
+*/
+OSCHandler* EnsembleModel::GetOSCHandler() const
+{
+	return oscHandler.get();
 }
 
 #pragma endregion
@@ -249,14 +257,14 @@ void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber,
 // Connects the OSC sender to the specified port number or 8001 by default if nothing is provided..
 void EnsembleModel::ConnectOSCReceiver(int portNumber)
 {
-	osc->ConnectReceiver(portNumber);
+	oscHandler->ConnectReceiver(portNumber);
 }
 
 //==============================================================================
 // Sends an action message via OSC with a given message.
 void EnsembleModel::SendActionMessage(juce::String message)
 {
-	osc->SendActionMessage(message);
+	oscHandler->SendActionMessage(message);
 }
 #pragma endregion
 
@@ -621,11 +629,12 @@ void EnsembleModel::calculateNewIntervals()
 		int onsetTime = players[i]->getLatestOnsetTime();
 		int nextNoteTime = onsetTime + onsetInterval;
 		int nextNoteTimeInMS = nextNoteTime * 1000 / sampleRate;
-		osc->MessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, nextNoteTimeInMS);
+		oscHandler->MessageSendNewInterval(i, players[i]->getCurrentNoteIndex() + 1, nextNoteTimeInMS);
 	}
 
 	//==========================================================================
 	// Add details of most recent onsets to buffers to be logged.
+	// TODO: Move most of this functionality to the Logger class.
 	if (logger)
 	{
 		for (int i = 0; i < players.size(); ++i)
@@ -649,6 +658,8 @@ void EnsembleModel::clearOnsetsAvailable()
 
 //==============================================================================
 // Stores the details of the latest onset for a player in the log data.
+// TODO: Create the LogData object here, rather than passing it into this function. Or move everything to the Logger class.
+// TODO: A lot of this could also be replaced with a system of GetState() functions for the entire system. Players and Ensemble
 void EnsembleModel::storeOnsetDetailsForPlayer(int playerIndex, Logger::LogData& log)
 {
 	auto* player = players[playerIndex].get();

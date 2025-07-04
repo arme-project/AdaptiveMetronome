@@ -112,6 +112,7 @@ public:
 	// Handler Functions
 	ConfigHandler* GetConfigHandler() const;
 	Logger* GetLogger() const;
+	OSCHandler* GetOSCHandler() const;
 
 	// MIDI file
 	juce::MidiFile GetMidiFile();
@@ -284,8 +285,8 @@ private:
 	// Pointers to corresponding helper classes
 	std::unique_ptr<Logger> logger;
 	std::unique_ptr<Poller> poller;
-	std::unique_ptr<ConfigHandler> config;
-	std::unique_ptr<OSCHandler> osc;
+	std::unique_ptr<ConfigHandler> configHandler;
+	std::unique_ptr<OSCHandler> oscHandler;
 
 	// Defaulted to autoconnect OSC to ports 8000 and 8001
 	bool oscAutoConnect = true;
@@ -307,6 +308,8 @@ private:
 	static const juce::uint8 introToneVel = 100;
 	int introCounter = 0;
 	int introTonesPlayed = 0;
+
+	// TODO: Replace these with a sequence of states in a custom data struct/enums/flags
 	bool playbackStarted = false;
 	bool introFinishedPlaying = false;
 	bool firstSampleProcessed = false;
