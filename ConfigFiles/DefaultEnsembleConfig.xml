@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<EnsembleModelConfig 
+    ConfigSubfolder="AMTest" 
+    LogSubfolder="AMTestLogs" 
+    LogFilename="TestLogfilename"
+    MidiFilename="haydn2.mid"
+    OSCReceivePort="8070">
+
+</EnsembleModelConfig>

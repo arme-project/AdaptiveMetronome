@@ -1,0 +1,35 @@
+The plugin is set up to use the "userDocumentsDirectory". This is a standard location that varies by platform, but typically:
+
+On Windows this is the logged in user's "Documents" or "MyDocuments" folder. 
+On Mac this is the user's "Documents" folder. 
+
+Without any changes, this is where any log files will be saved. This is also where the plugin looks for a "DefaultEnsembleConfig.xml" file. 
+
+This file can be used to change the default setup of the plugin when it first loads. If the "DefaultEnsembleConfig.xml" file is found, any settings defined there will be automatically applied. 
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<EnsembleModelConfig 
+    ConfigSubfolder="AMTest" 
+    LogSubfolder="AMTestLogs" 
+    LogFilename="TestLogfilename"
+    MidiFilename="haydn2.mid"
+    OSCReceivePort="8070">
+
+</EnsembleModelConfig>
+
+
+
+
+The example file provided here (the body of which is shown above), if copied to the User Documents irectory, will automatically change the working directory to the subfolder at "./UserDocumentsDirectory/AMTest". This is where the plugin will look for any subsequent config files or MIDI files to load. 
+
+It also changes the directory in which logs are saved to "./UserDocumentsDirectory/AMTestLogs", and the default log filename to "TestLogfilename.csv". 
+
+It then automatically tries to load the "haydn2.mid" file, if this is found in the AMTest" directory. 
+
+Finally, it tries to automatically connect the OSC message receiver to accept messages on port 8070. 
+
+
+These config files can be used to setup default parameters, OSC connection settings, folder structures and filenames. 
