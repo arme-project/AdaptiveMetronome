@@ -25,7 +25,7 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 {
 	// Creating Poller and Logger objects for tracking Player Paramaters throughout playback
 	logger = std::make_unique<Logger>(players.size(), sampleRate, isUserFlags);
-	poller = std::make_unique<Poller>(players.size());
+	//poller = std::make_unique<Poller>(players.size());
 
 	// Creating ConfigHanlder Object to be responsible for handling XML Loading or Saving
 	configHandler = std::make_unique<ConfigHandler>(this);
@@ -46,7 +46,7 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 // Destructor for EnsembleModel as it stops the poller and logger threads to ensure clean shutdown.
 EnsembleModel::~EnsembleModel()
 {
-	poller->Stop();
+	//poller->Stop();
 	logger->Stop();
 }
 
@@ -355,6 +355,9 @@ void EnsembleModel::createPlayers(const juce::MidiFile& file)
 		isUserFlags.push_back(player->isUserOperated());
 	}
 
+	logger = std::make_unique<Logger>(players.size(), sampleRate, isUserFlags);
+	//poller = std::make_unique<Poller>(players.size());
+
 	// Initialises the logger object used for the logging with the newly created players
 	if (!logger || getNumPlayers() != players.size()) {
 		if (logger) logger->Stop();
@@ -363,11 +366,11 @@ void EnsembleModel::createPlayers(const juce::MidiFile& file)
 	}
 
 	// Initialises the Poller object used for the polling with the newly created players
-	if (!poller || getNumPlayers() != players.size()) {
-		if (poller) poller->Stop();
-		poller = std::make_unique<Poller>(players.size());
-		poller->Start();
-	}
+	//if (!poller || getNumPlayers() != players.size()) {
+	//	if (poller) poller->Stop();
+	//	poller = std::make_unique<Poller>(players.size());
+	//	poller->Start();
+	//}
 
 	//==========================================================================
 	createAlphaBetaParameters(); // create matrix of parameters for alphas
@@ -766,7 +769,7 @@ void EnsembleModel::resetPlayers()
 	logger->Start();
 
 	// Start loop which polls for new alpha values
-	poller->Start();
+	//poller->Start();
 
 	//==========================================================================
 	// reset all players

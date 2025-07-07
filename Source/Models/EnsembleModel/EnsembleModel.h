@@ -25,7 +25,7 @@ class AdaptiveMetronomeAudioProcessor;
 
 /* HELPER */
 #include "FlagLock.h"
-#include "Poller.h"
+//#include "Poller.h"
 #include "Logger.h"
 #include "ConfigHandler.h"
 #include "OSCHandler.h"
@@ -284,7 +284,7 @@ private:
 
 	// Pointers to corresponding helper classes
 	std::unique_ptr<Logger> logger;
-	std::unique_ptr<Poller> poller;
+	//std::unique_ptr<Poller> poller;
 	std::unique_ptr<ConfigHandler> configHandler;
 	std::unique_ptr<OSCHandler> oscHandler;
 

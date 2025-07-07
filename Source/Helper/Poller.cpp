@@ -36,6 +36,7 @@ void Poller::Stop()
 // Initialise the polling buffers for the players.
 void Poller::InitialiseBuffers()
 {
+	
 	auto bufferSize = 10 * numPlayers;
 	fifo = std::make_unique <juce::AbstractFifo>(bufferSize);
 	buffer.resize(numPlayers);
