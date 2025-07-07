@@ -112,7 +112,7 @@ void ConfigHandler::LoadConfig(std::unique_ptr<juce::XmlElement> loadedConfig)
 			if (!newLogFilename.endsWith(".csv")) {
 				newLogFilename << ".csv";
 			}
-			model->SetConfigFileNameOverride(newLogFilename);
+			model->SetLogFileNameOverride(newLogFilename);
 		}
 	}
 

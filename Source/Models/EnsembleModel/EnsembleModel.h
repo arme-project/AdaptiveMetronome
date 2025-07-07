@@ -103,7 +103,7 @@ public:
 	int getNumPlayers();
 	int getNumUserPlayers();
 	bool isPlayerUserOperated(int playerIndex);
-	juce::String GetFileNameOverride();
+	juce::String GetLogFileNameOverride();
 
 	// Manual Playing
 	bool IsManuallyPlaying();
@@ -122,7 +122,7 @@ public:
 	//====================
 
 	void setAlphaBetaParams(float valueIn);
-	void SetConfigFileNameOverride(juce::String filename);
+	void SetLogFileNameOverride(juce::String filename);
 	void SetLogSubFolder(juce::String newLogSubFolder);
 	void SetNumUserPlayers(int numPlayers);
 	void SetNumIntroTones(int numIntroTonesIn);
@@ -154,7 +154,7 @@ public:
 	void ConnectOSCReceiver(int portNumber);
 	
 	/*
-	* \brief Sends an action message via OSC with the specified message string.
+	* \brief Sends an action message via JUCE with the specified message string.
 	*
 	* \param message The message string to send.
 	*/

@@ -50,17 +50,21 @@ public:
 	void Start();
 
 	/**
+	* \brief Starts the logging loop for the ensemble model.
+	*
+	* This function starts a logging loop for the ensemble model. It first stops any
+	* existing logging loop, then initialises the logging buffer and starts a new
+	* thread to run the logging loop. The logging loop will continue to run until
+	* the stopLoggerLoop function is called. This version allows you to change the number of players.
+	*/
+	void Start(int numPlayersIn);
+
+	/**
 	 * \brief Stops the logger loop by setting the continueLogging flag to false.
 	 *
 	 * If the logger thread is joinable, it will join the thread to ensure proper cleanup.
 	 */
 	void Stop();
-
-	/**
-	 * \brief Overrides the filename of the logging file
-	 * \param filename Name of the file to store it in
-	 */
-	void SetFilenameOverride(juce::String filename);
 
 	/**
 	 * \brief Changes the subfolder where the logging results are stored in
@@ -73,6 +77,12 @@ public:
 	 * \param entry Data corresponding to a player using the LogData structure
 	 */
 	void AddEntry(const LogData& entry);
+
+	/**
+	 * \brief Overrides the filename of the logging file
+	 * \param filename Name of the file to store it in
+	 */
+	void SetFilenameOverride(juce::String filename);
 
 	/**
 	 * \brief Returns the filename override of the file where the logging results are stored in

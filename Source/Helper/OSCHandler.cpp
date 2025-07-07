@@ -112,6 +112,28 @@ void OSCHandler::SendActionMessage(juce::String message)
 	sendActionMessage(message);
 }
 
+int OSCHandler::GetCurrentReceiverPort()
+{
+	if (currentReceiverPort > -1) {
+		return currentReceiverPort;
+	}
+	else {
+		DBG("OSC Receiver is not connected.");
+		return -1;
+	}
+}
+
+int OSCHandler::GetCurrentSenderPort()
+{
+	if (currentSenderPort > -1) {
+		return currentSenderPort;
+	}
+	else {
+		DBG("OSC Sender is not connected.");
+		return -1;
+	}
+}
+
 // Responsible for when an OSC message is received by the Reciever and performs corresponding actions base on the pattern
 void OSCHandler::oscMessageReceived(const juce::OSCMessage& message)
 {

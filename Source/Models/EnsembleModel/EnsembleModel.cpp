@@ -77,7 +77,7 @@ void EnsembleModel::setAlphaBetaParams(float valueIn)
 #pragma region GETTER FUNCTIONS
 
  // Returns the filename override for the logger.
-juce::String EnsembleModel::GetFileNameOverride()
+juce::String EnsembleModel::GetLogFileNameOverride()
 {
 	return logger->GetFileNameOverride();
 }
@@ -183,7 +183,7 @@ OSCHandler* EnsembleModel::GetOSCHandler() const
 
 #pragma region SETTER FUNCTIONS
 
-void EnsembleModel::SetConfigFileNameOverride(juce::String filename)
+void EnsembleModel::SetLogFileNameOverride(juce::String filename)
 {
 	logger->SetFilenameOverride(filename);
 }
@@ -261,7 +261,7 @@ void EnsembleModel::ConnectOSCReceiver(int portNumber)
 }
 
 //==============================================================================
-// Sends an action message via OSC with a given message.
+// Sends an action message via JUCE internal messaging with a given message.
 void EnsembleModel::SendActionMessage(juce::String message)
 {
 	oscHandler->SendActionMessage(message);
@@ -311,6 +311,7 @@ void EnsembleModel::createPlayers(const juce::MidiFile& file)
 {
 	//==========================================================================
 	// Delete Old Players
+	auto previousNumPlayers = getNumPlayers();
 	players.clear();
 
 	//==========================================================================
@@ -350,19 +351,22 @@ void EnsembleModel::createPlayers(const juce::MidiFile& file)
 		}
 	}
 
+	// TODO: Check that this is reset properly?
 	// Tracks which is user players or not for logging
 	for (const auto& player : players) {
 		isUserFlags.push_back(player->isUserOperated());
 	}
 
-	logger = std::make_unique<Logger>(players.size(), sampleRate, isUserFlags);
-	//poller = std::make_unique<Poller>(players.size());
-
 	// Initialises the logger object used for the logging with the newly created players
-	if (!logger || getNumPlayers() != players.size()) {
-		if (logger) logger->Stop();
+	if (!logger) {
 		logger = std::make_unique<Logger>(players.size(), sampleRate, isUserFlags);
 		logger->Start();
+	}
+
+	if (getNumPlayers() != previousNumPlayers)
+	{
+		// If the number of players has changed, reset the logger with new player number.
+		logger->Start(getNumPlayers());
 	}
 
 	// Initialises the Poller object used for the polling with the newly created players

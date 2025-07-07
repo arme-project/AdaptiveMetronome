@@ -94,6 +94,20 @@ public:
 	 */
 	void SendActionMessage(juce::String message);
 
+	/**
+	 * \brief Returns current receiver port.
+	 *
+	 * This function returns the current receiver port number that the OSCHandler is listening on.
+	 */
+	int GetCurrentReceiverPort();
+
+	/**
+	 * \brief Returns current receiver port.
+	 *
+	 * This function returns the current receiver port number that the OSCHandler is listening on.
+	 */
+	int GetCurrentSenderPort();
+
 	// Testing Function
 	/**
 	 * \brief Sends an OSC message either as a test or with onset data.
@@ -103,6 +117,8 @@ public:
 	 *             with four random float arguments.
 	 */
 	void MessageSendTest(juce::String pattern = "test");
+
+
 
 private:
 

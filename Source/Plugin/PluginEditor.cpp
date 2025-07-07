@@ -89,21 +89,20 @@ void AdaptiveMetronomeAudioProcessorEditor::reduceAlpha()
 void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
 {
 	// TODO: Fix display of OSC connection status
-	/*auto oscConnected = processor.ensemble.GetOSCHandler()->isOscReceiverConnected();
-	if (oscConnected)
+	if (processor.ensemble.GetOSCHandler()->IsReceiverConnected())
 	{
 		oscOn.setToggleState(true, juce::dontSendNotification);
 		auto tooltipString = juce::String("Listening on port ");
-		tooltipString << processor.ensemble.currentReceivePort;
+		tooltipString << processor.ensemble.GetOSCHandler()->GetCurrentReceiverPort();
 		oscOn.setTooltip(tooltipString);
 	}
 	else
 	{
 		oscOn.setToggleState(false, juce::dontSendNotification);
 		oscOn.setTooltip("OSC not connected");
-	}*/
+	}
 
-	versionLabel.setTooltip(processor.ensemble.GetFileNameOverride());
+	versionLabel.setTooltip(processor.ensemble.GetLogFileNameOverride());
 }
 
 //==============================================================================

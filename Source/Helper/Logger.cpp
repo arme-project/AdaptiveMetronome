@@ -28,8 +28,15 @@ Logger::~Logger()
 void Logger::Start()
 {
 	Stop(); //Stops any occuring Logging Threads before starting a new one
+	InitialiseBuffer(); // Initialises the logging buffer
 	continueLogging = true;
 	thread = std::thread([this]() {this->loggerLoop(); });
+}
+
+void Logger::Start(int numPlayersIn)
+{
+	numPlayers = numPlayersIn;
+	Start();
 }
 
 // Stops the logger loop by setting the continueLogging flag to false and joining the thread if it is joinable.
@@ -37,12 +44,6 @@ void Logger::Stop() {
 	continueLogging = false;
 	if (thread.joinable())
 		thread.join();
-}
-
-// Overrides the filename of the logging file
-void Logger::SetFilenameOverride(juce::String filename)
-{
-	logFilenameOverride = filename;
 }
 
 // Sets the subfolder where the logging results will be stored.
@@ -60,6 +61,12 @@ void Logger::AddEntry(const LogData& entry)
 		loggingBuffer[write.startIndex1] = entry;
 		fifo->finishedWrite(write.blockSize1);
 	}
+}
+
+// Overrides the filename of the logging file
+void Logger::SetFilenameOverride(juce::String filename)
+{
+	logFilenameOverride = filename;
 }
 
 // Returns the filename override for the logging file.
