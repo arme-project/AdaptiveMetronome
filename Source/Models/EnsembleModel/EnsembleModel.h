@@ -53,7 +53,6 @@ public:
 	//====================
 
 	AdaptiveMetronomeAudioProcessor* processor = nullptr; // Pointer to the Adaptive Metronome Processor owner
-	bool OSCAutoConnect = true; // Defaulted to autoconnect to port 8000 and 8001
 	bool waitingForFirstNote = true;
 
 	// TODO: Change to a JUCE parameter
@@ -203,15 +202,6 @@ public:
 	 */
 	bool reset();
 
-	/**
-	 * Resets the model to its initial state, and setting the number of Intro Tones.
-	 *
-	 * \param skipIntroNotes UNUSED
-	 *
-	 * \return false always.
-	 */
-	bool reset(bool skipIntroNotes);
-
 
 	/**
 	* \brief Sets the tempo of the ensemble to the given beats per minute (bpm).
@@ -288,8 +278,6 @@ private:
 	std::unique_ptr<ConfigHandler> configHandler;
 	std::unique_ptr<OSCHandler> oscHandler;
 
-	// Defaulted to autoconnect OSC to ports 8000 and 8001
-	bool oscAutoConnect = true;
 
 	// File Names and Path
 	juce::MidiFile midiFile;
@@ -301,6 +289,11 @@ private:
 	int scoreCounter = 0;
 
 	// Intro countdown
+#if FULL_SYSTEM
+	bool skipIntroTones = true;
+#else
+	bool skipIntroTones = false;
+#endif
 	const int introToneChannel = 16;
 	int numIntroTones = 4;
 	static const int introToneNoteFirst = 84;

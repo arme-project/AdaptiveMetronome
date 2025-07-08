@@ -2,7 +2,6 @@
 #include "Player.h"
 using namespace std::chrono;
 
-//==============================================================================
 Player::Player(int index, const juce::MidiMessageSequence* seq, int midiChannel,
 	const double& sampleRate, const int& scoreCounter, int initialInterval)
 	: Player(index, seq, midiChannel, sampleRate, scoreCounter, initialInterval, nullptr) {}
@@ -13,7 +12,7 @@ Player::Player(int index, const juce::MidiMessageSequence* seq, int midiChannel,
 	playerIndex(index),
 	sampleRate(sampleRate),
 	scoreCounter(scoreCounter),
-	onsetInterval(initialInterval)
+	nextScheduledOnsetIntervalSamples(initialInterval)
 {
 	*processor->channelParameter(playerIndex) = (playerIndex + 1);
 	initialiseScore(seq);
@@ -23,30 +22,26 @@ Player::~Player()
 {
 }
 
-//==============================================================================
 bool Player::isUserOperated()
 {
 	return false;
 }
 
-//==============================================================================
 void Player::reset()
 {
 	// rewind to start of score
-	currentNoteIndex = 0;
+	indexOfNextNote = 0;
 
 	// reset note on/off counters
 	samplesSinceLastOnset = 0;
 	samplesToNextOffset = -1;
 
 	// reset onset times
-	currentOnsetTime = 0;
-	previousOnsetTime = 0;
+	latestOnsetTimeSamples = 0;
+	previousOnsetTimeSamples = 0;
 
 	// clear note played flag
 	notePlayed = false;
-	onsetIntervals.clear();
-	onsetTimes.clear();
 
 	// noises
 	currentMotorNoise = 0.0;
@@ -55,51 +50,36 @@ void Player::reset()
 	timeKeeperMean = 0.0;
 }
 
-//==============================================================================
-// Called from EnsembleModel::setUserOnsetFromOsc
-// This sets newOSCOnsetAvailable to true, and sets the onset time in samples.
-// newOSCOnsetAvailable is checked in UserPlayer::processNoteOn.
-void Player::setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote)
+void Player::setOscOnsetTime(float onsetFromOscInSeconds, int onsetNoteNumber, int samplesSinceFirstNote)
 {
-	float antescofoDelay = 0.0;
-	int antescofoDelaySamples = (int)(antescofoDelay * sampleRate);
+	if (indexOfNextNote >= 0) {
+		latestOscOnsetTimeSeconds = onsetFromOscInSeconds;
+		latestOscOnsetTimeSamples = onsetFromOscInSeconds * sampleRate;
+		latestOscOnsetNoteNumber = onsetNoteNumber;
 
-	onsetFromOsc -= antescofoDelay;
-	samplesSinceFirstNote -= antescofoDelaySamples;
-	if (currentNoteIndex >= 0) {
-		oscOnsetTime = onsetFromOsc; // Onset in seconds
-		oscOnsetTimeInSamples = samplesSinceFirstNote;
-		latestOscOnsetNoteNumber = onsetNoteNumber;
+		// newOSCOnsetAvailable is checked in UserPlayer::processNoteOn
 		newOSCOnsetAvailable = true;
-		previousOnsetTime = currentOnsetTime;
-		currentOnsetTime = oscOnsetTimeInSamples;
-		setOnsetInterval(currentOnsetTime - previousOnsetTime);
-	}
-	else { // Why is this needed? Is it ever called?
-		oscOnsetTime = onsetFromOsc; // Onset in seconds
-		oscOnsetTimeInSamples = samplesSinceFirstNote;
-		latestOscOnsetNoteNumber = onsetNoteNumber;
-		newOSCOnsetAvailable = true;
+
+		//DBG("Note received in player: " << playerIndex << ", note number: " << latestOscOnsetNoteNumber
+		//	<< ", onset time in seconds: " << latestOscOnsetTimeInSeconds
+		//	<< ", onset time in samples: " << latestOscOnsetTimeSamples);
 	}
 }
-//==============================================================================
-void Player::setOnsetInterval(int interval)
+void Player::setNextScheduledOnsetIntervalSamples(int interval)
 {
-	onsetInterval = interval;
+	nextScheduledOnsetIntervalSamples = interval;
 }
 
-int Player::getOnsetInterval()
+int Player::getNextOnsetIntervalSamples()
 {
-	return onsetInterval;
+	return nextScheduledOnsetIntervalSamples;
 }
 
-int Player::getPlayedOnsetInterval()
+int Player::getLastPlayedOnsetInterval()
 {
-	return currentOnsetTime - previousOnsetTime;
+	return latestOnsetTimeSamples - previousOnsetTimeSamples;
 }
 
-// primary method to recalculate the next interval, based on alpha/beta parameters, and other player onsets
-// called from EnsembleModel::playScore => EnsembleModel::calculateNewIntervals, when all onsets for previous note have been registered
 void Player::recalculateOnsetInterval(int samplesPerBeat,
 	const std::vector <std::unique_ptr <Player> >& players)
 {
@@ -108,7 +88,7 @@ void Player::recalculateOnsetInterval(int samplesPerBeat,
 
 	for (int i = 0; i < players.size(); ++i)
 	{
-		double async = currentOnsetTime - players[i]->getLatestOnsetTime();
+		double async = latestOnsetTimeSamples - players[i]->getLatestOnsetTime();
 		auto alpha = processor->alphaParameter(playerIndex, i)->get();
 		auto beta = processor->betaParameter(playerIndex, i)->get();
 		alphaSum += alpha * async;
@@ -122,10 +102,9 @@ void Player::recalculateOnsetInterval(int samplesPerBeat,
 	double hNoise = generateHNoise() * sampleRate;
 
 	// calculate next onset interval
-	onsetInterval = samplesPerBeat - alphaSum + hNoise;
+	nextScheduledOnsetIntervalSamples = samplesPerBeat - alphaSum + hNoise;
 }
 
-//==============================================================================
 double Player::generateMotorNoise()
 {
 	previousMotorNoise = currentMotorNoise;
@@ -176,7 +155,6 @@ double Player::getTimeKeeperNoiseStd()
 	return tkNoiseDistribution.stddev();
 }
 
-//==============================================================================
 bool Player::hasNotePlayed()
 {
 	return notePlayed;
@@ -189,7 +167,7 @@ void Player::resetNotePlayed()
 
 int Player::getLatestOnsetTime()
 {
-	return currentOnsetTime;
+	return latestOnsetTimeSamples;
 }
 
 int Player::getLatestOnsetDelay()
@@ -209,9 +187,10 @@ bool Player::wasLatestOnsetUserInput()
 
 int Player::getCurrentNoteIndex()
 {
-	return (int)(currentNoteIndex);
+	return (int)(indexOfNextNote);
 }
-//==============================================================================
+
+
 void Player::processSample(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
 {
 	//==========================================================================
@@ -228,7 +207,7 @@ void Player::processSample(const juce::MidiBuffer& inMidi, juce::MidiBuffer& out
 
 	//==========================================================================
 	// Check if we're at the end of the score.
-	if (currentNoteIndex >= notes.size())
+	if (indexOfNextNote >= notes.size())
 	{
 		return;
 	}
@@ -240,13 +219,11 @@ void Player::processSample(const juce::MidiBuffer& inMidi, juce::MidiBuffer& out
 	++samplesSinceLastOnset;
 }
 
-//==============================================================================
 std::size_t Player::getNumNotes()
 {
 	return notes.size();
 }
 
-//==============================================================================
 void Player::initialiseScore(const juce::MidiMessageSequence* seq)
 {
 	// Get all note events from MIDI sequence.
@@ -274,21 +251,27 @@ void Player::initialiseScore(const juce::MidiMessageSequence* seq)
 	reset();
 }
 
-// Adds midi note to midioutput stream
-// Called from processSample -> processNoteOn -> playNextNote
 void Player::playNextNote(juce::MidiBuffer& midi, int sampleIndex, int samplesDelay)
 {
 	stopPreviousNote(midi, sampleIndex);
 
 	// Add note to buffer.
-	auto& note = notes[currentNoteIndex];
+	auto& note = notes[indexOfNextNote];
 	juce::uint8 velocity = note.velocity * processor->volumeParameter(playerIndex)->get();
 	int channelParam = processor->channelParameter(playerIndex)->get();
 
-	if (!isUserOperated() || noteTriggeredByUser)
-	{
-		midi.addEvent(juce::MidiMessage::noteOn(channelParam, note.noteNumber, velocity),
-			sampleIndex);
+	// Add a note to the midiOut buffer if this is not a user operated player, or if the note was triggered by the user. 
+	if (!isUserOperated() || noteTriggeredByUser) {
+		if (juce::JUCEApplicationBase::isStandaloneApp()) {
+			float velocityFloat = convertVelocityForStandalone(velocity);
+			midi.addEvent(juce::MidiMessage::noteOn(channelParam, note.noteNumber, velocityFloat),
+				sampleIndex);
+		}
+		else
+		{
+			midi.addEvent(juce::MidiMessage::noteOn(channelParam, note.noteNumber, velocity),
+				sampleIndex);
+		}
 	}
 	latestVolume = velocity / 127.0;
 
@@ -296,39 +279,56 @@ void Player::playNextNote(juce::MidiBuffer& midi, int sampleIndex, int samplesDe
 	samplesSinceLastOnset = samplesDelay;
 	samplesToNextOffset = note.duration * sampleRate;
 
+	// Trigger an update that the note has been played. 
+	updateNoteHasBeenPlayed(samplesDelay);
+}
+
+void Player::updateNoteHasBeenPlayed(int samplesDelay)
+{
 	// Store onset time, ignoring per-player delay.
-	notePlayed = true;
-	previousOnsetTime = currentOnsetTime;
-	currentOnsetTime = scoreCounter - samplesDelay;
+	previousOnsetTimeSamples = latestOnsetTimeSamples;
+	latestOnsetTimeSamples = scoreCounter - samplesDelay;
 
 	// Move to next note in score.
-	++currentNoteIndex;
+	++indexOfNextNote;
+
+	notePlayed = true;
 }
 
 void Player::stopPreviousNote(juce::MidiBuffer& midi, int sampleIndex)
 {
 	// Check if notes have been played yet.
-	if (currentNoteIndex == 0)
+	if (indexOfNextNote == 0)
 	{
 		return;
 	}
 
 	// Send note off for previous note.
-	auto& note = notes[currentNoteIndex - 1];
+	auto& note = notes[indexOfNextNote - 1];
 	auto channelParam = processor->channelParameter(playerIndex)->get();
-	auto volumeParam = processor->volumeParameter(playerIndex)->get();
-	midi.addEvent(juce::MidiMessage::noteOff(channelParam, note.noteNumber, note.velocity * volumeParam),
-		sampleIndex);
+	juce::uint8 velocity = note.velocity * processor->volumeParameter(playerIndex)->get();
+
+	if (!isUserOperated() || noteTriggeredByUser)
+	{
+		if (juce::JUCEApplicationBase::isStandaloneApp()) {
+			float velocityFloat = convertVelocityForStandalone(velocity);
+			midi.addEvent(juce::MidiMessage::noteOff(channelParam, note.noteNumber, velocityFloat),
+				sampleIndex);
+		}
+		else
+		{
+			midi.addEvent(juce::MidiMessage::noteOff(channelParam, note.noteNumber, velocity),
+				sampleIndex);
+		}
+	}
 }
 
-// Checks if new note should be played on this sample
-// processSample -> processNoteOn -> playNextNote
 void Player::processNoteOn(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex)
 {
 	auto delayParam = processor->delayParameter(playerIndex)->get();
 	int samplesDelay = sampleRate * delayParam / 1000.0;
 
-	if (samplesSinceLastOnset >= onsetInterval + samplesDelay || scoreCounter == samplesDelay)
+	if (samplesSinceLastOnset >= nextScheduledOnsetIntervalSamples + samplesDelay || scoreCounter == samplesDelay)
 	{
 		playNextNote(outMidi, sampleIndex, samplesDelay);
 	}

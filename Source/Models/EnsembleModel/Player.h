@@ -17,12 +17,26 @@
 class AdaptiveMetronomeAudioProcessor;
 
 /**
-* \brief The Player class is responsible for playing back a sequence of MIDI notes.
+ * @brief The Player class handles playback of MIDI notes in real time.
  *
- * The Player class handles the playback of MIDI notes, including the timing of the notes,
- * the onset intervals, and the playback of MIDI messages. It also handles the generation
- * of motor and timekeeper noises, and can be used to play back MIDI sequences in a user-operated
- * or automated manner.
+ * The `Player` class is responsible for playing back a sequence of MIDI notes,
+ * including handling timing, onset intervals, and MIDI message scheduling.
+ * It also manages the generation of motor and timekeeper noises, and supports
+ * both user-operated and automated playback modes.
+ *
+ * ### Processing Chain
+ *
+ * The playback process flows through the following steps:
+ *
+ * - @ref Player::processSample receives the current sample index and MIDI buffers.
+ * 
+ * - Calls @ref Player::processNoteOn to determine whether a note should be triggered.
+ * 
+ * - If a note should be played, @ref Player::playNextNote adds a note-on event to the output buffer.
+ * 
+ * - @ref Player::stopPreviousNote sends note-off events for prior notes.
+ *
+ * @see EnsembleModel, Player::processNoteOn, Player::playNextNote, Player::stopPreviousNote
  */
 class Player
 {
@@ -83,7 +97,7 @@ public:
 	 *
 	 * \param interval The onset interval in samples.
 	 */
-	void setOnsetInterval(int interval);
+	void setNextScheduledOnsetIntervalSamples(int interval);
 
 	/**
 	 * \brief Returns the current onset interval for the player.
@@ -94,29 +108,26 @@ public:
 	 *
 	 * \returns The onset interval in samples.
 	 */
-	int getOnsetInterval();
+	int getNextOnsetIntervalSamples();
 
 	/**
 	 * \brief Returns the onset interval for the last note played.
 	 *
-	 * This function retrieves the time interval in samples between the current
-	 * onset and the previous onset. It is used to determine the timing for the
+	 * This function retrieves the time interval in samples between the most recent
+	 * onset and the the one before. It is used to determine the timing for the
 	 * previous note that was played.
 	 *
 	 * \returns The onset interval in samples.
 	 */
-	int getPlayedOnsetInterval();
+	int getLastPlayedOnsetInterval();
 
-	std::deque<double> onsetIntervals;
-	std::deque<double> onsetTimes;
 
 	/**
 	 * \brief Recalculates the next onset interval for the player.
 	 *
-	 * This function updates the time keeper mean and generates noises for the current
-	 * onset. It then calculates the next onset interval based on the alpha and beta
-	 * parameters, the current onset time and the latest onset times of the other
-	 * players.
+	 * This function calculates the next onset interval based on the alpha and beta
+	 * parameters, the most rececnt onset time and the latest onset times of the other
+	 * players. This calculation is triggered when all players have played the most recent note.
 	 *
 	 * \param samplesPerBeat The number of samples per beat.
 	 * \param players The list of other players.
@@ -124,23 +135,20 @@ public:
 	virtual void recalculateOnsetInterval(int samplesPerBeat,
 		const std::vector<std::unique_ptr<Player>>& players);
 
-	/**
-	 * \brief Add an onset interval to the queue. Make sure this is an IOI in seconds.
-	 */
-	void addIntervalToQueue(double interval, double onsetTime);
-
-	/**
-	 * \brief Empty the interval queue.
-	 *
-	 */
-	void emptyIntervalQueue();
-
-	int numOfIntervalsInQueue = 0;
 
 	//==============================================================================
 	// OSC RELATED
-	float oscOnsetTime;
-	int oscOnsetTimeInSamples;
+	/**
+	 * \brief The latest onset time in seconds, as received via OSC message.
+	 */
+	float latestOscOnsetTimeSeconds;
+	/**
+	 * \brief This records the value of the scoreCounter, in samples, when the OSC message was processed.
+	 */
+	int latestOscOnsetTimeSamples;
+	/**
+	 * \brief This is the note number/index of the latest onset to be received via OSC message.
+	 */
 	int latestOscOnsetNoteNumber;
 
 	/**
@@ -156,12 +164,12 @@ public:
 	 * \param samplesSinceFirstNote The number of samples since the first note was played.
 	 */
 	void setOscOnsetTime(float onsetFromOsc, int onsetNoteNumber, int samplesSinceFirstNote);
-	// void setOscOnsetTimeInSamples(float oscOnsetTime);
+
 
 	bool newOSCOnsetAvailable = false;
 
 	//==============================================================================
-	// GETTERS FOR NOISES
+	// GETTERS FOR NOISE VALUES
 	double generateMotorNoise();
 	double generateTimeKeeperNoise();
 	double generateHNoise();
@@ -175,32 +183,32 @@ public:
 	//==============================================================================
 
 	/**
-	 * Returns true if the player has played a note in the most recent process block
+	 * \brief Returns true if the player has played a note in the most recent process block
 	 */
 	bool hasNotePlayed();
 
 	/**
-	 * Resets the note played flag to indicate that no note has been played.
+	 * \brief Resets the note played flag to indicate that no note has been played.
 	 */
 	void resetNotePlayed();
 
 	/**
-	 * Returns the latest onset time in samples.
+	 * \brief Returns the latest onset time in samples.
 	 */
 	int getLatestOnsetTime();
 
 	/**
-	 * Returns the latest onset delay in samples.
+	 * \brief Returns the latest onset delay in samples.
 	 */
 	int getLatestOnsetDelay();
 
 	/**
-	 * Returns the latest volume of the note played.
+	 * \brief Returns the latest volume of the note played.
 	 */
 	double getLatestVolume();
 
 	/**
-	 * Returns whether the latest onset of this player was caused by user input.
+	 * \brief Returns whether the latest onset of this player was caused by user input.
 	 */
 	virtual bool wasLatestOnsetUserInput();
 
@@ -247,6 +255,18 @@ public:
 	 *          of notes in the sequence.
 	 */
 	std::size_t getNumNotes();
+	/**
+	 * \brief Convert the velocity value for standalone compilation
+	 *
+	 * This function converts a MIDI velocity value (integer between 0 and 127) to a float value between 0.0 and 1.0.
+	 * This is required for standalone plugin compilation, as JUCE expects velocity values to be in the range of 0.0 to 1.0 in that context.
+	 *
+	 * \returns MIDI note velocity value converted to float in the range of 0.0 to 1.0.
+	 * 
+	 * @param velocity The note velocity value to convert. Integer between 0 and 127.
+	 */
+	float convertVelocityForStandalone(int velocity) { return juce::jlimit(0.0f, 1.0f, velocity / 127.0f); }
+
 
 protected:
 	//==============================================================================
@@ -262,7 +282,12 @@ protected:
 	};
 
 	std::vector<Note> notes;
-	std::size_t currentNoteIndex = 0;
+
+	/**
+	 * \brief This is the index of the next note to be played in the notes vector.
+	 * More intuitively, it is also a count of how many notes have actually been played.
+	 */
+	std::size_t indexOfNextNote = 0;
 	double latestVolume = 0.0;
 
 	/**
@@ -310,16 +335,49 @@ protected:
 	 * \param sampleIndex The sample index of the incoming MIDI data.
 	 */
 	virtual void processNoteOn(const juce::MidiBuffer& inMidi, juce::MidiBuffer& outMidi, int sampleIndex);
+	
+	/**
+	 * \brief Convenience function to update required variables when a new note has been played.
+	 */
+	void updateNoteHasBeenPlayed(int samplesDelay);
+
 	//==============================================================================
-	// Timing information
-	const double& sampleRate;
-	const int& scoreCounter;
-	int onsetInterval = 0; // time between previous and next onset in samples
+	// TIMING INFORMATION
 
-	int samplesSinceLastOnset = 0, samplesToNextOffset = -1;
+    /**
+     * \brief This is a reference to the current sample rate, as defined in the EnsembleModel and Processor.
+     */
+    const double& sampleRate;
 
-	int currentOnsetTime = 0, previousOnsetTime = 0;
-	int nextNoteTimeInMS = 0;
+    /**
+     * \brief This holds a reference to the score counter, in samples, which is updated and kept track of in EnsembleModel.
+     */
+    const int& scoreCounter;
+
+    /**
+     * \brief This is the main variable that should be calculated to determine when this player should be playing the next note. 
+     * It determines the intended number of samples between the last played note, and the next one.
+     */
+    int nextScheduledOnsetIntervalSamples = 0; 
+
+    /**
+     * \brief This keeps track of how many samples have been processed since the last note was played.
+     */
+    int samplesSinceLastOnset = 0;
+    /**
+     * \brief This keeps track of how many samples are left until the last played note should be turned off. This only applies to the midi note output.
+     */
+    int samplesToNextOffset = -1;
+
+    /**
+     * \brief This is the time, in samples, at which the most recent note was played.
+     */
+    int latestOnsetTimeSamples = 0;
+	
+    /**
+     * \brief This is the time, in samples, at which the second to last note was played. 
+     */
+    int previousOnsetTimeSamples = 0;
 
 	int latestDelay = 0;
 	bool notePlayed = false;
@@ -334,5 +392,9 @@ private:
 	double currentMotorNoise = 0.0, previousMotorNoise = 0.0, currentTimeKeeperNoise = 0.0, timeKeeperMean = 0.0;
 
 protected:
+	/**
+	* \brief This keeps track of whether the latest note played was triggered from user input. 
+	* This can be either from a midi input, or from an OSC message. 
+	*/
 	bool noteTriggeredByUser = false;
 };

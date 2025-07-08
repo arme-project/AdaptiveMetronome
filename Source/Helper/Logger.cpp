@@ -33,8 +33,9 @@ void Logger::Start()
 	thread = std::thread([this]() {this->loggerLoop(); });
 }
 
-void Logger::Start(int numPlayersIn)
+void Logger::Start(int numPlayersIn, std::vector<bool> isUserPlayerFlagsIn)
 {
+	isUserOperated = isUserPlayerFlagsIn;
 	numPlayers = numPlayersIn;
 	Start();
 }

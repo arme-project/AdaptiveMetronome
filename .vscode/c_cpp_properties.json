@@ -4,9 +4,12 @@
             "name": "JUCE",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${vcpkgRoot}/x64-windows/include",
+                "${env:JUCE_DIR}/modules",
                 "${workspaceFolder}/JuceLibraryCode",
-                "${env:JUCE_DIR}/../modules"
+                "${workspaceFolder}/Source/Helper",
+                "${workspaceFolder}/Source/Models/EnsembleModel",
+                "${workspaceFolder}/Source/Models/TimingModel",
+                "${workspaceFolder}/Source/Plugin"
             ],
             "defines": [
                 "_DEBUG",

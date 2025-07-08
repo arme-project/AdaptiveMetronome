@@ -12,7 +12,7 @@
         "cwd": "${workspaceFolder}/Builds/VisualStudio2022/x64/Debug/",
         "environment": [],
         "console": "internalConsole",
-        "preLaunchTask": "Build Solution"
+        "preLaunchTask": "Build Solution with MSBuild"
       }
     ]
   }

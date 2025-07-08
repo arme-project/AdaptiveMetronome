@@ -1,23 +1,25 @@
 {
     "version": "2.0.0",
     "tasks": [
-      {
-        "label": "Build Solution",
-        "type": "shell",
-        "command": "msbuild",
-        "args": [
-          "Builds\\VisualStudio2022\\AdaptiveMetronome.sln",       // replace with your .sln file
-          "/p:Configuration=Debug",  // or Release
-          "/p:Platform=x64",       // or x86
-          "/m"  // use multiple cores
-        ],
-        "problemMatcher": "$msCompile",
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        },
-        "detail": "Build the .sln using MSBuild"
-      }
+        {
+            "label": "Build Solution with MSBuild",
+            "type": "shell",
+            "command": "msbuild",
+            "args": [
+                "${workspaceFolder}\\Builds\\VisualStudio2022\\AdaptiveMetronome.sln",
+                "/p:Configuration=Debug",
+                "/p:Platform=x64",
+                "/m"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build the .sln using MSBuild",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+        }
     ]
-  }
-  
+}

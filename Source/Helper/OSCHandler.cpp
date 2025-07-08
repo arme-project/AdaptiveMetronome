@@ -37,11 +37,11 @@ void OSCHandler::ConnectReceiver(int portNumber)
 {
 	if (receiver.connect(portNumber)) {
 		currentReceiverPort = portNumber;
-		DBG("OSC Reciever has been connected to listen on port " << juce::String(portNumber));
+		DBG("OSC Receiver has been connected to listen on port " << juce::String(portNumber));
 	}
 	else {
 		currentReceiverPort = -1;
-		DBG("Unable to connect OSC Reciever on port " << juce::String(portNumber));
+		DBG("Unable to connect OSC Receiver on port " << juce::String(portNumber));
 	}
 }
 
@@ -189,7 +189,8 @@ void OSCHandler::oscMessageReceived(const juce::OSCMessage& message)
 		}
 	}
 	else if (pattern == "/oscstart") {
-		model->reset(true);
+
+		model->reset();
 		model->SetManualPlaying(true);
 	}
 	else if (pattern == "/playbackstart") { // Only used to set timer at start of playback. No longer needed.

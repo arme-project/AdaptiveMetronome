@@ -40,7 +40,7 @@ void UserPlayer::recalculateOnsetInterval(int samplesPerBeat,
 		if (!players[i]->isUserOperated())
 		{
 			meanOnset += players[i]->getLatestOnsetTime();
-			meanInterval += players[i]->getOnsetInterval();
+			meanInterval += players[i]->getNextOnsetIntervalSamples();
 			++nOtherPlayers;
 		}
 	}
@@ -58,7 +58,7 @@ void UserPlayer::recalculateOnsetInterval(int samplesPerBeat,
 	}
 	else
 	{
-		onsetInterval = meanOnset - currentOnsetTime + 1.5 * meanInterval;
+		nextScheduledOnsetIntervalSamples = meanOnset - latestOnsetTimeSamples + 1.5 * meanInterval;
 	}
 }
 
@@ -123,7 +123,7 @@ void UserPlayer::processNoteOn(const juce::MidiBuffer& inMidi, juce::MidiBuffer&
 		// Filters ... ignore if following conditions are true ....
 
 		// Ignore if score has not progressed half an interval length
-		if (scoreCounter <= (onsetInterval / 2))
+		if (scoreCounter <= (nextScheduledOnsetIntervalSamples / 2))
 		{
 			break;
 		}
@@ -134,7 +134,7 @@ void UserPlayer::processNoteOn(const juce::MidiBuffer& inMidi, juce::MidiBuffer&
 		}
 
 		// Ignore If time since last onset is less than 50% of onset interval
-		if (samplesSinceLastOnset < onsetInterval / 2) {
+		if (samplesSinceLastOnset < nextScheduledOnsetIntervalSamples / 2) {
 			break;
 		}
 
@@ -161,7 +161,7 @@ void UserPlayer::processNoteOn(const juce::MidiBuffer& inMidi, juce::MidiBuffer&
 	} // Finish sample loop
 
 	// If no user input trigger a note automatically if no note has been played for 50% of interval time
-	if (!notePlayed && (samplesSinceLastOnset >= (onsetInterval * 1.5)))
+	if (!notePlayed && (samplesSinceLastOnset >= (nextScheduledOnsetIntervalSamples * 1.5)))
 	{
 		noteTriggeredByUser = false;
 		playNextNote(outMidi, sampleIndex);

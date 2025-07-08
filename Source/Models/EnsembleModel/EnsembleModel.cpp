@@ -35,11 +35,12 @@ EnsembleModel::EnsembleModel(AdaptiveMetronomeAudioProcessor* processorPtr)
 	resetFlag.clear();
 	currentNoteIndex.set(99);
 
-	if (oscAutoConnect)
-	{
+
+	// Default to autoconnect OSC on launch
+#if OSC_AUTOCONNECT
 		oscHandler->ConnectSender();
 		oscHandler->ConnectReceiver();
-	}
+#endif // OSC_AUTOCONNECT
 }
 
 //=============================================================================
@@ -235,18 +236,15 @@ void EnsembleModel::SetManualPlaying(bool isPlaying)
 #pragma region OPEN SOUND CONTROL
 
 // Sets the user onset time from an OSC message, which is used to set the onset time for the user-operated players.
+//TODO: Check if this is running on the correct thread. This should not be on the audio thread. 
 void EnsembleModel::setUserOnsetFromOsc(float oscOnsetTime, int onsetNoteNumber, int msMax)
 {
 	for (auto& player : players)
 	{
 		if (player->isUserOperated()) {
-			//auto tickOfOnset = clock->convertMsMaxToTick(msMax);
-			//int msOnsetSinceFirstSample = clock->getDurationSincePlayback(tickOfOnset);
-			//int onsetInSamples = (int)(msOnsetSinceFirstSample * (sampleRate / 1000));
-
-			// This is a simplified version of the above, as we are not using the clock anymore. Onset time is simply whenever the note is received
 			int onsetInSamples = scoreCounter;
 			int onsetInSamplesFromOnsetTime = oscOnsetTime * sampleRate;
+			//TODO: Add a way to monitor this error, to see if it is within a reasonable range.
 			float errorInOnset = (onsetInSamples - onsetInSamplesFromOnsetTime) / (float)sampleRate;
 			player->setOscOnsetTime(oscOnsetTime, onsetNoteNumber, onsetInSamples);
 		}
@@ -276,12 +274,8 @@ void EnsembleModel::SendActionMessage(juce::String message)
 bool EnsembleModel::loadMidiFile(const juce::File& file, int userPlayers)
 {
 	FlagLock lock(playersInUse);
-
-	if (!lock.locked)
-	{
-		return false;
-	}
-
+	if (!lock.locked) return false;
+	
 	//==========================================================================
 	// Read in content of MIDI file.
 	juce::FileInputStream inStream(file);
@@ -366,7 +360,7 @@ void EnsembleModel::createPlayers(const juce::MidiFile& file)
 	if (getNumPlayers() != previousNumPlayers)
 	{
 		// If the number of players has changed, reset the logger with new player number.
-		logger->Start(getNumPlayers());
+		logger->Start(getNumPlayers(), isUserFlags);
 	}
 
 	// Initialises the Poller object used for the polling with the newly created players
@@ -392,26 +386,13 @@ void EnsembleModel::prepareToPlay(double newSampleRate)
 bool EnsembleModel::reset()
 {
 	FlagLock lock(playersInUse);
-
-	if (!lock.locked)
-	{
-		return false;
-	}
+	if (!lock.locked) return false;
 
 	resetPlayers();
 
 	return true;
 }
 
-//==============================================================================
-// Calls the reset function to reset the ensemble model, and sets the introTonesPlayed to the number of intro tones.
-bool EnsembleModel::reset(bool skipIntroNotes)
-{
-	reset();
-	introTonesPlayed = numIntroTones;
-
-	return false;
-}
 
 //==============================================================================
 // Sets the tempo of the ensemble model based on the given beats per minute (bpm).
@@ -475,34 +456,35 @@ void EnsembleModel::processMidiBlock(const juce::MidiBuffer& inMidi, juce::MidiB
 {
 	FlagLock lock(playersInUse);
 
-	if (!lock.locked)
-	{
-		return;
-	}
-
 	//==============================================================================
 	// Update tempo from DAW playhead.
 	setTempo(tempo);
 
 	//==============================================================================
 	// Clear output if ensemble has been reset
-	if (!resetFlag.test_and_set())
-	{
-		soundOffAllChannels(outMidi);
-	}
+	if (!resetFlag.test_and_set()) soundOffAllChannels(outMidi);
+
+	// If players have not been locked at the beginning of this method, then return early.
+	// Or if the system is waiting for the first note (in full system mode), then also return early. 
+	if (!lock.locked) return;
+	if (waitingForFirstNote) return;
 
 	//==============================================================================
 	// Process each sample of the buffer for each player.
 	for (int i = 0; i < numSamples; ++i)
 	{
-		if (introTonesPlayed < numIntroTones)
+		// Check if all intro tones have been played
+		if (introTonesPlayed >= numIntroTones)
 		{
+			// If so, play the score normally.
+			playScore(inMidi, outMidi, i);
+		}
+		else
+		{
+			// Otherwise, play the intro tones and user intro.
 			playIntroTones(outMidi, i);
 			playUserIntro(inMidi, outMidi, i);
-			continue;
 		}
-
-		playScore(inMidi, outMidi, i);
 	}
 }
 
@@ -581,7 +563,7 @@ void EnsembleModel::setInitialPlayerTempo()
 	{
 		for (auto& player : players)
 		{
-			player->setOnsetInterval(samplesPerBeat);
+			player->setNextScheduledOnsetIntervalSamples(samplesPerBeat);
 		}
 
 		initialTempoSet = true;
@@ -632,7 +614,7 @@ void EnsembleModel::calculateNewIntervals()
 
 	for (int i = 0; i < players.size(); ++i)
 	{
-		int onsetInterval = players[i]->getOnsetInterval();
+		int onsetInterval = players[i]->getNextOnsetIntervalSamples();
 		int onsetTime = players[i]->getLatestOnsetTime();
 		int nextNoteTime = onsetTime + onsetInterval;
 		int nextNoteTimeInMS = nextNoteTime * 1000 / sampleRate;
@@ -672,7 +654,7 @@ void EnsembleModel::storeOnsetDetailsForPlayer(int playerIndex, Logger::LogData&
 	auto* player = players[playerIndex].get();
 
 	log.onsetTime = player->getLatestOnsetTime();
-	log.onsetInterval = player->getOnsetInterval();
+	log.onsetInterval = player->getNextOnsetIntervalSamples();
 	log.userInput = player->isUserOperated();
 	log.delay = player->getLatestOnsetDelay();
 	log.motorNoise = player->getMotorNoise();
@@ -759,8 +741,7 @@ void EnsembleModel::resetPlayers()
 {
 	//==========================================================================
 	// Initialise intro countdown
-	introCounter = 0; //-sampleRate / 2;
-	introTonesPlayed = 0;
+	introCounter = 0;
 
 	// Initialise score counter
 	scoreCounter = 0;
@@ -781,6 +762,9 @@ void EnsembleModel::resetPlayers()
 	{
 		player->reset();
 	}
+
+	// If skipIntroTones is true, we skip the intro tones and set the introTonesPlayed to numIntroTones.
+	introTonesPlayed = skipIntroTones ? numIntroTones : 0;
 
 	resetFlag.clear();
 }

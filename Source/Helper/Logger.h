@@ -57,7 +57,7 @@ public:
 	* thread to run the logging loop. The logging loop will continue to run until
 	* the stopLoggerLoop function is called. This version allows you to change the number of players.
 	*/
-	void Start(int numPlayersIn);
+	void Start(int numPlayersIn, std::vector<bool> isUserPlayerFlagsIn);
 
 	/**
 	 * \brief Stops the logger loop by setting the continueLogging flag to false.
