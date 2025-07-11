@@ -11,6 +11,7 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(Ada
 	versionLabel(juce::String(), "(v1.0.3)"),
 	resetButton("Reset"),
 	loadMidiButton("Load File"),
+	optionsButton("See Options"),
 	oscOn("")
 {
 	//==========================================================================
@@ -31,27 +32,8 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(Ada
 	oscOn.setClickingTogglesState(false);
 	oscOn.setAlpha(0.5);
 
-	// ADD "SEE OPTIONS" BUTTON HERE
 	addAndMakeVisible(optionsButton);
-	optionsButton.onClick = [this]() {
-		optionsVisible = !optionsVisible;
-		if (optionsVisible) {
-			if (!optionsDisplay)
-			{
-				optionsDisplay = std::make_unique<juce::Component>();
-				optionsDisplay->setSize(300, 300); // Example size for the empty window
-				optionsDisplay->setColour(juce::Component::backgroundColourId, juce::Colours::darkgrey);
-			}
-			addAndMakeVisible(optionsDisplay.get());
-			// Place the optionsDisplay somewhere reasonable (centered for now)
-			int w = 300, h = 300;
-			optionsDisplay->setBounds((getWidth() - w) / 2, (getHeight() - h) / 2, w, h);
-			optionsDisplay->toFront(true);
-		} else {
-			if (optionsDisplay)
-				optionsDisplay->setVisible(false);
-		}
-	};
+	optionsButton.addListener(this);
 
 	//==========================================================================
 	addAndMakeVisible(userPlayersLabel);
@@ -93,6 +75,9 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(Ada
 	//==========================================================================
 	// Load default config, if it exists
 	CheckForDefaultConfig();
+
+	std::unique_ptr<EnsembleOptionEntry> newEntry = std::make_unique<EnsembleOptionEntry>("OSC Status");
+	ensembleOptionsList.addEntry(std::move(newEntry));
 }
 
 AdaptiveMetronomeAudioProcessorEditor::~AdaptiveMetronomeAudioProcessorEditor()
@@ -129,7 +114,7 @@ void AdaptiveMetronomeAudioProcessorEditor::timerCallback()
 		oscOn.setTooltip("OSC not connected");
 	}
 
-	versionLabel.setTooltip(processor.ensemble.GetLogFileNameOverride());
+	// versionLabel.setTooltip(processor.ensemble.GetLogFileNameOverride());
 }
 
 //==============================================================================
@@ -161,9 +146,8 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
 	//==========================================================================
 	// Static strip at top of screen.
 	auto headingStripBounds = bounds.removeFromTop(instructionStripHeight);
+	optionsButton.setBounds(headingStripBounds.removeFromRight(100).reduced(padding));
 	oscOn.setBounds(headingStripBounds.removeFromRight(45).reduced(padding));
-	// ADD "SEE OPTIONS" BUTTON HERE
-	optionsButton.setBounds(headingStripBounds.removeFromRight(120).reduced(padding));
 	versionLabel.setBounds(headingStripBounds.removeFromRight(100).reduced(padding));
 	instructionLabel.setBounds(headingStripBounds.reduced(padding));
 
@@ -185,14 +169,6 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
 	//==========================================================================
 	// Ensemble Parameters Area
 	ensembleParametersViewport.setBounds(bounds);
-
-	if (optionsDisplay && optionsVisible)
-	{
-		int w = 300, h = 300;
-		optionsDisplay->setBounds((getWidth() - w) / 2, (getHeight() - h) / 2, w, h);
-		optionsDisplay->setVisible(true);
-		optionsDisplay->toFront(true);
-	}
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::String& message)
@@ -216,9 +192,31 @@ void AdaptiveMetronomeAudioProcessorEditor::buttonClicked(juce::Button* button)
 	{
 		resetButtonCallback();
 	}
-	else
+	else if (button == &loadMidiButton)
 	{
 		loadMidiButtonCallback();
+	}
+	else if (button == &optionsButton)
+	{
+		// Toggle EnsembleOptionsComponent visibiity, passing EnsembleOptionsList in as a ptr. 
+		if (!ensembleOptionsComponent)
+		{
+			ensembleOptionsComponent = std::make_unique<EnsembleOptionsComponent>(&ensembleOptionsList);
+			addAndMakeVisible(*ensembleOptionsComponent);
+			ensembleOptionsComponent->setBounds(getLocalBounds().reduced(40, 40));
+			ensembleOptionsComponent->toFront(true);
+			for (auto& entry : ensembleOptionsComponent->optionEntriesList->optionsEntries)
+			{
+				ensembleOptionsComponent->addAndMakeVisible(entry.get()); // <-- This ensures the entry is visible
+			}
+		}
+		else
+		{
+			bool isVisible = ensembleOptionsComponent->isVisible();
+			ensembleOptionsComponent->setVisible(!isVisible);
+			if (!isVisible)
+				ensembleOptionsComponent->toFront(true);
+		}
 	}
 }
 
@@ -483,4 +481,58 @@ void AdaptiveMetronomeAudioProcessorEditor::EnsembleParametersComponent::calcula
 void AdaptiveMetronomeAudioProcessorEditor::initialiseEnsembleParameters(EnsembleModel& ensemble)
 {
 	ensembleParametersViewport.setViewedComponent(new EnsembleParametersComponent(ensemble, processor));
+}
+
+// ==================================
+// EnsembleOptionEntry implementation
+// ==================================
+AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionEntry::EnsembleOptionEntry(juce::String entryName) :
+		entryName(entryName) {}
+
+AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionEntry::~EnsembleOptionEntry() {}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionEntry::paint(juce::Graphics& g)
+{
+    g.fillAll(juce::Colours::darkgrey);
+    g.setColour(juce::Colours::white);
+    g.drawText(entryName, getLocalBounds(), juce::Justification::centred);
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionEntry::resized() {}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionEntry::updateEntry() {}
+
+// EnsembleOptionsList implementation
+AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsList::EnsembleOptionsList() {}
+AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsList::~EnsembleOptionsList() {}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsList::addEntry(std::unique_ptr<EnsembleOptionEntry> newEntry)
+{
+	optionsEntries.push_back(std::move(newEntry));
+}
+
+// EnsembleOptionsComponent implementation
+AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsComponent::EnsembleOptionsComponent(EnsembleOptionsList* entriesListPtr) 
+: optionEntriesList(entriesListPtr){}
+AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsComponent::~EnsembleOptionsComponent() {}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsComponent::paint(juce::Graphics& g)
+{
+	g.fillAll(juce::Colours::black);
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsComponent::resized()
+{
+    auto area = getLocalBounds();
+    int entryHeight = 30;
+    for (auto& entry : optionEntriesList->optionsEntries)
+    {
+       entry->setBounds(area.removeFromTop(entryHeight).reduced(2));
+    }
+}
+
+void AdaptiveMetronomeAudioProcessorEditor::EnsembleOptionsComponent::updateAllEntries()
+{
+    for (auto& entry : optionEntriesList->optionsEntries)
+       entry->updateEntry();
 }

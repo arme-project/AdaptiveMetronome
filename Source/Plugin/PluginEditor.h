@@ -32,10 +32,50 @@ public:
 	//==============================================================================
 	void buttonClicked(juce::Button* button) override;
 
+class EnsembleOptionEntry : public juce::Component
+	{
+	public:
+		EnsembleOptionEntry(juce::String entryName);
+		~EnsembleOptionEntry();
+
+		void paint(juce::Graphics& g) override;
+		void resized() override;
+
+		void updateEntry();
+		juce::String entryName;
+	};
+
+	class EnsembleOptionsList
+	{
+	public:
+		EnsembleOptionsList();
+		~EnsembleOptionsList();
+
+		void addEntry(std::unique_ptr<EnsembleOptionEntry> newEntry);
+		std::vector<std::unique_ptr<EnsembleOptionEntry>> optionsEntries;
+	};
+
+	class EnsembleOptionsComponent : public juce::Component
+	{
+	public:
+		EnsembleOptionsComponent(EnsembleOptionsList* entriesListPtr);
+		~EnsembleOptionsComponent();
+
+		void paint(juce::Graphics& g) override;
+		void resized() override;
+
+		EnsembleOptionsList* optionEntriesList;
+
+		void updateAllEntries();
+	};
+
+	EnsembleOptionsList ensembleOptionsList;
+
 private:
 	//==============================================================================
 	AdaptiveMetronomeAudioProcessor& processor;
-
+    std::unique_ptr<EnsembleOptionsComponent> ensembleOptionsComponent;
+	
 	int timerInterval = 50;
 
 	void CheckForDefaultConfig();
@@ -43,16 +83,17 @@ private:
 	//==============================================================================
 	juce::Label instructionLabel, userPlayersLabel, versionLabel;
 	juce::ComboBox userPlayersSelector;
-	juce::TextButton resetButton, loadMidiButton;
+	juce::TextButton resetButton, loadMidiButton, optionsButton;
 	juce::ToggleButton oscOn;
 	std::unique_ptr<juce::FileChooser> fileChooser;
-
 	juce::TooltipWindow tooltipWindow{ this };
 
 	//==============================================================================
 	void resetButtonCallback();
 	void loadMidiButtonCallback();
 	void loadMidiFile(juce::File file);
+
+	
 
 	//==============================================================================
 	class EnsembleParametersComponent : public juce::Component

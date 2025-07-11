@@ -98,8 +98,6 @@ public:
 	void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
 	//==============================================================================
-	bool manualPlaybackStarted;
-
 	//==============================================================================
 	bool hasEditor() const override;
 	juce::AudioProcessorEditor* createEditor() override;
@@ -252,7 +250,7 @@ public:
 	 * 
 	 * \return A boolean indicating whether the playback has been started manually.
 	 */
-	bool manualPlaybackStarted;
+	bool manualPlaybackStarted = false;
 
 	/**
 	 * \brief Flag that indicates whether playback should be started manually.
