@@ -86,7 +86,7 @@ juce::String EnsembleModel::GetLogFileNameOverride()
 // Returns whenever Manual Playing is enabled or not.
 bool EnsembleModel::IsManuallyPlaying()
 {
-	return processor->manualPlaying;
+	return processor->manualPlaybackStarted;
 }
 
 // Returns the MIDI file associated with the ensemble model.
@@ -713,6 +713,7 @@ void EnsembleModel::playScore(const juce::MidiBuffer& inMidi, juce::MidiBuffer& 
 	}
 
 	// If all players have played a note, update timings.
+	// TODO: These calculations should not be done on the audio thread.
 	if (newOnsetsAvailable())
 	{
 		calculateNewIntervals();
@@ -775,34 +776,3 @@ void EnsembleModel::postLatestOnsets(const std::vector<int>& onsets, const std::
 {
 }
 #pragma endregion
-
-//==============================================================================
-
-
-//void EnsembleModel::getLatestAlphas()
-//{
-//	//    if (pollingFifo)
-//	//    {
-//	//        // Consume everything in the buffer, only using the most recent set of alphas.
-//	//        auto reader = pollingFifo->read (pollingFifo->getNumReady());
-//	//
-//	//        for (int player1 = 0; player1 < pollingBuffer.size(); ++player1)
-//	//        {
-//	//            int player2 = 0;
-//	//
-//	//            int block1Start = std::max (reader.blockSize1 + reader.blockSize2 - static_cast <int> (players.size()), 0);
-//	//
-//	//            for (int i = block1Start; i < reader.blockSize1; ++i)
-//	//            {
-//	//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex1 + i];
-//	//            }
-//	//
-//	//            int block2Start = std::max (block1Start - reader.blockSize1, 0);
-//	//
-//	//            for (int i = block2Start; i < reader.blockSize2; ++i)
-//	//            {
-//	//                *(*alphaParams) [player1][player2++] = pollingBuffer [player1][reader.startIndex2 + i];
-//	//            }
-//	//        }
-//	//    }
-//}

@@ -13,6 +13,22 @@
 
 using AudioParameterFloatToUse = juce::AudioParameterFloat;
 
+/**
+ * @brief This class is the main processor for the Adaptive Metronome plugin.
+ * 
+ * It inherits from juce::AudioProcessor and manages the ensemble model, parameters, and audio.
+ * 
+ * It is very important to note that this class functions differently in FULL_SYSTEM mode 
+ * compared to PLUGIN mode.
+ * 
+ * In PLUGIN mode, playback is started automatically by the host/DAW (reaper, etc). 
+ * The ensemble model will typically handle production of the intro tones (on MIDI channel 16), before start the regular ensemble modelling and playback. 
+ * 
+ * In FULL_SYSTEM mode, the user must manually start playback by clicking the "Play" button in the GUI, or alternatively, playback can be started via an OSC message. 
+ * In this case, playback is "primed" by setting the `manualPlaybackStarted` flag to true, and also the "waitingForFirstNote` flag in the ensemble model is set to true.
+ * This means that the ensemble model will not start processing until the first note is received.
+ * This allows the metronome to be played externally (currently from MaxMSP), and for modelling to only occur from the first actual note onwards. 
+*/
 class AdaptiveMetronomeAudioProcessor : public juce::AudioProcessor
 {
 public:
@@ -82,8 +98,7 @@ public:
 	void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
 	//==============================================================================
-	bool manualPlaying;
-	bool reaperPlaying;
+	bool manualPlaybackStarted;
 
 	//==============================================================================
 	bool hasEditor() const override;
@@ -225,6 +240,34 @@ public:
 	ParameterIndexGetter<juce::AudioParameterInt> channelParameter;
 	ParameterIndexGetter<AudioParameterFloatToUse> alphaParameter, betaParameter;
 
+	//==============================================================================
+	/**
+	 * \brief Flag that indicates whether playback has been manually started.
+	 *
+	 * This flag indicates that the system has been primed for playback, but the first note has not yet beenn received, and hence EnsembleModel is not yet doing any processing. 
+	 * 
+	 * This allows things like a metronome to be played externally, while the EnsembleModel is paused as long as @ref EnsembleModel::waitingForFirstNote is also set to true. 
+	 * 
+	 * When this is false, playback starts when the host/DAW starts playback, and the EnsembleModel will start processing immediately.
+	 * 
+	 * \return A boolean indicating whether the playback has been started manually.
+	 */
+	bool manualPlaybackStarted;
+
+	/**
+	 * \brief Flag that indicates whether playback should be started manually.
+	 *
+	 * This flag is used to indicate whether the playback should be started manually by the user, via OSC messaging or GUI buttong. 
+	 * 
+	 * When set to false, the plugin works in it's original form, and waits for playback to be started in the host/DAW. 
+	 * 
+	 * \return A boolean indicating whether the playback should be started manually.
+	 */
+#if FULL_SYSTEM
+	bool useManualPlaybackStart = true;
+#else
+	bool useManualPlaybackStart = false;
+#endif
 private:
 	//==============================================================================
 	juce::MidiBuffer midiOutputBuffer;

@@ -1,16 +1,16 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
-AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(AdaptiveMetronomeAudioProcessor& p,
-	EnsembleModel& ensemble)
+AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(AdaptiveMetronomeAudioProcessor& p)
 	: AudioProcessorEditor(&p),
 	processor(p),
-	instructionLabel(juce::String(), "Waiting for message from MAX/MSP"),
+	instructionLabel(juce::String(), INSTRUCTION_LABEL),
 	userPlayersLabel(juce::String(), "No. User Players:"),
-	versionLabel(juce::String(), "(v1.0.3(SA))"),
+	versionLabel(juce::String(), "(v1.0.3)"),
 	resetButton("Reset"),
-	loadMidiButton("Load File"), // TODO: Rename this to reflect additional .xml config functionality?
+	loadMidiButton("Load File"),
 	oscOn("")
 {
 	//==========================================================================
@@ -22,9 +22,36 @@ AdaptiveMetronomeAudioProcessorEditor::AdaptiveMetronomeAudioProcessorEditor(Ada
 	versionLabel.setJustificationType(juce::Justification::right);
 	versionLabel.setFont(instructionStripHeight - padding * 4);
 
+	// Set the version label to be a tooltip with build date and time
+	auto versionTooltipString = juce::String("Build date: ");
+	versionTooltipString << BUILD_DATE << "\nBuild time: " << BUILD_TIME;
+	versionLabel.setTooltip(versionTooltipString);
+
 	addAndMakeVisible(oscOn);
 	oscOn.setClickingTogglesState(false);
 	oscOn.setAlpha(0.5);
+
+	// ADD "SEE OPTIONS" BUTTON HERE
+	addAndMakeVisible(optionsButton);
+	optionsButton.onClick = [this]() {
+		optionsVisible = !optionsVisible;
+		if (optionsVisible) {
+			if (!optionsDisplay)
+			{
+				optionsDisplay = std::make_unique<juce::Component>();
+				optionsDisplay->setSize(300, 300); // Example size for the empty window
+				optionsDisplay->setColour(juce::Component::backgroundColourId, juce::Colours::darkgrey);
+			}
+			addAndMakeVisible(optionsDisplay.get());
+			// Place the optionsDisplay somewhere reasonable (centered for now)
+			int w = 300, h = 300;
+			optionsDisplay->setBounds((getWidth() - w) / 2, (getHeight() - h) / 2, w, h);
+			optionsDisplay->toFront(true);
+		} else {
+			if (optionsDisplay)
+				optionsDisplay->setVisible(false);
+		}
+	};
 
 	//==========================================================================
 	addAndMakeVisible(userPlayersLabel);
@@ -135,6 +162,8 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
 	// Static strip at top of screen.
 	auto headingStripBounds = bounds.removeFromTop(instructionStripHeight);
 	oscOn.setBounds(headingStripBounds.removeFromRight(45).reduced(padding));
+	// ADD "SEE OPTIONS" BUTTON HERE
+	optionsButton.setBounds(headingStripBounds.removeFromRight(120).reduced(padding));
 	versionLabel.setBounds(headingStripBounds.removeFromRight(100).reduced(padding));
 	instructionLabel.setBounds(headingStripBounds.reduced(padding));
 
@@ -156,6 +185,14 @@ void AdaptiveMetronomeAudioProcessorEditor::resized()
 	//==========================================================================
 	// Ensemble Parameters Area
 	ensembleParametersViewport.setBounds(bounds);
+
+	if (optionsDisplay && optionsVisible)
+	{
+		int w = 300, h = 300;
+		optionsDisplay->setBounds((getWidth() - w) / 2, (getHeight() - h) / 2, w, h);
+		optionsDisplay->setVisible(true);
+		optionsDisplay->toFront(true);
+	}
 }
 
 void AdaptiveMetronomeAudioProcessorEditor::actionListenerCallback(const juce::String& message)

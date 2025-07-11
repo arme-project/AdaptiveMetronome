@@ -19,7 +19,8 @@
             "compilerPath": "cl.exe",
             "cStandard": "c17",
             "intelliSenseMode": "windows-msvc-x64",
-            "mergeConfigurations": true
+            "mergeConfigurations": true,
+            "cppStandard": "c++17"
         }
     ],
     "version": 4

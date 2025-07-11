@@ -2,6 +2,15 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+#define BUILD_DATE __DATE__
+#define BUILD_TIME __TIME__
+
+#if FULL_SYSTEM
+#define INSTRUCTION_LABEL "ARME Adaptive Metronome"
+#else
+#define INSTRUCTION_LABEL "Wait for intro tones and start tapping ..."
+#endif
+
 class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
 	public juce::Button::Listener,
 	public juce::ActionListener,
@@ -9,8 +18,7 @@ class AdaptiveMetronomeAudioProcessorEditor : public juce::AudioProcessorEditor,
 
 {
 public:
-	AdaptiveMetronomeAudioProcessorEditor(AdaptiveMetronomeAudioProcessor&,
-		EnsembleModel& ensemble);
+	AdaptiveMetronomeAudioProcessorEditor(AdaptiveMetronomeAudioProcessor&);
 	~AdaptiveMetronomeAudioProcessorEditor() override;
 
 	void timerCallback() override;
@@ -108,5 +116,5 @@ private:
 	void initialiseEnsembleParameters(EnsembleModel& ensemble);
 
 	//==============================================================================
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdaptiveMetronomeAudioProcessorEditor)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdaptiveMetronomeAudioProcessorEditor);
 };

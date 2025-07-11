@@ -20,6 +20,26 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             },
+        },
+        {
+            "label": "Build VST Solution with MSBuild",
+            "type": "shell",
+            "command": "msbuild",
+            "args": [
+                "${workspaceFolder}\\Builds\\VisualStudio2022\\AdaptiveMetronome.sln",
+                "/p:Configuration=DebugVst",
+                "/p:Platform=x64",
+                "/m"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build the VST .sln using MSBuild",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
         }
     ]
 }

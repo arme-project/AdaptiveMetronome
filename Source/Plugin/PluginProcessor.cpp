@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "EnsembleModel.h"
+#include <JucePluginDefines.h>
 
 //==============================================================================
 AdaptiveMetronomeAudioProcessor::AdaptiveMetronomeAudioProcessor()
@@ -16,18 +17,7 @@ AdaptiveMetronomeAudioProcessor::AdaptiveMetronomeAudioProcessor()
 	betaParameter(apvts, "beta-", "-"),
 	stdModelParams(4)
 {
-	// // Test only ... sets default Alpha and Beta parameters on initialisation
-	// ensemble.setAlphaBetaParams(0.25);
-
-	// // Get alpha parameter
-	// juce::AudioParameterFloat* parameter = alphaParameter(0, 0);
-	// std::function<float()> getFloat = [parameter]() { return parameter->get(); };
-
-	// auto testIndexGetter0 = stdModelParams.alphaParameter(0,0)->getRawValue();
-	// stdModelParams.alphaParameter(0,0)->setNewReference(getFloat);
-	// auto testIndexGetter1 = stdModelParams.alphaParameter(0,0)->getRawValue();
-	// ensemble.setAlphaBetaParams(0.13);
-	// auto testIndexGetter2 = stdModelParams.alphaParameter(0,0)->getRawValue();
+	
 }
 
 AdaptiveMetronomeAudioProcessor::~AdaptiveMetronomeAudioProcessor()
@@ -49,9 +39,7 @@ void AdaptiveMetronomeAudioProcessor::prepareToPlay(double sampleRate, int sampl
 
 	wasPlaying = false;
 
-	// Used in standalone
-	manualPlaying = false;
-	reaperPlaying = false;
+	setManualPlaying(useManualPlaybackStart);
 }
 
 inline const char* const BoolToString(bool b)
@@ -59,12 +47,11 @@ inline const char* const BoolToString(bool b)
 	return b ? "true" : "false";
 }
 
-// Where is this called from?
 void AdaptiveMetronomeAudioProcessor::setManualPlaying(bool shouldPlay)
 {
-	manualPlaying = shouldPlay;
-	ensemble.waitingForFirstNote = true;
-	DBG("SETTING PLAYBACK TO " << BoolToString(manualPlaying) << ", " << BoolToString(ensemble.waitingForFirstNote));
+	manualPlaybackStarted = shouldPlay;
+	ensemble.waitingForFirstNote = shouldPlay;
+	DBG("SETTING PLAYBACK TO " << BoolToString(manualPlaybackStarted) << ", " << BoolToString(ensemble.waitingForFirstNote));
 }
 
 void AdaptiveMetronomeAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -90,7 +77,7 @@ void AdaptiveMetronomeAudioProcessor::processBlock(juce::AudioBuffer<float>& buf
 
 	//==========================================================================
 	// If playback has just stopped, stop all sound
-	bool playbackStopped = !manualPlaying && wasPlaying;
+	bool playbackStopped = !manualPlaybackStarted && wasPlaying;
 
 	if (playbackStopped)
 	{
@@ -98,11 +85,11 @@ void AdaptiveMetronomeAudioProcessor::processBlock(juce::AudioBuffer<float>& buf
 	}
 
 	//wasPlaying = playing;
-	wasPlaying = manualPlaying;
+	wasPlaying = manualPlaybackStarted;
 
 	//==========================================================================
 	// If the playhead is moving start processing MIDI
-	if (manualPlaying)
+	if (manualPlaybackStarted)
 	{
 		ensemble.processMidiBlock(midiMessages, midiOutputBuffer, buffer.getNumSamples(), tempo);
 	}
@@ -124,7 +111,7 @@ bool AdaptiveMetronomeAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* AdaptiveMetronomeAudioProcessor::createEditor()
 {
-	return new AdaptiveMetronomeAudioProcessorEditor(*this, ensemble);
+	return new AdaptiveMetronomeAudioProcessorEditor(*this);
 }
 
 //==============================================================================
