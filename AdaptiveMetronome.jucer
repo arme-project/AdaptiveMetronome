@@ -9,6 +9,12 @@
               version="1.0.3" pluginFormats="buildStandalone">
   <MAINGROUP id="W50gFU" name="AdaptiveMetronome">
     <GROUP id="{3D843B26-CABE-6601-C112-2D32A102DAFB}" name="Source">
+      <GROUP id="{6827EA77-7327-1F20-E013-E814CFC31E83}" name="Processors">
+        <FILE id="GNdumd" name="AudioPlaybackController.cpp" compile="1" resource="0"
+              file="Source/Processors/AudioPlaybackController.cpp"/>
+        <FILE id="h5uG47" name="AudioPlaybackController.h" compile="0" resource="0"
+              file="Source/Processors/AudioPlaybackController.h"/>
+      </GROUP>
       <GROUP id="{D36B20F8-249D-6482-689E-CE707A2F30A7}" name="Helper">
         <FILE id="vUuc5c" name="ConfigHandler.cpp" compile="1" resource="0"
               file="Source/Helper/ConfigHandler.cpp"/>
@@ -80,9 +86,9 @@
     </XCODE_MAC>
     <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" headerPath="..\..\Source\Models\TimingModel&#10;..\..\Source\Models\EnsembleModel&#10;..\..\Source\Plugin&#10;..\..\Source\Helper"
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="..\..\Source\Models\TimingModel&#10;..\..\Source\Models\EnsembleModel&#10;..\..\Source\Plugin&#10;..\..\Source\Helper&#10;..\..\Source\Processors"
                        defines="FULL_SYSTEM=1&#10;OSC_AUTOCONNECT=1"/>
-        <CONFIGURATION isDebug="1" name="DebugVst" headerPath="..\..\Source\Models\TimingModel&#10;..\..\Source\Models\EnsembleModel&#10;..\..\Source\Plugin&#10;..\..\Source\Helper"
+        <CONFIGURATION isDebug="1" name="DebugVst" headerPath="..\..\Source\Models\TimingModel&#10;..\..\Source\Models\EnsembleModel&#10;..\..\Source\Plugin&#10;..\..\Source\Helper&#10;..\..\Source\Processors"
                        defines="FULL_SYSTEM=0&#10;OSC_AUTOCONNECT=0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
