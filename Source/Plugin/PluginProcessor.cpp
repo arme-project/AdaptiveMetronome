@@ -201,3 +201,58 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
 	return new AdaptiveMetronomeAudioProcessor();
 }
+
+juce::AudioProcessorValueTreeState::ParameterLayout AdaptiveMetronomeAudioProcessor::createParameterLayout()
+{
+	float defaultAlpha = 0.1f;
+	float defaultBeta = 0.1f;
+	float defaultVolume = 1.0f;
+	float defaultTkNoise = 1.0f;
+	float defaultMNoise = 0.1f;
+	float defaultDelay = 0.0f;
+
+	juce::AudioProcessorValueTreeState::ParameterLayout params;
+
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		// Volume
+		params.add(std::make_unique<AudioParameterFloatToUse>("player" + juce::String(i) + "-volume",
+			"Player " + juce::String(i) + " Volume",
+			0.0, 1.0, defaultVolume));
+
+		// Channel
+		params.add(std::make_unique<juce::AudioParameterInt>("player" + juce::String(i) + "-channel",
+			"Player " + juce::String(i) + " MIDI Channel",
+			1, 16, (i + 1)));
+
+		// Delay
+		params.add(std::make_unique<AudioParameterFloatToUse>("player" + juce::String(i) + "-delay",
+			"Player " + juce::String(i) + " Delay",
+			0.0, 200.0, defaultDelay));
+
+		// Motor Noise
+		params.add(std::make_unique<AudioParameterFloatToUse>("player" + juce::String(i) + "-mnoise-std",
+			"Player " + juce::String(i) + " Motor Noise Std",
+			0.0, 10.0, defaultMNoise));
+
+		// Timekeeper Noise
+		params.add(std::make_unique<AudioParameterFloatToUse>("player" + juce::String(i) + "-tknoise-std",
+			"Player " + juce::String(i) + " Time Keeper Noise Std",
+			0.0, 50.0, defaultTkNoise));
+
+		// Inner player loop for alphas
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			// Alpha
+			params.add(std::make_unique<AudioParameterFloatToUse>("alpha-" + juce::String(i) + "-" + juce::String(j),
+				"Alpha " + juce::String(i) + "-" + juce::String(j),
+				0.0, 1.0, defaultAlpha));
+
+			// Beta
+			params.add(std::make_unique<AudioParameterFloatToUse>("beta-" + juce::String(i) + "-" + juce::String(j),
+				"Beta " + juce::String(i) + "-" + juce::String(j),
+				0.0, 1.0, defaultBeta));
+		}
+	}
+	return params;
+}
