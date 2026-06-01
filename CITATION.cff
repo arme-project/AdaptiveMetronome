@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use AdaptiveMetronome in research, teaching, performance analysis, or derived software, please cite the software and the exact version or commit you used."
+type: software
+title: "AdaptiveMetronome"
+authors:
+  - family-names: "Enderby"
+    given-names: "Sean"
+  - family-names: "Stables"
+    given-names: "Ryan"
+    affiliation: "Birmingham City University"
+  - family-names: "Di Luca"
+    given-names: "Massimiliano"
+    affiliation: "University of Birmingham"
+    email: "m.diluca@bham.ac.uk"
+    website: "https://massimilianodiluca.info/"
+abstract: "AdaptiveMetronome is a JUCE MIDI-effect plug-in for simulating and studying adaptive timing in ensemble performance with virtual and human-operated players."
+repository-code: "https://github.com/arme-project/AdaptiveMetronome"
+url: "https://github.com/arme-project/AdaptiveMetronome"
+version: "1.0.3"
+date-released: "2026-06-01"
+keywords:
+  - adaptive metronome
+  - ensemble timing
+  - musical synchronisation
+  - MIDI
+  - JUCE
+  - linear phase correction

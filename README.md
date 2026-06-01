@@ -1,49 +1,137 @@
-The EPSRC-funded ARME project is proud to release a plug-in designed to simulate the harmonious synchronisation of musicians within a violin quartet playing a piece by Haydn. Such tool gives the ability to observe and analyse event times recorded during simulated ensemble performance. Virtual musicians perform their notes using a linear phase correction model, meticulously adjusting their timing to maintain a harmonious collective. The plug-in supports the configuration of the quartet's composition, accommodating any combination of virtual and human players Key to the virtual musicians' performances is the understanding of music cohesion which is reflected in various control parameters that empower the user to tailor their experience. 
+# AdaptiveMetronome
 
-**Instruction for installation on Logic Pro for Mac:**
+AdaptiveMetronome is a JUCE MIDI-effect plug-in for studying adaptive timing in
+ensemble performance. It loads a multi-track MIDI score, turns each note-bearing
+track into a player, and lets those players perform together using a linear
+phase-correction timing model. Players can be virtual, human-operated, or a mix
+of both.
 
-1) Download the latest release (on the right side of this page)
-2) Extract the AU plugin contained in the zip file and move it to the following folder: Finder\Macintosh HD\Library\Audio\Plugins\Components
-3) Download the midi file of the Haydn piece from this repo: https://github.com/maxdiluca/haydn_midi/archive/refs/tags/download.zip
-4) Extract the midi contained in the zip file
-5) Open Logic Pro
-6) If an error occurs with the plugin, go to Settings>'privacy and security', uder the “allow applications downloaded from” Select "App Store and identified developers", and under “AdaptiveMetronome.component was blocked from use because it is not from an identified developer”, click “Allow anyways”. Enter the password of an account with admin privileges. Close and re-open Logic Pro
-7) Create a new empty project. Choose Software Instrument or once the project is open select Track>New software instrument track.
-8) In the Library, select Orchestral, Strings, String ensemble (or another instrument of your choice)
-9) In the midi section of the new track select MIDI FX->Audio Units->ARME->Adaptive metronome
-10) Press Load MIDI in the new window the midi file
+The plug-in was developed as part of the EPSRC-funded
+[Augmented Reality Music Ensemble (ARME)](https://arme-project.co.uk/) project,
+with project context on the
+[ARME Adaptive Metronome demo page](https://arme-project.co.uk/demos/adaptive-metronome).
+ARME's immersive rehearsal work is also connected with the University of
+Birmingham [Virtual Reality Lab](https://virtualrealitylab.netlify.app/).
+It is useful for demonstrations, experiments, and teaching around musical
+synchronisation, human-machine ensemble interaction, and timing variability in
+chamber music.
 
-Video instructions:
+## What It Does
 
-[![Installation Video](https://img.youtube.com/vi/2CeIm4auh44/0.jpg)](https://www.youtube.com/watch?v=2CeIm4auh44)
+- Runs as an Audio Unit MIDI effect on macOS and as a VST3 MIDI effect on
+  Windows.
+- Loads a MIDI score and creates one player per MIDI track that contains notes.
+- Supports 0-4 human-operated players, with the remaining players simulated.
+- Lets the user set per-player MIDI channel, volume, delay, motor-noise standard
+  deviation, timekeeper-noise standard deviation, and pairwise alpha/beta timing
+  correction values.
+- Starts each performance with four guide tones, then plays the loaded score in
+  time with the host DAW.
+- Records onset timing, intervals, delays, model parameters, and user-input flags
+  to CSV files in the user's Documents folder.
 
+## Quick Start
 
+1. Download a packaged build from the repository's
+   [GitHub Releases](https://github.com/arme-project/AdaptiveMetronome/releases).
+2. Install the plug-in for your DAW:
+   - macOS Audio Unit: `Macintosh HD/Library/Audio/Plug-Ins/Components`
+   - Windows VST3: `C:\Program Files\Common Files\VST3`
+3. Download the example Haydn MIDI file from
+   [maxdiluca/haydn_midi](https://github.com/maxdiluca/haydn_midi/archive/refs/tags/download.zip).
+4. Add AdaptiveMetronome as a MIDI effect before a software instrument.
+5. Set the number of human players, press **Load MIDI**, and choose the score.
+6. Start DAW playback. After the four guide tones, tap along to trigger the
+   human player's notes.
 
+Detailed DAW walkthroughs are in [Installation And DAW Setup](docs/INSTALLATION.md).
 
-**Instructions for playing on Logic Pro for Mac:**
+## Typical Research Workflow
 
-1) Change the parameters of the simulation on the console
-2) Hit the “play” triangle in the main window to start the simulated performance
-3) After the initial 4 metronome beats, press J to play each note (if this doesn’t work go to Window>Show keyboard and check that by pressing J you can hear the notes playing)
+1. Prepare a MIDI file with one note-bearing track per ensemble player.
+2. Load the file into AdaptiveMetronome.
+3. Choose how many players are human-operated. Human players are assigned to the
+   first note-bearing tracks in the MIDI file.
+4. Set the timing parameters for each virtual player and the pairwise alpha/beta
+   matrices.
+5. Run the performance from the DAW transport.
+6. Collect the generated `Log_HH-MM-SS_DDMonYYYY.csv` file from the Documents
+   folder and analyse onset timing, asynchronies, and model settings.
 
-Video instructions:
+See [User Guide](docs/USER_GUIDE.md) for parameter definitions and log-column
+notes, and [Timing Model](docs/MODEL.md) for equations, defaults, units, and
+citations.
 
-[![Operation Video](https://img.youtube.com/vi/HKUYVPlAp8E/0.jpg)](https://www.youtube.com/watch?v=HKUYVPlAp8E)
+## Building From Source
 
+AdaptiveMetronome is a JUCE project defined by
+[AdaptiveMetronome.jucer](AdaptiveMetronome.jucer). To build it yourself:
 
+1. Install JUCE and open the project in Projucer.
+2. Check that the JUCE module paths match your local JUCE installation.
+3. Save the project to generate the IDE files.
+4. Build the Release target in Xcode on macOS or Visual Studio 2022 on Windows.
 
+More detailed build notes are in [Building](docs/BUILDING.md).
 
+## Citing
 
+If you use AdaptiveMetronome in a publication, performance study, teaching
+resource, or derived software project, please cite the software and the exact
+version or commit you used.
 
+This repository includes [CITATION.cff](CITATION.cff), so GitHub can generate a
+citation from the **Cite this repository** button. Additional wording for papers
+and methods sections is in [Citing AdaptiveMetronome](docs/CITING.md).
 
+This repository also includes a local copy of the related RPPW19 workshop
+abstract:
+[Adaptive Metronome: A MIDI Plug-In for Modelling Cooperative Timing in Music
+Ensembles](docs/references/rppw19_abstract_Sean_Enderby.pdf). Full citation
+wording is in [Citing AdaptiveMetronome](docs/CITING.md).
 
-**Instruction for installation on Reaper for Windows:**
+## Authors
 
-1) Download the latest release (on the right side of this page)
-2) Extract the VST3 plugin contained in the zip file and move it to the following plugin folder:  C:\Program Files\Common Files\VST3
-3) Download the MIDI file: https://github.com/maxdiluca/haydn_midi/archive/refs/tags/download.zip
-4) Extract the MIDI contained in the zip file and move it to your documents folder
-5) Open Reaper
-6) On a new empty project, create a new track and add the plugin by navigating to View > Browse FX and search for VST3: AdaptiveMetronome (ARME)
-7) In the new window add an instrument to the track by clicking on "Add" at the bottom left of the window, or by navigating to View > Browse FX
-8) In the FX window related to this track (if you have closed it you can re-open by clicking on the green FX button on the track), load a MIDI file by pressing the "Load MIDI" button.
+- Sean Enderby
+- Ryan Stables
+- [Massimiliano Di Luca](https://massimilianodiluca.info/) (<m.diluca@bham.ac.uk>)
+
+## Project Links
+
+- [ARME project](https://arme-project.co.uk/)
+- [ARME Adaptive Metronome demo](https://arme-project.co.uk/demos/adaptive-metronome)
+- [University of Birmingham Virtual Reality Lab](https://virtualrealitylab.netlify.app/)
+- [Virtual Reality Lab research-portal entry](https://research.birmingham.ac.uk/en/publications/virtual-reality-lab/)
+- [University of Birmingham ARME/virtual orchestra rehearsal news](https://www.birmingham.ac.uk/news/2024/dr-massimiliano-di-luca-leads-development-of-software-for-virtual-orchestra-rehearsals)
+- [Massimiliano Di Luca](https://massimilianodiluca.info/)
+- [Massimiliano Di Luca at the University of Birmingham](https://www.birmingham.ac.uk/staff/profiles/psychology/diluca-massimiliano)
+
+## Repository Guide
+
+- [Installation And DAW Setup](docs/INSTALLATION.md): Logic Pro and REAPER setup.
+- [User Guide](docs/USER_GUIDE.md): controls, MIDI preparation, and log output.
+- [Timing Model](docs/MODEL.md): equations, defaults, units, and citations.
+- [Building](docs/BUILDING.md): source-build workflow for JUCE, Xcode, and Visual
+  Studio.
+- [Troubleshooting](docs/TROUBLESHOOTING.md): common installation, audio, MIDI,
+  tapping, logging, and build issues.
+- [Contributing](CONTRIBUTING.md): what to include in issues and pull requests.
+- [Authors](AUTHORS.md): software authors and project cross-references.
+- [Maintainer Checklist](docs/MAINTAINER_CHECKLIST.md): steps that would make the
+  project easier to redistribute, archive, and cite.
+
+## License Status
+
+No software license is currently declared in this repository. Until a license is
+added, assume that redistribution and modification require permission from the
+maintainers or the relevant institution. The maintainer checklist includes this
+as a high-priority repository task.
+
+## Acknowledgements
+
+AdaptiveMetronome was developed by the
+[ARME project](https://arme-project.co.uk/) team. The project describes and
+supports simulation of synchronisation among musicians, including quartet
+performance scenarios based on a Haydn MIDI score. Related immersive rehearsal
+research is supported by the University of Birmingham
+[Virtual Reality Lab](https://virtualrealitylab.netlify.app/).

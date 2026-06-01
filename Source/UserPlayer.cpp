@@ -1,7 +1,7 @@
 #include "UserPlayer.h"
 
 //==============================================================================
-UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel, 
+UserPlayer::UserPlayer (int index, const juce::MidiMessageSequence *seq, int midiChannel,
                         const double &sampleRate, const int &scoreCounter, int initialInterval)
   : Player (index, seq, midiChannel, sampleRate, scoreCounter, initialInterval)
 {
@@ -23,12 +23,14 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &alphas,
                                            const std::vector <std::unique_ptr <juce::AudioParameterFloat> > &betas)
 {
+    juce::ignoreUnused (alphas, betas);
+
     //==========================================================================
     // Find mean onset and interval for all other players
     float meanOnset = 0.0f;
     float meanInterval = 0.0f;
     int nOtherPlayers = 0;
-    
+
     for (int i = 0; i < players.size(); ++i)
     {
         if (!players [i]->isUserOperated())
@@ -38,20 +40,20 @@ void UserPlayer::recalculateOnsetInterval (int samplesPerBeat,
             ++nOtherPlayers;
         }
     }
-    
-    meanOnset /= nOtherPlayers;
-    meanInterval /= nOtherPlayers;
-    
+
     //==========================================================================
     // Calculate next onset interval so that a note will be played automatically
     // between the next two non-user player onset times. If there are only human
     // players, just use the most recently played interval.
     if (nOtherPlayers == 0)
     {
-        // potentially do something clever here
+        int playedInterval = getPlayedOnsetInterval();
+        onsetInterval = playedInterval > 0 ? playedInterval : samplesPerBeat;
     }
     else
     {
+        meanOnset /= nOtherPlayers;
+        meanInterval /= nOtherPlayers;
         onsetInterval = meanOnset - currentOnsetTime + 1.5 * meanInterval;
     }
 }
@@ -73,9 +75,9 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
         {
             break;
         }
-        
+
         auto event = (*it).getMessage();
-        
+
         // Play the next note at the first note on in this beat period
         if (event.isNoteOn() && !notePlayed && scoreCounter > (onsetInterval / 2))
         {
@@ -83,7 +85,7 @@ void UserPlayer::processNoteOn (const juce::MidiBuffer &inMidi, juce::MidiBuffer
             noteTriggeredByUser = true;
         }
     }
-    
+
     // If no user input trigger a note automatically
     if (!notePlayed && (samplesSinceLastOnset >= onsetInterval || scoreCounter == 0))
     {
